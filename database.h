@@ -25,11 +25,13 @@
 #include <QImage>
 #include <QString>
 #include <QSharedDataPointer>
+#include <QPair>
 
 #include <libface/LibFace.h>
 #include <libface/Face.h>
 
 #include "kface_global.h"
+#include "kface.h"
 
 namespace kface
 {
@@ -68,26 +70,24 @@ public:
      * Scan an image for faces. Return a list with regions possibly
      * containing faces.
      * @param image The image in which faces are to be detected
-     * @return A QList of QRects, where each rect contains a face
+     * @return A QList of detected KFace *'s, with the extracted face images loaded into them.
      */
-    QList<QRect> detectFaces(const QImage& image);
+    QList<KFace *> detectFaces(const QImage& image);
+    
+    /**
+     * Function to recognize faces in a QList of KFace pointers which hold the face images.
+     * Recognized faces will have their ID's changed in the KFace objects
+     * @param faces A QList of KFace *'s, which hold the face image too, for recongition.
+     */
+    void recognizeFaces(QList<KFace *>& faces);
 
     /**
-     * In the given region of this image, try to recognize a face.
-     * If a face is recognized, the identifier associated with this face is returned.
-     * If no face is recognized, a null QString is returned.
-     * @param image A QImage from which faces will be extracted for recognition
-     * @param rectangles A QList of QRects, where each rect contains a face
+     * Update the training database with a QList of KFace pointers which hold the face images
+     * Faces that have not been given any ID by the caller will automatically be given the next available ID,
+     * and this ID will be updated in the KFace objects.
+     * @param faces A QList of KFace *'s, which hold the face image too, for updating the DB.
      */
-    QList<QString> recognizeFaces(const QImage& image, const QList<QRect>& rectangles);
-
-    /**
-     * Inform that the face with the given identifier is found on the image in the given region.
-     * There is no guarantee that rectangle is in the list of rectangles returned by detectFaces(),
-     * and no assumption if the face was previously recognized by recognizeFace or not.
-     * The identifier is a non-empty string, no format or restriction is specified here.
-     */
-    void trainFaces(const QImage& image, const QList<QRect>& rectangle, const QList<QString>& identifier);
+    void updateFaces(QList<KFace *>& faces);
 
 };
 
