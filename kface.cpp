@@ -39,4 +39,21 @@ KFace& KFace::operator=( Face& other)
     return *this;
 }
 
+void KFace::setRect(const QRect& rect)
+{
+    QPoint topLeft = rect.topLeft();
+    QPoint bottomRight = rect.bottomRight();
+    this->setX1(topLeft.x());
+    this->setY1(topLeft.y());
+    this->setX2(bottomRight.x());
+    this->setY2(bottomRight.y());
+}
+
+QRect KFace::getRect()
+{
+    QPoint topLeft(this->getX1(), this->getY1());
+    QPoint bottomRight(this->getX2(), this->getY2());
+    return QRect(topLeft, bottomRight);
+}
+
 };

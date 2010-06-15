@@ -42,13 +42,25 @@ public:
      */
     QImage* getImage();
     
+    /** Will set the co-ordinates of KFace object to the specified rectangle
+     * @param rect The QRect rectangle which is to be set as the rectangle for KFace instance
+     */
+    void setRect(const QRect& rect);
+    
+    /** Will return a QRect of the KFace object, for better interop with functions that don't want to directly use KFace
+     * @return A QRect version of the bounding box for a face
+     */
+    QRect getRect();
     /** Assignment operator that assigns a KFace's data to another KFace
      * @param other A reference to a KFace object
      * @return A reference to the copied KFace object
      */
-    
     KFace& operator=(KFace& other);
     
+    /** Assignment operator that assigns a Face's data to another KFace
+     * @param other A reference to a Face object
+     * @return A reference to the copied KFace object
+     */
     KFace& operator=(libface::Face& other);
 
 };
