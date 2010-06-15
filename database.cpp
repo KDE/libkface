@@ -64,7 +64,58 @@ QList<KFace *> Database::detectFaces(const QImage& image)
 	faceList.append(&kf);
     }
     return faceList;
-	
+}
+
+void Database::updateFaces(QList< KFace* >& faces)
+{
+    std::vector<Face> *faceVec;
+    Face f;
+    KFace kf;
+    
+    int i;
+    for(i = 0; i < faces.size(); ++i)
+    {
+	kf = *faces.at(i);
+	f = kf;	// Will this work properly? TODO: Test this
+	faceVec->push_back(f);
+    }
+    
+    std::vector<int> ids;
+    ids = d.data()->libface->update(faceVec);
+    
+    for(i = 0; i <faces.size(); ++i)
+    {
+	faces[i]->setId(ids.at(i));
+    }
+    
+}
+
+QList<double> Database::recognizeFaces ( QList< KFace* >& faces )
+{
+    std::vector<Face> *faceVec;
+    Face f;
+    KFace kf;
+    
+    int i;
+    for(i = 0; i < faces.size(); ++i)
+    {
+	kf = *faces.at(i);
+	f = kf;	// Will this work properly? TODO: Test this
+	faceVec->push_back(f);
+    }
+    
+    QList<double> closeness;
+    std::vector< std::pair<int, double> > result;
+    
+    result = d.data()->libface->recognise(faceVec);
+    
+    for(i = 0; i <faces.size(); ++i)
+    {
+	faces[i]->setId(result.at(i).first);
+	closeness.append(result.at(i).second);
+    }
+    
+    return closeness;
 }
 
 };

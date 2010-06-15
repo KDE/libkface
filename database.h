@@ -73,13 +73,6 @@ public:
      * @return A QList of detected KFace *'s, with the extracted face images loaded into them.
      */
     QList<KFace *> detectFaces(const QImage& image);
-    
-    /**
-     * Function to recognize faces in a QList of KFace pointers which hold the face images.
-     * Recognized faces will have their ID's changed in the KFace objects
-     * @param faces A QList of KFace *'s, which hold the face image too, for recongition.
-     */
-    void recognizeFaces(QList<KFace *>& faces);
 
     /**
      * Update the training database with a QList of KFace pointers which hold the face images
@@ -88,6 +81,14 @@ public:
      * @param faces A QList of KFace *'s, which hold the face image too, for updating the DB.
      */
     void updateFaces(QList<KFace *>& faces);
+    
+    /**
+     * Function to recognize faces in a QList of KFace pointers which hold the face images.
+     * Recognized faces will have their ID's changed in the KFace objects
+     * @param faces A QList of KFace *'s, which hold the face image too, for recongition.
+     * @return A QList of "closeness" of recognized faces, in the same order as the argument
+     */
+    QList<double> recognizeFaces(QList<KFace *>& faces);
 
 };
 

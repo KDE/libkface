@@ -1,7 +1,7 @@
 #include "kface.h"
 
 namespace kface {
-    
+
 void KFace::setImage(const QImage& image)
 {
     QImage greyImage = image.convertToFormat(QImage::Format_Indexed8);

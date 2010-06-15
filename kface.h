@@ -62,6 +62,8 @@ public:
      * @return A reference to the copied KFace object
      */
     KFace& operator=(libface::Face& other);
+    
+    
 
 };
 
