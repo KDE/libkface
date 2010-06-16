@@ -15,7 +15,7 @@
 * along with libkface.  If not, see <http://www.gnu.org/licenses/>.
 *
 * @note: This is a derivative of Face class
-* @author: Aditya Bhatt
+* @author: Aditya Bhatt, Marcel Wiesweg
 */
 
 #ifndef KFACE_FACE_H
