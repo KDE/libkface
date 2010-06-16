@@ -18,54 +18,76 @@
 * @author: Aditya Bhatt
 */
 
-#ifndef KFACE_H
-#define KFACE_H
+#ifndef KFACE_FACE_H
+#define KFACE_FACE_H
 
 #include <QImage>
-#include <libface/Face.h>
 
-#include "kfaceutils.h"
+#include "kface_global.h"
 
-namespace kface {
-    
-class KFace : public libface::Face
+namespace libface
+{ class Face; }
+
+namespace KFace {
+
+class FacePriv;
+
+class KFACESHARED_EXPORT Face
 {
 public:
+
+    Face();
+    Face(const QRect& rect, const QImage& image = QImage());
+    Face(const libface::Face& other);
+
+    Face(const Face& other);
+    ~Face();
 
     /** Will convert given QImage to an internal IplImage.
      * @param image The QImage to be set as the face image for the KFace object
      */
     void setImage(const QImage& image);
-    
+
     /** Will return a QImage version of the internal face image stored in the KFace object
      * @return The QImage version of the internal face image
      */
-    QImage* getImage();
-    
+    QImage getImage();
+
     /** Will set the co-ordinates of KFace object to the specified rectangle
      * @param rect The QRect rectangle which is to be set as the rectangle for KFace instance
      */
     void setRect(const QRect& rect);
-    
+
+    void setFace(const libface::Face& face);
+
+    int id() const;
+    void setId(int id);
+
     /** Will return a QRect of the KFace object, for better interop with functions that don't want to directly use KFace
      * @return A QRect version of the bounding box for a face
      */
-    QRect getRect();
+    QRect toRect() const;
+    operator QRect() const { return toRect(); }
+
+    libface::Face &face() const;
+    operator libface::Face&() const { return face(); }
+
     /** Assignment operator that assigns a KFace's data to another KFace
      * @param other A reference to a KFace object
      * @return A reference to the copied KFace object
      */
-    KFace& operator=(KFace& other);
-    
+    Face& operator=(const Face& other);
+
     /** Assignment operator that assigns a Face's data to another KFace
      * @param other A reference to a Face object
      * @return A reference to the copied KFace object
      */
-    KFace& operator=(libface::Face& other);
-    
-    
+    Face& operator=(const libface::Face& other);
 
+private:
+
+    FacePriv* const d;
 };
 
 };
-#endif // KFACE_H
+#endif // KFACE_FACE_H

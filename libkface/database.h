@@ -18,8 +18,8 @@
 * @author: Aditya Bhatt
 */
 
-#ifndef DATABASE_H
-#define DATABASE_H
+#ifndef KFACE_DATABASE_H
+#define KFACE_DATABASE_H
 
 #include <QExplicitlySharedDataPointer>
 #include <QImage>
@@ -27,27 +27,31 @@
 #include <QSharedDataPointer>
 #include <QPair>
 
-#include <libface/LibFace.h>
-#include <libface/Face.h>
-
 #include "kface_global.h"
 #include "kface.h"
 
-namespace kface
+namespace KFace
 {
 
 class DatabasePriv;
 
-class KFACESHARED_EXPORT Database {
+class KFACESHARED_EXPORT Database
+{
 private:
+
     QExplicitlySharedDataPointer<DatabasePriv> d;
-    
-    
-    Database(const QString& configurationPath);
-    qint32 indentifierToQint32(const QString& identifier);
 
 public:
-    Database(libface::Mode, const QString& configurationPath = QString());
+
+    enum InitFlag
+    {
+        InitDetection = 0x1,
+        InitRecognition = 0x2,
+        InitAll = InitDetection | InitRecognition
+    };
+    Q_DECLARE_FLAGS(InitFlags, InitFlag)
+
+    Database(InitFlags = InitAll, const QString& configurationPath = QString());
     Database(const Database& other);
     ~Database();
     Database& operator=(const Database& other);
@@ -61,27 +65,30 @@ public:
      * Scan an image for faces. Return a list with regions possibly
      * containing faces.
      * @param image The image in which faces are to be detected
-     * @return A QList of detected KFace *'s, with the extracted face images loaded into them.
+     * @return A QList of detected Face's, with the extracted face images loaded into them.
      */
-    QList<KFace *> detectFaces(const QImage& image);
+    QList<Face> detectFaces(const QImage& image);
 
     /**
      * Update the training database with a QList of KFace pointers which hold the face images
      * Faces that have not been given any ID by the caller will automatically be given the next available ID,
      * and this ID will be updated in the KFace objects.
-     * @param faces A QList of KFace *'s, which hold the face image too, for updating the DB.
+     * @param faces A QList of Face's, which hold the face image too, for updating the DB.
      */
-    void updateFaces(QList<KFace *>& faces);
+    void updateFaces(QList<Face>& faces);
     
     /**
      * Function to recognize faces in a QList of KFace pointers which hold the face images.
      * Recognized faces will have their ID's changed in the KFace objects
-     * @param faces A QList of KFace *'s, which hold the face image too, for recongition.
+     * @param faces A QList of Face's, which hold the face image too, for recongition.
      * @return A QList of "closeness" of recognized faces, in the same order as the argument
      */
-    QList<double> recognizeFaces(QList<KFace *>& faces);
+    QList<double> recognizeFaces(QList<Face>& faces);
 
 };
 
 };
-#endif // DATABASE_H
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KFace::Database::InitFlags)
+
+#endif // KFACE_DATABASE_H

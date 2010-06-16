@@ -4,11 +4,12 @@
 #include <QMutexLocker>
 #include <QSharedData>
 
+#include <libface/LibFace.h>
+#include <libface/Face.h>
+
 #include "kfaceutils.h"
 
-using namespace libface;
-
-namespace kface
+namespace KFace
 {
 
 class DatabaseStatic
@@ -32,99 +33,92 @@ public:
         libface = 0;
     }
 
-    LibFace *libface;
-    QString  configPath;
+    ~DatabasePriv()
+    {
+        delete libface;
+    }
+
+    libface::LibFace *libface;
+    QString           configPath;
 };
 
-Database::Database(libface::Mode mode, const QString& configurationPath)
+Database::Database(InitFlags flags, const QString& configurationPath)
 {
-    d.data()->configPath = configurationPath;
-    if(mode == libface::DETECT)
+    d->configPath = configurationPath;
+    if (flags == InitDetection)
     {
-	d.data()->libface = new libface::LibFace(DETECT);
+        d->libface = new libface::LibFace(libface::DETECT);
     }
     else
     {
-	d.data()->libface = new libface::LibFace(mode, configurationPath.toStdString());
+        libface::Mode mode;
+        if (flags == InitAll)
+            mode = libface::ALL;
+        else
+            mode = libface::EIGEN;
+        d->libface = new libface::LibFace(mode, configurationPath.toStdString());
     }
 }
 
 Database::Database(const Database& other)
 {
-    this->d.data()->libface = other.d.data()->libface;
-    this->d.data()->configPath = other.d.data()->configPath;
+    d = other.d;
 }
 
 Database::~Database()
 {
-    delete d.data()->libface;
 }
 
-QList<KFace *> Database::detectFaces(const QImage& image)
+QList<Face> Database::detectFaces(const QImage& image)
 {
-    IplImage *img = KFaceUtils::QImage2IplImage(&image);
-    std::vector<Face> result = d.data()->libface->detectFaces(img->imageData,img->width, img->height, img->widthStep, img->depth, img->nChannels);
-    
-    QList<KFace*> faceList;
-    Face f;
-    KFace kf;
-    foreach(f, result)
+    IplImage *img = KFaceUtils::QImage2IplImage(image);
+    std::vector<libface::Face> result = d->libface->detectFaces(img->imageData, img->width, img->height,
+                                                                img->widthStep, img->depth, img->nChannels);
+
+    QList<Face> faceList;
+    foreach(const libface::Face &f, result)
     {
-	kf = f;
-	faceList.append(&kf);
+        faceList << Face(f);
     }
     return faceList;
 }
 
-void Database::updateFaces(QList< KFace* >& faces)
+void Database::updateFaces(QList<Face>& faces)
 {
-    std::vector<Face> *faceVec;
-    Face f;
-    KFace kf;
-    
-    int i;
-    for(i = 0; i < faces.size(); ++i)
+    std::vector<libface::Face> faceVec;
+    foreach (const Face& face, faces)
     {
-	kf = *faces.at(i);
-	f = kf;	// Will this work properly? TODO: Test this
-	faceVec->push_back(f);
+        faceVec.push_back(face);
     }
-    
+
     std::vector<int> ids;
-    ids = d.data()->libface->update(faceVec);
-    
-    for(i = 0; i <faces.size(); ++i)
+    ids = d->libface->update(&faceVec);
+
+    for(int i = 0; i<faces.size() && i<(int)ids.size(); ++i)
     {
-	faces[i]->setId(ids.at(i));
+        faces[i].setId(ids.at(i));
     }
-    
 }
 
-QList<double> Database::recognizeFaces ( QList< KFace* >& faces )
+QList<double> Database::recognizeFaces(QList<Face>& faces)
 {
-    std::vector<Face> *faceVec;
-    Face f;
-    KFace kf;
-    
-    int i;
-    for(i = 0; i < faces.size(); ++i)
+    std::vector<libface::Face> faceVec;
+    foreach (const Face& face, faces)
     {
-	kf = *faces.at(i);
-	f = kf;	// Will this work properly? TODO: Test this
-	faceVec->push_back(f);
+        faceVec.push_back(face);
     }
-    
+
     QList<double> closeness;
     std::vector< std::pair<int, double> > result;
-    
-    result = d.data()->libface->recognise(faceVec);
-    
-    for(i = 0; i <faces.size(); ++i)
+
+    result = d->libface->recognise(&faceVec);
+
+    for(int i = 0; i <faces.size() && i<(int)result.size(); ++i)
     {
-	faces[i]->setId(result.at(i).first);
-	closeness.append(result.at(i).second);
+        faces[i].setId(result.at(i).first);
+        closeness.append(result.at(i).second);
     }
-    
+
     return closeness;
 }
 

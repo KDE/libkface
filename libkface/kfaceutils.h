@@ -4,13 +4,15 @@
 #include <opencv/cv.h>
 #include <QImage>
 
-class KFaceUtils
+namespace KFace
 {
-public:
-    KFaceUtils();
-    static IplImage* QImage2IplImage(const QImage *img);
-    static QImage* IplImage2QImage(const IplImage *img);
 
+namespace KFaceUtils
+{
+    IplImage* QImage2IplImage(const QImage& img);
+    QImage IplImage2QImage(const IplImage *img);
 };
+
+}
 
 #endif // KFACEUTILS_H
