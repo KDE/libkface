@@ -2,7 +2,7 @@ Begin4
 Title:          libkface
 Version:        ${KFACE_LIB_VERSION_STRING}
 Entered-date:   2010-16-06
-Description:    Libkface is a C++ wrapper around LibFace library to perform face recognition over pictures.
+Description:    A C++ wrapper around LibFace library to perform face recognition over pictures.
 Keywords:       kde image jpeg raw tiff png exif iptc xmp digikam kipi-plugins
 Author:         caulier dot gilles at gmail dot com (Gilles Caulier)
                 marcel dot wiesweg at gmx dot de (Marcel Wiesweg)
