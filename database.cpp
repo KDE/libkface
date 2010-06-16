@@ -51,12 +51,13 @@ Database::Database(libface::Mode mode, const QString& configurationPath)
 
 Database::Database(const Database& other)
 {
-    
+    this->d.data()->libface = other.d.data()->libface;
+    this->d.data()->configPath = other.d.data()->configPath;
 }
 
 Database::~Database()
 {
-
+    delete d.data()->libface;
 }
 
 QList<KFace *> Database::detectFaces(const QImage& image)
