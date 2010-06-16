@@ -5,6 +5,8 @@ ADD_DEFINITIONS(${LIBFACE_DEFINITIONS})
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 REMOVE_DEFINITIONS(-DQT_NO_STL)
 
+FIND_PACKAGE(OpenCV REQUIRED)
+
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 # This was used to enable catching of exceptions thrown by libexiv2.
@@ -20,7 +22,7 @@ KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${QT_QTGUI_LIBRARY}
-                            -lface
+                            -lface -lhighgui -lcv -lcxcore -lcvaux
 #                            ${LIBFACE_LIBRARIES}
                      )
 
