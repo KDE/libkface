@@ -34,7 +34,7 @@ INSTALL(TARGETS kface ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 INSTALL(FILES database.h
               kface.h
-              kfaceutils.hh
+              kfaceutils.h
               libkface_export.h
-              version.h
+              #version.h This must be added later
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel)
