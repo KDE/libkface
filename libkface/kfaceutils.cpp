@@ -10,9 +10,10 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage *qimg)
     IplImage *imgHeader = cvCreateImageHeader( cvSize(qimg->width(), qimg->width()), IPL_DEPTH_8U, 4);
     imgHeader->imageData = (char*) qimg->bits();
 
-    uchar* newdata = (uchar*) malloc(sizeof(uchar) * qimg->byteCount());
-    memcpy(newdata, qimg->bits(), qimg->byteCount());
-    imgHeader->imageData = (char*) newdata;
+    //uchar* newdata = (uchar*) malloc(sizeof(uchar) * qimg->byteCount());
+    //memcpy(newdata, qimg->bits(), qimg->byteCount());
+    //imgHeader->imageData = (char*) newdata;
+    imgHeader->imageData = (char *)qimg->bits();
 
     return imgHeader;
 }
