@@ -1,6 +1,8 @@
 PROJECT(libkface)
 
 FIND_PACKAGE(KDE4 REQUIRED)
+FIND_PACKAGE(OpenCV REQUIRED)
+
 INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
 INCLUDE(MacroOptionalAddSubdirectory)
