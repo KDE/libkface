@@ -47,19 +47,10 @@ private:
     qint32 indentifierToQint32(const QString& identifier);
 
 public:
-    Database();
+    Database(libface::Mode, const QString& configurationPath = QString());
     Database(const Database& other);
     ~Database();
     Database& operator=(const Database& other);
-
-    /**
-     * Creates a Face Detection/Recognition database, using the given directory
-     * for configuration. If no directory is specified, creates a new directory
-     * at a default place as obtained from kdelibs.
-     * @param configurationPath The directory to look in for the configuration
-     * @return A Database object as read from the config
-     */
-    static Database database(const QString& configurationPath = QString());
 
     /** 
      * Explicitly save configuration. Automatically done in destructor.

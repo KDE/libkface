@@ -36,8 +36,17 @@ public:
     QString  configPath;
 };
 
-Database::Database()
+Database::Database(libface::Mode mode, const QString& configurationPath)
 {
+    d.data()->configPath = configurationPath;
+    if(mode == libface::DETECT)
+    {
+	d.data()->libface = new libface::LibFace(DETECT);
+    }
+    else
+    {
+	d.data()->libface = new libface::LibFace(mode, configurationPath.toStdString());
+    }
 }
 
 Database::Database(const Database& other)
