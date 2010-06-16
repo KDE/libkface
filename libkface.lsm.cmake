@@ -1,14 +1,15 @@
 Begin4
-Title:          libkexiv2
-Version:        ${KEXIV2_LIB_VERSION_STRING}
-Entered-date:   2007-05-08
-Description:    A C++ library to manipulate EXIF/IPTC/XMP metadata using Exiv2 library. This library is used by digiKam and kipi-plugins.
+Title:          libkface
+Version:        ${KFACE_LIB_VERSION_STRING}
+Entered-date:   2010-16-06
+Description:    Libkface is a C++ wrapper around LibFace library to perform face recognition over pictures.
 Keywords:       kde image jpeg raw tiff png exif iptc xmp digikam kipi-plugins
 Author:         caulier dot gilles at gmail dot com (Gilles Caulier)
                 marcel dot wiesweg at gmx dot de (Marcel Wiesweg)
+                adityabhatt1991 at gmail dot com (Aditya Bhatt)
 Maintained-by:
-Primary-site:   http://www.kipi-plugins.org
-Alternate-site: http://www.digikam.org
+Primary-site:   http://www.digikam.org
+Alternate-site: http://www.kipi-plugins.org
 Original-site:
 Platforms:      Linux and other Unices, MacOs-X, Win32. Needs KDE 4.x
 Copying-policy: GPL
