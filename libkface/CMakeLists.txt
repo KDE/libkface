@@ -7,10 +7,6 @@ REMOVE_DEFINITIONS(-DQT_NO_STL)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
-# This was used to enable catching of exceptions thrown by libexiv2.
-# We use now #pragma GCC visibility push(default) around the headers
-#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=default")
-
 SET(kface_LIB_SRCS database.cpp
                    kface.cpp
                    kfaceutils.cpp
