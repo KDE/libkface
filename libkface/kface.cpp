@@ -80,8 +80,8 @@ void Face::setFace(const libface::Face& face)
     d->face.setX2(face.getX2());
     d->face.setY1(face.getY1());
     d->face.setY2(face.getY2());
-    d->face.setId(libface::Face(face).getId()); //FIXME: method must be const in libface
-    d->face.setFace(libface::Face(face).getFace()); //FIXME: method must be const in libface
+    d->face.setId(face.getId());
+    d->face.setFace(face.getFace());
 }
 
 Face& Face::operator=(const Face& other)
@@ -90,8 +90,8 @@ Face& Face::operator=(const Face& other)
     d->face.setX2(other.d->face.getX2());
     d->face.setY1(other.d->face.getY1());
     d->face.setY2(other.d->face.getY2());
-    d->face.setId(libface::Face(other.d->face).getId()); //FIXME: method must be const in libface
-    d->face.setFace(libface::Face(other.d->face).getFace()); //FIXME: method must be const in libface
+    d->face.setId(other.d->face.getId());
+    d->face.setFace(other.d->face.getFace());
 
     return *this;
 }
