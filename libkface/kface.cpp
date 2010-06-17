@@ -147,4 +147,4 @@ QRect Face::toRect() const
     return QRect(topLeft, bottomRight);
 }
 
-}; namespace KFace
+} // namespace KFace
