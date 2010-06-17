@@ -25,11 +25,13 @@
 // Libface includes
 
 #include <libface/Face.h>
+#include <libface/LibFaceConfig.h>
 
 // Local includes
 
 #include "kface.h"
 #include "kfaceutils.h"
+#include "version.h"
 
 namespace KFace
 {
@@ -145,6 +147,19 @@ QRect Face::toRect() const
     QPoint topLeft(d->face.getX1(), d->face.getY1());
     QPoint bottomRight(d->face.getX2(), d->face.getY2());
     return QRect(topLeft, bottomRight);
+}
+
+// Static methods ---------------------------------------------------------
+
+QString Face::LibFaceVersion()
+{
+    return QString("%1.%2").arg(LibFace_VERSION_MAJOR)
+                           .arg(LibFace_VERSION_MINOR);
+}
+
+QString Face::version()
+{
+    return QString(kface_version);
 }
 
 } // namespace KFace

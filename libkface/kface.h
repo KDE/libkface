@@ -96,6 +96,16 @@ public:
      */
     Face& operator=(const libface::Face& other);
 
+public:
+
+    /** Return a string version of LibFace release in format "major.minor.patch"
+     */
+    static QString LibFaceVersion();
+
+    /** Return a string version of libkface release
+     */
+    static QString version();
+
 private:
 
     FacePriv* const d;
