@@ -45,6 +45,7 @@ class FacePriv;
 
 class KFACE_EXPORT Face
 {
+
 public:
 
     Face();
