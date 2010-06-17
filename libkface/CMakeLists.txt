@@ -3,7 +3,8 @@ INCLUDE_DIRECTORIES( ${LIBFACE_INCLUDE_DIR}
 		     ${OpenCV_CV_INCLUDE_DIR}
                      ${OpenCV_CXCORE_INCLUDE_DIR}
                      ${OpenCV_CVAUX_INCLUDE_DIR}
-                     ${OpenCV_HIGHGUI_INCLUDE_DIR})
+                     ${OpenCV_HIGHGUI_INCLUDE_DIR}
+                   )
 
 ADD_DEFINITIONS(${LIBFACE_DEFINITIONS})
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
@@ -20,12 +21,16 @@ KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${QT_QTGUI_LIBRARY}
-                            -lface -lhighgui -lcv -lcxcore -lcvaux
+
 #                            ${LIBFACE_LIBRARIES}
-                            ${OpenCV_CV_LIBRARY}
-                            ${OpenCV_CXCORE_LIBRARY}
-                            ${OpenCV_CVAUX_LIBRARY}
-                            ${OpenCV_HIGHGUI_LIBRARY})
+                            -lface 
+
+                            -lhighgui -lcv -lcxcore -lcvaux
+#                            ${OpenCV_HIGHGUI_LIBRARY}
+#                            ${OpenCV_CV_LIBRARY}
+#                            ${OpenCV_CXCORE_LIBRARY}
+#                            ${OpenCV_CVAUX_LIBRARY}
+                            )
 
 SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
                             SOVERSION ${KFACE_LIB_SO_CUR_VERSION})
@@ -36,6 +41,7 @@ INSTALL(FILES database.h
               kface.h
               kfaceutils.h
               libkface_export.h
-              kface_global.h      
+              kface_global.h
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
+       )
