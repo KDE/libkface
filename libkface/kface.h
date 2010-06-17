@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "kface_global.h"
+#include "libkface_export.h"
 
 namespace libface
 {
@@ -43,7 +43,7 @@ namespace KFace
 
 class FacePriv;
 
-class KFACESHARED_EXPORT Face
+class KFACE_EXPORT Face
 {
 public:
 

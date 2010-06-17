@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "kface_global.h"
+#include "libkface_export.h"
 #include "kface.h"
 
 namespace KFace
@@ -43,7 +43,7 @@ namespace KFace
 
 class DatabasePriv;
 
-class KFACESHARED_EXPORT Database
+class KFACE_EXPORT Database
 {
 private:
 

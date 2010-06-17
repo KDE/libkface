@@ -41,7 +41,6 @@ INSTALL(FILES database.h
               kface.h
               kfaceutils.h
               libkface_export.h
-              kface_global.h
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
        )
