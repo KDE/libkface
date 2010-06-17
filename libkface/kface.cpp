@@ -92,7 +92,7 @@ void Face::setId(int id)
 void Face::setImage(const QImage& image)
 {
     QImage greyImage = image.convertToFormat(QImage::Format_Indexed8);
-    IplImage *faceImage;
+    IplImage* faceImage;
     faceImage = KFaceUtils::QImage2IplImage(greyImage);
     d->face.setFace(faceImage);
 }
@@ -132,7 +132,7 @@ Face& Face::operator=(const libface::Face& face)
 
 void Face::setRect(const QRect& rect)
 {
-    QPoint topLeft = rect.topLeft();
+    QPoint topLeft     = rect.topLeft();
     QPoint bottomRight = rect.bottomRight();
     d->face.setX1(topLeft.x());
     d->face.setY1(topLeft.y());
