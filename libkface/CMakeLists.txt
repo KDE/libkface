@@ -23,7 +23,7 @@ TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${QT_QTGUI_LIBRARY}
 
 #                            ${LIBFACE_LIBRARIES}
-                            -lface 
+                            -lface
 
                             -lhighgui -lcv -lcxcore -lcvaux
 #                            ${OpenCV_HIGHGUI_LIBRARY}
