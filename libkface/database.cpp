@@ -1,31 +1,41 @@
-/**
-* This file is part of libkface.
-*
-* libkface is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 2 of the License, or
-* (at your option) any later version.
-*
-* libkface is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with libkface.  If not, see <http://www.gnu.org/licenses/>.
-*
-* @note: The Database class wraps the libface database
-* @author: Aditya Bhatt, Marcel Wiesweg
-*/
+/** ===========================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * @date  : 2010-06-16
+ * @note  : The Database class wraps the libface database
+ *
+ * @author: Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ *          Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #include "database.h"
+
+// Qt includes
 
 #include <QMutex>
 #include <QMutexLocker>
 #include <QSharedData>
 
+// Libface includes
+
 #include <libface/LibFace.h>
 #include <libface/Face.h>
+
+// Local includes
 
 #include "kfaceutils.h"
 
@@ -58,7 +68,7 @@ public:
         delete libface;
     }
 
-    libface::LibFace *libface;
+    libface::LibFace* libface;
     QString           configPath;
 };
 
@@ -76,6 +86,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
             mode = libface::ALL;
         else
             mode = libface::EIGEN;
+
         d->libface = new libface::LibFace(mode, configurationPath.toStdString());
     }
 }
@@ -142,4 +153,4 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     return closeness;
 }
 
-};
+}; // namespace KFace
