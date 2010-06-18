@@ -99,7 +99,6 @@ Database::Database(const Database& other)
 
 Database::~Database()
 {
-    delete d;
 }
 
 QList<Face> Database::detectFaces(const QImage& image)
