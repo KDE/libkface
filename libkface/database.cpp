@@ -73,6 +73,7 @@ public:
 };
 
 Database::Database(InitFlags flags, const QString& configurationPath)
+        : d(new DatabasePriv)
 {
     d->configPath = configurationPath;
     if (flags == InitDetection)
@@ -98,16 +99,17 @@ Database::Database(const Database& other)
 
 Database::~Database()
 {
+    delete d;
 }
 
 QList<Face> Database::detectFaces(const QImage& image)
 {
-    IplImage *img = KFaceUtils::QImage2IplImage(image);
+    IplImage* img = KFaceUtils::QImage2IplImage(image);
     std::vector<libface::Face> result = d->libface->detectFaces(img->imageData, img->width, img->height,
                                                                 img->widthStep, img->depth, img->nChannels);
 
     QList<Face> faceList;
-    foreach(const libface::Face &f, result)
+    foreach(const libface::Face& f, result)
     {
         faceList << Face(f);
     }
