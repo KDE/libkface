@@ -49,7 +49,6 @@ QImage KFaceUtils::QImage2Grayscale(const QImage &qimg)
 
         int pixels = img.width()*img.height() ;
         unsigned int *data =  (unsigned int *)img.bits();
-            //(unsigned int *)img.colorTable();
         int val, i;
         for(i=0; i < pixels; ++i){
             val = qGray(data[i]);
@@ -71,11 +70,6 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     memcpy(newdata, img.bits(), img.numBytes());
 #endif
     imgHeader->imageData = (char*) newdata;
-    
-    cvNamedWindow("a");
-    cvShowImage("a", imgHeader);
-    cvWaitKey(0);
-    cvDestroyWindow("a");
 
     return imgHeader;
 }
