@@ -36,14 +36,9 @@ namespace KFace
 {
 /**
  This code is adapted from code (C) Rik Hemsley <rik@kde.org>
-
- The formula used (r + b + g) /3 is different from the qGray formula
- used by Qt.  This is because our formula is much much faster.  If,
- however, it turns out that this is producing sub-optimal images,
- then it will have to change (kurt)
-
- It does produce lower quality grayscale ;-) Use fast == true for the fast
- algorithm, false for the higher quality one (mosfet).
+ and further adapted from code by Mosfet, ported from old KDE 3.5 imaging code.
+ @param qimg The image whose grayscale version is desired
+ @return The grayscale version, RGB+Alpha
  */
 
 QImage KFaceUtils::QImage2Grayscale(const QImage &qimg)
