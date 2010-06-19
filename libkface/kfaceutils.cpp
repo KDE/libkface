@@ -30,21 +30,44 @@
 
 #include "kfaceutils.h"
 
+#include <opencv/highgui.h>
+
 namespace KFace
 {
+/**
+ This code is adapted from code (C) Rik Hemsley <rik@kde.org>
 
-QImage KFaceUtils::QImage2Grayscale(const QImage& img)
+ The formula used (r + b + g) /3 is different from the qGray formula
+ used by Qt.  This is because our formula is much much faster.  If,
+ however, it turns out that this is producing sub-optimal images,
+ then it will have to change (kurt)
+
+ It does produce lower quality grayscale ;-) Use fast == true for the fast
+ algorithm, false for the higher quality one (mosfet).
+ */
+
+QImage KFaceUtils::QImage2Grayscale(const QImage &qimg)
 {
-    if(!img.isGrayscale())
-	return img.convertToFormat(QImage::Format_Indexed8);
-    else
-	return img;
+    QImage img = qimg;
+    if (img.width() == 0 || img.height() == 0)
+      return img;
+
+        int pixels = img.width()*img.height() ;
+        unsigned int *data =  (unsigned int *)img.bits();
+            //(unsigned int *)img.colorTable();
+        int val, i;
+        for(i=0; i < pixels; ++i){
+            val = qGray(data[i]);
+            data[i] = qRgba(val, val, val, qAlpha(data[i]));
+        }
+    return img;
 }
+
 
 IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
 {
     QImage img           = QImage2Grayscale(qimg);
-    IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 1);
+    IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 4);
 #if QT_VERSION > 0x040503
     uchar* newdata       = (uchar*) malloc(sizeof(uchar) * img.byteCount());
     memcpy(newdata, img.bits(), img.byteCount());
@@ -53,6 +76,11 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     memcpy(newdata, img.bits(), img.numBytes());
 #endif
     imgHeader->imageData = (char*) newdata;
+    
+    cvNamedWindow("a");
+    cvShowImage("a", imgHeader);
+    cvWaitKey(0);
+    cvDestroyWindow("a");
 
     return imgHeader;
 }
