@@ -41,14 +41,17 @@ QImage KFaceUtils::QImage2Grayscale(const QImage& img)
 	return img;
 }
 
-IplImage* KFaceUtils::QImage2IplImage(const QImage &qimg)
+IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
 {
-    QImage img = QImage2Grayscale(qimg);
-    
-    IplImage *imgHeader = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 1);
-
-    uchar* newdata = (uchar*) malloc(sizeof(uchar) * img.byteCount());
+    QImage img           = QImage2Grayscale(qimg);
+    IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 1);
+#if QT_VERSION > 0x040503
+    uchar* newdata       = (uchar*) malloc(sizeof(uchar) * img.byteCount());
     memcpy(newdata, img.bits(), img.byteCount());
+#else
+    uchar* newdata       = (uchar*) malloc(sizeof(uchar) * img.numBytes());
+    memcpy(newdata, img.bits(), img.numBytes());
+#endif
     imgHeader->imageData = (char*) newdata;
 
     return imgHeader;
