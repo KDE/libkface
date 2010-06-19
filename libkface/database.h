@@ -59,6 +59,14 @@ public:
     };
     Q_DECLARE_FLAGS(InitFlags, InitFlag)
 
+    /** 
+     * Constructor for Database 
+     * @param InitFlags Flags that specify type of usage for the Database instance. 
+     * For Detection : InitDetection 
+     * For Recognition : InitRecognition
+     * For All : InitAll
+     * @param configurationPath The path where the Database configuration file will be stored.
+     */
     Database(InitFlags = InitAll, const QString& configurationPath = QString());
     Database(const Database& other);
     ~Database();
