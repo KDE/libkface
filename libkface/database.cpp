@@ -104,7 +104,7 @@ Database::~Database()
 QList<Face> Database::detectFaces(const QImage& image)
 {
     IplImage* img = KFaceUtils::QImage2IplImage(image);
-    
+
     std::vector<libface::Face> result = d->libface->detectFaces(img);
 
     QList<Face> faceList;
