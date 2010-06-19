@@ -41,27 +41,28 @@ int main(int argc, char** argv)
 {
     if (argc<2)
     {
-        qDebug()<<"Bad Args!!!\nUsage: "<<argv[0] << " <image1> <image2> ...";
+        qDebug() << "Bad Args!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
         return 0;
     }
 
     QImage img(argv[1]);
-    
+
     // Make a new instance of Database and then detect faces from the image
-    qDebug()<<"Making DB";
+    qDebug() << "Making DB";
     Database* d        = new Database(Database::InitDetection, QString("."));
-    qDebug()<<"Detecting";
+    qDebug() << "Detecting";
     QList<Face> result = d->detectFaces(img);
-    qDebug()<<"Detected";
+    qDebug() << "Detected";
 
 
-    qDebug()<<"Coordinates of detected faces : "<<endl;
+    qDebug() << "Coordinates of detected faces : ";
     Face f;
     foreach(f, result)
     {
 	QRect r = f.toRect();
-	qDebug()<<"("<<r.topLeft().x()<<","<<r.topLeft().y()<<");"<<"("<<r.bottomRight().x()<<","<<r.bottomRight().y()<<")";
+	qDebug() << "(" << r.topLeft().x() << "," << r.topLeft().y() << ");" 
+	         << "(" << r.bottomRight().x() << "," << r.bottomRight().y() << ")";
     }
-    
+
     return 0;
 }
