@@ -38,6 +38,7 @@ namespace KFace
 
 namespace KFaceUtils
 {
+    QImage QImage2Grayscale(const QImage& img);
     IplImage* QImage2IplImage(const QImage& img);
     QImage IplImage2QImage(const IplImage* img);
 };

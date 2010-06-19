@@ -45,23 +45,23 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    QApplication app(argc, argv);
-
-    // Set up a View and Scene
-    QGraphicsView* myView   = new QGraphicsView();
-    QGraphicsScene* myScene = new QGraphicsScene();
-    myView->setScene(myScene);
-
-    // Load an image from a file and add it to scene
-    QPixmap* p                 = new QPixmap(argv[1]);
-    QGraphicsPixmapItem* pItem = new QGraphicsPixmapItem(*p);
-    myScene->addItem(pItem);
-
-    myView->show();
-
+    QImage img(argv[1]);
+    
     // Make a new instance of Database and then detect faces from the image
-    Database* d        = new Database(Database::InitDetection, "");
-    QList<Face> result = d->detectFaces(p->toImage());
+    qDebug()<<"Making DB";
+    Database* d        = new Database(Database::InitDetection, QString("."));
+    qDebug()<<"Detecting";
+    QList<Face> result = d->detectFaces(img);
+    qDebug()<<"Detected";
 
-    return app.exec();
+
+    qDebug()<<"Coordinates of detected faces : "<<endl;
+    Face f;
+    foreach(f, result)
+    {
+	QRect r = f.toRect();
+	qDebug()<<"("<<r.topLeft().x()<<","<<r.topLeft().y()<<");"<<"("<<r.bottomRight().x()<<","<<r.bottomRight().y()<<")";
+    }
+    
+    return 0;
 }

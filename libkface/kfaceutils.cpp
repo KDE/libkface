@@ -33,16 +33,23 @@
 namespace KFace
 {
 
+QImage KFaceUtils::QImage2Grayscale(const QImage& img)
+{
+    if(!img.isGrayscale())
+	return img.convertToFormat(QImage::Format_Indexed8);
+    else
+	return img;
+}
+
 IplImage* KFaceUtils::QImage2IplImage(const QImage &qimg)
 {
+    QImage img = QImage2Grayscale(qimg);
+    
+    IplImage *imgHeader = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 1);
 
-    IplImage *imgHeader = cvCreateImageHeader( cvSize(qimg.width(), qimg.width()), IPL_DEPTH_8U, 4);
-    imgHeader->imageData = (char*) qimg.bits();
-
-    //uchar* newdata = (uchar*) malloc(sizeof(uchar) * qimg->byteCount());
-    //memcpy(newdata, qimg->bits(), qimg->byteCount());
-    //imgHeader->imageData = (char*) newdata;
-    imgHeader->imageData = (char *)qimg.bits();
+    uchar* newdata = (uchar*) malloc(sizeof(uchar) * img.byteCount());
+    memcpy(newdata, img.bits(), img.byteCount());
+    imgHeader->imageData = (char*) newdata;
 
     return imgHeader;
 }
