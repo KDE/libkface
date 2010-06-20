@@ -38,6 +38,7 @@
 // Local includes
 
 #include "kfaceutils.h"
+#include "image_p.h"
 
 namespace KFace
 {
@@ -101,9 +102,10 @@ Database::~Database()
 {
 }
 
-QList<Face> Database::detectFaces(const QImage& image)
+QList<Face> Database::detectFaces(const Image& image)
 {
-    IplImage* img = KFaceUtils::QImage2IplImage(image);
+    //IplImage* img = KFaceUtils::QImage2IplImage(image);
+    IplImage* img = image.imageData();
 
     std::vector<libface::Face> result = d->libface->detectFaces(img);
 

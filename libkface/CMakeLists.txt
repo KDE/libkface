@@ -15,6 +15,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 SET(kface_LIB_SRCS database.cpp
                    kface.cpp
                    kfaceutils.cpp
+                   image.cpp
    )
 
 KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS})

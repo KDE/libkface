@@ -37,6 +37,7 @@
 
 #include "libkface_export.h"
 #include "kface.h"
+#include "image.h"
 
 namespace KFace
 {
@@ -83,7 +84,7 @@ public:
      * @param image The image in which faces are to be detected
      * @return A QList of detected Face's, with the extracted face images loaded into them.
      */
-    QList<Face> detectFaces(const QImage& image);
+    QList<Face> detectFaces(const Image& image);
 
     /**
      * Update the training database with a QList of KFace pointers which hold the face images
