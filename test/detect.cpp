@@ -29,6 +29,11 @@
 #include <QGraphicsScene>
 #include <QDebug>
 #include <QGraphicsPixmapItem>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPixmap>
+#include <QWidget>
+
 
 // Local includes
 
@@ -36,6 +41,47 @@
 #include "libkface/kface.h"
 
 using namespace KFace;
+
+void detectFaces(Database *d, const QString& file)
+{
+    qDebug() << "Loading" << file;
+    QImage img(file);
+    qDebug() << "Detecting";
+    QList<Face> result = d->detectFaces(img);//QString::fromLocal8Bit(argv[1]));
+    qDebug() << "Detected";
+
+    if (result.isEmpty())
+    {
+        qDebug() << "No faces found";
+        return;
+    }
+
+    qDebug() << "Coordinates of detected faces : ";
+    Face f;
+    foreach(f, result)
+    {
+        QRect r = f.toRect();
+        qDebug() << r;// << "(" << r.topLeft().x() << "," << r.topLeft().y() << ");"
+                // << "(" << r.bottomRight().x() << "," << r.bottomRight().y() << ")";
+    }
+
+    QWidget *mainWidget = new QWidget;
+    mainWidget->setWindowTitle(file);
+    QHBoxLayout *layout = new QHBoxLayout(mainWidget);
+    QLabel *fullImage = new QLabel;
+    fullImage->setPixmap(QPixmap::fromImage(img.scaled(250, 250, Qt::KeepAspectRatio)));
+    layout->addWidget(fullImage);
+    foreach (const Face& f, result)
+    {
+        QLabel *label = new QLabel;
+        label->setScaledContents(false);
+        QImage part = img.copy(f.toRect());
+        label->setPixmap(QPixmap::fromImage(part.scaled(200, 200, Qt::KeepAspectRatio)));
+        layout->addWidget(label);
+    }
+    mainWidget->show();
+    qApp->processEvents(); // dirty hack
+}
 
 int main(int argc, char** argv)
 {
@@ -45,24 +91,16 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    QImage img(argv[1]);
-
     // Make a new instance of Database and then detect faces from the image
     qDebug() << "Making DB";
     Database* d        = new Database(Database::InitDetection, QString("."));
-    qDebug() << "Detecting";
-    QList<Face> result = d->detectFaces(img);
-    qDebug() << "Detected";
 
-
-    qDebug() << "Coordinates of detected faces : ";
-    Face f;
-    foreach(f, result)
+    QApplication app(argc, argv);
+    for (int i=1; i<argc; i++)
     {
-	QRect r = f.toRect();
-	qDebug() << "(" << r.topLeft().x() << "," << r.topLeft().y() << ");" 
-	         << "(" << r.bottomRight().x() << "," << r.bottomRight().y() << ")";
+        detectFaces(d, QString::fromLocal8Bit(argv[i]));
     }
+    app.exec();
 
     return 0;
 }
