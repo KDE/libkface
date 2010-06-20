@@ -57,8 +57,7 @@ public:
             cvReleaseImage(&image);
     }
 
-    IplImage *image;
-
+    IplImage* image;
 };
 
 Image::Image()
@@ -66,30 +65,30 @@ Image::Image()
 }
 
 Image::Image(const QString& filePath)
-            : d(new ImagePriv)
+     : d(new ImagePriv)
 {
     d->image = cvLoadImage(filePath.toLocal8Bit(), CV_LOAD_IMAGE_GRAYSCALE);
 }
 
 Image::Image(const QImage& givenImage)
-            : d(new ImagePriv)
+     : d(new ImagePriv)
 {
     d->image = KFaceUtils::QImage2IplImage(givenImage);
 }
 
 Image::Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar *data)
-            : d(new ImagePriv)
+     : d(new ImagePriv)
 {
     d->image = KFaceUtils::Data2IplImage(width, height, sixteenBit, alpha, data);
 }
 
 Image::Image(const Image& other)
-    : d(other.d)
+     : d(other.d)
 {
 }
 
 Image::Image(ImageData image)
-            : d(new ImagePriv)
+     : d(new ImagePriv)
 {
     // take ownership of IplImage
     d->image = image;
@@ -114,6 +113,7 @@ QSize Image::size() const
 {
     if (!d)
         return QSize();
+
     return QSize(d->image->width, d->image->height);
 }
 
@@ -122,6 +122,4 @@ const ImageData Image::imageData() const
     return d->image;
 }
 
-}
-
-
+} // namespace KFace

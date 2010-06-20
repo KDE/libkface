@@ -40,14 +40,14 @@ public:
 
     ImageData() : image(0) {}
 
-    ImageData(IplImage *image) : image(image) {}
-    ImageData &operator=(IplImage *im) { image = im; return *this; }
+    ImageData(IplImage* image) : image(image) {}
+    ImageData &operator=(IplImage* im) { image = im; return *this; }
     operator IplImage *() const { return image; }
 
     IplImage *image;
 };
 
-}
+} // namespace KFace
 
-#endif
+#endif // KFACE_IMAGE_P_H
 

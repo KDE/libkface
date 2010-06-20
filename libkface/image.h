@@ -60,7 +60,7 @@ public:
      *  Ownership of the data buffer remains with the caller, this constructor will take a copy
      *  of the data.
      */
-    Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar *data);
+    Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data);
 
     Image(const Image& other);
     Image(ImageData other);
@@ -78,6 +78,6 @@ private:
     QExplicitlySharedDataPointer<ImagePriv> d;
 };
 
-};
+}; // namespace KFace
 
 #endif // K_FACE_IMAGE_H
