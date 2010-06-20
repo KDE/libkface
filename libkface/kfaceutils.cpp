@@ -63,13 +63,64 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     QImage img           = QImage2Grayscale(qimg);
     IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 4);
 #if QT_VERSION > 0x040503
-    uchar* newdata       = (uchar*) malloc(sizeof(uchar) * img.byteCount());
-    memcpy(newdata, img.bits(), img.byteCount());
+    const int bytes = img.byteCount();
 #else
-    uchar* newdata       = (uchar*) malloc(sizeof(uchar) * img.numBytes());
-    memcpy(newdata, img.bits(), img.numBytes());
+    const int bytes = img.numBytes();
 #endif
+
+    uchar* newdata       = (uchar*) malloc(sizeof(uchar) * bytes);
+    memcpy(newdata, img.bits(), bytes);
     imgHeader->imageData = (char*) newdata;
+
+    return imgHeader;
+}
+
+IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar *data)
+{
+    Q_UNUSED(alpha);
+
+    IplImage* imgHeader  = cvCreateImageHeader( cvSize(width, height), IPL_DEPTH_8U, 4);
+
+    const uint bytes     = width * height * 4;
+    imgHeader->imageData = (char*)malloc(sizeof(uchar) * bytes);
+    if (!imgHeader->imageData)
+        return imgHeader;
+
+    if (sixteenBit)
+    {
+        uchar*        dptr = (uchar*)imgHeader->imageData;
+        const ushort* sptr = (const ushort*)data;
+
+        for (uint i = 0; i < bytes; i+=4)
+        {
+            int val = qGray((sptr[2] * 255UL) / 65535UL,    // R
+                            (sptr[1] * 255UL) / 65535UL,    // G
+                            (sptr[0] * 255UL) / 65535UL);   // B
+            dptr[0] = val;
+            dptr[1] = val;
+            dptr[2] = val;
+            dptr[3] = 0xFF; //(sptr[3] * 255UL) / 65535UL;
+            dptr += 4;
+            sptr += 4;
+        }
+    }
+    else
+    {
+        uchar*       dptr = (uchar*)imgHeader->imageData;
+        const uchar* sptr = data;
+
+        for (uint i = 0; i < bytes; i+=4)
+        {
+            int val = qGray(sptr[2], sptr[1], sptr[0]);
+            dptr[0] = val;
+            dptr[1] = val;
+            dptr[2] = val;
+            dptr[3] = 0xFF; //sptr[3];
+
+            dptr += 4;
+            sptr += 4;
+        }
+    }
 
     return imgHeader;
 }

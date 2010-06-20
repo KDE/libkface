@@ -40,6 +40,7 @@ namespace KFaceUtils
 {
     QImage QImage2Grayscale(const QImage& img);
     IplImage* QImage2IplImage(const QImage& img);
+    IplImage* Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar *data);
     QImage IplImage2QImage(const IplImage* img);
 };
 
