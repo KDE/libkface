@@ -17,13 +17,9 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, dou
     x2 = rect.bottomRight().x();
     y2 = rect.bottomRight().y();
 
-    qDebug()<<"Internal unscaledRect = "<<rect;
-    qDebug()<<scale;
     QRect scaledRect;
     scaledRect.setTopLeft(QPoint(x1*scale, y1*scale));
     scaledRect.setBottomRight(QPoint(x2*scale, y2*scale));
-
-    qDebug()<<"Internal scaledRect = "<<scaledRect;
 
     faceRect->setRect(scaledRect);
 
