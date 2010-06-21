@@ -156,4 +156,11 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     return closeness;
 }
 
+void Database::saveConfig()
+{
+    d->libface->saveConfig(d->configPath.toStdString());
+}
+
+
+
 }; // namespace KFace

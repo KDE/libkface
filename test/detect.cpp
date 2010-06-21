@@ -61,8 +61,7 @@ void detectFaces(Database* d, const QString& file)
     foreach(f, result)
     {
         QRect r = f.toRect();
-        qDebug() << r;// << "(" << r.topLeft().x() << "," << r.topLeft().y() << ");"
-                // << "(" << r.bottomRight().x() << "," << r.bottomRight().y() << ")";
+        qDebug() << r;
     }
 
     QWidget* mainWidget = new QWidget;
