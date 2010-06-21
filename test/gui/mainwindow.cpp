@@ -89,15 +89,13 @@ void MainWindow::openConfig()
 
 void MainWindow::detectFaces()
 {
-    int i;
     currentFaces = d->detectFaces(currentPhoto);
-
     Face face;
 
     foreach(face, currentFaces)
     {
-        FaceItem *faceItem = new FaceItem(0, myScene,face.toRect(), scale);
-        qDebug()<< face.toRect() <<" and scale is "<<scale<<endl;
+        new FaceItem(0, myScene, face.toRect(), scale);
+        qDebug() << face.toRect() <<" and scale is " << scale << endl;
     }
 }
 
