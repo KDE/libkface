@@ -1,4 +1,4 @@
-#include "faceitem.h"
+#include "faceitem.moc"
 
 #include <QDebug>
 
