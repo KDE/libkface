@@ -161,6 +161,4 @@ void Database::saveConfig()
     d->libface->saveConfig(d->configPath.toStdString());
 }
 
-
-
 }; // namespace KFace
