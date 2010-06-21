@@ -61,8 +61,8 @@ void MainWindow::openImage()
     printf("Opened file - %s\n",file.toAscii().data());
 
     QPixmap* photo = new QPixmap(file);
-    lastPhotoItem = new QGraphicsPixmapItem(*photo);
-    currentPhoto = photo->toImage();
+    lastPhotoItem  = new QGraphicsPixmapItem(*photo);
+    currentPhoto   = photo->toImage();
 
     if(1.*ui->widget->width()/photo->width() < 1.*ui->widget->height()/photo->height())
     {
@@ -73,7 +73,11 @@ void MainWindow::openImage()
         scale = 1.*ui->widget->height()/photo->height();
     }
 
+#if QT_VERSION > 0x040503
     lastPhotoItem->setScale(scale);
+#else
+    lastPhotoItem->scale(scale, scale);
+#endif
 
     myScene->addItem(lastPhotoItem);
 }
