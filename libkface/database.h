@@ -101,6 +101,8 @@ public:
      * @return A QList of "closeness" of recognized faces, in the same order as the argument
      */
     QList<double> recognizeFaces(QList<Face>& faces);
+    
+    QString configPath();
 };
 
 }; // namespace KFace

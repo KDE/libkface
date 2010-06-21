@@ -140,7 +140,9 @@ void MainWindow::detectFaces()
 
 void MainWindow::updateConfig()
 {
+    qDebug()<<"Path = "<<d->configPath();
     d->updateFaces(currentFaces);
+    qDebug()<<"Trained";
     d->saveConfig();
 }
 
