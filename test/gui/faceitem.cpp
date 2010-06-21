@@ -1,8 +1,8 @@
-#include "faceitem.moc"
+#include "faceitem.h"
 
 #include <QDebug>
 
-FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, double scale, QString name)
+FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, double scale, QString /*name*/)
 #if QT_VERSION >= 0x040600
         : QGraphicsObject(parent)
 #else
@@ -44,7 +44,7 @@ QRectF FaceItem::boundingRect() const
                   36 + adjust, 60 + adjust);
 }
 
-void FaceItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void FaceItem::paint(QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
 }
 
