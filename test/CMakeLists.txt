@@ -6,11 +6,11 @@ TARGET_LINK_LIBRARIES(detect kface ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 # -----------------------------------------------------------------------------
 
-KDE4_ADD_UI_FILES(libfaceGUI_SRCS gui/mainwindow.ui)
+KDE4_ADD_UI_FILES(libfaceGUI_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
 
-SET(libfaceGUI_SRCS gui/main.cpp
-                    gui/mainwindow.cpp
-                    gui/faceitem.cpp
+SET(libfaceGUI_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/gui/faceitem.cpp
    )
 
 KDE4_ADD_EXECUTABLE(libfaceGUI ${libfaceGUI_SRCS})
