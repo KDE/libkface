@@ -12,19 +12,25 @@
 
 #include "faceitem.h"
 
-namespace Ui {
+namespace Ui
+{
     class MainWindow;
 }
 
 using namespace KFace;
 using namespace std;
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
+
 public:
+
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
 public slots:
+
     void openImage();
     void openConfig();
     void detectFaces();
@@ -32,9 +38,11 @@ public slots:
     void recognise();
 
 protected:
+
     void changeEvent(QEvent *e);
 
 private:
+
     Ui::MainWindow *ui;
     QGraphicsScene *myScene;
     QGraphicsView *myView;

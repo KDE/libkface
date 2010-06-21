@@ -20,7 +20,7 @@ class FaceItem
 #endif
 {
     Q_OBJECT
-    Q_INTERFACES(QGraphicsItem)
+//    Q_INTERFACES(QGraphicsItem)
 
 public:
 
