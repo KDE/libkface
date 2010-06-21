@@ -1,34 +1,45 @@
 #ifndef FACEITEM_H
 #define FACEITEM_H
 
+#include <QtGlobal>
+#if QT_VERSION >= 0x040600
+#include <QGraphicsObject>
+#endif
+
 #include <QGraphicsItem>
 #include <QObject>
 #include <QGraphicsRectItem>
 #include <QBrush>
 #include <QFont>
 
-class FaceItem : public QObject, public QGraphicsItem
-
+class FaceItem
+#if QT_VERSION >= 0x040600
+    : public QGraphicsObject
+    #else
+    : public QObject, public QGraphicsItem
+#endif
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
 
-private:
-    QGraphicsRectItem *faceRect;
-    QGraphicsTextItem *faceName;
 public:
-    FaceItem(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0, QRect rect = QRect(0,0,0,0), double scale = 1, QString name = QString("unknown"));
+
+    FaceItem(QGraphicsItem* parent = 0, QGraphicsScene* scene = 0, QRect rect = QRect(0, 0, 0, 0),
+             double scale = 1, QString name = QString("unknown"));
 
     QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-               QWidget *widget);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
+               QWidget* widget);
     void setText(QString newName);
 
+Q_SIGNALS:
 
-signals:
+public Q_SLOTS:
 
-public slots:
+private:
 
+    QGraphicsRectItem* faceRect;
+    QGraphicsTextItem* faceName;
 };
 
 #endif // FACEITEM_H
