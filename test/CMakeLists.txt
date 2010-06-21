@@ -3,3 +3,15 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkface)
 SET(detect_SRCS detect.cpp)
 KDE4_ADD_EXECUTABLE(detect ${detect_SRCS})
 TARGET_LINK_LIBRARIES(detect kface ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+
+# -----------------------------------------------------------------------------
+
+KDE4_ADD_UI_FILES(libfaceGUI_SRCS gui/mainwindow.ui)
+
+SET(libfaceGUI_SRCS gui/main.cpp
+                    gui/mainwindow.cpp
+                    gui/faceitem.cpp
+   )
+
+KDE4_ADD_EXECUTABLE(libfaceGUI ${libfaceGUI_SRCS})
+TARGET_LINK_LIBRARIES(libfaceGUI kface ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
