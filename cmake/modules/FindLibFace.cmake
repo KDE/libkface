@@ -23,8 +23,9 @@ IF (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
   SET(LIBFACE_FOUND TRUE)
 
 ELSE (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
-  IF (NOT WIN32)
 
+#  IF (NOT WIN32)
+#
 #     # use pkg-config to get the directories and then use these values
 #     # in the FIND_PATH() and FIND_LIBRARY() calls
 #     INCLUDE(UsePkgConfig)
@@ -49,13 +50,13 @@ ELSE (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
 #         SET(LIBFACE_VERSION_GOOD_FOUND FALSE)
 #         MESSAGE(STATUS "Cannot find Face library!")
 #     ENDIF(_LIBFACELinkFlags)
-
-  ELSE(NOT WIN32)
+#
+#  ELSE(NOT WIN32)
 
      # Better check
      SET(LIBFACE_VERSION_GOOD_FOUND TRUE)
 
-  ENDIF (NOT WIN32)
+#  ENDIF (NOT WIN32)
 
   IF(LIBFACE_VERSION_GOOD_FOUND)
 

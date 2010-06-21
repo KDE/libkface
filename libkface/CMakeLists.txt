@@ -22,10 +22,7 @@ KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${QT_QTGUI_LIBRARY}
-
-#                            ${LIBFACE_LIBRARIES}
-                            -lface
-
+                            ${LIBFACE_LIBRARIES}
                             ${OpenCV_HIGHGUI_LIBRARY}
                             ${OpenCV_CV_LIBRARY}
                             ${OpenCV_CXCORE_LIBRARY}
