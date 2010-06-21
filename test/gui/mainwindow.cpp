@@ -17,10 +17,9 @@ MainWindow::MainWindow(QWidget* parent)
     this->connect(ui->recogniseBtn, SIGNAL(clicked()), this, SLOT(recognise()));
     this->connect(ui->updateDatabaseBtn, SIGNAL(clicked()), this, SLOT(updateConfig()));
 
-    myScene = new QGraphicsScene();
-
-    QHBoxLayout *layout = new QHBoxLayout;
-    myView = new QGraphicsView(myScene);
+    myScene             = new QGraphicsScene();
+    QHBoxLayout* layout = new QHBoxLayout;
+    myView              = new QGraphicsView(myScene);
     layout->addWidget(myView);
 
     ui->widget->setLayout(layout);
@@ -84,7 +83,7 @@ void MainWindow::openImage()
 
 void MainWindow::openConfig()
 {
-    QString directory = QFileDialog::getExistingDirectory(this,tr("Select Config Directory"),QDir::currentPath());
+    QString directory = QFileDialog::getExistingDirectory(this, tr("Select Config Directory"), QDir::currentPath());
 
     ui->configLocation->setText(directory);
 
@@ -99,7 +98,7 @@ void MainWindow::detectFaces()
     foreach(face, currentFaces)
     {
         new FaceItem(0, myScene, face.toRect(), scale);
-        qDebug() << face.toRect() <<" and scale is " << scale << endl;
+        qDebug() << face.toRect() << " and scale is " << scale << endl;
     }
 }
 
@@ -123,7 +122,7 @@ void MainWindow::clearScene()
 
 void MainWindow::recognise()
 {
-    qDebug()<<"Will run MainWindow::recognise()"<<endl;
+    qDebug() << "Will run MainWindow::recognise()";
 
     d->recognizeFaces(currentFaces);
 
