@@ -1,5 +1,31 @@
+/** ===========================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * @date  : 2010-06-21
+ * @note  : GUI test program for libkface
+ *
+ * @author: Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
+ *          Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
+// Qt includes
 
 #include <QDebug>
 
@@ -11,11 +37,20 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
 
-    this->connect(ui->openImageBtn, SIGNAL(clicked()), this, SLOT(openImage()));
-    this->connect(ui->openConfigBtn, SIGNAL(clicked()), this, SLOT(openConfig()));
-    this->connect(ui->detectFacesBtn, SIGNAL(clicked()), this, SLOT(detectFaces()));
-    this->connect(ui->recogniseBtn, SIGNAL(clicked()), this, SLOT(recognise()));
-    this->connect(ui->updateDatabaseBtn, SIGNAL(clicked()), this, SLOT(updateConfig()));
+    connect(ui->openImageBtn, SIGNAL(clicked()),
+            this, SLOT(openImage()));
+
+    connect(ui->openConfigBtn, SIGNAL(clicked()),
+            this, SLOT(openConfig()));
+
+    connect(ui->detectFacesBtn, SIGNAL(clicked()),
+            this, SLOT(detectFaces()));
+
+    connect(ui->recogniseBtn, SIGNAL(clicked()),
+            this, SLOT(recognise()));
+
+    connect(ui->updateDatabaseBtn, SIGNAL(clicked()),
+            this, SLOT(updateConfig()));
 
     myScene             = new QGraphicsScene();
     QHBoxLayout* layout = new QHBoxLayout;
@@ -42,11 +77,11 @@ void MainWindow::changeEvent(QEvent* e)
     QMainWindow::changeEvent(e);
     switch (e->type())
     {
-	case QEvent::LanguageChange:
-    	    ui->retranslateUi(this);
+        case QEvent::LanguageChange:
+            ui->retranslateUi(this);
             break;
-	default:
-    	    break;
+        default:
+            break;
     }
 }
 
@@ -114,7 +149,7 @@ void MainWindow::clearScene()
 
     int i;
 
-    for(i=0;i<list.size();i++)
+    for(i=0; i<list.size(); i++)
     {
         myScene->removeItem(list.at(i));
     }
