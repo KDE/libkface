@@ -1,6 +1,6 @@
 
 INCLUDE_DIRECTORIES( ${LIBFACE_INCLUDE_DIR}
-		     ${OpenCV_CV_INCLUDE_DIR}
+                     ${OpenCV_CV_INCLUDE_DIR}
                      ${OpenCV_CXCORE_INCLUDE_DIR}
                      ${OpenCV_CVAUX_INCLUDE_DIR}
                      ${OpenCV_HIGHGUI_INCLUDE_DIR}
@@ -26,11 +26,10 @@ TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
 #                            ${LIBFACE_LIBRARIES}
                             -lface
 
-                            -lhighgui -lcv -lcxcore -lcvaux
-#                            ${OpenCV_HIGHGUI_LIBRARY}
-#                            ${OpenCV_CV_LIBRARY}
-#                            ${OpenCV_CXCORE_LIBRARY}
-#                            ${OpenCV_CVAUX_LIBRARY}
+                            ${OpenCV_HIGHGUI_LIBRARY}
+                            ${OpenCV_CV_LIBRARY}
+                            ${OpenCV_CXCORE_LIBRARY}
+                            ${OpenCV_CVAUX_LIBRARY}
                             )
 
 SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
