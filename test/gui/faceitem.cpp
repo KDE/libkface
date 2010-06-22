@@ -28,7 +28,7 @@
 
 #include <QDebug>
 
-FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, double scale, QString /*name*/)
+FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, double scale, QString name)
 #if QT_VERSION >= 0x040600
         : QGraphicsObject(parent)
 #else
@@ -38,14 +38,14 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, dou
     faceRect = new QGraphicsRectItem( 0, scene);
 
     int x1, y1, x2, y2;
-    x1 = rect.topLeft().x();
-    y1 = rect.topLeft().y();
-    x2 = rect.bottomRight().x();
-    y2 = rect.bottomRight().y();
+    x1 = rect.topLeft().x()*scale;
+    y1 = rect.topLeft().y()*scale;
+    x2 = rect.bottomRight().x()*scale;
+    y2 = rect.bottomRight().y()*scale;
 
     QRect scaledRect;
-    scaledRect.setTopLeft(QPoint(x1*scale, y1*scale));
-    scaledRect.setBottomRight(QPoint(x2*scale, y2*scale));
+    scaledRect.setTopLeft(QPoint(x1, y1));
+    scaledRect.setBottomRight(QPoint(x2, y2));
 
     faceRect->setRect(scaledRect);
 
@@ -53,9 +53,13 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, dou
 
     faceRect->setOpacity(0.5);
 
-    //faceName = new QGraphicsTextItem (name, 0, scene);
-    //faceName->setPos(x-10,y-10);
-    //faceName->setFont(QFont("Helvetica"));
+    int x = x1 + 10;
+    int y = y2 + 10;
+    faceName = new QGraphicsTextItem (name, 0, scene);
+    faceName->setPos(x,y);
+    faceName->setDefaultTextColor(QColor(QString("white")));
+    faceName->setFont(QFont("Helvetica"));
+    faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
 }
 
 QRectF FaceItem::boundingRect() const
@@ -72,6 +76,6 @@ void FaceItem::paint(QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*op
 void FaceItem::setText(QString newName)
 {
     faceName->setPlainText(newName);
-
+    
     //Update?
 }
