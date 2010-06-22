@@ -57,15 +57,20 @@ public:
     
     void setText(QString newName);
     QString getText();
+    
+    
 
 Q_SIGNALS:
 
 public Q_SLOTS:
 
+    void update();
 private:
 
+    int x1, x2, y1, y2;
     QGraphicsRectItem* faceRect;
     QGraphicsTextItem* faceName;
+    QGraphicsRectItem* nameRect;
 };
 
 #endif // FACEITEM_H
