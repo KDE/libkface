@@ -134,7 +134,7 @@ void MainWindow::detectFaces()
     foreach(face, currentFaces)
     {
         new FaceItem(0, myScene, face.toRect(), scale);
-        qDebug() << face.toRect() << " and scale is " << scale << endl;
+        qDebug() << face.toRect()<<endl;
     }
 }
 
