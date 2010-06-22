@@ -104,7 +104,6 @@ Database::~Database()
 
 QList<Face> Database::detectFaces(const Image& image)
 {
-    //IplImage* img = KFaceUtils::QImage2IplImage(image);
     IplImage* img = image.imageData();
 
     std::vector<libface::Face> result = d->libface->detectFaces(img);
@@ -123,6 +122,10 @@ void Database::updateFaces(QList<Face>& faces)
     foreach (const Face& face, faces)
     {
         faceVec.push_back(face);
+	cvNamedWindow("a");
+	cvShowImage("a", faceVec.back().getFace());
+	cvWaitKey(0);
+	cvDestroyWindow("a");
     }
 
     std::vector<int> ids;

@@ -72,7 +72,9 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     memcpy(newdata, img.bits(), bytes);
     imgHeader->imageData = (char*) newdata;
 
-    return imgHeader;
+    IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1 );
+    cvConvertImage(imgHeader, greyImage); 
+    return greyImage;
 }
 
 IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar *data)
@@ -122,7 +124,10 @@ IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bo
         }
     }
 
-    return imgHeader;
+    
+    IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1 );
+    cvConvertImage(imgHeader, greyImage); 
+    return greyImage;
 }
 
 QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
