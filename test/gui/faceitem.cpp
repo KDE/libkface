@@ -28,7 +28,7 @@
 
 #include <QDebug>
 #include <QWidget>
-#include <qpainter.h>
+#include <QPainter>
 #include <QGraphicsOpacityEffect>
 
 #include <QTextDocument>
@@ -71,12 +71,13 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, dou
     QRectF r = faceName->mapRectToScene(faceName->boundingRect());
     nameRect->setRect(r);
     nameRect->setBrush(QBrush(QColor(QString("black"))));
-    nameRect->setOpacity(0.5);
+    nameRect->setOpacity(0.8);
 
     
     faceName->setDefaultTextColor(QColor(QString("white")));
     faceName->setFont(QFont("Helvetica", 10));
     faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
+    
     r = faceName->mapRectToScene(faceName->boundingRect());
     
     //faceName->setGraphicsEffect();

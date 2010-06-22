@@ -29,6 +29,8 @@
 // Qt includes
 
 #include <QDebug>
+#include <QLayout>
+#include <QFormLayout>
 
 using namespace KFace;
 
@@ -54,13 +56,12 @@ MainWindow::MainWindow(QWidget* parent)
             this, SLOT(updateConfig()));
 
     myScene             = new QGraphicsScene();
-    QHBoxLayout* layout = new QHBoxLayout;
+    QGridLayout* layout = new QGridLayout;
     myView              = new QGraphicsView(myScene);
     layout->addWidget(myView);
 
     ui->widget->setLayout(layout);
 
-    myView->setRenderHints(QPainter::Antialiasing);
     myView->show();
 
     d = new Database(Database::InitAll, QDir::currentPath());
@@ -175,6 +176,5 @@ void MainWindow::recognise()
     {
 	qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id();
     }
-
     //TODO: create mapping to items.
 }
