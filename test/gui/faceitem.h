@@ -50,12 +50,13 @@ class FaceItem
 public:
 
     FaceItem(QGraphicsItem* parent = 0, QGraphicsScene* scene = 0, QRect rect = QRect(0, 0, 0, 0),
-             double scale = 1, QString name = QString("unknown"));
+             double scale = 1, QString name = QString("?"));
 
     QRectF boundingRect() const;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
-               QWidget* widget);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    
     void setText(QString newName);
+    QString getText();
 
 Q_SIGNALS:
 

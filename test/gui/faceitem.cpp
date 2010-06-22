@@ -76,6 +76,10 @@ void FaceItem::paint(QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*op
 void FaceItem::setText(QString newName)
 {
     faceName->setPlainText(newName);
-    
-    //Update?
 }
+
+QString FaceItem::getText()
+{
+    return faceName->toPlainText();
+}
+
