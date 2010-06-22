@@ -52,7 +52,9 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, dou
     scaledRect.setBottomRight(QPoint(x2, y2));
 
     faceRect->setRect(scaledRect);
-    faceRect->setBrush(QBrush(QColor(QString("red"))));
+    QPen pen(QColor(QString("red")));
+    pen.setWidth(3);
+    faceRect->setPen(pen);
     faceRect->setOpacity(0.5);
 
     int x = x1 + 10;
