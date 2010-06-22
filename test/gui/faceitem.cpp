@@ -82,7 +82,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, dou
     faceName->setDefaultTextColor(QColor(QString("white")));
     faceName->setFont(QFont("Helvetica", 10));
     faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
-    
+    faceName->setTextWidth((x2-x1)>300?(x2-x1):140);
     r = faceName->mapRectToScene(faceName->boundingRect());
     
     //faceName->setGraphicsEffect();
