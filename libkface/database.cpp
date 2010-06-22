@@ -122,10 +122,6 @@ void Database::updateFaces(QList<Face>& faces)
     foreach (const Face& face, faces)
     {
         faceVec.push_back(face);
-	cvNamedWindow("a");
-	cvShowImage("a", faceVec.back().getFace());
-	cvWaitKey(0);
-	cvDestroyWindow("a");
     }
 
     std::vector<int> ids;
