@@ -72,6 +72,9 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, dou
     
     QRectF r = faceName->mapRectToScene(faceName->boundingRect());
     nameRect->setRect(r);
+    QPen p(QColor(QString("black")));
+    p.setWidth(3);
+    nameRect->setPen(p);
     nameRect->setBrush(QBrush(QColor(QString("black"))));
     nameRect->setOpacity(0.8);
 
@@ -84,9 +87,6 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, QRect rect, dou
     
     //faceName->setGraphicsEffect();
     faceName->setOpacity(1);
-    
-    
-    
     
 }
 
