@@ -144,6 +144,12 @@ void MainWindow::updateConfig()
     d->updateFaces(currentFaces);
     qDebug()<<"Trained";
     d->saveConfig();
+    
+    int i;
+    for(i = 0; i < currentFaces.size(); ++i)
+    {
+	qDebug()<<"Assigned ID to face #"<<i+1<<" as "<<currentFaces[i].id();
+    }
 }
 
 void MainWindow::clearScene()
@@ -163,6 +169,12 @@ void MainWindow::recognise()
     qDebug() << "Will run MainWindow::recognise()";
 
     d->recognizeFaces(currentFaces);
+    
+    int i;
+    for(i = 0; i < currentFaces.size(); ++i)
+    {
+	qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id();
+    }
 
     //TODO: create mapping to items.
 }
