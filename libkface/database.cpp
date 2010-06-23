@@ -100,6 +100,11 @@ Database::Database(const Database& other)
     d = other.d;
 }
 
+Database& Database::operator=(const KFace::Database& other)
+{
+    d = other.d;
+}
+
 Database::~Database()
 {
 }
