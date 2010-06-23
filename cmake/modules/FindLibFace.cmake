@@ -24,39 +24,39 @@ IF (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
 
 ELSE (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
 
-#  IF (NOT WIN32)
-#
-#     # use pkg-config to get the directories and then use these values
-#     # in the FIND_PATH() and FIND_LIBRARY() calls
-#     INCLUDE(UsePkgConfig)
-# 
-#     IF(NOT LIBFACE_MIN_VERSION)
-#       SET(LIBFACE_MIN_VERSION "0.1.0")
-#     ENDIF(NOT LIBFACE_MIN_VERSION)
-# 
-#     pkgconfig(face _LIBFACEIncDir _LIBFACELinkDir _LIBFACELinkFlags _LIBFACECflags)
-# 
-#     IF(_LIBFACELinkFlags)
-#       # query pkg-config asking for a Face >= 0.1.0
-#       EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=${LIBFACE_MIN_VERSION} face RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
-#       IF(_return_VALUE STREQUAL "0")
-#         MESSAGE(STATUS "Found Face release >= ${LIBFACE_MIN_VERSION}")
-#         SET(LIBFACE_VERSION_GOOD_FOUND TRUE)
-#       ELSE(_return_VALUE STREQUAL "0")
-#         MESSAGE(STATUS "Found Face release < ${LIBFACE_MIN_VERSION}")
-#       ENDIF(_return_VALUE STREQUAL "0")
-#     ELSE(_LIBFACELinkFlags)
-#         SET(LIBFACE_FOUND FALSE)
-#         SET(LIBFACE_VERSION_GOOD_FOUND FALSE)
-#         MESSAGE(STATUS "Cannot find Face library!")
-#     ENDIF(_LIBFACELinkFlags)
-#
-#  ELSE(NOT WIN32)
+  IF (NOT WIN32)
+
+    # use pkg-config to get the directories and then use these values
+    # in the FIND_PATH() and FIND_LIBRARY() calls
+    INCLUDE(UsePkgConfig)
+
+    IF(NOT LIBFACE_MIN_VERSION)
+      SET(LIBFACE_MIN_VERSION "0.1")
+    ENDIF(NOT LIBFACE_MIN_VERSION)
+
+    pkgconfig(libface _LIBFACEIncDir _LIBFACELinkDir _LIBFACELinkFlags _LIBFACECflags)
+
+    IF(_LIBFACELinkFlags)
+      # query pkg-config asking for a Face >= 0.1
+      EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=${LIBFACE_MIN_VERSION} face RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+      IF(_return_VALUE STREQUAL "0")
+        MESSAGE(STATUS "Found LibFace release >= ${LIBFACE_MIN_VERSION}")
+        SET(LIBFACE_VERSION_GOOD_FOUND TRUE)
+      ELSE(_return_VALUE STREQUAL "0")
+        MESSAGE(STATUS "Found LibFace release < ${LIBFACE_MIN_VERSION}")
+      ENDIF(_return_VALUE STREQUAL "0")
+    ELSE(_LIBFACELinkFlags)
+        SET(LIBFACE_FOUND FALSE)
+        SET(LIBFACE_VERSION_GOOD_FOUND FALSE)
+        MESSAGE(STATUS "Cannot find LibFace library!")
+    ENDIF(_LIBFACELinkFlags)
+
+  ELSE(NOT WIN32)
 
      # Better check
      SET(LIBFACE_VERSION_GOOD_FOUND TRUE)
 
-#  ENDIF (NOT WIN32)
+  ENDIF (NOT WIN32)
 
   IF(LIBFACE_VERSION_GOOD_FOUND)
 
@@ -91,10 +91,10 @@ ELSE (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
 
      IF (Face_FIND_REQUIRED)
        IF (NOT LIBFACE_INCLUDE_DIR)
-         MESSAGE(FATAL_ERROR "Could NOT find Face header files")
+         MESSAGE(FATAL_ERROR "Could NOT find LibFace header files")
        ENDIF (NOT LIBFACE_INCLUDE_DIR)
        IF (NOT LIBFACE_LIBRARIES)
-           MESSAGE(FATAL_ERROR "Could NOT find Face library")
+           MESSAGE(FATAL_ERROR "Could NOT find LibFace library")
        ENDIF (NOT LIBFACE_LIBRARIES)
      ENDIF (Face_FIND_REQUIRED)
 
