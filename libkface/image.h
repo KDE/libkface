@@ -64,13 +64,33 @@ public:
      */
     Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data);
 
+    /**
+     * Copy Constructor.
+     */
     Image(const Image& other);
+    
+    /**
+     * Constructor. Create an Image from an ImageData struct
+     */
     Image(ImageData other);
+    
+    /**
+     * Assignment operator
+     * @param other An Image to be assigned
+     */
     Image& operator=(const Image& other);
 
+    /**
+     * Destructor
+     */
     ~Image();
 
+    /**
+     * Check if the image is null
+     * @return A boolean value, that is true if the image is null
+     */
     bool isNull() const;
+    
     QSize size() const;
 
     const ImageData imageData() const;
