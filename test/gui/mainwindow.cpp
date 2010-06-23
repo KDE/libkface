@@ -60,11 +60,15 @@ MainWindow::MainWindow(QWidget* parent)
     
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),
 	    this, SLOT(updateAccuracy()));
+	    
 
     myScene             = new QGraphicsScene();
     QGridLayout* layout = new QGridLayout;
     myView              = new QGraphicsView(myScene);
+    statusLabel         = new QLabel;
+    
     layout->addWidget(myView);
+    ui->statusBar->addWidget(statusLabel);
 
     ui->widget->setLayout(layout);
 
@@ -74,6 +78,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     ui->configLocation->setText(QDir::currentPath());
     ui->horizontalSlider->setValue(d->detectionAccuracy());
+    
+    statusLabel->setText("Idle.");
+    ui->statusBar->update();
 }
 
 MainWindow::~MainWindow()
@@ -136,19 +143,29 @@ void MainWindow::openConfig()
 
 void MainWindow::detectFaces()
 {
+    statusLabel->setText("Detecting...");
+    ui->statusBar->update();
+    
     currentFaces.clear();
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
     qDebug()<<"libkface detected : "<<currentFaces.size();
+    
     foreach(face, currentFaces)
     {
         new FaceItem(0, myScene, face.toRect(), scale);
         qDebug() << face.toRect()<<endl;
     }
+    
+    statusLabel->setText("Idle.");
+    ui->statusBar->update();
 }
 
 void MainWindow::updateConfig()
 {
+    statusLabel->setText("Training with new faces...");
+    ui->statusBar->update();
+    
     qDebug()<<"Path = "<<d->configPath();
     d->updateFaces(currentFaces);
     qDebug()<<"Trained";
@@ -159,6 +176,9 @@ void MainWindow::updateConfig()
     {
 	qDebug()<<"Assigned ID to face #"<<i+1<<" as "<<currentFaces[i].id();
     }
+    
+    statusLabel->setText("Idle.");
+    ui->statusBar->update();
 }
 
 void MainWindow::updateAccuracy()
@@ -171,6 +191,9 @@ void MainWindow::updateAccuracy()
 
 void MainWindow::clearScene()
 {
+    statusLabel->setText("Clearing scene...");
+    ui->statusBar->update();
+    
     QList<QGraphicsItem*> list = myScene->items();
 
     int i;
@@ -179,10 +202,16 @@ void MainWindow::clearScene()
     {
         myScene->removeItem(list.at(i));
     }
+    
+    statusLabel->setText("Idle.");
+    ui->statusBar->update();
 }
 
 void MainWindow::recognise()
 {
+    statusLabel->setText("Recognizing...");
+    ui->statusBar->update();
+    
     qDebug() << "Will run MainWindow::recognise()";
 
     d->recognizeFaces(currentFaces);
@@ -193,4 +222,7 @@ void MainWindow::recognise()
 	qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id();
     }
     //TODO: create mapping to items.
+    
+    statusLabel->setText("Idle.");
+    ui->statusBar->update();
 }

@@ -36,6 +36,7 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QFileDialog>
+#include <QLabel>
 
 // libkface includes
 
@@ -86,8 +87,9 @@ private:
     QGraphicsScene*      myScene;
     QGraphicsView*       myView;
     QGraphicsPixmapItem* lastPhotoItem;
+    QLabel*              statusLabel;
+    
     Database*            d;
-
     QImage               currentPhoto;
     double               scale;
     QList<Face>          currentFaces;
