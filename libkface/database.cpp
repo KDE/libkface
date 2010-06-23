@@ -103,6 +103,7 @@ Database::Database(const Database& other)
 Database& Database::operator=(const KFace::Database& other)
 {
     d = other.d;
+    return *this;
 }
 
 Database::~Database()
