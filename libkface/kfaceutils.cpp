@@ -34,6 +34,7 @@
 
 namespace KFace
 {
+
 /**
  This code is adapted from code (C) Rik Hemsley <rik@kde.org>
  and further adapted from code by Mosfet, ported from old KDE 3.5 imaging code.
@@ -47,16 +48,16 @@ QImage KFaceUtils::QImage2Grayscale(const QImage &qimg)
     if (img.width() == 0 || img.height() == 0)
       return img;
 
-        int pixels = img.width()*img.height() ;
-        unsigned int *data =  (unsigned int *)img.bits();
-        int val, i;
-        for(i=0; i < pixels; ++i){
-            val = qGray(data[i]);
-            data[i] = qRgba(val, val, val, qAlpha(data[i]));
-        }
+    int pixels = img.width()*img.height() ;
+    unsigned int* data =  (unsigned int *)img.bits();
+    int val, i;
+    for(i=0; i < pixels; ++i)
+    {
+        val = qGray(data[i]);
+        data[i] = qRgba(val, val, val, qAlpha(data[i]));
+    }
     return img;
 }
-
 
 IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
 {
@@ -77,7 +78,7 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     return greyImage;
 }
 
-IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar *data)
+IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data)
 {
     Q_UNUSED(alpha);
 
@@ -124,7 +125,6 @@ IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bo
         }
     }
 
-    
     IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1 );
     cvConvertImage(imgHeader, greyImage); 
     return greyImage;
