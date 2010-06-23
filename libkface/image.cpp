@@ -6,7 +6,7 @@
  * @date  : 2010-06-18
  * @brief : Wrapper class for image data
  *
- * @author: Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg at gmx dot de>
+ * @author: Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *          Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
  * This program is free software; you can redistribute it
