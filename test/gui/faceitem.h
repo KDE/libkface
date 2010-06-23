@@ -49,25 +49,24 @@ class FaceItem
 
 public:
 
-    FaceItem(QGraphicsItem* parent = 0, QGraphicsScene* scene = 0, QRect rect = QRect(0, 0, 0, 0),
-             double scale = 1, QString name = QString("?"));
+    FaceItem(QGraphicsItem* parent = 0, QGraphicsScene* scene = 0, const QRect& rect = QRect(0, 0, 0, 0),
+             double scale = 1, const QString& name = QString("?"));
 
     QRectF boundingRect() const;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
-    
-    void setText(QString newName);
+
+    void setText(const QString& newName);
     QString getText();
-    
-    
 
 Q_SIGNALS:
 
 public Q_SLOTS:
 
     void update();
+
 private:
 
-    int x1, x2, y1, y2;
+    int                x1, x2, y1, y2;
     QGraphicsRectItem* faceRect;
     QGraphicsTextItem* faceName;
     QGraphicsRectItem* nameRect;
