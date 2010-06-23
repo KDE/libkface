@@ -98,6 +98,10 @@ public:
 
 public:
 
+    /** Return a string version of LibOpenCV release in format "major.minor.patch"
+     */
+    static QString LibOpenCVVersion();
+
     /** Return a string version of LibFace release in format "major.minor.patch"
      */
     static QString LibFaceVersion();

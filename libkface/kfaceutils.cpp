@@ -30,6 +30,8 @@
 
 #include "kfaceutils.h"
 
+// OpenCV includes.
+
 #include <opencv/highgui.h>
 
 namespace KFace

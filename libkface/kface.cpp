@@ -27,6 +27,10 @@
 #include <libface/Face.h>
 #include <libface/LibFaceConfig.h>
 
+// OpenCV includes.
+
+#include <opencv/cvver.h>
+
 // Local includes
 
 #include "kface.h"
@@ -150,6 +154,11 @@ QRect Face::toRect() const
 }
 
 // Static methods ---------------------------------------------------------
+
+QString Face::LibOpenCVVersion()
+{
+    return QString("%1").arg(CV_VERSION);
+}
 
 QString Face::LibFaceVersion()
 {
