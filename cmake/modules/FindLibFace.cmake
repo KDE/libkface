@@ -16,15 +16,17 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-
 IF (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
 
   # in cache already
+  MESSAGE(STATUS "Found LibFace library in cache: ${LIBFACE_LIBRARIES}")
   SET(LIBFACE_FOUND TRUE)
 
 ELSE (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
 
   IF (NOT WIN32)
+
+    MESSAGE(STATUS "Check LibFace library using pkg-config...")
 
     # use pkg-config to get the directories and then use these values
     # in the FIND_PATH() and FIND_LIBRARY() calls
