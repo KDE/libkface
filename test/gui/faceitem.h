@@ -66,6 +66,7 @@ public Q_SLOTS:
 
 private:
 
+    int                sceneWidth, sceneHeight;
     int                x1, x2, y1, y2;
     QGraphicsRectItem* faceRect;
     QGraphicsTextItem* faceName;
