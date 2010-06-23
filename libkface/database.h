@@ -89,21 +89,25 @@ public:
     QList<Face> detectFaces(const Image& image);
 
     /**
-     * Update the training database with a QList of KFace pointers which hold the face images
+     * Update the training database with a QList of Faces which hold the face images
      * Faces that have not been given any ID by the caller will automatically be given the next available ID,
-     * and this ID will be updated in the KFace objects.
+     * and this ID will be updated in the Face objects.
      * @param faces A QList of Face's, which hold the face image too, for updating the DB.
      */
     void updateFaces(QList<Face>& faces);
 
     /**
-     * Function to recognize faces in a QList of KFace pointers which hold the face images.
-     * Recognized faces will have their ID's changed in the KFace objects
+     * Function to recognize faces in a QList of Faces which hold the face images.
+     * Recognized faces will have their ID's changed in the Face objects
      * @param faces A QList of Face's, which hold the face image too, for recongition.
      * @return A QList of "closeness" of recognized faces, in the same order as the argument
      */
     QList<double> recognizeFaces(QList<Face>& faces);
     
+    /**
+     * Returns the directory path of the config file
+     *
+     */
     QString configPath();
 };
 
