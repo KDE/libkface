@@ -71,8 +71,22 @@ public:
      * @param configurationPath The path where the Database configuration file will be stored.
      */
     Database(InitFlags = InitAll, const QString& configurationPath = QString());
+    
+    /**
+     * Copy constructor for database
+     * @param other A reference to another database
+     */
     Database(const Database& other);
+    
+    /**
+     * Descructor
+     */
     ~Database();
+    
+    /**
+     * Assignment Operator.
+     * @param other The database whose contents are to be assigned.
+     */
     Database& operator=(const Database& other);
 
     /**

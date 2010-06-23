@@ -39,12 +39,6 @@
 namespace KFace
 {
 
-/**
- This code is adapted from code (C) Rik Hemsley <rik@kde.org>
- and further adapted from code by Mosfet, ported from old KDE 3.5 imaging code.
- @param qimg The image whose grayscale version is desired
- @return The grayscale version, RGB+Alpha
- */
 
 QImage KFaceUtils::QImage2Grayscale(const QImage &qimg)
 {
