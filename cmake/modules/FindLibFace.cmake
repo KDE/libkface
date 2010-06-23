@@ -37,7 +37,7 @@ ELSE (LIBFACE_INCLUDE_DIR AND LIBFACE_LIBRARIES)
     pkgconfig(libface _LIBFACEIncDir _LIBFACELinkDir _LIBFACELinkFlags _LIBFACECflags)
 
     IF(_LIBFACELinkFlags)
-      # query pkg-config asking for a Face >= 0.1
+      # query pkg-config asking for a LibFace >= 0.1
       EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=${LIBFACE_MIN_VERSION} face RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
       IF(_return_VALUE STREQUAL "0")
         MESSAGE(STATUS "Found LibFace release >= ${LIBFACE_MIN_VERSION}")
