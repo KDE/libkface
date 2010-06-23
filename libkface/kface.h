@@ -62,9 +62,22 @@ public:
      * @param image The QImage for the face image
      */
     Face(const QRect& rect, const QImage& image = QImage());
+    
+    /** 
+     * Face constructor which constructs a face object from a libface::Face.
+     * @param other The libface::Face object.
+     */
     Face(const libface::Face& other);
 
+    /** 
+     * Face constructor which constructs a face object from another Face.
+     * @param other The Face object
+     */
     Face(const Face& other);
+    
+    /** 
+     * Destructor
+     */
     ~Face();
 
     /** Will convert given QImage to an internal IplImage.
@@ -82,17 +95,34 @@ public:
      */
     void setRect(const QRect& rect);
 
+    /** Will set the co-ordinates of KFace object to the specified rectangle
+     * @param rect The QRect rectangle which is to be set as the rectangle for KFace instance
+     */
     void setFace(const libface::Face& face);
 
+    /**
+     * Returns integer ID of the Face
+     * @return ID
+     */
     int id() const;
+    
+    /**
+     * Set the integer ID of the Face
+     * @param id The ID
+     */
     void setId(int id);
 
-    /** Will return a QRect of the KFace object, for better interop with functions that don't want to directly use KFace
+    /** 
+     * Will return a QRect of the Face object, for better interop with functions that don't want to directly use Face
      * @return A QRect version of the bounding box for a face
      */
     QRect toRect() const;
     operator QRect() const { return toRect(); }
 
+    /** 
+     * Will return a libface::Face version of the Face object
+     * @return libface::Face version
+     */
     libface::Face &face() const;
     operator libface::Face&() const { return face(); }
 
