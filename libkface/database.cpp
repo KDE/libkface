@@ -167,4 +167,15 @@ QString Database::configPath()
     return d->configPath;
 }
 
+void Database::setDetectionAccuracy(int value)
+{
+    d->libface->setDetectionAccuracy(value);
+}
+
+int Database::detectionAccuracy()
+{
+    return d->libface->getDetectionAccuracy();
+}
+
+
 }; // namespace KFace
