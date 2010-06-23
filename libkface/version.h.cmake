@@ -1,7 +1,7 @@
 /** ===========================================================
  *
  * This file is a part of digiKam project
- * http://www.digikam.org
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date  : 2010-06-16
  * @brief : LibFace library interface for KDE
