@@ -14,66 +14,97 @@
    <string>Libkface GUI Test Program</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_2">
+   <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" colspan="2">
-       <widget class="QWidget" name="widget" native="true"/>
-      </item>
-      <item row="0" column="2">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QPushButton" name="openImageBtn">
-          <property name="text">
-           <string>Open Image</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="detectFacesBtn">
-          <property name="text">
-           <string>Detect Faces</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="recogniseBtn">
-          <property name="text">
-           <string>Recognise</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="updateDatabaseBtn">
-          <property name="text">
-           <string>Update Database</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="saveConfigBtn">
-          <property name="text">
-           <string>Save Config</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLineEdit" name="configLocation">
+     <widget class="QSlider" name="horizontalSlider">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>5</number>
+      </property>
+      <property name="singleStep">
+       <number>1</number>
+      </property>
+      <property name="pageStep">
+       <number>1</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>24</number>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Accuracy</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLCDNumber" name="lcdNumber"/>
+    </item>
+    <item row="1" column="0" colspan="4">
+     <widget class="QWidget" name="widget" native="true"/>
+    </item>
+    <item row="1" column="4">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QPushButton" name="openImageBtn">
         <property name="text">
-         <string>Some Default File Location</string>
+         <string>Open Image</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="openConfigBtn">
+      <item>
+       <widget class="QPushButton" name="detectFacesBtn">
         <property name="text">
-         <string>Config Directory</string>
+         <string>Detect Faces</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="recogniseBtn">
+        <property name="text">
+         <string>Recognise</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="updateDatabaseBtn">
+        <property name="text">
+         <string>Update Database</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveConfigBtn">
+        <property name="text">
+         <string>Save Config</string>
         </property>
        </widget>
       </item>
      </layout>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLineEdit" name="configLocation">
+      <property name="text">
+       <string>Some Default File Location</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QPushButton" name="openConfigBtn">
+      <property name="text">
+       <string>Config Directory</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

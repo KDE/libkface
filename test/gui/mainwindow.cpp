@@ -57,6 +57,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui->updateDatabaseBtn, SIGNAL(clicked()),
             this, SLOT(updateConfig()));
+    
+    connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),
+	    this, SLOT(updateAccuracy()));
 
     myScene             = new QGraphicsScene();
     QGridLayout* layout = new QGridLayout;
@@ -70,6 +73,7 @@ MainWindow::MainWindow(QWidget* parent)
     d = new Database(Database::InitAll, QDir::currentPath());
 
     ui->configLocation->setText(QDir::currentPath());
+    ui->horizontalSlider->setValue(d->detectionAccuracy());
 }
 
 MainWindow::~MainWindow()
@@ -132,9 +136,10 @@ void MainWindow::openConfig()
 
 void MainWindow::detectFaces()
 {
+    currentFaces.clear();
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
-
+    qDebug()<<"libkface detected : "<<currentFaces.size();
     foreach(face, currentFaces)
     {
         new FaceItem(0, myScene, face.toRect(), scale);
@@ -155,6 +160,14 @@ void MainWindow::updateConfig()
 	qDebug()<<"Assigned ID to face #"<<i+1<<" as "<<currentFaces[i].id();
     }
 }
+
+void MainWindow::updateAccuracy()
+{
+    int value = ui->horizontalSlider->value();
+    ui->lcdNumber->display(value);
+    d->setDetectionAccuracy(value);
+}
+
 
 void MainWindow::clearScene()
 {
