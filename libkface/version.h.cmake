@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * @date  : 2010-06-16
- * @note  : LibFace library interface for KDE
+ * @brief : LibFace library interface for KDE
  *
  * @author: Copyright (C) Gilles Caulier <caulier dot gilles at gmail dot com>
  *

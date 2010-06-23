@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * @date  : 2010-06-18
- * @note  : Wrapper class for image data
+ * @brief : Wrapper class for image data
  *
  * @author: Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg at gmx dot de>
  *          Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>

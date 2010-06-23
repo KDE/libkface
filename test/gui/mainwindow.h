@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * @date  : 2010-06-21
- * @note  : GUI test program for libkface
+ * @brief : GUI test program for libkface
  *
  * @author: Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *          Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
