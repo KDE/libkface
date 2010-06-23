@@ -34,8 +34,12 @@
 #include <QGraphicsPixmapItem>
 #include <QFileDialog>
 
+// libkface includes
+
 #include <libkface/database.h>
 #include <libkface/kface.h>
+
+// local includes
 
 #include "faceitem.h"
 

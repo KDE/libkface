@@ -145,7 +145,7 @@ void MainWindow::updateConfig()
     d->updateFaces(currentFaces);
     qDebug()<<"Trained";
     d->saveConfig();
-    
+
     int i;
     for(i = 0; i < currentFaces.size(); ++i)
     {
@@ -170,7 +170,7 @@ void MainWindow::recognise()
     qDebug() << "Will run MainWindow::recognise()";
 
     d->recognizeFaces(currentFaces);
-    
+
     int i;
     for(i = 0; i < currentFaces.size(); ++i)
     {
