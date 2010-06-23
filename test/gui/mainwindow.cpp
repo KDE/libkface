@@ -93,7 +93,7 @@ void MainWindow::changeEvent(QEvent* e)
 void MainWindow::openImage()
 {
     QString file = QFileDialog::getOpenFileName(this,
-            tr("Open Image"), QDir::currentPath(), tr("Image Files (*.png *.jpg *.bmp)"));
+            "Open Image", QDir::currentPath(), "Image Files (*.png *.jpg *.bmp)");
 
     clearScene();
 
@@ -123,7 +123,7 @@ void MainWindow::openImage()
 
 void MainWindow::openConfig()
 {
-    QString directory = QFileDialog::getExistingDirectory(this, tr("Select Config Directory"), QDir::currentPath());
+    QString directory = QFileDialog::getExistingDirectory(this, "Select Config Directory", QDir::currentPath());
 
     ui->configLocation->setText(directory);
 

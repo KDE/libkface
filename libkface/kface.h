@@ -50,7 +50,17 @@ class KFACE_EXPORT Face
 
 public:
 
+    /** 
+     * Face constructor
+     */
     Face();
+    
+    /** 
+     * Face constructor which constructs a face object out of a QRect and optionally a QImage.
+     * If no image is passed, it sets a blank image made by QImage()
+     * @param rect The QRect for the Face object
+     * @param image The QImage for the face image
+     */
     Face(const QRect& rect, const QImage& image = QImage());
     Face(const libface::Face& other);
 
