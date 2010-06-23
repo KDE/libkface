@@ -34,8 +34,7 @@
 #include <QPixmap>
 #include <QWidget>
 
-
-// Local includes
+// libkface includes
 
 #include "libkface/database.h"
 #include "libkface/kface.h"
