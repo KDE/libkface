@@ -54,7 +54,7 @@ public:
      * Face constructor
      */
     Face();
-    
+
     /** 
      * Face constructor which constructs a face object out of a QRect and optionally a QImage.
      * If no image is passed, it sets a blank image made by QImage()
@@ -62,7 +62,7 @@ public:
      * @param image The QImage for the face image
      */
     Face(const QRect& rect, const QImage& image = QImage());
-    
+
     /** 
      * Face constructor which constructs a face object from a libface::Face.
      * @param other The libface::Face object.
@@ -74,7 +74,7 @@ public:
      * @param other The Face object
      */
     Face(const Face& other);
-    
+
     /** 
      * Destructor
      */
@@ -95,8 +95,8 @@ public:
      */
     void setRect(const QRect& rect);
 
-    /** Will set the co-ordinates of KFace object to the specified rectangle
-     * @param rect The QRect rectangle which is to be set as the rectangle for KFace instance
+    /** Will set a face object from a libface::Face.
+     * @param face The libface::Face object.
      */
     void setFace(const libface::Face& face);
 
@@ -105,7 +105,7 @@ public:
      * @return ID
      */
     int id() const;
-    
+
     /**
      * Set the integer ID of the Face
      * @param id The ID
