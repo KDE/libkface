@@ -36,17 +36,12 @@
 #include <QGraphicsScene>
 
 FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name)
-#if QT_VERSION >= 0x040600
         : QGraphicsObject(parent)
-#else
-        : QGraphicsItem(parent)
-#endif
 {
-    faceRect = new QGraphicsRectItem( 0, scene);
-
-    sceneWidth = scene->width();
+    faceRect    = new QGraphicsRectItem( 0, scene);
+    sceneWidth  = scene->width();
     sceneHeight = scene->height();
-    
+
     // Scale all coordinates to fit the initial size of the scene
     x1 = rect.topLeft().x()*scale;
     y1 = rect.topLeft().y()*scale;
@@ -72,7 +67,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
     nameRect = new QGraphicsRectItem( 0, scene);
     faceName = new QGraphicsTextItem (name, 0, scene);
-    
+
     // Make the bounding box for the name update itself to cover all the text whenever contents are changed
     QTextDocument* doc;
     doc = faceName->document();
@@ -87,7 +82,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
 
     // Get coordinates of the name relative the the scene
     QRectF r = faceName->mapRectToScene(faceName->boundingRect());
-    
+
     // Draw the bounding name rectangle with the scene coordinates
     nameRect->setRect(r);
     QPen p(QColor(QString("black")));
@@ -101,7 +96,6 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     faceName->setFont(QFont("Helvetica", 10));
     faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
     faceName->setOpacity(1);
-    
 }
 
 QRectF FaceItem::boundingRect() const
@@ -113,7 +107,6 @@ QRectF FaceItem::boundingRect() const
 
 void FaceItem::paint(QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-    
 }
 
 void FaceItem::setText(const QString& newName)

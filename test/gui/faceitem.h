@@ -30,22 +30,14 @@
 // Qt includes
 
 #include <QtGlobal>
-#if QT_VERSION >= 0x040600
 #include <QGraphicsObject>
-#endif
-
-#include <QGraphicsItem>
 #include <QObject>
 #include <QGraphicsRectItem>
 #include <QBrush>
 #include <QFont>
 
 class FaceItem
-#if QT_VERSION >= 0x040600
     : public QGraphicsObject
-#else
-    : public QObject, public QGraphicsItem
-#endif
 {
     Q_OBJECT
 
@@ -59,8 +51,6 @@ public:
 
     void setText(const QString& newName);
     QString getText();
-
-Q_SIGNALS:
 
 public Q_SLOTS:
 
