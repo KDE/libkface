@@ -30,6 +30,7 @@
 // Qt includes
 
 #include <QImage>
+#include <QString>
 
 // Local includes
 
@@ -105,13 +106,25 @@ public:
      * @return ID
      */
     int id() const;
-
+    
+    /**
+     * Returns the name of the Face
+     * @return A QString name of the Face
+     */
+    QString name() const;
+    
     /**
      * Set the integer ID of the Face
      * @param id The ID
      */
     void setId(int id);
-
+    
+    /**
+     * Set the name of the Face
+     * @param name The name (QString)
+     */
+    void setName(QString name);
+    
     /** 
      * Will return a QRect of the Face object, for better interop with functions that don't want to directly use Face
      * @return A QRect version of the bounding box for a face

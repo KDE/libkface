@@ -51,6 +51,7 @@ public:
     }
 
     libface::Face face;
+    QString name;
 };
 
 Face::Face()
@@ -90,6 +91,16 @@ libface::Face &Face::face() const
 int Face::id() const
 {
     return d->face.getId();
+}
+
+QString Face::name() const
+{
+    return d->name;
+}
+
+void Face::setName(QString name)
+{
+    d->name = name;
 }
 
 void Face::setId(int id)
