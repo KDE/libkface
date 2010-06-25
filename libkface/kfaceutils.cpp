@@ -39,14 +39,13 @@
 namespace KFace
 {
 
-
 QImage KFaceUtils::QImage2Grayscale(const QImage &qimg)
 {
     QImage img = qimg;
     if (img.width() == 0 || img.height() == 0)
       return img;
 
-    int pixels = img.width()*img.height() ;
+    int pixels         = img.width()*img.height() ;
     unsigned int* data =  (unsigned int *)img.bits();
     int val, i;
     for(i=0; i < pixels; ++i)
@@ -71,7 +70,7 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     memcpy(newdata, img.bits(), bytes);
     imgHeader->imageData = (char*) newdata;
 
-    IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1 );
+    IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1 );
     cvConvertImage(imgHeader, greyImage); 
     return greyImage;
 }
@@ -138,7 +137,7 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
 
     if (channels != 1 && channels != 3 && channels != 4)
     {
-        kError() << "Unsupported number of channels in IplImage:" << channels;
+        kError(51005) << "Unsupported number of channels in IplImage:" << channels;
         return QImage();
     }
 
