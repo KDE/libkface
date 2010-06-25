@@ -24,6 +24,11 @@
  *
  * ============================================================ */
 
+// Qt includes
+
+#include <QFile>
+#include <QDataStream>
+
 // KDE include
 
 #include <kdebug.h>
@@ -172,6 +177,38 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
     }
 
     return qimg;
+}
+
+QHash< QString, int > KFaceUtils::hashFromFile(const QString fileName)
+{
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    
+    QHash<QString, int> tempHash;
+    
+    QPair<QString, int> namePair;
+    QDataStream in;
+    
+    while( !in.atEnd() )
+    {
+        in >> namePair;
+        tempHash[namePair.first] = namePair.second;
+    }
+    
+    file.close();
+    
+    return tempHash;
+}
+
+void KFaceUtils::addNameToFile(const QString fileName, const QString name, const int id)
+{
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly);
+    
+    QDataStream out(&file);
+    out << qMakePair<QString, int>(name,id);
+    
+    file.close();
 }
 
 } // namespace KFace

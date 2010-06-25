@@ -34,6 +34,7 @@
 #include <QString>
 #include <QSharedDataPointer>
 #include <QPair>
+#include <QHash>
 
 // Local includes
 

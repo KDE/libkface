@@ -71,14 +71,17 @@ public:
         delete libface;
     }
 
-    libface::LibFace* libface;
-    QString           configPath;
+    libface::LibFace*   libface;
+    QHash<QString, int> hash;       // FIXME: Does this need a better name?
+    QString             configPath;
 };
 
 Database::Database(InitFlags flags, const QString& configurationPath)
         : d(new DatabasePriv)
 {
     d->configPath = configurationPath;
+    d->hash = KFaceUtils::hashFromFile(d->configPath+QString("/dictionary.config"));
+
     if (flags == InitDetection)
     {
         d->libface = new libface::LibFace(libface::DETECT);
@@ -127,8 +130,12 @@ QList<Face> Database::detectFaces(const Image& image)
 void Database::updateFaces(QList<Face>& faces)
 {
     std::vector<libface::Face> faceVec;
-    foreach (const Face& face, faces)
+    foreach (Face face, faces)
     {
+        // If a name is already there in the dictionary, then set the ID from the dictionary, so that libface won't set it's own ID
+        if(d->hash.contains(face.name()))
+            face.setId(d->hash[face.name()]);
+        
         faceVec.push_back(face);
     }
 
@@ -137,7 +144,16 @@ void Database::updateFaces(QList<Face>& faces)
 
     for(int i = 0; i<faces.size() && i<(int)ids.size(); ++i)
     {
-        faces[i].setId(ids.at(i));
+            faces[i].setId(ids.at(i));
+        
+            // If the name was not in the mapping before (new name), add it to the dictionary
+            if(!d->hash.contains(faces[i].name()))
+            {
+                // Add to file
+                KFaceUtils::addNameToFile(d->configPath+QString("/dictionary.config"), faces[i].name(), faces[i].id());
+                // Add to d->hash
+                d->hash[faces[i].name()] = faces[i].id();
+            }
     }
 }
 
@@ -158,6 +174,12 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     {
         faces[i].setId(result.at(i).first);
         closeness.append(result.at(i).second);
+        
+        // Locate the name from the hash, pity we don't have a bi-directional hash in Qt
+        QHashIterator<QString, int> it(d->hash);
+        while (!it.findNext(faces[i].id())) {}
+        
+        faces[i].setName(it.key());
     }
 
     return closeness;

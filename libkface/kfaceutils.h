@@ -72,6 +72,21 @@ namespace KFaceUtils
      * @return QImage version of image
      */
     QImage IplImage2QImage(const IplImage* img);
+    
+    /**
+     * Takes a filename and returns a string to integer hash.
+     * @param fileName The name of the file from which the hash is to be retrieved
+     * @return A QHash<QString, int>, which maps the name of a person to his ID in the database
+     */
+    QHash<QString, int> hashFromFile(const QString fileName);
+    
+    /**
+     * Adds a person's name and ID to the specified file
+     * @param fileName The QString name of the file which is to be update with the new person
+     * @param name The QString name of the new person
+     * @param id The integer ID of the new person
+     */
+    void addNameToFile(const QString fileName, const QString name, const int id);
 };
 
 } // namespace KFace
