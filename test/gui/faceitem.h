@@ -50,7 +50,7 @@ public:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
     void setText(const QString& newName);
-    QString getText();
+    QString text() const;
 
 public Q_SLOTS:
 

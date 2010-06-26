@@ -151,9 +151,12 @@ void MainWindow::detectFaces()
     Face face;
     qDebug()<<"libkface detected : "<<currentFaces.size();
     
+    faceitems.clear();
+    
     foreach(face, currentFaces)
     {
-        new FaceItem(0, myScene, face.toRect(), scale);
+        
+        faceitems.append(new FaceItem(0, myScene, face.toRect(), scale));
         qDebug() << face.toRect()<<endl;
     }
     
@@ -166,12 +169,20 @@ void MainWindow::updateConfig()
     statusLabel->setText("Training with new faces...");
     ui->statusBar->update();
     
+    int i;
+    
     qDebug()<<"Path = "<<d->configPath();
+    
+    for(i = 0 ; i <currentFaces.size(); ++i)
+    {
+        currentFaces[i].setName(faceitems[i]->text());
+    }
+    
     d->updateFaces(currentFaces);
     qDebug()<<"Trained";
     d->saveConfig();
 
-    int i;
+    
     for(i = 0; i < currentFaces.size(); ++i)
     {
 	qDebug()<<"Assigned ID to face #"<<i+1<<" as "<<currentFaces[i].id();
@@ -219,7 +230,8 @@ void MainWindow::recognise()
     int i;
     for(i = 0; i < currentFaces.size(); ++i)
     {
-	qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id();
+        faceitems[i]->setText(currentFaces[i].name());
+        qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id();
     }
     //TODO: create mapping to items.
     

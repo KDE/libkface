@@ -88,6 +88,7 @@ private:
     QGraphicsView*       myView;
     QGraphicsPixmapItem* lastPhotoItem;
     QLabel*              statusLabel;
+    QList<FaceItem *>      faceitems;
     
     Database*            d;
     QImage               currentPhoto;

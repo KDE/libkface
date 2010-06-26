@@ -114,7 +114,7 @@ void FaceItem::setText(const QString& newName)
     faceName->setPlainText(newName);
 }
 
-QString FaceItem::getText()
+QString FaceItem::text() const
 {
     return faceName->toPlainText();
 }

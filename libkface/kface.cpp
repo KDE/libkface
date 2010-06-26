@@ -98,7 +98,7 @@ QString Face::name() const
     return d->name;
 }
 
-void Face::setName(QString name)
+void Face::setName(const QString& name)
 {
     d->name = name;
 }

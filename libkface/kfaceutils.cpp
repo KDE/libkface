@@ -203,7 +203,7 @@ QHash< QString, int > KFaceUtils::hashFromFile(const QString fileName)
 void KFaceUtils::addNameToFile(const QString fileName, const QString name, const int id)
 {
     QFile file(fileName);
-    file.open(QIODevice::WriteOnly);
+    file.open(QIODevice::Append|QIODevice::WriteOnly|QIODevice::Text);
     
     QDataStream out(&file);
     out << qMakePair<QString, int>(name,id);

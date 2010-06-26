@@ -123,7 +123,7 @@ public:
      * Set the name of the Face
      * @param name The name (QString)
      */
-    void setName(QString name);
+    void setName(const QString& name);
     
     /** 
      * Will return a QRect of the Face object, for better interop with functions that don't want to directly use Face
