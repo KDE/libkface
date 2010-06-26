@@ -31,6 +31,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QSharedData>
+#include <QDebug>
 
 // Libface includes
 
@@ -80,7 +81,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
         : d(new DatabasePriv)
 {
     d->configPath = configurationPath;
-    d->hash = KFaceUtils::hashFromFile(d->configPath+QString("/dictionary.config"));
+    d->hash = KFaceUtils::hashFromFile(d->configPath+QString("/dictionary"));
 
     if (flags == InitDetection)
     {
@@ -150,7 +151,7 @@ void Database::updateFaces(QList<Face>& faces)
             if(!d->hash.contains(faces[i].name()))
             {
                 // Add to file
-                KFaceUtils::addNameToFile(d->configPath+QString("/dictionary.config"), faces[i].name(), faces[i].id());
+                KFaceUtils::addNameToFile(d->configPath+QString("/dictionary"), faces[i].name(), faces[i].id());
                 // Add to d->hash
                 d->hash[faces[i].name()] = faces[i].id();
             }
@@ -177,11 +178,16 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         
         // Locate the name from the hash, pity we don't have a bi-directional hash in Qt
         QHashIterator<QString, int> it(d->hash);
-        while (!it.findNext(faces[i].id())) {}
         
-        faces[i].setName(it.key());
+        qDebug()<<"Will look in hash";
+        
+        while(it.findNext( faces[i].id() ))
+        {
+            faces[i].setName(it.key());
+            qDebug()<<"This one is "<<it.key();
+            break;
+        }
     }
-
     return closeness;
 }
 
