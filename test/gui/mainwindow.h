@@ -94,6 +94,7 @@ private:
     QImage               currentPhoto;
     double               scale;
     QList<Face>          currentFaces;
+    QString              lastFileOpenPath;
 };
 
 #endif // MAINWINDOW_H

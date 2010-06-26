@@ -81,6 +81,8 @@ MainWindow::MainWindow(QWidget* parent)
     
     statusLabel->setText("Idle.");
     ui->statusBar->update();
+
+    lastFileOpenPath = QDir::currentPath();
 }
 
 MainWindow::~MainWindow()
@@ -104,7 +106,12 @@ void MainWindow::changeEvent(QEvent* e)
 void MainWindow::openImage()
 {
     QString file = QFileDialog::getOpenFileName(this,
-            "Open Image", QDir::currentPath(), "Image Files (*.png *.jpg *.bmp)");
+            "Open Image", lastFileOpenPath, "Image Files (*.png *.jpg *.bmp)");
+
+    if (file.isEmpty())
+        return;
+
+    lastFileOpenPath = QFileInfo(file).absolutePath();
 
     clearScene();
 
