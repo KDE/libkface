@@ -180,12 +180,17 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         QHashIterator<QString, int> it(d->hash);
         
         qDebug()<<"Will look in hash";
-        
-        while(it.findNext( faces[i].id() ))
+
+        it.toFront();
+        while(it.hasNext())
         {
-            faces[i].setName(it.key());
-            qDebug()<<"This one is "<<it.key();
-            break;
+            it.next();
+            if(it.value() == faces[i].id())
+            {
+                faces[i].setName(it.key());
+                qDebug()<<"This one is "<<it.key()<<" with name "<<faces[i].name();
+                break;
+            }
         }
     }
     return closeness;

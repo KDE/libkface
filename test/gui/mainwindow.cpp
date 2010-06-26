@@ -150,9 +150,8 @@ void MainWindow::detectFaces()
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
     qDebug()<<"libkface detected : "<<currentFaces.size();
-    
+        
     faceitems.clear();
-    
     foreach(face, currentFaces)
     {
         
@@ -231,7 +230,7 @@ void MainWindow::recognise()
     for(i = 0; i < currentFaces.size(); ++i)
     {
         faceitems[i]->setText(currentFaces[i].name());
-        qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id();
+        qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id()<<" and name "<<currentFaces[i].name();
     }
     //TODO: create mapping to items.
     
