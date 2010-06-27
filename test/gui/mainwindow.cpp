@@ -106,7 +106,7 @@ void MainWindow::changeEvent(QEvent* e)
 void MainWindow::openImage()
 {
     QString file = QFileDialog::getOpenFileName(this,
-            "Open Image", lastFileOpenPath, "Image Files (*.png *.jpg *.bmp)");
+            "Open Image", lastFileOpenPath, "Image Files (*.png *.jpg *.bmp *.pgm)");
 
     if (file.isEmpty())
         return;
@@ -180,13 +180,19 @@ void MainWindow::updateConfig()
     
     qDebug()<<"Path = "<<d->configPath();
     
-    // Assign the text of the faceitems to the name of each face
+    // Assign the text of the faceitems to the name of each face. When there is no text, drop that face from currentfaces.
+    QList<Face> updateList;
+
     for(i = 0 ; i <currentFaces.size(); ++i)
     {
-        currentFaces[i].setName(faceitems[i]->text());
+        if(faceitems[i]->text() != "?")
+        {
+            currentFaces[i].setName(faceitems[i]->text());
+            updateList.append(currentFaces.at(i));
+        }
     }
     
-    d->updateFaces(currentFaces);
+    d->updateFaces(updateList);
     qDebug()<<"Trained";
     d->saveConfig();
     
