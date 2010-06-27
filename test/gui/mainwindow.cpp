@@ -110,7 +110,7 @@ void MainWindow::openImage()
 
     clearScene();
 
-    printf("Opened file - %s\n",file.toAscii().data());
+    qDebug()<<"Opened file "<<file.toAscii().data();
 
     QPixmap* photo = new QPixmap(file);
     lastPhotoItem  = new QGraphicsPixmapItem(*photo);
@@ -160,7 +160,7 @@ void MainWindow::updateConfig()
 {
     int i;
     
-    qDebug()<<"Path = "<<d->configPath();
+    qDebug()<<"Path of config directory = "<<d->configPath();
     
     // Assign the text of the faceitems to the name of each face. When there is no text, drop that face from currentfaces.
     QList<Face> updateList;
@@ -181,7 +181,7 @@ void MainWindow::updateConfig()
     }
     else
     {
-        qDebug()<<"No faces to train";
+        qDebug()<<"No faces to train.";
     }
 }
 
