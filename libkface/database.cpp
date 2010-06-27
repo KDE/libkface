@@ -165,13 +165,24 @@ bool Database::updateFaces(QList<Face>& faces)
 
 QList<double> Database::recognizeFaces(QList<Face>& faces)
 {
+    QList<double> closeness;
+    if(faces.isEmpty())
+    {
+        return closeness;
+    }
+    
+    if(d->hash.isEmpty())
+    {
+        qDebug()<<"ERROR: No database exists.";
+        return closeness;
+    }
+    
     std::vector<libface::Face> faceVec;
     foreach (const Face& face, faces)
     {
         faceVec.push_back(face);
     }
 
-    QList<double> closeness;
     std::vector< std::pair<int, double> > result;
 
     result = d->libface->recognise(&faceVec);

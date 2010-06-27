@@ -208,12 +208,17 @@ void MainWindow::clearScene()
 
 void MainWindow::recognise()
 {
-    d->recognizeFaces(currentFaces);
-
+    QList<double> closeness;
+    closeness = d->recognizeFaces(currentFaces);
+    
+    if(closeness.isEmpty())
+        return;
+    
     int i;
     for(i = 0; i < currentFaces.size(); ++i)
     {
         faceitems[i]->setText(currentFaces[i].name());
-        qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id()<<" and name "<<currentFaces[i].name();
+        qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id()<<" and name "<<currentFaces[i].name()
+                <<" with a distance of "<<closeness[i];
     }
 }
