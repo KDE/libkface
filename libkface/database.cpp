@@ -46,18 +46,6 @@
 namespace KFace
 {
 
-class DatabaseStatic
-{
-public:
-
-    DatabaseStatic()
-    {
-    }
-
-    QMutex  mutex;
-    //QHash<QString, Database> hash;
-};
-
 class DatabasePriv : public QSharedData
 {
 public:
@@ -73,7 +61,7 @@ public:
     }
 
     libface::LibFace*   libface;
-    QHash<QString, int> hash;       // FIXME: Does this need a better name?
+    QHash<QString, int> hash;
     QString             configPath;
 };
 
