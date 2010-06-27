@@ -65,10 +65,8 @@ MainWindow::MainWindow(QWidget* parent)
     myScene             = new QGraphicsScene();
     QGridLayout* layout = new QGridLayout;
     myView              = new QGraphicsView(myScene);
-    statusLabel         = new QLabel;
     
     layout->addWidget(myView);
-    ui->statusBar->addWidget(statusLabel);
 
     ui->widget->setLayout(layout);
 
@@ -79,9 +77,6 @@ MainWindow::MainWindow(QWidget* parent)
     ui->configLocation->setText(QDir::currentPath());
     ui->horizontalSlider->setValue(d->detectionAccuracy());
     
-    statusLabel->setText("Idle.");
-    ui->statusBar->update();
-
     lastFileOpenPath = QDir::currentPath();
 }
 
@@ -150,9 +145,6 @@ void MainWindow::openConfig()
 
 void MainWindow::detectFaces()
 {
-    statusLabel->setText("Detecting...");
-    ui->statusBar->update();
-    
     currentFaces.clear();
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
@@ -166,16 +158,10 @@ void MainWindow::detectFaces()
         faceitems.append(new FaceItem(0, myScene, face.toRect(), scale));
         qDebug() << face.toRect()<<endl;
     }
-    
-    statusLabel->setText("Idle.");
-    ui->statusBar->update();
 }
 
 void MainWindow::updateConfig()
 {
-    statusLabel->setText("Training with new faces...");
-    ui->statusBar->update();
-    
     int i;
     
     qDebug()<<"Path = "<<d->configPath();
@@ -201,9 +187,6 @@ void MainWindow::updateConfig()
     {
         qDebug()<<"No faces to train";
     }
-    
-    statusLabel->setText("Idle.");
-    ui->statusBar->update();
 }
 
 void MainWindow::updateAccuracy()
@@ -216,9 +199,6 @@ void MainWindow::updateAccuracy()
 
 void MainWindow::clearScene()
 {
-    statusLabel->setText("Clearing scene...");
-    ui->statusBar->update();
-    
     QList<QGraphicsItem*> list = myScene->items();
 
     int i;
@@ -228,15 +208,10 @@ void MainWindow::clearScene()
         myScene->removeItem(list.at(i));
     }
     
-    statusLabel->setText("Idle.");
-    ui->statusBar->update();
 }
 
 void MainWindow::recognise()
 {
-    statusLabel->setText("Recognizing...");
-    ui->statusBar->update();
-    
     d->recognizeFaces(currentFaces);
 
     int i;
@@ -245,7 +220,4 @@ void MainWindow::recognise()
         faceitems[i]->setText(currentFaces[i].name());
         qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id()<<" and name "<<currentFaces[i].name();
     }
-    
-    statusLabel->setText("Idle.");
-    ui->statusBar->update();
 }
