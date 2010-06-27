@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     myView->show();
 
-    d = new Database(Database::InitAll, QDir::currentPath());
+    d = new Database(Database::InitAll, ".");
 
     ui->configLocation->setText(QDir::currentPath());
     ui->horizontalSlider->setValue(d->detectionAccuracy());

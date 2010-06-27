@@ -46,6 +46,7 @@
 namespace KFace
 {
 
+    const QString mappingFilename = QString("dictionary");
 class DatabasePriv : public QSharedData
 {
 public:
@@ -69,7 +70,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
         : d(new DatabasePriv)
 {
     d->configPath = configurationPath;
-    d->hash = KFaceUtils::hashFromFile(d->configPath+QString("/dictionary"));
+    d->hash = KFaceUtils::hashFromFile(d->configPath+mappingFilename);
     
     if (flags == InitDetection)
     {
@@ -83,7 +84,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
         else
             mode = libface::EIGEN;
 
-        d->libface = new libface::LibFace(mode, configurationPath.toStdString());
+        d->libface = new libface::LibFace(mode, d->configPath.toStdString());
     }
 }
 
@@ -142,7 +143,7 @@ bool Database::updateFaces(QList<Face>& faces)
             if(!d->hash.contains(faces[i].name()))
             {
                 // Add to file
-                KFaceUtils::addNameToFile(d->configPath+QString("/dictionary"), faces[i].name(), faces[i].id());
+                KFaceUtils::addNameToFile(d->configPath+mappingFilename, faces[i].name(), faces[i].id());
                 // Add to d->hash
                 d->hash[faces[i].name()] = faces[i].id();
             }
