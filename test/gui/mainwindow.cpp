@@ -125,11 +125,7 @@ void MainWindow::openImage()
         scale = 1.*ui->widget->height()/photo->height();
     }
 
-#if QT_VERSION > 0x040503
     lastPhotoItem->setScale(scale);
-#else
-    lastPhotoItem->scale(scale, scale);
-#endif
 
     myScene->addItem(lastPhotoItem);
 }

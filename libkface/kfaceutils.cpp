@@ -65,11 +65,8 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
 {
     QImage img           = QImage2Grayscale(qimg);
     IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 4);
-#if QT_VERSION > 0x040503
+
     const int bytes = img.byteCount();
-#else
-    const int bytes = img.numBytes();
-#endif
 
     uchar* newdata       = (uchar*) malloc(sizeof(uchar) * bytes);
     memcpy(newdata, img.bits(), bytes);
