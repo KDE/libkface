@@ -128,8 +128,10 @@ QList<Face> Database::detectFaces(const Image& image)
     return faceList;
 }
 
-void Database::updateFaces(QList<Face>& faces)
+bool Database::updateFaces(QList<Face>& faces)
 {
+    if(faces.isEmpty())
+        return false;
     std::vector<libface::Face> faceVec;
     foreach (Face face, faces)
     {
@@ -157,6 +159,8 @@ void Database::updateFaces(QList<Face>& faces)
                 d->hash[faces[i].name()] = faces[i].id();
             }
     }
+    
+    return true;
 }
 
 QList<double> Database::recognizeFaces(QList<Face>& faces)

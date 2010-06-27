@@ -108,8 +108,9 @@ public:
      * Faces that have not been given any ID by the caller will automatically be given the next available ID,
      * and this ID will be updated in the Face objects.
      * @param faces A QList of Face's, which hold the face image too, for updating the DB.
+     * @return False if no faces were updated, due to an argument of size zero
      */
-    void updateFaces(QList<Face>& faces);
+    bool updateFaces(QList<Face>& faces);
 
     /**
      * Function to recognize faces in a QList of Faces which hold the face images.

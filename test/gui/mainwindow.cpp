@@ -192,9 +192,15 @@ void MainWindow::updateConfig()
         }
     }
     
-    d->updateFaces(updateList);
-    qDebug()<<"Trained";
-    d->saveConfig();
+    if( d->updateFaces(updateList) )
+    {
+        qDebug()<<"Trained";
+        d->saveConfig();
+    }
+    else
+    {
+        qDebug()<<"No faces to train";
+    }
     
     statusLabel->setText("Idle.");
     ui->statusBar->update();
