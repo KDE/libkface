@@ -156,12 +156,13 @@ void MainWindow::detectFaces()
     currentFaces.clear();
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
-    qDebug()<<"libkface detected : "<<currentFaces.size();
+    qDebug()<<"libkface detected : "<<currentFaces.size()<<" faces.";
         
     faceitems.clear();
-    foreach(face, currentFaces)
+    
+    for(int i = 0; i < currentFaces.size(); ++i)
     {
-        
+        face = currentFaces[i];
         faceitems.append(new FaceItem(0, myScene, face.toRect(), scale));
         qDebug() << face.toRect()<<endl;
     }
@@ -179,6 +180,7 @@ void MainWindow::updateConfig()
     
     qDebug()<<"Path = "<<d->configPath();
     
+    // Assign the text of the faceitems to the name of each face
     for(i = 0 ; i <currentFaces.size(); ++i)
     {
         currentFaces[i].setName(faceitems[i]->text());
@@ -229,8 +231,6 @@ void MainWindow::recognise()
     statusLabel->setText("Recognizing...");
     ui->statusBar->update();
     
-    qDebug() << "Will run MainWindow::recognise()";
-
     d->recognizeFaces(currentFaces);
 
     int i;
@@ -239,7 +239,6 @@ void MainWindow::recognise()
         faceitems[i]->setText(currentFaces[i].name());
         qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id()<<" and name "<<currentFaces[i].name();
     }
-    //TODO: create mapping to items.
     
     statusLabel->setText("Idle.");
     ui->statusBar->update();

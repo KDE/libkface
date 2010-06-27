@@ -182,12 +182,12 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
 QHash< QString, int > KFaceUtils::hashFromFile(const QString fileName)
 {
     QFile file(fileName);
-    file.open(QIODevice::ReadOnly);
+    file.open(QIODevice::ReadOnly|QIODevice::Text);
     
     QHash<QString, int> tempHash;
     
     QPair<QString, int> namePair;
-    QDataStream in;
+    QDataStream in(&file);
     
     while( !in.atEnd() )
     {

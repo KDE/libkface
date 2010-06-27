@@ -82,7 +82,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
 {
     d->configPath = configurationPath;
     d->hash = KFaceUtils::hashFromFile(d->configPath+QString("/dictionary"));
-
+    
     if (flags == InitDetection)
     {
         d->libface = new libface::LibFace(libface::DETECT);
@@ -135,18 +135,19 @@ void Database::updateFaces(QList<Face>& faces)
     {
         // If a name is already there in the dictionary, then set the ID from the dictionary, so that libface won't set it's own ID
         if(d->hash.contains(face.name()))
+        {
             face.setId(d->hash[face.name()]);
-        
+        }
         faceVec.push_back(face);
     }
 
     std::vector<int> ids;
     ids = d->libface->update(&faceVec);
-
-    for(int i = 0; i<faces.size() && i<(int)ids.size(); ++i)
+    
+    for(int i = 0; i<(int)ids.size(); ++i)
     {
             faces[i].setId(ids.at(i));
-        
+            
             // If the name was not in the mapping before (new name), add it to the dictionary
             if(!d->hash.contains(faces[i].name()))
             {
@@ -178,9 +179,6 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         
         // Locate the name from the hash, pity we don't have a bi-directional hash in Qt
         QHashIterator<QString, int> it(d->hash);
-        
-        qDebug()<<"Will look in hash";
-
         it.toFront();
         while(it.hasNext())
         {
@@ -188,10 +186,10 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
             if(it.value() == faces[i].id())
             {
                 faces[i].setName(it.key());
-                qDebug()<<"This one is "<<it.key()<<" with name "<<faces[i].name();
                 break;
             }
         }
+        
     }
     return closeness;
 }

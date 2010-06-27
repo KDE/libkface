@@ -138,8 +138,8 @@ Face& Face::operator=(const Face& other)
     d->face.setY1(other.d->face.getY1());
     d->face.setY2(other.d->face.getY2());
     d->face.setId(other.d->face.getId());
+    d->name = other.name();
     d->face.setFace(other.d->face.getFace());
-
     return *this;
 }
 
