@@ -189,12 +189,6 @@ void MainWindow::updateConfig()
     d->updateFaces(currentFaces);
     qDebug()<<"Trained";
     d->saveConfig();
-
-    
-    for(i = 0; i < currentFaces.size(); ++i)
-    {
-	qDebug()<<"Assigned ID to face #"<<i+1<<" as "<<currentFaces[i].id();
-    }
     
     statusLabel->setText("Idle.");
     ui->statusBar->update();
