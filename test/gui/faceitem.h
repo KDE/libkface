@@ -52,6 +52,8 @@ public:
     void setText(const QString& newName);
     QString text() const;
 
+    void setVisible(bool);
+    
 public Q_SLOTS:
 
     void update();

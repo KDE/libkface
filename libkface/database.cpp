@@ -160,6 +160,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         return closeness;
     }
     
+    qDebug()<<"hashsize"<<d->hash.size();
     if(d->hash.isEmpty())
     {
         qDebug()<<"ERROR: No database exists.";

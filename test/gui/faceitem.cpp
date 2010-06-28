@@ -127,3 +127,11 @@ void FaceItem::update()
     QRectF r = faceName->mapRectToScene(faceName->boundingRect());
     nameRect->setRect(r);
 }
+
+void FaceItem::setVisible(bool visible)
+{
+    this->faceRect->setVisible(visible);
+    this->nameRect->setVisible(visible);
+    this->faceName->setVisible(visible);
+}
+
