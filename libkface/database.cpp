@@ -200,7 +200,8 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
 
 void Database::saveConfig()
 {
-    d->libface->saveConfig(d->configPath.toStdString());
+    std::string path = d->configPath.toStdString();
+    d->libface->saveConfig(path);
 }
 
 QString Database::configPath()
