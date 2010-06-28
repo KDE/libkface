@@ -28,12 +28,15 @@
 #include <QImage>
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QDebug>
 #include <QGraphicsPixmapItem>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPixmap>
 #include <QWidget>
+
+// KDE includes
+
+#include <kdebug.h>
 
 // libkface includes
 
@@ -44,24 +47,24 @@ using namespace KFace;
 
 void detectFaces(Database* d, const QString& file)
 {
-    qDebug() << "Loading" << file;
+    kDebug(51005) << "Loading" << file;
     QImage img(file);
-    qDebug() << "Detecting";
+    kDebug(51005) << "Detecting";
     QList<Face> result = d->detectFaces(img);//QString::fromLocal8Bit(argv[1]));
-    qDebug() << "Detected";
+    kDebug(51005) << "Detected";
 
     if (result.isEmpty())
     {
-        qDebug() << "No faces found";
+        kDebug(51005) << "No faces found";
         return;
     }
 
-    qDebug() << "Coordinates of detected faces : ";
+    kDebug(51005) << "Coordinates of detected faces : ";
     Face f;
     foreach(f, result)
     {
         QRect r = f.toRect();
-        qDebug() << r;
+        kDebug(51005) << r;
     }
 
     QWidget* mainWidget = new QWidget;
@@ -88,12 +91,12 @@ int main(int argc, char** argv)
 {
     if (argc<2)
     {
-        qDebug() << "Bad Args!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
+        kDebug(51005) << "Bad Args!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
         return 0;
     }
 
     // Make a new instance of Database and then detect faces from the image
-    qDebug() << "Making DB";
+    kDebug(51005) << "Making DB";
     Database* d = new Database(Database::InitDetection, QString("."));
 
     QApplication app(argc, argv);
