@@ -26,7 +26,7 @@
  *
  * ============================================================ */
 
-#include "mainwindow.h"
+#include "mainwindow.moc"
 #include "ui_mainwindow.h"
 
 // Qt includes
