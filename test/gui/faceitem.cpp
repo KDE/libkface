@@ -28,12 +28,15 @@
 
 // Qt includes
 
-#include <QDebug>
 #include <QWidget>
 #include <QPainter>
 #include <QGraphicsOpacityEffect>
 #include <QTextDocument>
 #include <QGraphicsScene>
+
+// KDE include
+
+#include <kdebug.h>
 
 FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name)
         : QGraphicsObject(parent)

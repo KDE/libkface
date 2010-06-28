@@ -35,6 +35,10 @@
 #include <QLayout>
 #include <QFormLayout>
 
+// KDE include
+
+#include <kdebug.h>
+
 using namespace KFace;
 
 MainWindow::MainWindow(QWidget* parent)
@@ -110,7 +114,7 @@ void MainWindow::openImage()
 
     clearScene();
 
-    qDebug() << "Opened file " << file.toAscii().data();
+    kDebug(51005) << "Opened file " << file.toAscii().data();
 
     QPixmap* photo = new QPixmap(file);
     lastPhotoItem  = new QGraphicsPixmapItem(*photo);
@@ -144,7 +148,7 @@ void MainWindow::detectFaces()
     currentFaces.clear();
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
-    qDebug() << "libkface detected : " << currentFaces.size() << " faces.";
+    kDebug(51005) << "libkface detected : " << currentFaces.size() << " faces.";
 
     faceitems.clear();
 
@@ -152,7 +156,7 @@ void MainWindow::detectFaces()
     {
         face = currentFaces[i];
         faceitems.append(new FaceItem(0, myScene, face.toRect(), scale));
-        qDebug() << face.toRect()<<endl;
+        kDebug(51005) << face.toRect()<<endl;
     }
 }
 
@@ -160,7 +164,7 @@ void MainWindow::updateConfig()
 {
     int i;
 
-    qDebug() << "Path of config directory = " << d->configPath();
+    kDebug(51005) << "Path of config directory = " << d->configPath();
 
     // Assign the text of the faceitems to the name of each face. When there is no text, drop that face from currentfaces.
     QList<Face> updateList;
@@ -176,12 +180,12 @@ void MainWindow::updateConfig()
 
     if( d->updateFaces(updateList) )
     {
-        qDebug() << "Trained";
+        kDebug(51005) << "Trained";
         d->saveConfig();
     }
     else
     {
-        qDebug() << "No faces to train.";
+        kDebug(51005) << "No faces to train.";
     }
 }
 
@@ -216,7 +220,7 @@ void MainWindow::recognise()
     for(i = 0; i < currentFaces.size(); ++i)
     {
         faceitems[i]->setText(currentFaces[i].name());
-        qDebug() << "Face #"<< i+1 << " is closest to the person with ID " << currentFaces[i].id() 
+        kDebug(51005) << "Face #"<< i+1 << " is closest to the person with ID " << currentFaces[i].id() 
                  << " and name "<< currentFaces[i].name()
                  << " with a distance of "<< closeness[i];
     }
