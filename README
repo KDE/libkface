@@ -20,11 +20,11 @@ CMake      >= 2.4.x                    http://www.cmake.org
 libqt      >= 4.6.x                    http://www.qtsoftware.com
 libkde     >= 4.0.x                    http://www.kde.org
 libface    >= 0.1.0                    http://libface.sourceforge.net
-libopencv  >= 2.0.0                    http://opencv.willowgarage.com/wiki
+libopencv  >= 2.0.0                    http://opencv.willowgarage.com/wiki    (with opencv 'haarcascades' data files)
 
 -- INSTALL ------------------------------------------------------------
 
-In order to compile, especially when QT3/Qt4 are installed at the same time, 
+In order to compile, especially when QT3/Qt4 are installed at the same time,
 just use something like that:
 
 # export VERBOSE=1
