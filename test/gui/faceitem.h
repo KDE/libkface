@@ -36,6 +36,10 @@
 #include <QBrush>
 #include <QFont>
 
+// Local includes
+
+#include "button.h"
+
 class FaceItem
     : public QGraphicsObject
 {
@@ -65,6 +69,8 @@ private:
     QGraphicsRectItem* faceRect;
     QGraphicsTextItem* faceName;
     QGraphicsRectItem* nameRect;
+    Button*            approveButton;
+    Button*            rejectButton;
 };
 
 #endif // FACEITEM_H

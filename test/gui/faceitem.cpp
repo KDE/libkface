@@ -64,7 +64,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     faceRect->setOpacity(1);
 
     // Top-left Coordinates for the name
-    int x = x1 - 20;
+    int x = x1 + 20;
     int y = y2 + 10;
 
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
@@ -99,6 +99,15 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     faceName->setFont(QFont("Helvetica", 10));
     faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
     faceName->setOpacity(1);
+    
+    approveButton = new Button("button-approve-normal.png", "button-approve-pressed.png");
+    rejectButton = new Button("button-reject-normal.png", "button-reject-pressed.png");
+    
+    scene->addItem(approveButton);
+    scene->addItem(rejectButton);
+    
+    approveButton->setPos(x-40, y);
+    rejectButton->setPos(x-20, y);
 }
 
 QRectF FaceItem::boundingRect() const
