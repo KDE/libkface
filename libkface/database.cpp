@@ -42,11 +42,12 @@
 
 #include "kfaceutils.h"
 #include "image_p.h"
+#include <QFile>
 
 namespace KFace
 {
 
-    const QString mappingFilename = QString("dictionary");
+    const QString mappingFilename = QString("/dictionary");
 class DatabasePriv : public QSharedData
 {
 public:
@@ -160,8 +161,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         return closeness;
     }
     
-    qDebug()<<"hashsize"<<d->hash.size();
-    if(d->hash.isEmpty())
+    if(!QFile::exists(d->configPath+mappingFilename))
     {
         qDebug()<<"ERROR: No database exists.";
         return closeness;
