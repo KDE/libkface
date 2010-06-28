@@ -57,15 +57,15 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(ui->updateDatabaseBtn, SIGNAL(clicked()),
             this, SLOT(updateConfig()));
-    
+
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),
 	    this, SLOT(updateAccuracy()));
-	    
+
 
     myScene             = new QGraphicsScene();
     QGridLayout* layout = new QGridLayout;
     myView              = new QGraphicsView(myScene);
-    
+
     layout->addWidget(myView);
 
     ui->widget->setLayout(layout);
@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     ui->configLocation->setText(QDir::currentPath());
     ui->horizontalSlider->setValue(d->detectionAccuracy());
-    
+
     lastFileOpenPath = QDir::currentPath();
 }
 
@@ -110,7 +110,7 @@ void MainWindow::openImage()
 
     clearScene();
 
-    qDebug()<<"Opened file "<<file.toAscii().data();
+    qDebug() << "Opened file " << file.toAscii().data();
 
     QPixmap* photo = new QPixmap(file);
     lastPhotoItem  = new QGraphicsPixmapItem(*photo);
@@ -144,10 +144,10 @@ void MainWindow::detectFaces()
     currentFaces.clear();
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
-    qDebug()<<"libkface detected : "<<currentFaces.size()<<" faces.";
-        
+    qDebug() << "libkface detected : " << currentFaces.size() << " faces.";
+
     faceitems.clear();
-    
+
     for(int i = 0; i < currentFaces.size(); ++i)
     {
         face = currentFaces[i];
@@ -159,9 +159,9 @@ void MainWindow::detectFaces()
 void MainWindow::updateConfig()
 {
     int i;
-    
-    qDebug()<<"Path of config directory = "<<d->configPath();
-    
+
+    qDebug() << "Path of config directory = " << d->configPath();
+
     // Assign the text of the faceitems to the name of each face. When there is no text, drop that face from currentfaces.
     QList<Face> updateList;
 
@@ -173,15 +173,15 @@ void MainWindow::updateConfig()
             updateList.append(currentFaces.at(i));
         }
     }
-    
+
     if( d->updateFaces(updateList) )
     {
-        qDebug()<<"Trained";
+        qDebug() << "Trained";
         d->saveConfig();
     }
     else
     {
-        qDebug()<<"No faces to train.";
+        qDebug() << "No faces to train.";
     }
 }
 
@@ -191,7 +191,6 @@ void MainWindow::updateAccuracy()
     ui->lcdNumber->display(value);
     d->setDetectionAccuracy(value);
 }
-
 
 void MainWindow::clearScene()
 {
@@ -203,22 +202,22 @@ void MainWindow::clearScene()
     {
         myScene->removeItem(list.at(i));
     }
-    
 }
 
 void MainWindow::recognise()
 {
     QList<double> closeness;
     closeness = d->recognizeFaces(currentFaces);
-    
+
     if(closeness.isEmpty())
         return;
-    
+
     int i;
     for(i = 0; i < currentFaces.size(); ++i)
     {
         faceitems[i]->setText(currentFaces[i].name());
-        qDebug()<<"Face #"<<i+1<<" is closest to the person with ID "<<currentFaces[i].id()<<" and name "<<currentFaces[i].name()
-                <<" with a distance of "<<closeness[i];
+        qDebug() << "Face #"<< i+1 << " is closest to the person with ID " << currentFaces[i].id() 
+                 << " and name "<< currentFaces[i].name()
+                 << " with a distance of "<< closeness[i];
     }
 }
