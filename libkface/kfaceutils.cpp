@@ -180,20 +180,20 @@ QHash< QString, int > KFaceUtils::hashFromFile(const QString fileName)
 {
     QFile file(fileName);
     file.open(QIODevice::ReadOnly|QIODevice::Text);
-    
+
     QHash<QString, int> tempHash;
-    
+
     QPair<QString, int> namePair;
     QDataStream in(&file);
-    
+
     while( !in.atEnd() )
     {
         in >> namePair;
         tempHash[namePair.first] = namePair.second;
     }
-    
+
     file.close();
-    
+
     return tempHash;
 }
 
@@ -201,10 +201,10 @@ void KFaceUtils::addNameToFile(const QString fileName, const QString name, const
 {
     QFile file(fileName);
     file.open(QIODevice::Append|QIODevice::WriteOnly|QIODevice::Text);
-    
+
     QDataStream out(&file);
     out << qMakePair<QString, int>(name,id);
-    
+
     file.close();
 }
 
