@@ -87,8 +87,8 @@ private:
     QGraphicsScene*      myScene;
     QGraphicsView*       myView;
     QGraphicsPixmapItem* lastPhotoItem;
-    QList<FaceItem *>      faceitems;
-    
+    QList<FaceItem *>    faceitems;
+
     Database*            d;
     QImage               currentPhoto;
     double               scale;
