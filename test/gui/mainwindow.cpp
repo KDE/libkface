@@ -152,7 +152,11 @@ void MainWindow::detectFaces()
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
     kDebug(51005) << "libkface detected : " << currentFaces.size() << " faces.";
-
+    
+    FaceItem* item;
+    foreach(item, faceitems)
+        item->setVisible(false);
+    
     faceitems.clear();
 
     for(int i = 0; i < currentFaces.size(); ++i)
