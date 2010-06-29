@@ -1,24 +1,31 @@
-/********************************************************************************
-**
-**  GNU General Public License Usage
-**
-**  This program is free software: you can redistribute it and/or modify
-**  it under the terms of the GNU General Public License as published by
-**  the Free Software Foundation, either version 3 of the License, or
-**  (at your option) any later version.
-**
-**  This program is distributed in the hope that it will be useful,
-**  but WITHOUT ANY WARRANTY; without even the implied warranty of
-**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-**  GNU General Public License for more details.
-**
-**  You should have received a copy of the GNU General Public License
-**  along with this program. If not, see <http://www.gnu.org/licenses/>.
-**
-********************************************************************************/
+/** ===========================================================
+ *
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ *
+ * @date   2010-06-29
+ * @brief  GUI test program for libkface
+ *
+ * @author Copyright (C) 2010 by Aditya Bhatt
+ *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #ifndef BUTTON_H
 #define BUTTON_H
+
+// Qt includes
 
 #include <QGraphicsItem>
 #include <QObject>
@@ -31,27 +38,30 @@ class Button : public QObject, public QGraphicsItem
     Q_INTERFACES(QGraphicsItem)
 
 public:
-    Button(QGraphicsItem *parent = 0);
-    Button(const QString normal, const QString pressed = "",
-           QGraphicsItem *parent = 0);
+
+    Button(QGraphicsItem* parent = 0);
+    Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* parent = 0);
 
     QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-               QWidget *widget = 0);
-    void setPixmap(const QString normal, const QString pressed = "");
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
+               QWidget* widget = 0);
+    void setPixmap(const QString& normal, const QString& pressed = QString());
 
-signals:
+Q_SIGNALS:
+
     void clicked();
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
+    void mousePressEvent(QGraphicsSceneMouseEvent*);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent*);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
 private:
+
+    bool    m_isPressed;
     QPixmap m_normal;
     QPixmap m_pressed;
-    bool m_isPressed;
 };
 
-#endif
+#endif // BUTTON_H
