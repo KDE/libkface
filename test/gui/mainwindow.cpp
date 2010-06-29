@@ -39,7 +39,7 @@
 
 #include <kdebug.h>
 
-using namespace KFace;
+using namespace KFaceIface;
 
 MainWindow::MainWindow(QWidget* parent)
           : QMainWindow(parent),
@@ -221,7 +221,7 @@ void MainWindow::recognise()
     {
         faceitems[i]->setText(currentFaces[i].name());
         kDebug(51005) << "Face #"<< i+1 << " is closest to the person with ID " << currentFaces[i].id() 
-                 << " and name "<< currentFaces[i].name()
-                 << " with a distance of "<< closeness[i];
+                      << " and name "<< currentFaces[i].name()
+                      << " with a distance of "<< closeness[i];
     }
 }

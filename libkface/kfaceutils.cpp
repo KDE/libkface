@@ -41,7 +41,7 @@
 
 #include <opencv/highgui.h>
 
-namespace KFace
+namespace KFaceIface
 {
 
 QImage KFaceUtils::QImage2Grayscale(const QImage &qimg)
@@ -176,7 +176,7 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
     return qimg;
 }
 
-QHash< QString, int > KFaceUtils::hashFromFile(const QString fileName)
+QHash< QString, int > KFaceUtils::hashFromFile(const QString& fileName)
 {
     QFile file(fileName);
     file.open(QIODevice::ReadOnly|QIODevice::Text);
@@ -197,7 +197,7 @@ QHash< QString, int > KFaceUtils::hashFromFile(const QString fileName)
     return tempHash;
 }
 
-void KFaceUtils::addNameToFile(const QString fileName, const QString name, const int id)
+void KFaceUtils::addNameToFile(const QString& fileName, const QString& name, const int id)
 {
     QFile file(fileName);
     file.open(QIODevice::Append|QIODevice::WriteOnly|QIODevice::Text);
@@ -208,4 +208,4 @@ void KFaceUtils::addNameToFile(const QString fileName, const QString name, const
     file.close();
 }
 
-} // namespace KFace
+} // namespace KFaceIface

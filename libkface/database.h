@@ -42,7 +42,7 @@
 #include "kface.h"
 #include "image.h"
 
-namespace KFace
+namespace KFaceIface
 {
 
 class DatabasePriv;
@@ -142,8 +142,8 @@ public:
     int detectionAccuracy();
 };
 
-}; // namespace KFace
+}; // namespace KFaceIface
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KFace::Database::InitFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KFaceIface::Database::InitFlags)
 
 #endif // KFACE_DATABASE_H

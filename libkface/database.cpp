@@ -44,10 +44,11 @@
 #include "image_p.h"
 #include <QFile>
 
-namespace KFace
+namespace KFaceIface
 {
 
-    const QString mappingFilename = QString("/dictionary");
+const QString mappingFilename = QString("/dictionary");
+
 class DatabasePriv : public QSharedData
 {
 public:
@@ -72,7 +73,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
 {
     d->configPath = configurationPath;
     d->hash = KFaceUtils::hashFromFile(d->configPath+mappingFilename);
-    
+
     if (flags == InitDetection)
     {
         d->libface = new libface::LibFace(libface::DETECT);
@@ -94,7 +95,7 @@ Database::Database(const Database& other)
     d = other.d;
 }
 
-Database& Database::operator=(const KFace::Database& other)
+Database& Database::operator=(const KFaceIface::Database& other)
 {
     d = other.d;
     return *this;
@@ -135,11 +136,11 @@ bool Database::updateFaces(QList<Face>& faces)
 
     std::vector<int> ids;
     ids = d->libface->update(&faceVec);
-    
+
     for(int i = 0; i<(int)ids.size(); ++i)
     {
             faces[i].setId(ids.at(i));
-            
+
             // If the name was not in the mapping before (new name), add it to the dictionary
             if(!d->hash.contains(faces[i].name()))
             {
@@ -160,13 +161,13 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     {
         return closeness;
     }
-    
+
     if(!QFile::exists(d->configPath+mappingFilename))
     {
         qDebug()<<"ERROR: No database exists.";
         return closeness;
     }
-    
+
     std::vector<libface::Face> faceVec;
     foreach (const Face& face, faces)
     {
@@ -181,7 +182,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     {
         faces[i].setId(result.at(i).first);
         closeness.append(result.at(i).second);
-        
+
         // Locate the name from the hash, pity we don't have a bi-directional hash in Qt
         QHashIterator<QString, int> it(d->hash);
         it.toFront();
@@ -194,7 +195,6 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
                 break;
             }
         }
-        
     }
     return closeness;
 }
@@ -220,4 +220,4 @@ int Database::detectionAccuracy()
     return d->libface->getDetectionAccuracy();
 }
 
-}; // namespace KFace
+}; // namespace KFaceIface

@@ -39,7 +39,7 @@
 #include "kfaceutils.h"
 #include "version.h"
 
-namespace KFace
+namespace KFaceIface
 {
 
 class FacePriv
@@ -184,4 +184,4 @@ QString Face::version()
     return QString(kface_version);
 }
 
-} // namespace KFace
+} // namespace KFaceIface

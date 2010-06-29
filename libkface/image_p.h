@@ -31,7 +31,7 @@
 
 #include <opencv/cv.h>
 
-namespace KFace
+namespace KFaceIface
 {
 
 // INTERNAL
@@ -43,13 +43,12 @@ public:
     ImageData() : image(0) {}
 
     ImageData(IplImage* image) : image(image) {}
-    ImageData &operator=(IplImage* im) { image = im; return *this; }
+    ImageData& operator=(IplImage* im) { image = im; return *this; }
     operator IplImage *() const { return image; }
 
-    IplImage *image;
+    IplImage* image;
 };
 
-} // namespace KFace
+} // namespace KFaceIface
 
 #endif // KFACE_IMAGE_P_H
-

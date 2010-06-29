@@ -43,7 +43,7 @@
 #include "libkface/database.h"
 #include "libkface/kface.h"
 
-using namespace KFace;
+using namespace KFaceIface;
 
 void detectFaces(Database* d, const QString& file)
 {
@@ -89,7 +89,7 @@ void detectFaces(Database* d, const QString& file)
 
 int main(int argc, char** argv)
 {
-    if (argc<2)
+    if (argc < 2)
     {
         kDebug(51005) << "Bad Args!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
         return 0;

@@ -36,7 +36,7 @@
 
 #include "libkface_export.h"
 
-namespace KFace
+namespace KFaceIface
 {
 
 class ImagePriv;
@@ -68,12 +68,12 @@ public:
      * Copy Constructor.
      */
     Image(const Image& other);
-    
+
     /**
      * Constructor. Create an Image from an ImageData struct
      */
     Image(ImageData other);
-    
+
     /**
      * Assignment operator
      * @param other An Image to be assigned
@@ -90,7 +90,7 @@ public:
      * @return A boolean value, that is true if the image is null
      */
     bool isNull() const;
-    
+
     QSize size() const;
 
     const ImageData imageData() const;
@@ -100,6 +100,6 @@ private:
     QExplicitlySharedDataPointer<ImagePriv> d;
 };
 
-}; // namespace KFace
+}; // namespace KFaceIface
 
 #endif // K_FACE_IMAGE_H

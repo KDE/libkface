@@ -36,7 +36,7 @@
 #include "image.h"
 #include "kfaceutils.h"
 
-namespace KFace
+namespace KFaceIface
 {
 
 class ImagePriv : public QSharedData
@@ -124,4 +124,4 @@ const ImageData Image::imageData() const
     return d->image;
 }
 
-} // namespace KFace
+} // namespace KFaceIface

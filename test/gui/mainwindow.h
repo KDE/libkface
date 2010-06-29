@@ -52,7 +52,7 @@ namespace Ui
     class MainWindow;
 }
 
-using namespace KFace;
+using namespace KFaceIface;
 using namespace std;
 
 class MainWindow : public QMainWindow
