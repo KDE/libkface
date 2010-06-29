@@ -69,7 +69,10 @@ MainWindow::MainWindow(QWidget* parent)
     myScene             = new QGraphicsScene();
     QGridLayout* layout = new QGridLayout;
     myView              = new QGraphicsView(myScene);
-
+    
+    myView->setCacheMode(QGraphicsView::CacheBackground);
+    myScene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    
     layout->addWidget(myView);
 
     ui->widget->setLayout(layout);
