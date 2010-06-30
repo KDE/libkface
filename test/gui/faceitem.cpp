@@ -118,6 +118,8 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     rejectButton->setPos(x-20, y );
     
     connect(rejectButton, SIGNAL(clicked()), this, SLOT(clearText()) );
+    
+    this->setAcceptHoverEvents(true);
 }
 
 QRectF FaceItem::boundingRect() const
