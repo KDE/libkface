@@ -177,3 +177,38 @@ void FaceItem::clearText()
     faceName->setPlainText("");
 }
 
+void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+{
+    kDebug(51005)<<"entered";
+    // Ugly hack, probably there is some better way to map from parent to scene
+    QPointF p = this->mapFromParent(QCursor::pos());
+    p = this->mapToScene(p);
+    
+    QRectF r = faceRect->mapRectToScene(faceRect->boundingRect());
+    
+    if(r.contains(p))
+        this->setControlsVisible(true);
+}
+
+void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+{    
+        kDebug(51005)<<"moved";
+
+    QPointF p = this->mapFromParent(QCursor::pos());
+    p = this->mapToScene(p);
+    
+    QRectF r = faceRect->mapRectToScene(faceRect->boundingRect());
+    
+    if(r.contains(p))
+        this->setControlsVisible(true);
+    else
+        this->setControlsVisible(false);
+}
+
+void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
+{
+        kDebug(51005)<<"left";
+
+    QGraphicsItem::hoverLeaveEvent(event);
+}
+

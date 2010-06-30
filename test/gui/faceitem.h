@@ -64,6 +64,11 @@ public Q_SLOTS:
     void update();
     void clearText();
 
+protected:
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
+    void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
+
 private:
 
     int                sceneWidth, sceneHeight;
