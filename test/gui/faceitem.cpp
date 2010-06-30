@@ -114,6 +114,8 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     
     approveButton->setPos(x-40, y );
     rejectButton->setPos(x-20, y );
+    
+    connect(rejectButton, SIGNAL(pressed()), this->faceName, SLOT(setText("")));
 }
 
 QRectF FaceItem::boundingRect() const
