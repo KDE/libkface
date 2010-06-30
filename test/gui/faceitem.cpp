@@ -108,6 +108,8 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     rejectButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"), 
                                 KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-pressed.png") );
     
+    approveButton->hide();
+    rejectButton->hide();
     
     scene->addItem(approveButton);
     scene->addItem(rejectButton);
@@ -141,6 +143,17 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
+    if(faceName->toPlainText() == "")
+    {
+        approveButton->hide();
+        rejectButton->hide();
+    }
+    else
+    {
+        approveButton->show();
+        rejectButton->show();
+    }
+    
     QRectF r = faceName->mapRectToScene(faceName->boundingRect());
     nameRect->setRect(r);
 }

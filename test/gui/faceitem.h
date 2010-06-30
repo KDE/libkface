@@ -48,7 +48,7 @@ class FaceItem
 public:
 
     FaceItem(QGraphicsItem* parent = 0, QGraphicsScene* scene = 0, const QRect& rect = QRect(0, 0, 0, 0),
-             double scale = 1, const QString& name = QString("?"));
+             double scale = 1, const QString& name = QString(""));
 
     QRectF boundingRect() const;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
