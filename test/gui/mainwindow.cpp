@@ -73,6 +73,7 @@ MainWindow::MainWindow(QWidget* parent)
     myView->setCacheMode(QGraphicsView::CacheBackground);
     myScene->setItemIndexMethod(QGraphicsScene::NoIndex);
     
+    this->setMouseTracking(true);
     layout->addWidget(myView);
 
     ui->widget->setLayout(layout);
