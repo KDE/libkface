@@ -161,11 +161,19 @@ void FaceItem::update()
 void FaceItem::setVisible(bool visible)
 {
     this->faceRect->setVisible(visible);
+    this->setControlsVisible(visible);
+}
+
+void FaceItem::setControlsVisible(bool visible)
+{
     this->nameRect->setVisible(visible);
     this->faceName->setVisible(visible);
+    this->approveButton->setVisible(visible);
+    this->rejectButton->setVisible(visible);
 }
 
 void FaceItem::clearText()
 {
-    faceName->setPlainText("?");
+    faceName->setPlainText("");
 }
+

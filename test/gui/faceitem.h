@@ -57,6 +57,7 @@ public:
     QString text() const;
 
     void setVisible(bool);
+    void setControlsVisible(bool);
     
 public Q_SLOTS:
 
