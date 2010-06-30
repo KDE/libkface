@@ -37,6 +37,8 @@
 // KDE include
 
 #include <kdebug.h>
+#include <kstandarddirs.h>
+
 
 FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name)
         : QGraphicsObject(parent)
@@ -96,18 +98,22 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
 
     // Draw the name input item
     faceName->setDefaultTextColor(QColor(QString("white")));
-    faceName->setFont(QFont("Helvetica", 10));
+    faceName->setFont(QFont("Helvetica", 8));
     faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
     faceName->setOpacity(1);
     
-    approveButton = new Button("button-approve-normal.png", "button-approve-pressed.png");
-    rejectButton = new Button("button-reject-normal.png", "button-reject-pressed.png");
+    approveButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-normal.png"), 
+                                KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-pressed.png") );
+                                
+    rejectButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"), 
+                                KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-pressed.png") );
+    
     
     scene->addItem(approveButton);
     scene->addItem(rejectButton);
     
-    approveButton->setPos(x-40, y);
-    rejectButton->setPos(x-20, y);
+    approveButton->setPos(x-40, y );
+    rejectButton->setPos(x-20, y );
 }
 
 QRectF FaceItem::boundingRect() const

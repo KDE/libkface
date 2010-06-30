@@ -38,4 +38,13 @@ SET(libfaceGUI_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
 
 KDE4_ADD_UI_FILES(libfaceGUI_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
 KDE4_ADD_EXECUTABLE(libfaceGUI ${libfaceGUI_SRCS})
+
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/gui/icons/button-approve-normal.png
+              ${CMAKE_CURRENT_SOURCE_DIR}/gui/icons/button-approve-pressed.png
+              ${CMAKE_CURRENT_SOURCE_DIR}/gui/icons/button-reject-normal.png
+              ${CMAKE_CURRENT_SOURCE_DIR}/gui/icons/button-reject-pressed.png
+              
+        DESTINATION ${DATA_INSTALL_DIR}/regiontaggingwidget/icons
+       )
+
 TARGET_LINK_LIBRARIES(libfaceGUI kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
