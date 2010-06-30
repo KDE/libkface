@@ -61,6 +61,7 @@ public:
 public Q_SLOTS:
 
     void update();
+    void clearText();
 
 private:
 
