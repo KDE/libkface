@@ -43,6 +43,8 @@
 namespace KFaceIface
 {
 
+class FaceItemPriv;
+
 class FaceItem : public QGraphicsObject
 {
     Q_OBJECT
@@ -51,6 +53,7 @@ public:
 
     FaceItem(QGraphicsItem* parent = 0, QGraphicsScene* scene = 0, const QRect& rect = QRect(0, 0, 0, 0),
              double scale = 1, const QString& name = QString());
+    ~FaceItem();
 
     QRectF boundingRect() const;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
@@ -67,19 +70,14 @@ public Q_SLOTS:
     void clearText();
 
 protected:
+
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
 
 private:
 
-    int                sceneWidth, sceneHeight;
-    int                x1, x2, y1, y2;
-    QGraphicsRectItem* faceRect;
-    QGraphicsTextItem* faceName;
-    QGraphicsRectItem* nameRect;
-    Button*            approveButton;
-    Button*            rejectButton;
+    FaceItemPriv* const d;
 };
 
 }; // namespace KFaceIface

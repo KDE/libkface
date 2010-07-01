@@ -42,88 +42,115 @@
 namespace KFaceIface
 {
 
+class FaceItemPriv
+{
+public:
+
+    FaceItemPriv()
+    {
+        faceRect      = 0;
+        faceName      = 0;
+        nameRect      = 0;
+        approveButton = 0;
+        rejectButton  = 0;
+    }
+
+    int                sceneWidth, sceneHeight;
+    int                x1, x2, y1, y2;
+    QGraphicsRectItem* faceRect;
+    QGraphicsTextItem* faceName;
+    QGraphicsRectItem* nameRect;
+    Button*            approveButton;
+    Button*            rejectButton;
+};
+
 FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name)
-        : QGraphicsObject(parent)
+        : QGraphicsObject(parent), d(new FaceItemPriv)
 {
     setAcceptHoverEvents(true);
 
-    faceRect    = new QGraphicsRectItem( 0, scene);
-    sceneWidth  = scene->width();
-    sceneHeight = scene->height();
+    d->faceRect    = new QGraphicsRectItem( 0, scene);
+    d->sceneWidth  = scene->width();
+    d->sceneHeight = scene->height();
 
     // Scale all coordinates to fit the initial size of the scene
-    x1 = rect.topLeft().x()*scale;
-    y1 = rect.topLeft().y()*scale;
-    x2 = rect.bottomRight().x()*scale;
-    y2 = rect.bottomRight().y()*scale;
+    d->x1 = rect.topLeft().x()*scale;
+    d->y1 = rect.topLeft().y()*scale;
+    d->x2 = rect.bottomRight().x()*scale;
+    d->y2 = rect.bottomRight().y()*scale;
 
     // A QRect containing coordinates for the face rectangle
     QRect scaledRect;
-    scaledRect.setTopLeft(QPoint(x1, y1));
-    scaledRect.setBottomRight(QPoint(x2, y2));
+    scaledRect.setTopLeft(QPoint(d->x1, d->y1));
+    scaledRect.setBottomRight(QPoint(d->x2, d->y2));
 
     // Draw the Face Rectangle as a QGraphicsRectItem using the dimensions of the scaledRect
-    faceRect->setRect(scaledRect);
+    d->faceRect->setRect(scaledRect);
     QPen pen(QColor(QString("red")));
     pen.setWidth(3);
-    faceRect->setPen(pen);
-    faceRect->setOpacity(1);
+    d->faceRect->setPen(pen);
+    d->faceRect->setOpacity(1);
 
     // Top-left Coordinates for the name
-    int x = x1 + 20;
-    int y = y2 + 10;
+    int x = d->x1 + 20;
+    int y = d->y2 + 10;
 
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
-    nameRect = new QGraphicsRectItem( 0, scene);
-    faceName = new QGraphicsTextItem (name, 0, scene);
+    d->nameRect = new QGraphicsRectItem( 0, scene);
+    d->faceName = new QGraphicsTextItem (name, 0, scene);
 
     // Make the bounding box for the name update itself to cover all the text whenever contents are changed
     QTextDocument* doc;
-    doc = faceName->document();
+    doc = d->faceName->document();
     QTextOption o; 
     o.setAlignment(Qt::AlignCenter);
     doc->setDefaultTextOption(o);
 
     // Set coordinates of the name
-    faceName->setPos(x,y);
+    d->faceName->setPos(x,y);
 
     // Get coordinates of the name relative the the scene
-    QRectF r = faceName->mapRectToScene(faceName->boundingRect());
+    QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
 
     // Draw the bounding name rectangle with the scene coordinates
-    nameRect->setRect(r);
+    d->nameRect->setRect(r);
     QPen p(QColor(QString("black")));
     p.setWidth(3);
-    nameRect->setPen(p);
-    nameRect->setBrush(QBrush(QColor(QString("black"))));
-    nameRect->setOpacity(0.8);
+    d->nameRect->setPen(p);
+    d->nameRect->setBrush(QBrush(QColor(QString("black"))));
+    d->nameRect->setOpacity(0.8);
 
     // Draw the name input item
-    faceName->setDefaultTextColor(QColor(QString("white")));
-    faceName->setFont(QFont("Helvetica", 8));
-    faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
-    faceName->setOpacity(1);
+    d->faceName->setDefaultTextColor(QColor(QString("white")));
+    d->faceName->setFont(QFont("Helvetica", 8));
+    d->faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
+    d->faceName->setOpacity(1);
 
-    approveButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-normal.png"), 
+    d->approveButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-normal.png"), 
                                 KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-pressed.png") );
 
-    rejectButton  = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"), 
+    d->rejectButton  = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"), 
                                 KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-pressed.png") );
 
-    approveButton->hide();
-    rejectButton->hide();
+    d->approveButton->hide();
+    d->rejectButton->hide();
 
-    scene->addItem(approveButton);
-    scene->addItem(rejectButton);
+    scene->addItem(d->approveButton);
+    scene->addItem(d->rejectButton);
 
-    approveButton->setPos(x-40, y);
-    rejectButton->setPos(x-20, y);
+    d->approveButton->setPos(x-40, y);
+    d->rejectButton->setPos(x-20, y);
 
-    connect(rejectButton, SIGNAL(clicked()), 
+    connect(d->rejectButton, SIGNAL(clicked()), 
             this, SLOT(clearText()) );
 
     connect(doc, SIGNAL(contentsChanged()), 
             this, SLOT(update()));
+}
+
+FaceItem::~FaceItem()
+{
+    delete d;
 }
 
 QRectF FaceItem::boundingRect() const
@@ -139,48 +166,48 @@ void FaceItem::paint(QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*op
 
 void FaceItem::setText(const QString& newName)
 {
-    faceName->setPlainText(newName);
+    d->faceName->setPlainText(newName);
 }
 
 QString FaceItem::text() const
 {
-    return faceName->toPlainText();
+    return d->faceName->toPlainText();
 }
 
 void FaceItem::update()
 {
-    if(faceName->toPlainText() == QString())
+    if(d->faceName->toPlainText() == QString())
     {
-        approveButton->hide();
-        rejectButton->hide();
+        d->approveButton->hide();
+        d->rejectButton->hide();
     }
     else
     {
-        approveButton->show();
-        rejectButton->show();
+        d->approveButton->show();
+        d->rejectButton->show();
     }
 
-    QRectF r = faceName->mapRectToScene(faceName->boundingRect());
-    nameRect->setRect(r);
+    QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
+    d->nameRect->setRect(r);
 }
 
 void FaceItem::setVisible(bool visible)
 {
-    faceRect->setVisible(visible);
+    d->faceRect->setVisible(visible);
     setControlsVisible(visible);
 }
 
 void FaceItem::setControlsVisible(bool visible)
 {
-    nameRect->setVisible(visible);
-    faceName->setVisible(visible);
-    approveButton->setVisible(visible);
-    rejectButton->setVisible(visible);
+    d->nameRect->setVisible(visible);
+    d->faceName->setVisible(visible);
+    d->approveButton->setVisible(visible);
+    d->rejectButton->setVisible(visible);
 }
 
 void FaceItem::clearText()
 {
-    faceName->setPlainText(QString());
+    d->faceName->setPlainText(QString());
 }
 
 void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
@@ -190,7 +217,7 @@ void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
     // Ugly hack, probably there is some better way to map from parent to scene
     QPointF p = mapFromParent(QCursor::pos());
     p         = mapToScene(p);
-    QRectF r  = faceRect->mapRectToScene(faceRect->boundingRect());
+    QRectF r  = d->faceRect->mapRectToScene(d->faceRect->boundingRect());
 
     if(r.contains(p))
         setControlsVisible(true);
@@ -202,7 +229,7 @@ void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
 
     QPointF p = mapFromParent(QCursor::pos());
     p         = mapToScene(p);
-    QRectF r  = faceRect->mapRectToScene(faceRect->boundingRect());
+    QRectF r  = d->faceRect->mapRectToScene(d->faceRect->boundingRect());
 
     if(r.contains(p))
         setControlsVisible(true);
