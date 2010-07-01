@@ -43,8 +43,10 @@ public:
     ImageData() : image(0) {}
 
     ImageData(IplImage* image) : image(image) {}
-    ImageData& operator=(IplImage* im) { image = im; return *this; }
-    operator IplImage *() const { return image; }
+    ImageData& operator=(IplImage* im)        { image = im; return *this; }
+    operator IplImage *() const               { return image; }
+
+public:
 
     IplImage* image;
 };

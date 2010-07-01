@@ -64,7 +64,7 @@ namespace KFaceUtils
      * @param data Unsigned char* image data
      * @return A pointer to the new IplImage
      */
-    IplImage* Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar *data);
+    IplImage* Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data);
 
     /**
      * Takes a pointer to an IplImage and returns a Qimage

@@ -110,9 +110,8 @@ void Face::setId(int id)
 
 void Face::setImage(const QImage& image)
 {
-    QImage greyImage = image.convertToFormat(QImage::Format_Indexed8);
-    IplImage* faceImage;
-    faceImage        = KFaceUtils::QImage2IplImage(greyImage);
+    QImage greyImage    = image.convertToFormat(QImage::Format_Indexed8);
+    IplImage* faceImage = KFaceUtils::QImage2IplImage(greyImage);
     d->face.setFace(faceImage);
 }
 

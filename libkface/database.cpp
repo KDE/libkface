@@ -31,7 +31,11 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QSharedData>
-#include <QDebug>
+#include <QFile>
+
+// KDE includes
+
+#include <kdebug.h>
 
 // Libface includes
 
@@ -42,7 +46,6 @@
 
 #include "kfaceutils.h"
 #include "image_p.h"
-#include <QFile>
 
 namespace KFaceIface
 {
@@ -72,7 +75,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
         : d(new DatabasePriv)
 {
     d->configPath = configurationPath;
-    d->hash = KFaceUtils::hashFromFile(d->configPath+mappingFilename);
+    d->hash       = KFaceUtils::hashFromFile(d->configPath+mappingFilename);
 
     if (flags == InitDetection)
     {
@@ -123,6 +126,7 @@ bool Database::updateFaces(QList<Face>& faces)
 {
     if(faces.isEmpty())
         return false;
+
     std::vector<libface::Face> faceVec;
     foreach (Face face, faces)
     {
@@ -134,8 +138,7 @@ bool Database::updateFaces(QList<Face>& faces)
         faceVec.push_back(face);
     }
 
-    std::vector<int> ids;
-    ids = d->libface->update(&faceVec);
+    std::vector<int> ids = d->libface->update(&faceVec);
 
     for(int i = 0; i<(int)ids.size(); ++i)
     {
@@ -150,7 +153,7 @@ bool Database::updateFaces(QList<Face>& faces)
                 d->hash[faces[i].name()] = faces[i].id();
             }
     }
-    
+
     return true;
 }
 
@@ -164,7 +167,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
 
     if(!QFile::exists(d->configPath+mappingFilename))
     {
-        qDebug()<<"ERROR: No database exists.";
+        kError(51005) << "ERROR: No database exists.";
         return closeness;
     }
 
@@ -174,9 +177,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         faceVec.push_back(face);
     }
 
-    std::vector< std::pair<int, double> > result;
-
-    result = d->libface->recognise(&faceVec);
+    std::vector< std::pair<int, double> > result = d->libface->recognise(&faceVec);
 
     for(int i = 0; i <faces.size() && i<(int)result.size(); ++i)
     {

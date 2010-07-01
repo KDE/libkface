@@ -44,18 +44,19 @@
 namespace KFaceIface
 {
 
-QImage KFaceUtils::QImage2Grayscale(const QImage &qimg)
+QImage KFaceUtils::QImage2Grayscale(const QImage& qimg)
 {
     QImage img = qimg;
     if (img.width() == 0 || img.height() == 0)
       return img;
 
     int pixels         = img.width()*img.height() ;
-    unsigned int* data =  (unsigned int *)img.bits();
-    int val, i;
-    for(i=0; i < pixels; ++i)
+    unsigned int* data =  (unsigned int*)img.bits();
+
+    int val;
+    for(int i=0; i < pixels; ++i)
     {
-        val = qGray(data[i]);
+        val     = qGray(data[i]);
         data[i] = qRgba(val, val, val, qAlpha(data[i]));
     }
     return img;
@@ -66,13 +67,13 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     QImage img           = QImage2Grayscale(qimg);
     IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 4);
 
-    const int bytes = img.byteCount();
+    const int bytes      = img.byteCount();
 
     uchar* newdata       = (uchar*) malloc(sizeof(uchar) * bytes);
     memcpy(newdata, img.bits(), bytes);
     imgHeader->imageData = (char*) newdata;
 
-    IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1 );
+    IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
     cvConvertImage(imgHeader, greyImage); 
     return greyImage;
 }
@@ -124,8 +125,8 @@ IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bo
         }
     }
 
-    IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1 );
-    cvConvertImage(imgHeader, greyImage); 
+    IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
+    cvConvertImage(imgHeader, greyImage);
     return greyImage;
 }
 
@@ -176,7 +177,7 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
     return qimg;
 }
 
-QHash< QString, int > KFaceUtils::hashFromFile(const QString& fileName)
+QHash<QString, int> KFaceUtils::hashFromFile(const QString& fileName)
 {
     QFile file(fileName);
     file.open(QIODevice::ReadOnly|QIODevice::Text);
