@@ -69,6 +69,7 @@ Image::Image()
 Image::Image(const QString& filePath)
      : d(new ImagePriv)
 {
+    // FIXME: do not use toLocal8Bits(), it's non-portable way (non UTF-8 file path support)
     d->image = cvLoadImage(filePath.toLocal8Bit(), CV_LOAD_IMAGE_GRAYSCALE);
 }
 
@@ -78,7 +79,7 @@ Image::Image(const QImage& givenImage)
     d->image = KFaceUtils::QImage2IplImage(givenImage);
 }
 
-Image::Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar *data)
+Image::Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data)
      : d(new ImagePriv)
 {
     d->image = KFaceUtils::Data2IplImage(width, height, sixteenBit, alpha, data);
