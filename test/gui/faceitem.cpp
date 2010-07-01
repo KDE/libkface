@@ -39,6 +39,9 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+namespace KFaceIface
+{
+
 FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name)
         : QGraphicsObject(parent)
 {
@@ -213,3 +216,5 @@ void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 
     QGraphicsItem::hoverLeaveEvent(event);
 }
+
+}; // namespace KFaceIface

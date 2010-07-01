@@ -7,6 +7,8 @@
  * @brief  Pressable Button class using QGraphicsItem
  *
  * @author Copyright (C) 2010 by Frederico Duarte
+ * @author Copyright (C) 2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,20 +25,42 @@
 
 #include "button.moc"
 
+namespace KFaceIface
+{
+
+class ButtonPriv
+{
+public:
+
+    ButtonPriv()
+    {
+        isPressed = false;
+    }
+
+    bool    isPressed;
+    QPixmap normal;
+    QPixmap pressed;
+};
+
 Button::Button(QGraphicsItem* parent)
-      : QGraphicsItem(parent), m_isPressed(false)
+      : QGraphicsItem(parent), d(new ButtonPriv)
 {
 }
 
 Button::Button(const QString& normal, const QString& pressed, QGraphicsItem* parent)
-      : QGraphicsItem(parent), m_isPressed(false)
+      : QGraphicsItem(parent), d(new ButtonPriv)
 {
     setPixmap(normal, pressed);
 }
 
+Button::~Button()
+{
+    delete d;
+}
+
 QRectF Button::boundingRect() const
 {
-    return m_normal.rect();
+    return d->normal.rect();
 }
 
 void Button::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -44,22 +68,22 @@ void Button::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if (m_isPressed)
-        painter->drawPixmap(0, 0, m_pressed);
+    if (d->isPressed)
+        painter->drawPixmap(0, 0, d->pressed);
     else
-        painter->drawPixmap(0, 0, m_normal);
+        painter->drawPixmap(0, 0, d->normal);
 }
 
 void Button::setPixmap(const QString& normal, const QString& pressed)
 {
-    if (! m_normal.isNull())
+    if (! d->normal.isNull())
     {
-        m_normal.detach();
-        m_pressed.detach();
+        d->normal.detach();
+        d->pressed.detach();
     }
 
-    m_normal.load(normal);
-    m_pressed.load(pressed);
+    d->normal.load(normal);
+    d->pressed.load(pressed);
 }
 
 void Button::mousePressEvent(QGraphicsSceneMouseEvent* event)
@@ -67,7 +91,7 @@ void Button::mousePressEvent(QGraphicsSceneMouseEvent* event)
     if (event->button() == Qt::LeftButton)
     {
         if (contains(event->pos()))
-            m_isPressed = true;
+            d->isPressed = true;
 
         update();
     }
@@ -79,11 +103,11 @@ void Button::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     {
         if (contains(event->pos()))
         {
-            m_isPressed = true;
+            d->isPressed = true;
         }
         else
         {
-            m_isPressed = false;
+            d->isPressed = false;
         }
 
         update();
@@ -94,7 +118,7 @@ void Button::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        m_isPressed = false;
+        d->isPressed = false;
 
         update();
 
@@ -104,3 +128,5 @@ void Button::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
         }
     }
 }
+
+}; // namespace KFaceIface
