@@ -58,7 +58,7 @@ public:
 
     void setVisible(bool);
     void setControlsVisible(bool);
-    
+
 public Q_SLOTS:
 
     void update();

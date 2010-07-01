@@ -69,11 +69,11 @@ MainWindow::MainWindow(QWidget* parent)
     myScene             = new QGraphicsScene();
     QGridLayout* layout = new QGridLayout;
     myView              = new QGraphicsView(myScene);
-    
+
     myView->setCacheMode(QGraphicsView::CacheBackground);
     myScene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    
-    this->setMouseTracking(true);
+
+    setMouseTracking(true);
     layout->addWidget(myView);
 
     ui->widget->setLayout(layout);
@@ -153,11 +153,11 @@ void MainWindow::detectFaces()
     currentFaces = d->detectFaces(currentPhoto);
     Face face;
     kDebug(51005) << "libkface detected : " << currentFaces.size() << " faces.";
-    
-    FaceItem* item;
+
+    FaceItem* item=0;
     foreach(item, faceitems)
         item->setVisible(false);
-    
+
     faceitems.clear();
 
     for(int i = 0; i < currentFaces.size(); ++i)
@@ -170,14 +170,12 @@ void MainWindow::detectFaces()
 
 void MainWindow::updateConfig()
 {
-    int i;
-
     kDebug(51005) << "Path of config directory = " << d->configPath();
 
     // Assign the text of the faceitems to the name of each face. When there is no text, drop that face from currentfaces.
     QList<Face> updateList;
 
-    for(i = 0 ; i <currentFaces.size(); ++i)
+    for(int i = 0 ; i <currentFaces.size(); ++i)
     {
         if(faceitems[i]->text() != "?")
         {
@@ -208,9 +206,7 @@ void MainWindow::clearScene()
 {
     QList<QGraphicsItem*> list = myScene->items();
 
-    int i;
-
-    for(i=0; i<list.size(); i++)
+    for(int i=0; i<list.size(); i++)
     {
         myScene->removeItem(list.at(i));
     }
@@ -218,14 +214,12 @@ void MainWindow::clearScene()
 
 void MainWindow::recognise()
 {
-    QList<double> closeness;
-    closeness = d->recognizeFaces(currentFaces);
+    QList<double> closeness = d->recognizeFaces(currentFaces);
 
     if(closeness.isEmpty())
         return;
 
-    int i;
-    for(i = 0; i < currentFaces.size(); ++i)
+    for(int i = 0; i < currentFaces.size(); ++i)
     {
         faceitems[i]->setText(currentFaces[i].name());
         kDebug(51005) << "Face #"<< i+1 << " is closest to the person with ID " << currentFaces[i].id() 

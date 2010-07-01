@@ -39,10 +39,11 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-
 FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name)
         : QGraphicsObject(parent)
 {
+    setAcceptHoverEvents(true);
+
     faceRect    = new QGraphicsRectItem( 0, scene);
     sceneWidth  = scene->width();
     sceneHeight = scene->height();
@@ -79,8 +80,6 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     QTextOption o; 
     o.setAlignment(Qt::AlignCenter);
     doc->setDefaultTextOption(o);
-    connect(doc, SIGNAL(contentsChanged()), 
-            this, SLOT(update()));
 
     // Set coordinates of the name
     faceName->setPos(x,y);
@@ -101,25 +100,27 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     faceName->setFont(QFont("Helvetica", 8));
     faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
     faceName->setOpacity(1);
-    
+
     approveButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-normal.png"), 
                                 KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-pressed.png") );
-                                
-    rejectButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"), 
+
+    rejectButton  = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"), 
                                 KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-pressed.png") );
-    
+
     approveButton->hide();
     rejectButton->hide();
-    
+
     scene->addItem(approveButton);
     scene->addItem(rejectButton);
-    
-    approveButton->setPos(x-40, y );
-    rejectButton->setPos(x-20, y );
-    
-    connect(rejectButton, SIGNAL(clicked()), this, SLOT(clearText()) );
-    
-    this->setAcceptHoverEvents(true);
+
+    approveButton->setPos(x-40, y);
+    rejectButton->setPos(x-20, y);
+
+    connect(rejectButton, SIGNAL(clicked()), 
+            this, SLOT(clearText()) );
+
+    connect(doc, SIGNAL(contentsChanged()), 
+            this, SLOT(update()));
 }
 
 QRectF FaceItem::boundingRect() const
@@ -145,7 +146,7 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
-    if(faceName->toPlainText() == "")
+    if(faceName->toPlainText() == QString())
     {
         approveButton->hide();
         rejectButton->hide();
@@ -155,62 +156,60 @@ void FaceItem::update()
         approveButton->show();
         rejectButton->show();
     }
-    
+
     QRectF r = faceName->mapRectToScene(faceName->boundingRect());
     nameRect->setRect(r);
 }
 
 void FaceItem::setVisible(bool visible)
 {
-    this->faceRect->setVisible(visible);
-    this->setControlsVisible(visible);
+    faceRect->setVisible(visible);
+    setControlsVisible(visible);
 }
 
 void FaceItem::setControlsVisible(bool visible)
 {
-    this->nameRect->setVisible(visible);
-    this->faceName->setVisible(visible);
-    this->approveButton->setVisible(visible);
-    this->rejectButton->setVisible(visible);
+    nameRect->setVisible(visible);
+    faceName->setVisible(visible);
+    approveButton->setVisible(visible);
+    rejectButton->setVisible(visible);
 }
 
 void FaceItem::clearText()
 {
-    faceName->setPlainText("");
+    faceName->setPlainText(QString());
 }
 
-void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-    kDebug(51005)<<"entered";
+    kDebug(51005) << "entered";
+
     // Ugly hack, probably there is some better way to map from parent to scene
-    QPointF p = this->mapFromParent(QCursor::pos());
-    p = this->mapToScene(p);
-    
-    QRectF r = faceRect->mapRectToScene(faceRect->boundingRect());
-    
+    QPointF p = mapFromParent(QCursor::pos());
+    p         = mapToScene(p);
+    QRectF r  = faceRect->mapRectToScene(faceRect->boundingRect());
+
     if(r.contains(p))
-        this->setControlsVisible(true);
+        setControlsVisible(true);
 }
 
-void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
-{    
-        kDebug(51005)<<"moved";
+void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
+{
+    kDebug(51005) << "moved";
 
-    QPointF p = this->mapFromParent(QCursor::pos());
-    p = this->mapToScene(p);
-    
-    QRectF r = faceRect->mapRectToScene(faceRect->boundingRect());
-    
+    QPointF p = mapFromParent(QCursor::pos());
+    p         = mapToScene(p);
+    QRectF r  = faceRect->mapRectToScene(faceRect->boundingRect());
+
     if(r.contains(p))
-        this->setControlsVisible(true);
+        setControlsVisible(true);
     else
-        this->setControlsVisible(false);
+        setControlsVisible(false);
 }
 
 void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 {
-        kDebug(51005)<<"left";
+    kDebug(51005) << "left";
 
     QGraphicsItem::hoverLeaveEvent(event);
 }
-

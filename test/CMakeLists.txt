@@ -43,7 +43,7 @@ INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/gui/icons/button-approve-normal.png
               ${CMAKE_CURRENT_SOURCE_DIR}/gui/icons/button-approve-pressed.png
               ${CMAKE_CURRENT_SOURCE_DIR}/gui/icons/button-reject-normal.png
               ${CMAKE_CURRENT_SOURCE_DIR}/gui/icons/button-reject-pressed.png
-              
+
         DESTINATION ${DATA_INSTALL_DIR}/regiontaggingwidget/icons
        )
 
