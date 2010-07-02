@@ -8,7 +8,7 @@
  *
  * @author Copyright (C) 2010 by Alex Jironkin
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
- *         Copyright (C) 2010 by Aditya Bhatt
+ * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
  * @author Copyright (C) 2010 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
