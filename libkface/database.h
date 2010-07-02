@@ -8,7 +8,7 @@
  *
  * @author Copyright (C) 2010 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
- *         Copyright (C) 2010 by Aditya Bhatt
+ * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
