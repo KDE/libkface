@@ -8,8 +8,10 @@
  *
  * @author Copyright (C) 2010 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
- *         Copyright (C) 2010 by Aditya Bhatt
+ * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
+ * @author Copyright (C) 2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,6 +25,10 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Qt includes
+
+#include <QFile>
 
 // OpenCV includes
 
@@ -69,8 +75,7 @@ Image::Image()
 Image::Image(const QString& filePath)
      : d(new ImagePriv)
 {
-    // FIXME: do not use toLocal8Bits(), it's non-portable way (non UTF-8 file path support)
-    d->image = cvLoadImage(filePath.toLocal8Bit(), CV_LOAD_IMAGE_GRAYSCALE);
+    d->image = cvLoadImage(QFile::encodeName(filePath), CV_LOAD_IMAGE_GRAYSCALE);
 }
 
 Image::Image(const QImage& givenImage)
