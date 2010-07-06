@@ -140,6 +140,19 @@ public:
      * @return The degree of accuracy (1 to 5)
      */
     int detectionAccuracy();
+    
+    /**
+     * Get the number of people in the database
+     * @return Number of unique ID's in the database
+     */
+    int peopleCount();
+    
+    /**
+     * Get the number of occurences of a person
+     * @param id The ID of the person
+     * @return The number of occurences of the person in the Database
+     */
+    int count(int id);
 };
 
 }; // namespace KFaceIface

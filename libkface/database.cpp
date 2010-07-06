@@ -221,4 +221,14 @@ int Database::detectionAccuracy()
     return d->libface->getDetectionAccuracy();
 }
 
+int Database::peopleCount()
+{
+    return d->libface->count();
+}
+
+int Database::count(int id)
+{
+    return d->libface->count(id);
+}
+
 }; // namespace KFaceIface
