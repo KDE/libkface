@@ -80,6 +80,10 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->y1 = rect.topLeft().y()*scale;
     d->x2 = rect.bottomRight().x()*scale;
     d->y2 = rect.bottomRight().y()*scale;
+    
+    // Top-left Coordinates for the name
+    int x = d->x1 + 20;
+    int y = d->y2 + 10;
 
     // A QRect containing coordinates for the face rectangle
     QRect scaledRect;
@@ -93,10 +97,6 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->faceRect->setPen(pen);
     d->faceRect->setOpacity(1);
 
-    // Top-left Coordinates for the name
-    int x = d->x1 + 20;
-    int y = d->y2 + 10;
-
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
     d->nameRect = new QGraphicsRectItem( 0, scene);
     d->faceName = new QGraphicsTextItem (name, 0, scene);
@@ -108,6 +108,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     o.setAlignment(Qt::AlignCenter);
     doc->setDefaultTextOption(o);
 
+    // ----------------
     // Set coordinates of the name
     d->faceName->setPos(x,y);
 
@@ -128,6 +129,8 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
     d->faceName->setOpacity(1);
 
+    //---------------------
+    
     d->approveButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-normal.png"), 
                                 KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-pressed.png") );
 
