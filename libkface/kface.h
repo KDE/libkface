@@ -151,8 +151,8 @@ public:
      */
     Face& operator=(const libface::Face& other);
 
-public:
-
+    //----------------------
+    
     /** Return a string version of LibOpenCV release in format "major.minor.patch"
      */
     static QString LibOpenCVVersion();
