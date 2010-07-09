@@ -131,6 +131,10 @@ public:
      */
     QRect toRect() const;
     
+    /** 
+     * Will return the center coordinates of the Face object
+     * @return A QPoint version of the center for a face
+     */
     QPoint center() const;
     
     operator QRect() const { return toRect(); }
