@@ -130,6 +130,9 @@ public:
      * @return A QRect version of the bounding box for a face
      */
     QRect toRect() const;
+    
+    QPoint center() const;
+    
     operator QRect() const { return toRect(); }
 
     /** 

@@ -165,6 +165,11 @@ QRect Face::toRect() const
     return QRect(topLeft, bottomRight);
 }
 
+QPoint Face::center() const
+{
+    return this->toRect().center();
+}
+
 // Static methods ---------------------------------------------------------
 
 QString Face::LibOpenCVVersion()
