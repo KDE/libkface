@@ -47,24 +47,24 @@ using namespace KFaceIface;
 
 void detectFaces(Database* d, const QString& file)
 {
-    kDebug(51005) << "Loading" << file;
+    kDebug() << "Loading" << file;
     QImage img(file);
-    kDebug(51005) << "Detecting";
+    kDebug() << "Detecting";
     QList<Face> result = d->detectFaces(img);//QString::fromLocal8Bit(argv[1]));
-    kDebug(51005) << "Detected";
+    kDebug() << "Detected";
 
     if (result.isEmpty())
     {
-        kDebug(51005) << "No faces found";
+        kDebug() << "No faces found";
         return;
     }
 
-    kDebug(51005) << "Coordinates of detected faces : ";
+    kDebug() << "Coordinates of detected faces : ";
     Face f;
     foreach(f, result)
     {
         QRect r = f.toRect();
-        kDebug(51005) << r;
+        kDebug() << r;
     }
 
     QWidget* mainWidget = new QWidget;
@@ -91,12 +91,12 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        kDebug(51005) << "Bad Args!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
+        kDebug() << "Bad Args!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
         return 0;
     }
 
     // Make a new instance of Database and then detect faces from the image
-    kDebug(51005) << "Making DB";
+    kDebug() << "Making DB";
     Database* d = new Database(Database::InitDetection, QString("."));
 
     QApplication app(argc, argv);

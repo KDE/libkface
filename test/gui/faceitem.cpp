@@ -80,7 +80,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->y1 = rect.topLeft().y()*scale;
     d->x2 = rect.bottomRight().x()*scale;
     d->y2 = rect.bottomRight().y()*scale;
-    
+
     // Top-left Coordinates for the name
     int x = d->x1 + 20;
     int y = d->y2 + 10;
@@ -104,7 +104,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     // Make the bounding box for the name update itself to cover all the text whenever contents are changed
     QTextDocument* doc;
     doc = d->faceName->document();
-    QTextOption o; 
+    QTextOption o;
     o.setAlignment(Qt::AlignCenter);
     doc->setDefaultTextOption(o);
 
@@ -130,11 +130,11 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->faceName->setOpacity(1);
 
     //---------------------
-    
-    d->approveButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-normal.png"), 
+
+    d->approveButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-normal.png"),
                                 KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-pressed.png") );
 
-    d->rejectButton  = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"), 
+    d->rejectButton  = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"),
                                 KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-pressed.png") );
 
     d->approveButton->hide();
@@ -146,10 +146,10 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->approveButton->setPos(x-40, y);
     d->rejectButton->setPos(x-20, y);
 
-    connect(d->rejectButton, SIGNAL(clicked()), 
+    connect(d->rejectButton, SIGNAL(clicked()),
             this, SLOT(clearText()) );
 
-    connect(doc, SIGNAL(contentsChanged()), 
+    connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
 }
 
@@ -217,7 +217,7 @@ void FaceItem::clearText()
 
 void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-    kDebug(51005) << "entered";
+    kDebug() << "entered";
 
     // Ugly hack, probably there is some better way to map from parent to scene
     QPointF p = mapFromParent(QCursor::pos());
@@ -230,7 +230,7 @@ void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
 
 void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-    kDebug(51005) << "moved";
+    kDebug() << "moved";
 
     QPointF p = mapFromParent(QCursor::pos());
     p         = mapToScene(p);
@@ -244,7 +244,7 @@ void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
 
 void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 {
-    kDebug(51005) << "left";
+    kDebug() << "left";
 
     QGraphicsItem::hoverLeaveEvent(event);
 }
