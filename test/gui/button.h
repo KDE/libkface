@@ -69,6 +69,6 @@ private:
     ButtonPriv* const d;
 };
 
-}; // namespace KFaceIface
+} // namespace KFaceIface
 
 #endif // BUTTON_H

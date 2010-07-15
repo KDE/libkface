@@ -82,6 +82,6 @@ private:
     FaceItemPriv* const d;
 };
 
-}; // namespace KFaceIface
+} // namespace KFaceIface
 
 #endif // FACEITEM_H

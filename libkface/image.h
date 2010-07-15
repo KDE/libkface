@@ -100,6 +100,6 @@ private:
     QExplicitlySharedDataPointer<ImagePriv> d;
 };
 
-}; // namespace KFaceIface
+} // namespace KFaceIface
 
 #endif // K_FACE_IMAGE_H

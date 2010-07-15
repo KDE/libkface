@@ -87,7 +87,7 @@ namespace KFaceUtils
      * @param id The integer ID of the new person
      */
     void addNameToFile(const QString& fileName, const QString& name, const int id);
-};
+}
 
 } // namespace KFaceIface
 

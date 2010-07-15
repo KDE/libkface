@@ -155,7 +155,7 @@ public:
     int count(int id);
 };
 
-}; // namespace KFaceIface
+} // namespace KFaceIface
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KFaceIface::Database::InitFlags)
 

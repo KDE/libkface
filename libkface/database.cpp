@@ -231,4 +231,4 @@ int Database::count(int id)
     return d->libface->count(id);
 }
 
-}; // namespace KFaceIface
+} // namespace KFaceIface

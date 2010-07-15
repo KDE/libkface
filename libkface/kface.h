@@ -177,6 +177,6 @@ private:
     FacePriv* const d;
 };
 
-}; // namespace KFaceIface
+} // namespace KFaceIface
 
 #endif // KFACE_FACE_H

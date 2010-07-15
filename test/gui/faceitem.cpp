@@ -249,4 +249,4 @@ void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
-}; // namespace KFaceIface
+} // namespace KFaceIface

@@ -129,4 +129,4 @@ void Button::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-}; // namespace KFaceIface
+} // namespace KFaceIface
