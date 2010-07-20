@@ -45,13 +45,8 @@
 namespace KFaceIface
 {
 
-class DatabasePriv;
-
 class KFACE_EXPORT Database
 {
-private:
-
-    QExplicitlySharedDataPointer<DatabasePriv> d;
 
 public:
 
@@ -64,9 +59,9 @@ public:
     Q_DECLARE_FLAGS(InitFlags, InitFlag)
 
     /**
-     * Constructor for Database 
-     * @param flags Flags that specify type of usage for the Database instance. 
-     * For Detection : InitDetection 
+     * Constructor for Database
+     * @param flags Flags that specify type of usage for the Database instance.
+     * For Detection : InitDetection
      * For Recognition : InitRecognition
      * For All : InitAll
      * @param configurationPath The path where the Database configuration file will be stored.
@@ -102,7 +97,7 @@ public:
      * @return A QList of detected Face's, with the extracted face images loaded into them.
      */
     QList<Face> detectFaces(const Image& image);
-    
+
     /**
      * Load an Image from specified file name and scan it for faces. Return a list with regions possibly
      * containing faces.
@@ -148,19 +143,24 @@ public:
      * @return The degree of accuracy (1 to 5)
      */
     int detectionAccuracy();
-    
+
     /**
      * Get the number of people in the database
      * @return Number of unique ID's in the database
      */
     int peopleCount();
-    
+
     /**
      * Get the number of occurences of a person
      * @param id The ID of the person
      * @return The number of occurences of the person in the Database
      */
     int count(int id);
+
+private:
+
+    class DatabasePriv;
+    QExplicitlySharedDataPointer<DatabasePriv> d;
 };
 
 } // namespace KFaceIface

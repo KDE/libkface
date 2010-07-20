@@ -50,13 +50,12 @@
 namespace KFaceIface
 {
 
-const QString mappingFilename = QString("/dictionary");
-
-class DatabasePriv : public QSharedData
+class Database::DatabasePriv : public QSharedData
 {
 public:
 
     DatabasePriv()
+        : mappingFilename(QString("/dictionary"))
     {
         libface = 0;
     }
@@ -69,13 +68,14 @@ public:
     libface::LibFace*   libface;
     QHash<QString, int> hash;
     QString             configPath;
+    const QString       mappingFilename;
 };
 
 Database::Database(InitFlags flags, const QString& configurationPath)
         : d(new DatabasePriv)
 {
     d->configPath = configurationPath;
-    d->hash       = KFaceUtils::hashFromFile(d->configPath+mappingFilename);
+    d->hash       = KFaceUtils::hashFromFile(d->configPath + d->mappingFilename);
 
     if (flags == InitDetection)
     {
@@ -153,7 +153,7 @@ bool Database::updateFaces(QList<Face>& faces)
             if(!d->hash.contains(faces[i].name()))
             {
                 // Add to file
-                KFaceUtils::addNameToFile(d->configPath+mappingFilename, faces[i].name(), faces[i].id());
+                KFaceUtils::addNameToFile(d->configPath + d->mappingFilename, faces[i].name(), faces[i].id());
                 // Add to d->hash
                 d->hash[faces[i].name()] = faces[i].id();
             }
@@ -170,7 +170,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         return closeness;
     }
 
-    if(!QFile::exists(d->configPath+mappingFilename))
+    if(!QFile::exists(d->configPath + d->mappingFilename))
     {
         kError(51005) << "ERROR: No database exists.";
         return closeness;
