@@ -102,6 +102,14 @@ public:
      * @return A QList of detected Face's, with the extracted face images loaded into them.
      */
     QList<Face> detectFaces(const Image& image);
+    
+    /**
+     * Load an Image from specified file name and scan it for faces. Return a list with regions possibly
+     * containing faces.
+     * @param fileName The filename of the image in which faces are to be detected
+     * @return A QList of detected Face's, with the extracted face images loaded into them.
+     */
+    QList<Face> detectFaces(const QString& fileName);
 
     /**
      * Update the training database with a QList of Faces which hold the face images

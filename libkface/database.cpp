@@ -122,6 +122,11 @@ QList<Face> Database::detectFaces(const Image& image)
     return faceList;
 }
 
+QList<Face> Database::detectFaces(const QString& fileName)
+{
+    return detectFaces(Image(fileName));
+}
+
 bool Database::updateFaces(QList<Face>& faces)
 {
     if(faces.isEmpty())
