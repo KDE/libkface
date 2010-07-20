@@ -45,8 +45,6 @@
 namespace KFaceIface
 {
 
-class FaceItemPriv;
-
 class FaceItem : public QGraphicsObject
 {
     Q_OBJECT
@@ -79,6 +77,7 @@ protected:
 
 private:
 
+    class FaceItemPriv;
     FaceItemPriv* const d;
 };
 

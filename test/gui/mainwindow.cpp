@@ -80,10 +80,10 @@ MainWindow::MainWindow(QWidget* parent)
 
     myView->show();
 
-    d = new Database(Database::InitAll, ".");
+    database = new Database(Database::InitAll, ".");
 
     ui->configLocation->setText(QDir::currentPath());
-    ui->horizontalSlider->setValue(d->detectionAccuracy());
+    ui->horizontalSlider->setValue(database->detectionAccuracy());
 
     lastFileOpenPath = QDir::currentPath();
 }
@@ -144,13 +144,13 @@ void MainWindow::openConfig()
 
     ui->configLocation->setText(directory);
 
-    d = new Database(Database::InitAll, directory);
+    database = new Database(Database::InitAll, directory);
 }
 
 void MainWindow::detectFaces()
 {
     currentFaces.clear();
-    currentFaces = d->detectFaces(currentPhoto);
+    currentFaces = database->detectFaces(currentPhoto);
     Face face;
     kDebug() << "libkface detected : " << currentFaces.size() << " faces.";
 
@@ -170,7 +170,7 @@ void MainWindow::detectFaces()
 
 void MainWindow::updateConfig()
 {
-    kDebug() << "Path of config directory = " << d->configPath();
+    kDebug() << "Path of config directory = " << database->configPath();
 
     // Assign the text of the faceitems to the name of each face. When there is no text, drop that face from currentfaces.
     QList<Face> updateList;
@@ -184,10 +184,10 @@ void MainWindow::updateConfig()
         }
     }
 
-    if( d->updateFaces(updateList) )
+    if( database->updateFaces(updateList) )
     {
         kDebug() << "Trained";
-        d->saveConfig();
+        database->saveConfig();
     }
     else
     {
@@ -199,7 +199,7 @@ void MainWindow::updateAccuracy()
 {
     int value = ui->horizontalSlider->value();
     ui->lcdNumber->display(value);
-    d->setDetectionAccuracy(value);
+    database->setDetectionAccuracy(value);
 }
 
 void MainWindow::clearScene()
@@ -214,7 +214,7 @@ void MainWindow::clearScene()
 
 void MainWindow::recognise()
 {
-    QList<double> closeness = d->recognizeFaces(currentFaces);
+    QList<double> closeness = database->recognizeFaces(currentFaces);
 
     if(closeness.isEmpty())
         return;
@@ -223,7 +223,7 @@ void MainWindow::recognise()
     {
         faceitems[i]->setText(currentFaces[i].name());
         kDebug() << "Face #"<< i+1 << " is closest to the person with ID " << currentFaces[i].id()
-                      << " and name "<< currentFaces[i].name()
-                      << " with a distance of "<< closeness[i];
+                 << " and name "<< currentFaces[i].name()
+                 << " with a distance of "<< closeness[i];
     }
 }

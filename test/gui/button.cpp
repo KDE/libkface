@@ -28,7 +28,7 @@
 namespace KFaceIface
 {
 
-class ButtonPriv
+class Button::ButtonPriv
 {
 public:
 

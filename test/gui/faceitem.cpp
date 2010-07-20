@@ -44,7 +44,7 @@
 namespace KFaceIface
 {
 
-class FaceItemPriv
+class FaceItem::FaceItemPriv
 {
 public:
 

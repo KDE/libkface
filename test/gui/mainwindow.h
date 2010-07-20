@@ -89,7 +89,7 @@ private:
     QGraphicsPixmapItem* lastPhotoItem;
     QList<FaceItem *>    faceitems;
 
-    Database*            d;
+    Database*            database;
     QImage               currentPhoto;
     double               scale;
     QList<Face>          currentFaces;

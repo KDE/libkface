@@ -36,8 +36,6 @@
 namespace KFaceIface
 {
 
-class ButtonPriv;
-
 class Button : public QObject, public QGraphicsItem
 {
     Q_OBJECT
@@ -50,8 +48,7 @@ public:
     ~Button();
 
     QRectF boundingRect() const;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
-               QWidget* widget = 0);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     void setPixmap(const QString& normal, const QString& pressed = QString());
 
 Q_SIGNALS:
@@ -66,6 +63,7 @@ protected:
 
 private:
 
+    class ButtonPriv;
     ButtonPriv* const d;
 };
 
