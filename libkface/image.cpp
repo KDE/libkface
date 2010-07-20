@@ -45,7 +45,7 @@
 namespace KFaceIface
 {
 
-class ImagePriv : public QSharedData
+class Image::ImagePriv : public QSharedData
 {
 public:
 

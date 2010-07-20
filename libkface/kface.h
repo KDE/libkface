@@ -10,6 +10,8 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
+ * @author Copyright (C) 2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,19 +46,17 @@ namespace libface
 namespace KFaceIface
 {
 
-class FacePriv;
-
 class KFACE_EXPORT Face
 {
 
 public:
 
-    /** 
+    /**
      * Face constructor
      */
     Face();
 
-    /** 
+    /**
      * Face constructor which constructs a face object out of a QRect and optionally a QImage.
      * If no image is passed, it sets a blank image made by QImage()
      * @param rect The QRect for the Face object
@@ -64,19 +64,19 @@ public:
      */
     Face(const QRect& rect, const QImage& image = QImage());
 
-    /** 
+    /**
      * Face constructor which constructs a face object from a libface::Face.
      * @param other The libface::Face object.
      */
     Face(const libface::Face& other);
 
-    /** 
+    /**
      * Face constructor which constructs a face object from another Face.
      * @param other The Face object
      */
     Face(const Face& other);
 
-    /** 
+    /**
      * Destructor
      */
     ~Face();
@@ -125,21 +125,21 @@ public:
      */
     void setName(const QString& name);
 
-    /** 
+    /**
      * Will return a QRect of the Face object, for better interop with functions that don't want to directly use Face
      * @return A QRect version of the bounding box for a face
      */
     QRect toRect() const;
-    
-    /** 
+
+    /**
      * Will return the center coordinates of the Face object
      * @return A QPoint version of the center for a face
      */
     QPoint center() const;
-    
+
     operator QRect() const { return toRect(); }
 
-    /** 
+    /**
      * Will return a libface::Face version of the Face object
      * @return libface::Face version
      */
@@ -159,7 +159,7 @@ public:
     Face& operator=(const libface::Face& other);
 
     //----------------------
-    
+
     /** Return a string version of LibOpenCV release in format "major.minor.patch"
      */
     static QString LibOpenCVVersion();
@@ -174,6 +174,7 @@ public:
 
 private:
 
+    class FacePriv;
     FacePriv* const d;
 };
 

@@ -10,6 +10,8 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
+ * @author Copyright (C) 2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,7 +76,7 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     imgHeader->imageData = (char*) newdata;
 
     IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
-    cvConvertImage(imgHeader, greyImage); 
+    cvConvertImage(imgHeader, greyImage);
     return greyImage;
 }
 
