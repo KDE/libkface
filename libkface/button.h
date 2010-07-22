@@ -33,10 +33,14 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 
+// Local includes
+
+#include "libkface_export.h"
+
 namespace KFaceIface
 {
 
-class Button : public QObject, public QGraphicsItem
+class KFACE_EXPORT Button : public QObject, public QGraphicsItem
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)

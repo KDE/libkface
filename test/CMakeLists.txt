@@ -31,9 +31,6 @@ TARGET_LINK_LIBRARIES(detect kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${Q
 # -----------------------------------------------------------------------------
 
 SET(libfaceGUI_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/gui/faceitem.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/gui/button.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/gui/activetooltip.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
    )
 

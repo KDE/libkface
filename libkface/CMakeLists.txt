@@ -36,6 +36,8 @@ SET(kface_LIB_SRCS database.cpp
                    kface.cpp
                    kfaceutils.cpp
                    image.cpp
+                   faceitem.cpp
+                   button.cpp
    )
 
 KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS})
@@ -56,6 +58,8 @@ INSTALL(FILES database.h
               kfaceutils.h
               libkface_export.h
               image.h
+              faceitem.h
+              button.h
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
        )
