@@ -110,7 +110,6 @@ Image& Image::operator=(const Image& other)
 
 Image::~Image()
 {
-    cvReleaseImage(&d->image);
 }
 
 bool Image::isNull() const
