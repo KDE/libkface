@@ -53,6 +53,12 @@ Button::Button(const QString& normal, const QString& pressed, QGraphicsItem* par
     setPixmap(normal, pressed);
 }
 
+Button::Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* parent)
+      : QGraphicsItem(parent), d(new ButtonPriv)
+{
+    setPixmap(normal, pressed);
+}
+
 Button::~Button()
 {
     delete d;
@@ -86,6 +92,11 @@ void Button::setPixmap(const QString& normal, const QString& pressed)
     d->pressed.load(pressed);
 }
 
+void Button::setPixmap(const QPixmap& normal, const QPixmap& pressed)
+{
+    d->normal = normal;
+    d->pressed = pressed;
+}
 void Button::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)

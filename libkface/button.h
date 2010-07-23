@@ -50,10 +50,13 @@ public:
     Button(QGraphicsItem* parent = 0);
     Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* parent = 0);
     ~Button();
+    
+    Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* parent = 0);
 
     QRectF boundingRect() const;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     void setPixmap(const QString& normal, const QString& pressed = QString());
+    void setPixmap(const QPixmap& normal, const QPixmap& pressed);
 
 Q_SIGNALS:
 

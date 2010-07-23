@@ -35,11 +35,13 @@
 #include <QGraphicsOpacityEffect>
 #include <QTextDocument>
 #include <QGraphicsScene>
+#include <QColor>
 
 // KDE include
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kicon.h>
 
 namespace KFaceIface
 {
@@ -53,7 +55,6 @@ public:
         faceRect      = 0;
         faceName      = 0;
         nameRect      = 0;
-        approveButton = 0;
         rejectButton  = 0;
     }
 
@@ -62,7 +63,6 @@ public:
     QGraphicsRectItem* faceRect;
     QGraphicsTextItem* faceName;
     QGraphicsRectItem* nameRect;
-    Button*            approveButton;
     Button*            rejectButton;
 };
 
@@ -130,24 +130,18 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->faceName->setOpacity(1);
 
     //---------------------
-
-    d->approveButton = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-normal.png"),
-                                KStandardDirs::locate("data", "regiontaggingwidget/icons/button-approve-pressed.png") );
-
-    d->rejectButton  = new Button( KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-normal.png"),
-                                KStandardDirs::locate("data", "regiontaggingwidget/icons/button-reject-pressed.png") );
-
-    d->approveButton->hide();
+    
+    QString s("dialog-close");
+    KIcon *icon  =new KIcon(s);
+    QPixmap rejectPix = icon->pixmap(QSize(16,16));
+    
+    d->rejectButton  = new Button( rejectPix, rejectPix);
     d->rejectButton->hide();
-
-    scene->addItem(d->approveButton);
     scene->addItem(d->rejectButton);
-
-    d->approveButton->setPos(x-40, y);
-    d->rejectButton->setPos(x-20, y);
-
-    connect(d->rejectButton, SIGNAL(clicked()),
-            this, SLOT(clearText()) );
+    
+    QPointF coord = d->faceRect->rect().topLeft();
+    d->rejectButton->setPos(coord.x() - 8, coord.y() - 8);
+    d->rejectButton->show();
 
     connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
@@ -181,17 +175,6 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
-    if(d->faceName->toPlainText() == QString())
-    {
-        d->approveButton->hide();
-        d->rejectButton->hide();
-    }
-    else
-    {
-        d->approveButton->show();
-        d->rejectButton->show();
-    }
-
     QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
     d->nameRect->setRect(r);
 }
@@ -206,7 +189,6 @@ void FaceItem::setControlsVisible(bool visible)
 {
     d->nameRect->setVisible(visible);
     d->faceName->setVisible(visible);
-    d->approveButton->setVisible(visible);
     d->rejectButton->setVisible(visible);
 }
 

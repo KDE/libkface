@@ -43,6 +43,7 @@ SET(kface_LIB_SRCS database.cpp
 KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
+                            ${KDE4_KDEUI_LIBS}
                             ${QT_QTGUI_LIBRARY}
                             ${LIBFACE_LIBRARIES}
                             ${OpenCV_LIBS}
