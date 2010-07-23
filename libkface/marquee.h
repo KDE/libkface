@@ -47,6 +47,8 @@ public:
 signals:
     void selected(Marquee *m);
     void changed();
+    void entered();
+    void left();
 
 private:
     void                        createHandles();

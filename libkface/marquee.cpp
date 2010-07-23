@@ -22,6 +22,8 @@
 #include "fancyrect.h"
 
 #include <QGraphicsItemGroup>
+#include <KDebug>
+
 #define HANDLESIZE 10
 
 namespace KFaceIface
@@ -145,6 +147,7 @@ void Marquee::mousePressEvent(QGraphicsSceneMouseEvent *e)
     }
     
     // If no handle is under the mouse, then we move the frame
+    m_resizing = false;
     m_moving = true;
     m_moveOffset = e->pos();
     

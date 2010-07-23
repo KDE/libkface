@@ -149,6 +149,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
 
     connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
+    
     connect(d->faceMarquee, SIGNAL(changed()),
             this, SLOT(update()));
 }
@@ -181,12 +182,12 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
-    QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
-    d->nameRect->setRect(r);
     QPointF tl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).topLeft();
     d->rejectButton->setPos(tl.x() - 8, tl.y() - 8);
     QPointF bl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).bottomLeft();
     d->faceName->setPos(bl.x(), bl.y() + 5);
+    QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
+    d->nameRect->setRect(r);
 }
 
 void FaceItem::setVisible(bool visible)
