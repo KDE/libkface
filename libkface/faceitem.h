@@ -31,12 +31,12 @@
 
 // Qt includes
 
-#include <QtGlobal>
-#include <QGraphicsObject>
-#include <QObject>
-#include <QGraphicsRectItem>
-#include <QBrush>
-#include <QFont>
+#include <QtCore/QtGlobal>
+#include <QtCore/QObject>
+#include <QtGui/QGraphicsObject>
+#include <QtGui/QGraphicsRectItem>
+#include <QtGui/QBrush>
+#include <QtGui/QFont>
 
 // Local includes
 

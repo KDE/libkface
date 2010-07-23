@@ -94,9 +94,10 @@ void Button::setPixmap(const QString& normal, const QString& pressed)
 
 void Button::setPixmap(const QPixmap& normal, const QPixmap& pressed)
 {
-    d->normal = normal;
+    d->normal  = normal;
     d->pressed = pressed;
 }
+
 void Button::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)

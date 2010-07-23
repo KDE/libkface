@@ -31,12 +31,12 @@
 
 // Qt includes
 
-#include <QExplicitlySharedDataPointer>
-#include <QImage>
-#include <QString>
-#include <QSharedDataPointer>
-#include <QPair>
-#include <QHash>
+#include <QtCore/QExplicitlySharedDataPointer>
+#include <QtCore/QString>
+#include <QtCore/QSharedDataPointer>
+#include <QtCore/QPair>
+#include <QtCore/QHash>
+#include <QtGui/QImage>
 
 // Local includes
 

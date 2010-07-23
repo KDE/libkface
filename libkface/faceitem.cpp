@@ -102,8 +102,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->faceName = new QGraphicsTextItem (name, 0, scene);
 
     // Make the bounding box for the name update itself to cover all the text whenever contents are changed
-    QTextDocument* doc;
-    doc = d->faceName->document();
+    QTextDocument* doc = d->faceName->document();
     QTextOption o;
     o.setAlignment(Qt::AlignCenter);
     doc->setDefaultTextOption(o);
@@ -130,21 +129,22 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->faceName->setOpacity(1);
 
     //---------------------
-    
+
     QString s("dialog-close");
-    KIcon *icon  =new KIcon(s);
+    KIcon* icon       = new KIcon(s);
     QPixmap rejectPix = icon->pixmap(QSize(16,16));
-    
-    d->rejectButton  = new Button( rejectPix, rejectPix);
+
+    d->rejectButton   = new Button( rejectPix, rejectPix);
     d->rejectButton->hide();
     scene->addItem(d->rejectButton);
-    
-    QPointF coord = d->faceRect->rect().topLeft();
+
+    QPointF coord     = d->faceRect->rect().topLeft();
     d->rejectButton->setPos(coord.x() - 8, coord.y() - 8);
     d->rejectButton->show();
 
     connect(d->rejectButton, SIGNAL(clicked()),
             this, SLOT(clearAndHide()));
+
     connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
 }

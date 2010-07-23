@@ -35,7 +35,7 @@
 
 // Qt includes
 
-#include <QImage>
+#include <QtGui/QImage>
 
 namespace KFaceIface
 {

@@ -31,8 +31,8 @@
 
 // Qt includes
 
-#include <QImage>
-#include <QString>
+#include <QtGui/QImage>
+#include <QtCore/QString>
 
 // Local includes
 

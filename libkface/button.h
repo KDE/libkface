@@ -28,10 +28,10 @@
 
 // Qt includes
 
-#include <QGraphicsItem>
-#include <QObject>
-#include <QPainter>
-#include <QGraphicsSceneMouseEvent>
+#include <QtCore/QObject>
+#include <QtGui/QPainter>
+#include <QtGui/QGraphicsItem>
+#include <QtGui/QGraphicsSceneMouseEvent>
 
 // Local includes
 
@@ -50,7 +50,7 @@ public:
     Button(QGraphicsItem* parent = 0);
     Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* parent = 0);
     ~Button();
-    
+
     Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* parent = 0);
 
     QRectF boundingRect() const;

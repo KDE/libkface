@@ -31,8 +31,8 @@
 
 // Qt includes
 
-#include <QImage>
-#include <QExplicitlySharedDataPointer>
+#include <QtGui/QImage>
+#include <QtCore/QExplicitlySharedDataPointer>
 
 // Local includes
 
