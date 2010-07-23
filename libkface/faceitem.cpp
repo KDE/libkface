@@ -143,6 +143,8 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->rejectButton->setPos(coord.x() - 8, coord.y() - 8);
     d->rejectButton->show();
 
+    connect(d->rejectButton, SIGNAL(clicked()),
+            this, SLOT(clearAndHide()));
     connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
 }
@@ -229,6 +231,12 @@ void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
     kDebug() << "left";
 
     QGraphicsItem::hoverLeaveEvent(event);
+}
+
+void FaceItem::clearAndHide()
+{
+    clearText();
+    setVisible(false);
 }
 
 } // namespace KFaceIface

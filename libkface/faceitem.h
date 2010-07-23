@@ -68,6 +68,7 @@ public Q_SLOTS:
 
     void update();
     void clearText();
+    void clearAndHide();
 
 protected:
 
