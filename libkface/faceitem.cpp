@@ -43,6 +43,9 @@
 #include <kstandarddirs.h>
 #include <kicon.h>
 
+#include "marquee.h"
+#include "fancyrect.h"
+
 namespace KFaceIface
 {
 
@@ -52,15 +55,15 @@ public:
 
     FaceItemPriv()
     {
-        faceRect      = 0;
         faceName      = 0;
         nameRect      = 0;
         rejectButton  = 0;
+        faceMarquee   = 0;
     }
 
     int                sceneWidth, sceneHeight;
     int                x1, x2, y1, y2;
-    QGraphicsRectItem* faceRect;
+    Marquee*           faceMarquee;
     QGraphicsTextItem* faceName;
     QGraphicsRectItem* nameRect;
     Button*            rejectButton;
@@ -71,7 +74,8 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
 {
     setAcceptHoverEvents(true);
 
-    d->faceRect    = new QGraphicsRectItem( 0, scene);
+    FancyRect* fancy;
+    
     d->sceneWidth  = scene->width();
     d->sceneHeight = scene->height();
 
@@ -89,14 +93,16 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     QRect scaledRect;
     scaledRect.setTopLeft(QPoint(d->x1, d->y1));
     scaledRect.setBottomRight(QPoint(d->x2, d->y2));
-
-    // Draw the Face Rectangle as a QGraphicsRectItem using the dimensions of the scaledRect
-    d->faceRect->setRect(scaledRect);
+    
+    ////// marquee
     QPen pen(QColor(QString("red")));
     pen.setWidth(3);
-    d->faceRect->setPen(pen);
-    d->faceRect->setOpacity(1);
-
+    
+    fancy = new FancyRect(scaledRect);
+    fancy->setPen(pen);
+    d->faceMarquee = new Marquee(fancy);
+    scene->addItem(d->faceMarquee);
+    
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
     d->nameRect = new QGraphicsRectItem( 0, scene);
     d->faceName = new QGraphicsTextItem (name, 0, scene);
@@ -106,10 +112,6 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     QTextOption o;
     o.setAlignment(Qt::AlignCenter);
     doc->setDefaultTextOption(o);
-
-    // ----------------
-    // Set coordinates of the name
-    d->faceName->setPos(x,y);
 
     // Get coordinates of the name relative the the scene
     QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
@@ -121,6 +123,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->nameRect->setPen(p);
     d->nameRect->setBrush(QBrush(QColor(QString("black"))));
     d->nameRect->setOpacity(0.8);
+    d->nameRect->show();
 
     // Draw the name input item
     d->faceName->setDefaultTextColor(QColor(QString("white")));
@@ -137,15 +140,16 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->rejectButton   = new Button( rejectPix, rejectPix);
     d->rejectButton->hide();
     scene->addItem(d->rejectButton);
-
-    QPointF coord     = d->faceRect->rect().topLeft();
-    d->rejectButton->setPos(coord.x() - 8, coord.y() - 8);
     d->rejectButton->show();
-
+    
+    update();
+    
     connect(d->rejectButton, SIGNAL(clicked()),
             this, SLOT(clearAndHide()));
 
     connect(doc, SIGNAL(contentsChanged()),
+            this, SLOT(update()));
+    connect(d->faceMarquee, SIGNAL(changed()),
             this, SLOT(update()));
 }
 
@@ -179,11 +183,15 @@ void FaceItem::update()
 {
     QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
     d->nameRect->setRect(r);
+    QPointF tl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).topLeft();
+    d->rejectButton->setPos(tl.x() - 8, tl.y() - 8);
+    QPointF bl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).bottomLeft();
+    d->faceName->setPos(bl.x(), bl.y() + 5);
 }
 
 void FaceItem::setVisible(bool visible)
 {
-    d->faceRect->setVisible(visible);
+    d->faceMarquee->setVisible(visible);
     setControlsVisible(visible);
 }
 
@@ -201,36 +209,17 @@ void FaceItem::clearText()
 
 void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-    kDebug() << "entered";
 
-    // Ugly hack, probably there is some better way to map from parent to scene
-    QPointF p = mapFromParent(QCursor::pos());
-    p         = mapToScene(p);
-    QRectF r  = d->faceRect->mapRectToScene(d->faceRect->boundingRect());
-
-    if(r.contains(p))
-        setControlsVisible(true);
 }
 
 void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-    kDebug() << "moved";
-
-    QPointF p = mapFromParent(QCursor::pos());
-    p         = mapToScene(p);
-    QRectF r  = d->faceRect->mapRectToScene(d->faceRect->boundingRect());
-
-    if(r.contains(p))
-        setControlsVisible(true);
-    else
-        setControlsVisible(false);
+    
 }
 
-void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
+void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-    kDebug() << "left";
-
-    QGraphicsItem::hoverLeaveEvent(event);
+    
 }
 
 void FaceItem::clearAndHide()
