@@ -95,11 +95,8 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     scaledRect.setBottomRight(QPoint(d->x2, d->y2));
     
     ////// marquee
-    QPen pen(QColor(QString("red")));
-    pen.setWidth(3);
     
     fancy = new FancyRect(scaledRect);
-    fancy->setPen(pen);
     d->faceMarquee = new Marquee(fancy);
     scene->addItem(d->faceMarquee);
     
