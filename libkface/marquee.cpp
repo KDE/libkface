@@ -1,37 +1,54 @@
-/*
- * This file is part of the Nepomuk KDE project.
- * Copyright (C) 2008 Adrien Bustany <madcat@mymadcat.com>
+/** ===========================================================
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * This library is distributed in the hope that it will be useful,
+ * @date   2010-07-23
+ * @brief  face marquer widget for libkface
+ *
+ * @author Copyright (C) 2008 Adrien Bustany
+ *         <a href="mailto:madcat at mymadcat dot com">madcat at mymadcat dot com</a>
+ * @author Copyright (C) 2010 by Aditya Bhatt
+ *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
+ * @author Copyright (C) 2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- */
+ * ============================================================ */
 
 #include "marquee.moc"
-#include "fancyrect.h"
+
+// Qt includes
 
 #include <QGraphicsItemGroup>
-#include <KDebug>
+
+// KDE includes
+
+#include <kdebug.h>
+
+// Local includes
+
+#include "fancyrect.h"
 
 #define HANDLESIZE 10
 
 namespace KFaceIface
 {
 
-Marquee::Marquee(FancyRect* rect, QGraphicsItem *parent) : QObject(NULL), QGraphicsItemGroup(parent), m_rect(rect)
+Marquee::Marquee(FancyRect* rect, QGraphicsItem* parent)
+       : QObject(NULL), QGraphicsItemGroup(parent), m_rect(rect)
 {
-    m_Htr = m_Hbr = m_Hbl = NULL;
+    m_Htr = m_Hbr = m_Hbl = 0;
     m_rectPen.setColor(Qt::white);
     m_rectPen.setWidth(2);
     m_outlinePen.setColor(Qt::black);
@@ -60,7 +77,7 @@ QRectF Marquee::boundingRect() const
     return m_rect->rect();
 }
 
-void Marquee::setLabel(const QString &text)
+void Marquee::setLabel(const QString& text)
 {
     m_label->setText(text);
     placeLabel();
@@ -113,7 +130,7 @@ void Marquee::placeHandles()
     qreal ox = m_rect->rect().x();
     qreal oy = m_rect->rect().y();
     qreal hs = m_Hbr->boundingRect().width();
-    
+
     m_Htr->setPos(ox+rw-hs, oy);
     m_Hbl->setPos(ox, oy+rh-hs);
     m_Hbr->setPos(ox+rw-hs, oy+rh-hs);
@@ -125,40 +142,45 @@ void Marquee::placeLabel()
     m_label->setPos((boundingRect().width() - regionRect.width())/2, (boundingRect().height() - regionRect.height())/2);
 }
 
-void Marquee::mousePressEvent(QGraphicsSceneMouseEvent *e)
+void Marquee::mousePressEvent(QGraphicsSceneMouseEvent* e)
 {
     emit selected(this);
     // Check for some resize handles under the mouse
-    
-    if (m_Htr->isUnderMouse()) {
+
+    if (m_Htr->isUnderMouse())
+    {
         m_resizing = true;
         m_resizeType = 1;
         return;
     }
-    if (m_Hbl->isUnderMouse()) {
+    if (m_Hbl->isUnderMouse())
+    {
         m_resizing = true;
         m_resizeType = 2;
         return;
     }
-    if (m_Hbr->isUnderMouse()) {
+    if (m_Hbr->isUnderMouse())
+    {
         m_resizing = true;
         m_resizeType = 3;
         return;
     }
-    
+
     // If no handle is under the mouse, then we move the frame
     m_resizing = false;
     m_moving = true;
     m_moveOffset = e->pos();
-    
+
     emit changed();
 }
 
-void Marquee::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
+void Marquee::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
 {
-    if (m_resizing) {
+    if (m_resizing)
+    {
         QRectF r = m_rect->rect();
-        switch(m_resizeType) {
+        switch(m_resizeType)
+	{
             case 1:
                 r.setTopRight(e->pos());
                 break;
@@ -178,20 +200,21 @@ void Marquee::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
         placeHandles();
         placeLabel();
     }
-    if (m_moving) {
+    if (m_moving)
+    {
         setPos(e->scenePos() - m_moveOffset);
     }
-    
+
     emit changed();
 }
 
-void Marquee::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
+void Marquee::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 {
     Q_UNUSED(e);
     m_resizing = false;
     m_moving = false;
-    
+
     emit changed();
 }
 
-}
+} // namespace KFaceIface
