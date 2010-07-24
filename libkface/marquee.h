@@ -49,6 +49,8 @@ class KFACE_EXPORT Marquee : public QObject, public QGraphicsItemGroup
 public:
 
     Marquee(FancyRect* rect, QGraphicsItem* parent = 0);
+    ~Marquee();
+
     QRectF boundingRect() const;
     void setLabel(const QString& text);
     QString id();
@@ -77,22 +79,8 @@ private:
 
 private:
 
-    QPen                     m_rectPen;    // The pen used to draw the frames
-    QPen                     m_outlinePen; // Text outline pen
-
-    // Handles
-    FancyRect*               m_Htr;
-    FancyRect*               m_Hbr;
-    FancyRect*               m_Hbl;
-
-    FancyRect*               m_rect;       // Main frame
-    QGraphicsSimpleTextItem* m_label;
-
-    bool                     m_moving;     // Tells if we are moving the marquee
-    QPointF                  m_moveOffset; // where the mouse was when the user began to drag the marquee
-    bool                     m_resizing;   // Tells if we are resizing the marquee
-    char                     m_resizeType; // 0 = from top left, 1 = top right, etc.
-    QString                  m_mid;        // Nepomuk resource id, only set for previously existing regions
+    class MarqueePriv;
+    MarqueePriv* const d;
 };
 
 } // namespace KFaceIface
