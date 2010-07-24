@@ -85,10 +85,6 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->x2 = rect.bottomRight().x()*scale;
     d->y2 = rect.bottomRight().y()*scale;
 
-    // Top-left Coordinates for the name
-    int x = d->x1 + 20;
-    int y = d->y2 + 10;
-
     // A QRect containing coordinates for the face rectangle
     QRect scaledRect;
     scaledRect.setTopLeft(QPoint(d->x1, d->y1));
