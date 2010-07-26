@@ -36,6 +36,7 @@
 #include <QTextDocument>
 #include <QGraphicsScene>
 #include <QColor>
+#include <QDebug>
 
 // KDE include
 
@@ -66,14 +67,20 @@ public:
     Marquee*           faceMarquee;
     QGraphicsTextItem* faceName;
     QGraphicsRectItem* nameRect;
+    QRect              origRect;
+    double             origScale;
+    double             scale;
     Button*            rejectButton;
 };
 
-FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name)
+FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name, double originalscale)
         : QGraphicsObject(parent), d(new FaceItemPriv)
 {
     setAcceptHoverEvents(true);
 
+    d->origScale = originalscale;
+    d->scale = scale;
+    d->origRect = rect;
     FancyRect* fancy;
     
     d->sceneWidth  = scene->width();
@@ -181,6 +188,16 @@ void FaceItem::update()
     d->faceName->setPos(bl.x(), bl.y() + 5);
     QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
     d->nameRect->setRect(r);
+    
+    QRect newRect = this->d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).toRect();
+    qDebug()<<"Origscale is : "<<d->origScale<<" and scale is "<<d->scale;
+    QSize s(newRect.size());
+    s.scale(newRect.width()*sqrt(d->origScale), newRect.height()*sqrt(d->origScale), Qt::KeepAspectRatio);
+    newRect.setSize(s);
+    //newRect.setRect(x,y,w,h);
+    qDebug()<<"Orig before"<<d->origRect;
+    //d->origRect = newRect;
+    qDebug()<<"Orig after"<<d->origRect;
 }
 
 void FaceItem::setVisible(bool visible)
@@ -220,6 +237,16 @@ void FaceItem::clearAndHide()
 {
     clearText();
     setVisible(false);
+}
+
+QRect FaceItem::originalRect()
+{
+    return d->origRect;
+}
+
+double FaceItem::originalScale()
+{
+    return d->origScale;
 }
 
 } // namespace KFaceIface
