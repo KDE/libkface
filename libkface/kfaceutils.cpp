@@ -83,6 +83,9 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
 
         IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
         cvConvertImage(imgHeader, greyImage);
+        
+        free(newdata);
+        cvReleaseImage(&imgHeader);
         return greyImage;
     }
     catch(...)
