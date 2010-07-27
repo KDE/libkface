@@ -22,6 +22,9 @@
 #
 # ============================================================
 
+# To handle OpenCV C++ exceptions.
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
 INCLUDE_DIRECTORIES( ${LIBFACE_INCLUDE_DIR}
                      ${OpenCV_INCLUDE_DIRS}
                    )
