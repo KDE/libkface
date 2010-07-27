@@ -26,6 +26,10 @@
  *
  * ============================================================ */
 
+// C++ includes
+
+#include <cassert>
+
 // Qt includes
 
 #include <QFile>
@@ -66,117 +70,144 @@ QImage KFaceUtils::QImage2Grayscale(const QImage& qimg)
 
 IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
 {
-    QImage img           = QImage2Grayscale(qimg);
-    IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 4);
+    try
+    {
+        QImage img           = QImage2Grayscale(qimg);
+        IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 4);
 
-    const int bytes      = img.byteCount();
+        const int bytes      = img.byteCount();
 
-    uchar* newdata       = (uchar*) malloc(sizeof(uchar) * bytes);
-    memcpy(newdata, img.bits(), bytes);
-    imgHeader->imageData = (char*) newdata;
+        uchar* newdata       = (uchar*) malloc(sizeof(uchar) * bytes);
+        memcpy(newdata, img.bits(), bytes);
+        imgHeader->imageData = (char*) newdata;
 
-    IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
-    cvConvertImage(imgHeader, greyImage);
-    return greyImage;
+        IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
+        cvConvertImage(imgHeader, greyImage);
+        return greyImage;
+    }
+    catch(...)
+    {
+        kDebug() << "Cannot convert QImage to OpenCV Image";
+    }
+
+    return 0;
 }
 
 IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data)
 {
     Q_UNUSED(alpha);
 
-    IplImage* imgHeader  = cvCreateImageHeader( cvSize(width, height), IPL_DEPTH_8U, 4);
-
-    const uint bytes     = width * height * 4;
-    imgHeader->imageData = (char*)malloc(sizeof(uchar) * bytes);
-    if (!imgHeader->imageData)
-        return imgHeader;
-
-    if (sixteenBit)
+    try
     {
-        uchar*        dptr = (uchar*)imgHeader->imageData;
-        const ushort* sptr = (const ushort*)data;
+        IplImage* imgHeader  = cvCreateImageHeader( cvSize(width, height), IPL_DEPTH_8U, 4);
 
-        for (uint i = 0; i < bytes; i+=4)
+        const uint bytes     = width * height * 4;
+        imgHeader->imageData = (char*)malloc(sizeof(uchar) * bytes);
+        if (!imgHeader->imageData)
+            return imgHeader;
+
+        if (sixteenBit)
         {
-            int val = qGray((sptr[2] * 255UL) / 65535UL,    // R
-                            (sptr[1] * 255UL) / 65535UL,    // G
-                            (sptr[0] * 255UL) / 65535UL);   // B
-            dptr[0] = val;
-            dptr[1] = val;
-            dptr[2] = val;
-            dptr[3] = 0xFF; //(sptr[3] * 255UL) / 65535UL;
-            dptr += 4;
-            sptr += 4;
+            uchar*        dptr = (uchar*)imgHeader->imageData;
+            const ushort* sptr = (const ushort*)data;
+
+            for (uint i = 0; i < bytes; i+=4)
+            {
+                int val = qGray((sptr[2] * 255UL) / 65535UL,    // R
+                                (sptr[1] * 255UL) / 65535UL,    // G
+                                (sptr[0] * 255UL) / 65535UL);   // B
+                dptr[0] = val;
+                dptr[1] = val;
+                dptr[2] = val;
+                dptr[3] = 0xFF; //(sptr[3] * 255UL) / 65535UL;
+                dptr += 4;
+                sptr += 4;
+            }
         }
+        else
+        {
+            uchar*       dptr = (uchar*)imgHeader->imageData;
+            const uchar* sptr = data;
+
+            for (uint i = 0; i < bytes; i+=4)
+            {
+                int val = qGray(sptr[2], sptr[1], sptr[0]);
+                dptr[0] = val;
+                dptr[1] = val;
+                dptr[2] = val;
+                dptr[3] = 0xFF; //sptr[3];
+
+                dptr += 4;
+                sptr += 4;
+            }
+        }
+
+        IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
+        cvConvertImage(imgHeader, greyImage);
+        return greyImage;
     }
-    else
+    catch(...)
     {
-        uchar*       dptr = (uchar*)imgHeader->imageData;
-        const uchar* sptr = data;
-
-        for (uint i = 0; i < bytes; i+=4)
-        {
-            int val = qGray(sptr[2], sptr[1], sptr[0]);
-            dptr[0] = val;
-            dptr[1] = val;
-            dptr[2] = val;
-            dptr[3] = 0xFF; //sptr[3];
-
-            dptr += 4;
-            sptr += 4;
-        }
+        kDebug() << "Cannot convert image data to OpenCV Image";
     }
 
-    IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
-    cvConvertImage(imgHeader, greyImage);
-    return greyImage;
+    return 0;
 }
 
 QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
 {
-    int h        = iplImg->height;
-    int w        = iplImg->width;
-    int channels = iplImg->nChannels;
-    QImage qimg(w, h, QImage::Format_ARGB32);
-    char* data   = iplImg->imageData;
-
-    if (channels != 1 && channels != 3 && channels != 4)
+    try
     {
-        kError(51005) << "Unsupported number of channels in IplImage:" << channels;
-        return QImage();
-    }
+        int h        = iplImg->height;
+        int w        = iplImg->width;
+        int channels = iplImg->nChannels;
+        QImage qimg(w, h, QImage::Format_ARGB32);
+        char* data   = iplImg->imageData;
 
-    for (int y = 0; y < h; y++, data += iplImg->widthStep)
-    {
-        for (int x = 0; x < w; x++)
+        if (channels != 1 && channels != 3 && channels != 4)
         {
-            char r, g, b, a = 0;
-            if (channels == 1)
-            {
-                r = data[x * channels];
-                g = data[x * channels];
-                b = data[x * channels];
-            }
-            else // if (channels == 3 || channels == 4)
-            {
-                r = data[x * channels + 2];
-                g = data[x * channels + 1];
-                b = data[x * channels];
-            }
+            kError(51005) << "Unsupported number of channels in IplImage:" << channels;
+            return QImage();
+        }
 
-            if (channels == 4)
+        for (int y = 0; y < h; y++, data += iplImg->widthStep)
+        {
+            for (int x = 0; x < w; x++)
             {
-                a = data[x * channels + 3];
-                qimg.setPixel(x, y, qRgba(r, g, b, a));
-            }
-            else
-            {
-                qimg.setPixel(x, y, qRgb(r, g, b));
+                char r, g, b, a = 0;
+                if (channels == 1)
+                {
+                    r = data[x * channels];
+                    g = data[x * channels];
+                    b = data[x * channels];
+                }
+                else // if (channels == 3 || channels == 4)
+                {
+                    r = data[x * channels + 2];
+                    g = data[x * channels + 1];
+                    b = data[x * channels];
+                }
+
+                if (channels == 4)
+                {
+                    a = data[x * channels + 3];
+                    qimg.setPixel(x, y, qRgba(r, g, b, a));
+                }
+                else
+                {
+                    qimg.setPixel(x, y, qRgb(r, g, b));
+                }
             }
         }
+
+        return qimg;
+    }
+    catch(...)
+    {
+        kDebug() << "Cannot convert OpenCV Image to QImage";
     }
 
-    return qimg;
+    return QImage();
 }
 
 QHash<QString, int> KFaceUtils::hashFromFile(const QString& fileName)
