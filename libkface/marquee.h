@@ -52,11 +52,7 @@ public:
     ~Marquee();
 
     QRectF boundingRect() const;
-    void setLabel(const QString& text);
-    QString id();
-    void setId(const QString& id);
     QRectF toRectF();
-    void setLabelMatrix(const QMatrix& matrix);
 
 Q_SIGNALS:
 

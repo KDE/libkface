@@ -79,9 +79,9 @@ Marquee::Marquee(FancyRect* rect, QGraphicsItem* parent)
        : QObject(0), QGraphicsItemGroup(parent), d(new MarqueePriv)
 {
     d->rect = rect;
-    d->rectPen.setColor(Qt::white);
+    d->rectPen.setColor(Qt::red);
     d->rectPen.setWidth(2);
-    d->outlinePen.setColor(Qt::black);
+    d->outlinePen.setColor(Qt::red);
     addToGroup(d->rect);
     d->rect->setPen(d->rectPen);
     setPos(d->rect->scenePos());
@@ -96,7 +96,6 @@ Marquee::Marquee(FancyRect* rect, QGraphicsItem* parent)
     font.setBold(true);
     font.setPointSize(12);
     d->label->setFont(font);
-    placeLabel();
     setFlag(QGraphicsItem::ItemIsSelectable);
     setSelected(true);
     emit selected(this);
@@ -112,31 +111,9 @@ QRectF Marquee::boundingRect() const
     return d->rect->rect();
 }
 
-void Marquee::setLabel(const QString& text)
-{
-    d->label->setText(text);
-    placeLabel();
-}
-
-QString Marquee::id()
-{
-    return d->mid;
-}
-
-void Marquee::setId(const QString& id)
-{
-    d->mid = id;
-}
-
 QRectF Marquee::toRectF()
 {
     return QRectF(x(), y(), d->rect->rect().width(), d->rect->rect().height());
-}
-
-void Marquee::setLabelMatrix(const QMatrix& matrix)
-{
-    d->label->setTransform(QTransform(matrix));
-    placeLabel();
 }
 
 void Marquee::createHandles()
@@ -169,12 +146,6 @@ void Marquee::placeHandles()
     d->htr->setPos(ox+rw-hs, oy);
     d->hbl->setPos(ox, oy+rh-hs);
     d->hbr->setPos(ox+rw-hs, oy+rh-hs);
-}
-
-void Marquee::placeLabel()
-{
-    QRect regionRect = d->label->boundingRegion(d->label->transform()).boundingRect();
-    d->label->setPos((boundingRect().width() - regionRect.width())/2, (boundingRect().height() - regionRect.height())/2);
 }
 
 void Marquee::mousePressEvent(QGraphicsSceneMouseEvent* e)
@@ -236,7 +207,6 @@ void Marquee::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
         r.moveTopLeft(QPointF(0, 0));
         d->rect->setRect(r);
         placeHandles();
-        placeLabel();
     }
 
     if (d->moving)
