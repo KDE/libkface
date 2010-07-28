@@ -118,11 +118,11 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
 
     // Draw the bounding name rectangle with the scene coordinates
     d->nameRect->setRect(r);
-    QPen p(QColor(QString("black")));
+    QPen p(QColor(QString("white")));
     p.setWidth(3);
     d->nameRect->setPen(p);
     d->nameRect->setBrush(QBrush(QColor(QString("black"))));
-    d->nameRect->setOpacity(0.8);
+    d->nameRect->setOpacity(0.6);
     d->nameRect->show();
 
     // Draw the name input item
@@ -182,10 +182,9 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
-    QPointF tl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).topLeft();
-    d->rejectButton->setPos(tl.x() - 8, tl.y() - 8);
     QPointF bl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).bottomLeft();
-    d->faceName->setPos(bl.x(), bl.y() + 5);
+    d->faceName->setPos(bl.x() + 5, bl.y() + 5);
+    d->rejectButton->setPos(bl.x() - 16, bl.y() + 9);
     QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
     d->nameRect->setRect(r);
     

@@ -57,7 +57,7 @@ Image::Image(const QString& filePath)
 Image::Image(const QImage& givenImage)
      : d(new ImagePriv)
 {
-    d->image = KFaceUtils::QImage2IplImage(givenImage);
+    d->image = KFaceUtils::QImage2IplImage(KFaceUtils::QImage2Grayscale(givenImage));
 }
 
 Image::Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data)
