@@ -71,7 +71,7 @@ Image::Image(const Image& other)
 {
 }
 
-Image::Image(ImageData image)
+Image::Image(const ImageData& image)
      : d(new ImagePriv)
 {
     // take ownership of IplImage

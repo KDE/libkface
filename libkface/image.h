@@ -73,7 +73,7 @@ public:
     /**
      * Constructor. Create an Image from an ImageData struct
      */
-    Image(ImageData other);
+    Image(const ImageData& other);
 
     /**
      * Assignment operator
