@@ -61,13 +61,12 @@ INSTALL(TARGETS kface ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 INSTALL(FILES database.h
               kface.h
-              kfaceutils.h
-              libkface_export.h
               image.h
               faceitem.h
               button.h
               marquee.h
               fancyrect.h
+              libkface_export.h
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
        )
