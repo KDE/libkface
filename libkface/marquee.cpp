@@ -61,6 +61,7 @@ public:
     QPen                     outlinePen; // Text outline pen
 
     // Handles
+    FancyRect*               htl;
     FancyRect*               htr;
     FancyRect*               hbr;
     FancyRect*               hbl;
@@ -118,6 +119,8 @@ QRectF Marquee::toRectF()
 
 void Marquee::createHandles()
 {
+    d->htl = new FancyRect(0, 0, HANDLESIZE, HANDLESIZE);
+    d->htl->setZValue(1);
     d->htr = new FancyRect(0, 0, HANDLESIZE, HANDLESIZE);
     d->htr->setZValue(1);
     d->hbl = new FancyRect(0, 0, HANDLESIZE, HANDLESIZE);
@@ -125,10 +128,12 @@ void Marquee::createHandles()
     d->hbr = new FancyRect(0, 0, HANDLESIZE, HANDLESIZE);
     d->hbr->setZValue(1);
 
+    d->htl->setPen(d->rectPen);
     d->htr->setPen(d->rectPen);
     d->hbl->setPen(d->rectPen);
     d->hbr->setPen(d->rectPen);
 
+    addToGroup(d->htl);
     addToGroup(d->htr);
     addToGroup(d->hbl);
     addToGroup(d->hbr);
@@ -143,6 +148,7 @@ void Marquee::placeHandles()
     qreal oy = d->rect->rect().y();
     qreal hs = d->hbr->boundingRect().width();
 
+    d->htl->setPos(ox, oy);
     d->htr->setPos(ox+rw-hs, oy);
     d->hbl->setPos(ox, oy+rh-hs);
     d->hbr->setPos(ox+rw-hs, oy+rh-hs);
@@ -153,6 +159,13 @@ void Marquee::mousePressEvent(QGraphicsSceneMouseEvent* e)
     emit selected(this);
     // Check for some resize handles under the mouse
 
+    if (d->htl->isUnderMouse())
+    {
+        d->resizing   = true;
+        d->resizeType = 0;
+        return;
+    }
+    
     if (d->htr->isUnderMouse())
     {
         d->resizing   = true;
@@ -187,6 +200,9 @@ void Marquee::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
         QRectF r = d->rect->rect();
         switch(d->resizeType)
         {
+            case 0:
+                r.setTopLeft(e->pos());
+                break;
             case 1:
                 r.setTopRight(e->pos());
                 break;
