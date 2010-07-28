@@ -39,34 +39,10 @@
 // Local includes
 
 #include "image_p.h"
-#include "image.h"
 #include "kfaceutils.h"
 
 namespace KFaceIface
 {
-
-class Image::ImagePriv : public QSharedData
-{
-public:
-
-    ImagePriv() : image(0)
-    {
-    }
-
-    ImagePriv(const ImagePriv& other) : QSharedData(other)
-    {
-        // this code is called of we want to detach()
-        image = cvCloneImage(other.image);
-    }
-
-    ~ImagePriv()
-    {
-        if (image)
-            cvReleaseImage(&image);
-    }
-
-    IplImage* image;
-};
 
 Image::Image()
 {

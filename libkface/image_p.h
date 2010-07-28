@@ -33,10 +33,37 @@
 
 #include <opencv/cv.h>
 
+// Local includes
+
+#include "image.h"
+
 namespace KFaceIface
 {
 
-// INTERNAL
+class Image::ImagePriv : public QSharedData
+{
+public:
+
+    ImagePriv() : image(0)
+    {
+    }
+
+    ImagePriv(const ImagePriv& other) : QSharedData(other)
+    {
+        // this code is called of we want to detach()
+        image = cvCloneImage(other.image);
+    }
+
+    ~ImagePriv()
+    {
+        if (image)
+            cvReleaseImage(&image);
+    }
+
+    IplImage* image;
+};
+
+// -----------------------------------------------------------------------------
 
 class ImageData
 {
