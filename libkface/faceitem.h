@@ -66,11 +66,16 @@ public:
     void setVisible(bool);
     void setControlsVisible(bool);
 
+Q_SIGNALS:
+    
+    void acceptButtonClicked(const QString&);
+    
 public Q_SLOTS:
 
     void update();
     void clearText();
     void clearAndHide();
+    void accepted();
 
 protected:
 

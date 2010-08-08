@@ -59,6 +59,7 @@ public:
         faceName      = 0;
         nameRect      = 0;
         rejectButton  = 0;
+        acceptButton  = 0;
         faceMarquee   = 0;
     }
 
@@ -71,6 +72,7 @@ public:
     double             origScale;
     double             scale;
     Button*            rejectButton;
+    Button*            acceptButton;
 };
 
 FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name, double originalscale)
@@ -127,7 +129,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
 
     // Draw the name input item
     d->faceName->setDefaultTextColor(QColor(QString("white")));
-    d->faceName->setFont(QFont("Helvetica", 8));
+    //d->faceName->setFont(QFont("Helvetica", 8));
     d->faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
     d->faceName->setOpacity(1);
 
@@ -142,10 +144,22 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     scene->addItem(d->rejectButton);
     d->rejectButton->show();
     
+    QString s1("dialog-ok");
+    KIcon* icon1       = new KIcon(s1);
+    QPixmap rejectPix1 = icon1->pixmap(QSize(16,16));
+
+    d->acceptButton   = new Button( rejectPix1, rejectPix1);
+    d->acceptButton->hide();
+    scene->addItem(d->acceptButton);
+    d->acceptButton->show();
+    
     update();
     
     connect(d->rejectButton, SIGNAL(clicked()),
             this, SLOT(clearAndHide()));
+    
+    connect(d->acceptButton, SIGNAL(clicked()),
+            this, SLOT(accepted()));
 
     connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
@@ -182,9 +196,17 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
+    if(text() == "")
+        d->acceptButton->hide();
+    else
+        d->acceptButton->show();
+    
     QPointF bl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).bottomLeft();
+    QPointF br     = d->nameRect->mapRectToScene(d->nameRect->boundingRect()).bottomRight();
     d->faceName->setPos(bl.x() + 5, bl.y() + 5);
     d->rejectButton->setPos(bl.x() - 16, bl.y() + 9);
+    d->acceptButton->setPos(br.x() + 4, bl.y() + 11);
+    
     QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
     d->nameRect->setRect(r);
     
@@ -210,6 +232,7 @@ void FaceItem::setControlsVisible(bool visible)
     d->nameRect->setVisible(visible);
     d->faceName->setVisible(visible);
     d->rejectButton->setVisible(visible);
+    d->acceptButton->setVisible(visible);
 }
 
 void FaceItem::clearText()
@@ -237,6 +260,13 @@ void FaceItem::clearAndHide()
     clearText();
     setVisible(false);
 }
+
+void FaceItem::accepted()
+{
+    d->acceptButton->hide();
+    emit this->acceptButtonClicked(this->text());
+}
+
 
 QRect FaceItem::originalRect()
 {
