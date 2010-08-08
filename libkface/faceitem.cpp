@@ -156,7 +156,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     update();
     
     connect(d->rejectButton, SIGNAL(clicked()),
-            this, SLOT(clearAndHide()));
+            this, SLOT(reject()));
     
     connect(d->acceptButton, SIGNAL(clicked()),
             this, SLOT(accepted()));
@@ -286,6 +286,12 @@ QRect FaceItem::originalRect()
 double FaceItem::originalScale()
 {
     return d->origScale;
+}
+
+void FaceItem::reject()
+{
+    emit this->rejectButtonClicked(this->text());
+    clearAndHide();
 }
 
 } // namespace KFaceIface

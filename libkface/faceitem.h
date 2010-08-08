@@ -69,6 +69,7 @@ public:
 Q_SIGNALS:
     
     void acceptButtonClicked(const QString&);
+    void rejectButtonClicked(const QString&);
     
 public Q_SLOTS:
 
@@ -76,7 +77,8 @@ public Q_SLOTS:
     void clearText();
     void clearAndHide();
     void accepted();
-
+    void reject();
+    
 protected:
 
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
