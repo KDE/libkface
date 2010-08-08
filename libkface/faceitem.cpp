@@ -274,7 +274,7 @@ void FaceItem::accepted()
     d->acceptButton->hide();
     d->faceName->setDefaultTextColor(QColor("white"));
     d->nameRect->setPen(QPen(QColor("white")));
-    emit this->acceptButtonClicked(this->text());
+    emit this->acceptButtonClicked(this->text(), this->originalRect());
 }
 
 
@@ -290,7 +290,7 @@ double FaceItem::originalScale()
 
 void FaceItem::reject()
 {
-    emit this->rejectButtonClicked(this->text());
+    emit this->rejectButtonClicked(this->text(), this->originalRect());
     clearAndHide();
 }
 

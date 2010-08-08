@@ -68,8 +68,8 @@ public:
 
 Q_SIGNALS:
     
-    void acceptButtonClicked(const QString&);
-    void rejectButtonClicked(const QString&);
+    void acceptButtonClicked(const QString&, const QRect&);
+    void rejectButtonClicked(const QString&, const QRect&);
     
 public Q_SLOTS:
 
