@@ -199,10 +199,12 @@ void FaceItem::update()
     if(text() == "")
     {
         d->faceName->setDefaultTextColor(QColor("white"));
+        d->nameRect->setPen(QPen(QColor("white")));
         d->acceptButton->hide();
     }
     else
     {
+        d->nameRect->setPen(QPen(QColor("yellow")));
         d->faceName->setDefaultTextColor(QColor("yellow"));
         d->acceptButton->show();
     }
@@ -271,6 +273,7 @@ void FaceItem::accepted()
 {
     d->acceptButton->hide();
     d->faceName->setDefaultTextColor(QColor("white"));
+    d->nameRect->setPen(QPen(QColor("white")));
     emit this->acceptButtonClicked(this->text());
 }
 
