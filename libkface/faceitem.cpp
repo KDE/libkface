@@ -129,7 +129,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
 
     // Draw the name input item
     d->faceName->setDefaultTextColor(QColor(QString("white")));
-    //d->faceName->setFont(QFont("Helvetica", 8));
+    d->faceName->setFont(QFont("Helvetica", 9));
     d->faceName->setTextInteractionFlags(Qt::TextEditorInteraction);
     d->faceName->setOpacity(1);
 
@@ -197,9 +197,15 @@ QString FaceItem::text() const
 void FaceItem::update()
 {
     if(text() == "")
+    {
+        d->faceName->setDefaultTextColor(QColor("white"));
         d->acceptButton->hide();
+    }
     else
+    {
+        d->faceName->setDefaultTextColor(QColor("yellow"));
         d->acceptButton->show();
+    }
     
     QPointF bl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).bottomLeft();
     QPointF br     = d->nameRect->mapRectToScene(d->nameRect->boundingRect()).bottomRight();
@@ -264,6 +270,7 @@ void FaceItem::clearAndHide()
 void FaceItem::accepted()
 {
     d->acceptButton->hide();
+    d->faceName->setDefaultTextColor(QColor("white"));
     emit this->acceptButtonClicked(this->text());
 }
 
