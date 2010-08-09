@@ -89,7 +89,7 @@ public:
     /** Will return a QImage version of the internal face image stored in the KFace object
      * @return The QImage version of the internal face image
      */
-    QImage getImage();
+    QImage getImage()  const;
 
     /** Will set the co-ordinates of KFace object to the specified rectangle
      * @param rect The QRect rectangle which is to be set as the rectangle for KFace instance

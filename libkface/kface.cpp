@@ -117,7 +117,7 @@ void Face::setImage(const QImage& image)
     d->face.setFace(faceImage);
 }
 
-QImage Face::getImage()
+QImage Face::getImage() const
 {
     return KFaceUtils::IplImage2QImage(d->face.getFace());
 }
