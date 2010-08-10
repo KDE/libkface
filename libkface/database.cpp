@@ -93,6 +93,8 @@ Database::Database(InitFlags flags, const QString& configurationPath)
 
         d->libface = new libface::LibFace(mode, d->configPath.toStdString());
     }
+    
+    this->setDetectionAccuracy(3);
 }
 
 Database::Database(const Database& other)
