@@ -221,7 +221,7 @@ void MainWindow::recognise()
 
     for(int i = 0; i < currentFaces.size(); ++i)
     {
-        faceitems[i]->setText(currentFaces[i].name());
+        faceitems[i]->suggest(currentFaces[i].name());
         kDebug() << "Face #"<< i+1 << " is closest to the person with ID " << currentFaces[i].id()
                  << " and name "<< currentFaces[i].name()
                  << " with a distance of "<< closeness[i];
