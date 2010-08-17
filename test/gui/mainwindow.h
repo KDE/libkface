@@ -40,9 +40,9 @@
 
 // libkface includes
 
-#include "libkface/database.h"
-#include "libkface/kface.h"
-#include "libkface/faceitem.h"
+#include "database.h"
+#include "kface.h"
+#include "faceitem.h"
 
 namespace Ui
 {
