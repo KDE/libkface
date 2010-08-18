@@ -62,18 +62,18 @@ public:
     QString text() const;
     QRect originalRect();
     double originalScale();
-    
+
     void setVisible(bool);
     void setControlsVisible(bool);
 
 Q_SIGNALS:
-    
+
     void acceptButtonClicked(const QString&, const QRect&);
     void rejectButtonClicked(const QString&, const QRect&);
-    
+
     void suggestionAcceptButtonClicked(const QString&, const QRect&);
     void suggestionRejectButtonClicked(const QString&, const QRect&);
-    
+
 public Q_SLOTS:
 
     void update();
@@ -81,17 +81,16 @@ public Q_SLOTS:
     void clearAndHide();
     void accepted();
     void reject();
-    
+
     void suggest(const QString& name);
     void switchToEditMode();
     void switchToSuggestionMode();
-    
+
     void slotSuggestionAccepted();
     void slotSuggestionRejected();
-    
+
 protected:
-    
-    
+
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
