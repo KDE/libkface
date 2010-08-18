@@ -66,25 +66,25 @@ public:
         suggestionMode = false;
         name = "";
     }
-    
+
     bool               suggestionMode;
-    
+
     int                sceneWidth, sceneHeight;
     int                x1, x2, y1, y2;
-    
+
     QString            name;
     Marquee*           faceMarquee;
-    
+
     QGraphicsTextItem* faceName;
     QGraphicsRectItem* nameRect;
-    
+
     QRect              origRect;
     double             origScale;
     double             scale;
-    
+
     Button*            rejectButton;
     Button*            acceptButton;
-    
+
     Button*            suggestionRejectButton;
     Button*            suggestionAcceptButton;
 };
@@ -95,10 +95,10 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     setAcceptHoverEvents(true);
 
     d->origScale = originalscale;
-    d->scale = scale;
-    d->origRect = rect;
+    d->scale     = scale;
+    d->origRect  = rect;
     FancyRect* fancy;
-    
+
     d->sceneWidth  = scene->width();
     d->sceneHeight = scene->height();
 
@@ -112,13 +112,12 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     QRect scaledRect;
     scaledRect.setTopLeft(QPoint(d->x1, d->y1));
     scaledRect.setBottomRight(QPoint(d->x2, d->y2));
-    
-    ////// marquee
-    
+
+    // marquee
     fancy = new FancyRect(scaledRect);
     d->faceMarquee = new Marquee(fancy);
     scene->addItem(d->faceMarquee);
-    
+
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
     d->nameRect = new QGraphicsRectItem( 0, scene);
     d->faceName = new QGraphicsTextItem (name, 0, scene);
@@ -156,7 +155,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->rejectButton   = new Button( rejectPix, rejectPix);
     scene->addItem(d->rejectButton);
     d->rejectButton->show();
-    
+
     QString s1("dialog-ok");
     KIcon* icon1       = new KIcon(s1);
     QPixmap acceptPix = icon1->pixmap(QSize(16,16));
@@ -164,36 +163,36 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->acceptButton   = new Button( acceptPix, acceptPix);
     scene->addItem(d->acceptButton);
     //d->acceptButton->show();
-    
+
     d->suggestionRejectButton = new Button( rejectPix, rejectPix);
     scene->addItem(d->suggestionRejectButton);
     //d->suggestionAcceptButton->hide();
-    
+
     d->suggestionAcceptButton = new Button( acceptPix, acceptPix);
     scene->addItem(d->suggestionAcceptButton);
     //d->suggestionRejectButton->hide();
-    
+
     update();
-    
+
     switchToEditMode();
-        
+
     d->acceptButton->hide();
-    
+
     connect(d->rejectButton, SIGNAL(clicked()),
             this, SLOT(reject()));
-    
+
     connect(d->acceptButton, SIGNAL(clicked()),
             this, SLOT(accepted()));
-    
+
     connect(d->suggestionAcceptButton, SIGNAL(clicked()),
             this, SLOT(slotSuggestionAccepted()) );
-    
+
     connect(d->suggestionRejectButton, SIGNAL (clicked()),
             this, SLOT(slotSuggestionRejected()) );
-    
+
     connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
-    
+
     connect(d->faceMarquee, SIGNAL(changed()),
             this, SLOT(update()));
 }
@@ -226,12 +225,12 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
-    if(text() == "")
+    if(text() == QString())
     {
         d->faceName->setDefaultTextColor(QColor("white"));
         d->nameRect->setPen(QPen(QColor("white")));
         d->acceptButton->hide();
-        d->name = "";
+        d->name = QString();
     }
     else
     {
@@ -243,20 +242,20 @@ void FaceItem::update()
             d->name = text();
         }
     }
-    
+
     QPointF bl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).bottomLeft();
     QPointF br     = d->nameRect->mapRectToScene(d->nameRect->boundingRect()).bottomRight();
     d->faceName->setPos(bl.x() + 5, bl.y() + 5);
-    
+
     d->rejectButton->setPos(bl.x() - 16, bl.y() + 9);
     d->acceptButton->setPos(br.x() + 4, bl.y() + 11);
-    
+
     d->suggestionAcceptButton->setPos(br.x() + 4, bl.y() + 11);
     d->suggestionRejectButton->setPos(br.x() + 20, bl.y() + 11);
-    
+
     QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
     d->nameRect->setRect(r);
-    
+
     QRect newRect = this->d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).toRect();
     qDebug()<<"Origscale is : "<<d->origScale<<" and scale is "<<d->scale;
     QSize s(newRect.size());
@@ -278,7 +277,7 @@ void FaceItem::setControlsVisible(bool visible)
 {
     d->nameRect->setVisible(visible);
     d->faceName->setVisible(visible);
-    
+
     if(d->suggestionMode)
     {
         d->suggestionAcceptButton->setVisible(visible);
@@ -298,17 +297,14 @@ void FaceItem::clearText()
 
 void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-
 }
 
 void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-    
 }
 
 void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
-    
 }
 
 void FaceItem::clearAndHide()
@@ -324,7 +320,6 @@ void FaceItem::accepted()
     d->nameRect->setPen(QPen(QColor("white")));
     emit this->acceptButtonClicked(this->text(), this->originalRect());
 }
-
 
 QRect FaceItem::originalRect()
 {
@@ -383,7 +378,5 @@ void FaceItem::slotSuggestionRejected()
     d->faceName->setHtml("<b>" + QString() + "</b>");
     emit this->suggestionRejectButtonClicked(this->text(), this->originalRect());
 }
-
-
 
 } // namespace KFaceIface
