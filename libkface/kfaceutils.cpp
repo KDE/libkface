@@ -83,7 +83,7 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
 
         IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
         cvConvertImage(imgHeader, greyImage);
-        
+
         free(newdata);
         cvReleaseImage(&imgHeader);
         return greyImage;
@@ -103,9 +103,9 @@ IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bo
     try
     {
         IplImage* imgHeader  = cvCreateImageHeader( cvSize(width, height), IPL_DEPTH_8U, 4);
-
         const uint bytes     = width * height * 4;
         imgHeader->imageData = (char*)malloc(sizeof(uchar) * bytes);
+
         if (!imgHeader->imageData)
             return imgHeader;
 

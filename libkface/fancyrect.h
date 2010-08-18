@@ -42,7 +42,7 @@ class KFACE_EXPORT FancyRect : public QGraphicsRectItem
 
 public:
 
-    FancyRect(QGraphicsItem *parent = 0);
+    FancyRect(QGraphicsItem* parent = 0);
     FancyRect(const QRectF& rect, QGraphicsItem* parent = 0);
     FancyRect(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* parent = 0);
     FancyRect(QGraphicsRectItem* other, QGraphicsItem* parent);

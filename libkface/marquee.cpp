@@ -165,7 +165,7 @@ void Marquee::mousePressEvent(QGraphicsSceneMouseEvent* e)
         d->resizeType = 0;
         return;
     }
-    
+
     if (d->htr->isUnderMouse())
     {
         d->resizing   = true;
