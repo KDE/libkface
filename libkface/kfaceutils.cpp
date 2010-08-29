@@ -88,9 +88,9 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
         cvReleaseImage(&imgHeader);
         return greyImage;
     }
-    catch(...)
+    catch (cv::Exception& e)
     {
-        kDebug() << "Cannot convert QImage to OpenCV Image";
+        kError() << "Cannot convert QImage to OpenCV Image:" << e.what();
     }
 
     return 0;
@@ -149,9 +149,9 @@ IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bo
         cvConvertImage(imgHeader, greyImage);
         return greyImage;
     }
-    catch(...)
+    catch (cv::Exception& e)
     {
-        kDebug() << "Cannot convert image data to OpenCV Image";
+        kError() << "Cannot convert image data to OpenCV Image:" << e.what();
     }
 
     return 0;
@@ -205,9 +205,9 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
 
         return qimg;
     }
-    catch(...)
+    catch (cv::Exception& e)
     {
-        kDebug() << "Cannot convert OpenCV Image to QImage";
+        kError() << "Cannot convert OpenCV Image to QImage:" << e.what();
     }
 
     return QImage();

@@ -79,21 +79,28 @@ Database::Database(InitFlags flags, const QString& configurationPath)
     d->configPath = configurationPath;
     d->hash       = KFaceUtils::hashFromFile(d->configPath + d->mappingFilename);
 
-    if (flags == InitDetection)
+    try
     {
-        d->libface = new libface::LibFace(libface::DETECT);
-    }
-    else
-    {
-        libface::Mode mode;
-        if (flags == InitAll)
-            mode = libface::ALL;
+        if (flags == InitDetection)
+        {
+            d->libface = new libface::LibFace(libface::DETECT);
+        }
         else
-            mode = libface::EIGEN;
+        {
+            libface::Mode mode;
+            if (flags == InitAll)
+                mode = libface::ALL;
+            else
+                mode = libface::EIGEN;
 
-        d->libface = new libface::LibFace(mode, d->configPath.toStdString());
+            d->libface = new libface::LibFace(mode, d->configPath.toStdString());
+        }
     }
-    
+    catch (cv::Exception& e)
+    {
+        kError() << "cv::Exception:" << e.what();
+    }
+
     this->setDetectionAccuracy(3);
 }
 
@@ -116,12 +123,21 @@ QList<Face> Database::detectFaces(const Image& image)
 {
     IplImage* img = image.imageData();
 
-    std::vector<libface::Face> result = d->libface->detectFaces(img);
+    std::vector<libface::Face> result;
+    try
+    {
+        result = d->libface->detectFaces(img);
+    }
+    catch (cv::Exception& e)
+    {
+        kError() << "cv::Exception:" << e.what();
+    }
 
     QList<Face> faceList;
-    foreach(const libface::Face& f, result)
+    std::vector<libface::Face>::iterator it;
+    for (it = result.begin(); it != result.end(); ++it)
     {
-        faceList << Face(f);
+        faceList << Face(*it);
     }
     return faceList;
 }
@@ -147,20 +163,28 @@ bool Database::updateFaces(QList<Face>& faces)
         faceVec.push_back(face);
     }
 
-    std::vector<int> ids = d->libface->update(&faceVec);
+    std::vector<int> ids;
+    try
+    {
+        ids = d->libface->update(&faceVec);
+    }
+    catch (cv::Exception& e)
+    {
+        kError() << "cv::Exception:" << e.what();
+    }
 
     for(int i = 0; i<(int)ids.size(); ++i)
     {
-            faces[i].setId(ids.at(i));
+        faces[i].setId(ids.at(i));
 
-            // If the name was not in the mapping before (new name), add it to the dictionary
-            if(!d->hash.contains(faces[i].name()))
-            {
-                // Add to file
-                KFaceUtils::addNameToFile(d->configPath + d->mappingFilename, faces[i].name(), faces[i].id());
-                // Add to d->hash
-                d->hash[faces[i].name()] = faces[i].id();
-            }
+        // If the name was not in the mapping before (new name), add it to the dictionary
+        if(!d->hash.contains(faces[i].name()))
+        {
+            // Add to file
+            KFaceUtils::addNameToFile(d->configPath + d->mappingFilename, faces[i].name(), faces[i].id());
+            // Add to d->hash
+            d->hash[faces[i].name()] = faces[i].id();
+        }
     }
 
     return true;
@@ -186,7 +210,15 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         faceVec.push_back(face);
     }
 
-    std::vector< std::pair<int, double> > result = d->libface->recognise(&faceVec);
+    std::vector< std::pair<int, double> > result;
+    try
+    {
+        result = d->libface->recognise(&faceVec);
+    }
+    catch (cv::Exception& e)
+    {
+        kError() << "cv::Exception:" << e.what();
+    }
 
     for(int i = 0; i <faces.size() && i<(int)result.size(); ++i)
     {
