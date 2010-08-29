@@ -45,6 +45,7 @@
 
 // OpenCV includes.
 
+#include <opencv/cxcore.h>
 #include <opencv/highgui.h>
 
 namespace KFaceIface
@@ -91,6 +92,10 @@ IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
     catch (cv::Exception& e)
     {
         kError() << "Cannot convert QImage to OpenCV Image:" << e.what();
+    }
+    catch(...)
+    {
+        kDebug() << "Cannot convert QImage to OpenCV Image";
     }
 
     return 0;
@@ -153,6 +158,10 @@ IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bo
     {
         kError() << "Cannot convert image data to OpenCV Image:" << e.what();
     }
+    catch(...)
+    {
+        kDebug() << "Cannot convert image data OpenCV Image";
+    }
 
     return 0;
 }
@@ -208,6 +217,10 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
     catch (cv::Exception& e)
     {
         kError() << "Cannot convert OpenCV Image to QImage:" << e.what();
+    }
+    catch(...)
+    {
+        kDebug() << "Cannot convert OpenCV Image to QImage";
     }
 
     return QImage();

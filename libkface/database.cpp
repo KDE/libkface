@@ -39,6 +39,10 @@
 
 #include <kdebug.h>
 
+// OpenCV includes
+
+#include <opencv/cxcore.h>
+
 // Libface includes
 
 #include <libface/LibFace.h>
@@ -100,6 +104,10 @@ Database::Database(InitFlags flags, const QString& configurationPath)
     {
         kError() << "cv::Exception:" << e.what();
     }
+    catch(...)
+    {
+        kDebug() << "cv::Exception";
+    }
 
     this->setDetectionAccuracy(3);
 }
@@ -131,6 +139,10 @@ QList<Face> Database::detectFaces(const Image& image)
     catch (cv::Exception& e)
     {
         kError() << "cv::Exception:" << e.what();
+    }
+    catch(...)
+    {
+        kDebug() << "cv::Exception";
     }
 
     QList<Face> faceList;
@@ -171,6 +183,10 @@ bool Database::updateFaces(QList<Face>& faces)
     catch (cv::Exception& e)
     {
         kError() << "cv::Exception:" << e.what();
+    }
+    catch(...)
+    {
+        kDebug() << "cv::Exception";
     }
 
     for(int i = 0; i<(int)ids.size(); ++i)
@@ -218,6 +234,10 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     catch (cv::Exception& e)
     {
         kError() << "cv::Exception:" << e.what();
+    }
+    catch(...)
+    {
+        kDebug() << "cv::Exception";
     }
 
     for(int i = 0; i <faces.size() && i<(int)result.size(); ++i)
