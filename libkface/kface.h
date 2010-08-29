@@ -31,11 +31,13 @@
 
 // Qt includes
 
+#include <QExplicitlySharedDataPointer>
 #include <QtGui/QImage>
 #include <QtCore/QString>
 
 // Local includes
 
+#include "image.h"
 #include "libkface_export.h"
 
 namespace libface
@@ -45,6 +47,18 @@ namespace libface
 
 namespace KFaceIface
 {
+
+/** Return a string version of LibOpenCV release in format "major.minor.patch"
+ */
+QString KFACE_EXPORT LibOpenCVVersion();
+
+/** Return a string version of LibFace release in format "major.minor.patch"
+ */
+KFACE_EXPORT QString LibFaceVersion();
+
+/** Return a string version of libkface release
+ */
+KFACE_EXPORT QString version();
 
 class KFACE_EXPORT Face
 {
@@ -84,7 +98,7 @@ public:
     /** Will convert given QImage to an internal IplImage.
      * @param image The QImage to be set as the face image for the KFace object
      */
-    void setImage(const QImage& image);
+    void setImage(const Image& image);
 
     /** Will return a QImage version of the internal face image stored in the KFace object
      * @return The QImage version of the internal face image
@@ -140,6 +154,11 @@ public:
     operator QRect() const { return toRect(); }
 
     /**
+     * Clears id and name
+     */
+    void clearRecognition();
+
+    /**
      * Will return a libface::Face version of the Face object
      * @return libface::Face version
      */
@@ -158,24 +177,10 @@ public:
      */
     Face& operator=(const libface::Face& other);
 
-    //----------------------
-
-    /** Return a string version of LibOpenCV release in format "major.minor.patch"
-     */
-    static QString LibOpenCVVersion();
-
-    /** Return a string version of LibFace release in format "major.minor.patch"
-     */
-    static QString LibFaceVersion();
-
-    /** Return a string version of libkface release
-     */
-    static QString version();
-
 private:
 
     class FacePriv;
-    FacePriv* const d;
+    QExplicitlySharedDataPointer<FacePriv> d;
 };
 
 } // namespace KFaceIface

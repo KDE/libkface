@@ -31,20 +31,18 @@
 #include <libface/Face.h>
 #include <libface/LibFaceConfig.h>
 
-// OpenCV includes.
-
-#include <opencv/cvver.h>
-
 // Local includes
 
 #include "kface.h"
 #include "kfaceutils.h"
+#include "image.h"
+#include "image_p.h"
 #include "version.h"
 
 namespace KFaceIface
 {
 
-class Face::FacePriv
+class Face::FacePriv : public QSharedData
 {
 public:
 
@@ -52,8 +50,15 @@ public:
     {
     }
 
+    ~FacePriv()
+    {
+        // we handle releasing the image
+        face.setFace(0);
+    }
+
     libface::Face face;
     QString       name;
+    Image         image;
 };
 
 Face::Face()
@@ -75,14 +80,18 @@ Face::Face(const libface::Face& other)
 }
 
 Face::Face(const Face& other)
-    : d(new FacePriv)
+    : d(other.d)
 {
-    operator=(other);
 }
 
 Face::~Face()
 {
-    delete d;
+}
+
+Face& Face::operator=(const Face& other)
+{
+    d = other.d;
+    return *this;
 }
 
 libface::Face &Face::face() const
@@ -110,10 +119,10 @@ void Face::setId(int id)
     d->face.setId(id);
 }
 
-void Face::setImage(const QImage& image)
+void Face::setImage(const Image& image)
 {
-    IplImage* faceImage = KFaceUtils::QImage2IplImage(image);
-    d->face.setFace(faceImage);
+    d->image = image;
+    d->face.setFace(image.imageData());
 }
 
 QImage Face::getImage() const
@@ -129,18 +138,6 @@ void Face::setFace(const libface::Face& face)
     d->face.setY2(face.getY2());
     d->face.setId(face.getId());
     d->face.setFace(face.getFace());
-}
-
-Face& Face::operator=(const Face& other)
-{
-    d->face.setX1(other.d->face.getX1());
-    d->face.setX2(other.d->face.getX2());
-    d->face.setY1(other.d->face.getY1());
-    d->face.setY2(other.d->face.getY2());
-    d->face.setId(other.d->face.getId());
-    d->name = other.name();
-    d->face.setFace(other.d->face.getFace());
-    return *this;
 }
 
 Face& Face::operator=(const libface::Face& face)
@@ -171,20 +168,26 @@ QPoint Face::center() const
     return this->toRect().center();
 }
 
+void Face::clearRecognition()
+{
+    setId(-1);
+    d->name = QString();
+}
+
 // Static methods ---------------------------------------------------------
 
-QString Face::LibOpenCVVersion()
+QString LibOpenCVVersion()
 {
     return QString("%1").arg(CV_VERSION);
 }
 
-QString Face::LibFaceVersion()
+QString LibFaceVersion()
 {
     return QString("%1.%2").arg(LibFace_VERSION_MAJOR)
                            .arg(LibFace_VERSION_MINOR);
 }
 
-QString Face::version()
+QString version()
 {
     return QString(kface_version);
 }
