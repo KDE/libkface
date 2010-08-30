@@ -43,6 +43,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 
 FIND_PACKAGE(LibFace REQUIRED)
 FIND_PACKAGE(OpenCV REQUIRED)
+SET(OpenCV_LIBS ${OpenCV_LIBRARIES})
 
 # =======================================================
 # Information to update before to release this library.
@@ -80,16 +81,19 @@ SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_
 
 # =======================================================
 
-IF (LIBFACE_FOUND)
-  SUBDIRS(libkface)
-  SUBDIRS(test)
+IF (NOT LIBFACE_FOUND)
+  # libface not found, fail to configure the build
+  MESSAGE(FATAL_ERROR "libface was not found, can not build without it: http://libface.sourceforge.net")
+ENDIF (NOT LIBFACE_FOUND)
 
-  IF(NOT WIN32)
+SUBDIRS(libkface)
+SUBDIRS(test)
+
+IF(NOT WIN32)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkface.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkface.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkface.lsm)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-  ENDIF(NOT WIN32)
-ENDIF (LIBFACE_FOUND)
+ENDIF(NOT WIN32)
 
 # Install find cmake script to the system for client applications.
 
