@@ -69,101 +69,116 @@ QImage KFaceUtils::QImage2Grayscale(const QImage& qimg)
     return img;
 }
 
-IplImage* KFaceUtils::QImage2IplImage(const QImage& qimg)
+IplImage* KFaceUtils::QImage2GrayscaleIplImage(const QImage& qimg)
 {
+    QImage localImage;
+    switch (qimg.format())
+    {
+        case QImage::Format_RGB32:
+        case QImage::Format_ARGB32:
+        case QImage::Format_ARGB32_Premultiplied:
+            // I think we can ignore premultiplication when converting to grayscale
+            localImage = qimg;
+            break;
+        default:
+            localImage = qimg.convertToFormat(QImage::Format_RGB32);
+            break;
+    }
+    // I'm a bit paranoid not to cause a deep copy when calling bits()
+    const QImage& image = localImage;
+
+    const int width  = image.width();
+    const int height = image.height();
+    IplImage* iplImg;
+
     try
     {
-        QImage img           = QImage2Grayscale(qimg);
-        IplImage* imgHeader  = cvCreateImageHeader( cvSize(img.width(), img.height()), IPL_DEPTH_8U, 4);
-
-        const int bytes      = img.byteCount();
-
-        uchar* newdata       = (uchar*) malloc(sizeof(uchar) * bytes);
-        memcpy(newdata, img.bits(), bytes);
-        imgHeader->imageData = (char*) newdata;
-
-        IplImage* greyImage  = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
-        cvConvertImage(imgHeader, greyImage);
-
-        free(newdata);
-        cvReleaseImage(&imgHeader);
-        return greyImage;
+        iplImg = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
     }
     catch (cv::Exception& e)
     {
-        kError() << "Cannot convert QImage to OpenCV Image:" << e.what();
+        kError() << "Cannot allocate IplImage:" << e.what();
+        return 0;
     }
     catch(...)
     {
-        kDebug() << "Cannot convert QImage to OpenCV Image";
+        kError() << "Cannot allocate IplImage";
+        return 0;
     }
 
-    return 0;
+    const quint32* sptr = (const quint32*)image.bits();
+    const int imageStep = image.bytesPerLine() / sizeof(quint32);
+    uchar* dptr         = (uchar *)iplImg->imageData;
+    const int iplStep   = iplImg->widthStep / sizeof(uchar);
+
+    for (int y=0; y<height; y++)
+    {
+        for (int x=0; x<width; x++)
+        {
+            dptr[x] = qGray(sptr[x]);
+        }
+        sptr += imageStep;
+        dptr += iplStep;
+    }
+
+    return iplImg;
 }
 
-IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data)
+IplImage* KFaceUtils::Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data)
 {
     Q_UNUSED(alpha);
 
+    IplImage* img;
     try
     {
-        IplImage* imgHeader  = cvCreateImageHeader( cvSize(width, height), IPL_DEPTH_8U, 4);
-        const uint bytes     = width * height * 4;
-        imgHeader->imageData = (char*)malloc(sizeof(uchar) * bytes);
-
-        if (!imgHeader->imageData)
-            return imgHeader;
-
-        if (sixteenBit)
-        {
-            uchar*        dptr = (uchar*)imgHeader->imageData;
-            const ushort* sptr = (const ushort*)data;
-
-            for (uint i = 0; i < bytes; i+=4)
-            {
-                int val = qGray((sptr[2] * 255UL) / 65535UL,    // R
-                                (sptr[1] * 255UL) / 65535UL,    // G
-                                (sptr[0] * 255UL) / 65535UL);   // B
-                dptr[0] = val;
-                dptr[1] = val;
-                dptr[2] = val;
-                dptr[3] = 0xFF; //(sptr[3] * 255UL) / 65535UL;
-                dptr += 4;
-                sptr += 4;
-            }
-        }
-        else
-        {
-            uchar*       dptr = (uchar*)imgHeader->imageData;
-            const uchar* sptr = data;
-
-            for (uint i = 0; i < bytes; i+=4)
-            {
-                int val = qGray(sptr[2], sptr[1], sptr[0]);
-                dptr[0] = val;
-                dptr[1] = val;
-                dptr[2] = val;
-                dptr[3] = 0xFF; //sptr[3];
-
-                dptr += 4;
-                sptr += 4;
-            }
-        }
-
-        IplImage* greyImage = cvCreateImage(cvSize(imgHeader->width, imgHeader->height), imgHeader->depth, 1);
-        cvConvertImage(imgHeader, greyImage);
-        return greyImage;
+        img = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1);
     }
     catch (cv::Exception& e)
     {
-        kError() << "Cannot convert image data to OpenCV Image:" << e.what();
+        kError() << "Cannot allocate IplImage:" << e.what();
+        return 0;
     }
     catch(...)
     {
-        kDebug() << "Cannot convert image data OpenCV Image";
+        kError() << "Cannot allocate IplImage";
+        return 0;
     }
 
-    return 0;
+    uchar* dptr       = (uchar*)img->imageData;
+    const int iplStep = img->widthStep / sizeof(uchar);
+
+    if (sixteenBit)
+    {
+        const ushort* sptr = (const ushort*)data;
+
+        for (uint y=0; y<height; y++)
+        {
+            for (uint x=0; x<width; x++)
+            {
+                dptr[x] = qGray((sptr[2] * 255UL) / 65535UL,    // R
+                                (sptr[1] * 255UL) / 65535UL,    // G
+                                (sptr[0] * 255UL) / 65535UL);   // B
+                sptr += 4;
+            }
+            dptr += iplStep;
+        }
+    }
+    else
+    {
+        const uchar* sptr = data;
+
+        for (uint y=0; y<height; y++)
+        {
+            for (uint x=0; x<width; x++)
+            {
+                dptr[x] = qGray(sptr[2], sptr[1], sptr[0]);
+                sptr += 4;
+            }
+            dptr += iplStep;
+        }
+    }
+
+    return img;
 }
 
 QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)

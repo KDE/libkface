@@ -57,13 +57,13 @@ Image::Image(const QString& filePath)
 Image::Image(const QImage& givenImage)
      : d(new ImagePriv)
 {
-    d->image = KFaceUtils::QImage2IplImage(KFaceUtils::QImage2Grayscale(givenImage));
+    d->image = KFaceUtils::QImage2GrayscaleIplImage(KFaceUtils::QImage2Grayscale(givenImage));
 }
 
 Image::Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data)
      : d(new ImagePriv)
 {
-    d->image = KFaceUtils::Data2IplImage(width, height, sixteenBit, alpha, data);
+    d->image = KFaceUtils::Data2GrayscaleIplImage(width, height, sixteenBit, alpha, data);
 }
 
 Image::Image(const Image& other)
@@ -71,7 +71,7 @@ Image::Image(const Image& other)
 {
 }
 
-Image::Image(const ImageData& image)
+Image::Image(ImageData image)
      : d(new ImagePriv)
 {
     // take ownership of IplImage
@@ -101,9 +101,19 @@ QSize Image::size() const
     return QSize(d->image->width, d->image->height);
 }
 
+ImageData Image::imageData()
+{
+    return d ? d->image : 0;
+}
+
 const ImageData Image::imageData() const
 {
-    return d->image;
+    return d ? d->image : 0;
+}
+
+QImage Image::toQImage() const
+{
+    return KFaceUtils::IplImage2QImage(d->image);
 }
 
 } // namespace KFaceIface

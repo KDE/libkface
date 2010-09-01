@@ -55,7 +55,7 @@ namespace KFaceUtils
      * @param img The QImage to be converted.
      * @return the IplImage pointer
      */
-    IplImage* QImage2IplImage(const QImage& img);
+    IplImage* QImage2GrayscaleIplImage(const QImage& img);
 
     /**
      * Creates and returns a pointer to an IplImage from raw image data.
@@ -66,7 +66,7 @@ namespace KFaceUtils
      * @param data Unsigned char* image data
      * @return A pointer to the new IplImage
      */
-    IplImage* Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data);
+    IplImage* Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data);
 
     /**
      * Takes a pointer to an IplImage and returns a Qimage

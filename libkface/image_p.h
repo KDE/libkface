@@ -73,7 +73,8 @@ public:
 
     ImageData(IplImage* image) : image(image) {}
     ImageData& operator=(IplImage* im)        { image = im; return *this; }
-    operator IplImage *() const               { return image; }
+    operator IplImage *()                     { return image; }
+    operator const IplImage *() const         { return image; }
 
 public:
 

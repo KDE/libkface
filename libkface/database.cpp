@@ -129,7 +129,7 @@ Database::~Database()
 
 QList<Face> Database::detectFaces(const Image& image)
 {
-    IplImage* img = image.imageData();
+    const IplImage* img = image.imageData();
 
     std::vector<libface::Face> result;
     try
@@ -149,7 +149,7 @@ QList<Face> Database::detectFaces(const Image& image)
     std::vector<libface::Face>::iterator it;
     for (it = result.begin(); it != result.end(); ++it)
     {
-        faceList << Face(*it);
+        faceList << Face::fromFace(*it, Face::ShallowCopy);
     }
     return faceList;
 }
@@ -172,7 +172,7 @@ bool Database::updateFaces(QList<Face>& faces)
         {
             face.setId(d->hash[face.name()]);
         }
-        faceVec.push_back(face);
+        faceVec.push_back(face.toFace(Face::ShallowCopy));
     }
 
     std::vector<int> ids;
@@ -223,7 +223,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     std::vector<libface::Face> faceVec;
     foreach (const Face& face, faces)
     {
-        faceVec.push_back(face);
+        faceVec.push_back(face.toFace(Face::ShallowCopy));
     }
 
     std::vector< std::pair<int, double> > result;

@@ -76,13 +76,7 @@ public:
      * @param rect The QRect for the Face object
      * @param image The QImage for the face image
      */
-    Face(const QRect& rect, const QImage& image = QImage());
-
-    /**
-     * Face constructor which constructs a face object from a libface::Face.
-     * @param other The libface::Face object.
-     */
-    Face(const libface::Face& other);
+    Face(const QRect& rect, const Image& image = Image());
 
     /**
      * Face constructor which constructs a face object from another Face.
@@ -90,10 +84,63 @@ public:
      */
     Face(const Face& other);
 
+    /** Assignment operator that assigns a KFace's data to another KFace
+     * @param other A reference to a KFace object
+     * @return A reference to the copied KFace object
+     */
+    Face& operator=(const Face& other);
+
     /**
      * Destructor
      */
     ~Face();
+
+    /**
+     * This mode determines how the image data stored in the face is treated.
+     */
+    enum ImageOwnershipMode
+    {
+        /**
+         * Constructing from libface::Face:
+         *  Takes ownership of the image data in the face. Not appropriate
+         *  if there is another KFaceIface::Face object also holding the same image data.
+         *  (typically, if the libface::Face was created from this other KFaceIface::Face).
+         *  Note appropriate if any other entity possibly references the image data.
+         * Returning a libface::Face:
+         *  As the image data stored in libface::Face is const, this mode is almost always
+         *  appropriate. Ensure that the KFaceIface object lives longer than the libface::Face.
+         */
+        ShallowCopy,
+
+        /**
+         * Constructing from libface::Face:
+         *  If another entity has ownership of the image data.
+         * Returning a libface::Face:
+         *  Usually no use case
+         */
+        DeepCopy,
+
+        /**
+         * Constructing from libface::Face:
+         *  Does not touch the image data in the face. Image is null.
+         * Returning a libface::Face:
+         *  Returned face has no image data set.
+         */
+        IgnoreData
+    };
+
+   /**
+     * Face constructor which constructs a face object from a libface::Face.
+     * @param other The libface::Face object.
+     */
+    static Face fromFace(const libface::Face& other, ImageOwnershipMode mode);
+    const ImageData imageData() const;
+
+    /**
+     * Will return a libface::Face version of the Face object
+     * @return libface::Face version
+     */
+    libface::Face toFace(ImageOwnershipMode mode = ShallowCopy) const;
 
     /** Will convert given QImage to an internal IplImage.
      * @param image The QImage to be set as the face image for the KFace object
@@ -103,17 +150,12 @@ public:
     /** Will return a QImage version of the internal face image stored in the KFace object
      * @return The QImage version of the internal face image
      */
-    QImage getImage()  const;
+    Image image()  const;
 
     /** Will set the co-ordinates of KFace object to the specified rectangle
      * @param rect The QRect rectangle which is to be set as the rectangle for KFace instance
      */
     void setRect(const QRect& rect);
-
-    /** Will set a face object from a libface::Face.
-     * @param face The libface::Face object.
-     */
-    void setFace(const libface::Face& face);
 
     /**
      * Returns integer ID of the Face
@@ -157,25 +199,6 @@ public:
      * Clears id and name
      */
     void clearRecognition();
-
-    /**
-     * Will return a libface::Face version of the Face object
-     * @return libface::Face version
-     */
-    libface::Face &face() const;
-    operator libface::Face&() const { return face(); }
-
-    /** Assignment operator that assigns a KFace's data to another KFace
-     * @param other A reference to a KFace object
-     * @return A reference to the copied KFace object
-     */
-    Face& operator=(const Face& other);
-
-    /** Assignment operator that assigns a Face's data to another KFace
-     * @param other A reference to a Face object
-     * @return A reference to the copied KFace object
-     */
-    Face& operator=(const libface::Face& other);
 
 private:
 

@@ -66,17 +66,11 @@ Face::Face()
 {
 }
 
-Face::Face(const QRect& rect, const QImage& image)
+Face::Face(const QRect& rect, const Image& image)
     : d(new FacePriv)
 {
     setRect(rect);
     setImage(image);
-}
-
-Face::Face(const libface::Face& other)
-    : d(new FacePriv)
-{
-    operator=(other);
 }
 
 Face::Face(const Face& other)
@@ -94,9 +88,43 @@ Face& Face::operator=(const Face& other)
     return *this;
 }
 
-libface::Face &Face::face() const
+Face Face::fromFace(const libface::Face& f, ImageOwnershipMode mode)
 {
-    return d->face;
+    Image image;
+    switch (mode)
+    {
+        case ShallowCopy:
+            image = ImageData(const_cast<IplImage*>(f.getFace()));
+            break;
+        case DeepCopy:
+            image = ImageData(cvCloneImage(f.getFace()));
+            break;
+        case IgnoreData:
+            break;
+    }
+
+    QRect rect = QRect(QPoint(f.getX1(), f.getY1()), QPoint(f.getX2(), f.getY2()));
+    Face face(rect, image);
+    face.setId(f.getId());
+    return face;
+}
+
+libface::Face Face::toFace(ImageOwnershipMode mode) const
+{
+    libface::Face face = d->face;
+    switch (mode)
+    {
+        case ShallowCopy:
+            face.setFace(d->image.imageData());
+            break;
+        case DeepCopy:
+            face.setFace(cvCloneImage(d->image.imageData()));
+            break;
+        case IgnoreData:
+            face.setFace(0);
+            break;
+    }
+    return face;
 }
 
 int Face::id() const
@@ -122,28 +150,11 @@ void Face::setId(int id)
 void Face::setImage(const Image& image)
 {
     d->image = image;
-    d->face.setFace(image.imageData());
 }
 
-QImage Face::getImage() const
+Image Face::image() const
 {
-    return KFaceUtils::IplImage2QImage(d->face.getFace());
-}
-
-void Face::setFace(const libface::Face& face)
-{
-    d->face.setX1(face.getX1());
-    d->face.setX2(face.getX2());
-    d->face.setY1(face.getY1());
-    d->face.setY2(face.getY2());
-    d->face.setId(face.getId());
-    d->face.setFace(face.getFace());
-}
-
-Face& Face::operator=(const libface::Face& face)
-{
-    setFace(face);
-    return *this;
+    return d->image;
 }
 
 void Face::setRect(const QRect& rect)

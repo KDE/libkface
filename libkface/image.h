@@ -32,7 +32,7 @@
 // Qt includes
 
 #include <QtGui/QImage>
-#include <QtCore/QExplicitlySharedDataPointer>
+#include <QtCore/QSharedDataPointer>
 
 // Local includes
 
@@ -73,7 +73,7 @@ public:
     /**
      * Constructor. Create an Image from an ImageData struct
      */
-    Image(const ImageData& other);
+    Image(ImageData other);
 
     /**
      * Assignment operator
@@ -94,12 +94,15 @@ public:
 
     QSize size() const;
 
+    ImageData imageData();
     const ImageData imageData() const;
+
+    QImage toQImage() const;
 
 private:
 
     class ImagePriv;
-    QExplicitlySharedDataPointer<ImagePriv> d;
+    QSharedDataPointer<ImagePriv> d;
 };
 
 } // namespace KFaceIface
