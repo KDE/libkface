@@ -94,7 +94,7 @@ Face Face::fromFace(const libface::Face& f, ImageOwnershipMode mode)
     switch (mode)
     {
         case ShallowCopy:
-            image = ImageData(const_cast<IplImage*>(f.getFace()));
+            image = ImageData(f.takeFace());
             break;
         case DeepCopy:
             image = ImageData(cvCloneImage(f.getFace()));
