@@ -39,6 +39,8 @@ SET(kface_LIB_SRCS database.cpp
                    kface.cpp
                    kfaceutils.cpp
                    image.cpp
+                   facedetector.cpp
+                   recognitiondatabase.cpp
                    faceitem.cpp
                    button.cpp
                    marquee.cpp
@@ -62,6 +64,8 @@ INSTALL(TARGETS kface ${INSTALL_TARGETS_DEFAULT_ARGS})
 INSTALL(FILES database.h
               kface.h
               image.h
+              facedetector.h
+              recognitiondatabase.h
               faceitem.h
               button.h
               marquee.h
