@@ -67,6 +67,7 @@ public:
      * For Recognition : InitRecognition
      * For All : InitAll
      * @param configurationPath The path where the Database configuration file will be stored.
+     * The default configuration path will be located by KStandardDirs by "data", "libkface/database/".
      */
     Database(InitFlags flags = InitAll, const QString& configurationPath = QString());
 
@@ -95,18 +96,11 @@ public:
     /**
      * Scan an image for faces. Return a list with regions possibly
      * containing faces.
+     * Note that you can construct a KFaceIface::Image from a QImage, raw data or a file path.
      * @param image The image in which faces are to be detected
      * @return A QList of detected Face's, with the extracted face images loaded into them.
      */
     QList<Face> detectFaces(const Image& image);
-
-    /**
-     * Load an Image from specified file name and scan it for faces. Return a list with regions possibly
-     * containing faces.
-     * @param fileName The filename of the image in which faces are to be detected
-     * @return A QList of detected Face's, with the extracted face images loaded into them.
-     */
-    QList<Face> detectFaces(const QString& fileName);
 
     /**
      * Update the training database with a QList of Faces which hold the face images
@@ -129,7 +123,7 @@ public:
      * Returns the directory path of the config file
      *
      */
-    QString configPath();
+    QString configPath() const;
 
     /**
      * Set the accuracy of Face Detection. This is measured on a 5-point scale, from 1 to 5.
@@ -144,20 +138,20 @@ public:
      * 1 means least accuracy, but very high speed. 5 means highest accuracy but very low speed.
      * @return The degree of accuracy (1 to 5)
      */
-    int detectionAccuracy();
+    int detectionAccuracy() const;
 
     /**
      * Get the number of people in the database
      * @return Number of unique ID's in the database
      */
-    int peopleCount();
+    int peopleCount() const;
 
     /**
      * Get the number of occurences of a person
      * @param id The ID of the person
      * @return The number of occurences of the person in the Database
      */
-    int count(int id);
+    int count(int id) const;
 
 private:
 

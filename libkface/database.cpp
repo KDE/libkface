@@ -38,6 +38,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 // OpenCV includes
 
@@ -68,20 +69,34 @@ public:
 
     ~DatabasePriv()
     {
+        saveConfig();
         delete libface;
     }
 
     libface::LibFace*   libface;
+    Database::InitFlags initFlags;
     QHash<QString, int> hash;
     QString             configPath;
     const QString       mappingFilename;
+
+    void saveConfig()
+    {
+        if (initFlags & Database::InitRecognition)
+            libface->saveConfig(configPath.toStdString());
+    }
 };
 
 Database::Database(InitFlags flags, const QString& configurationPath)
         : d(new DatabasePriv)
 {
-    d->configPath = configurationPath;
+    // Note: same lines in RecognitionDatabase. Keep in sync.
+    if (configurationPath.isNull())
+        d->configPath = KStandardDirs::locateLocal("data", "libkface/database/", true);
+    else
+        d->configPath = configurationPath;
+
     d->hash       = KFaceUtils::hashFromFile(d->configPath + d->mappingFilename);
+    d->initFlags  = flags;
 
     try
     {
@@ -109,7 +124,8 @@ Database::Database(InitFlags flags, const QString& configurationPath)
         kDebug() << "cv::Exception";
     }
 
-    this->setDetectionAccuracy(3);
+    if (flags & InitDetection)
+        this->setDetectionAccuracy(3);
 }
 
 Database::Database(const Database& other)
@@ -125,6 +141,7 @@ Database& Database::operator=(const KFaceIface::Database& other)
 
 Database::~Database()
 {
+    // note: saveConfig is done in Priv destructor!
 }
 
 QList<Face> Database::detectFaces(const Image& image)
@@ -152,11 +169,6 @@ QList<Face> Database::detectFaces(const Image& image)
         faceList << Face::fromFace(*it, Face::ShallowCopy);
     }
     return faceList;
-}
-
-QList<Face> Database::detectFaces(const QString& fileName)
-{
-    return detectFaces(Image(fileName));
 }
 
 bool Database::updateFaces(QList<Face>& faces)
@@ -263,11 +275,10 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
 
 void Database::saveConfig()
 {
-    std::string path = d->configPath.toStdString();
-    d->libface->saveConfig(path);
+    d->saveConfig();
 }
 
-QString Database::configPath()
+QString Database::configPath() const
 {
     return d->configPath;
 }
@@ -277,17 +288,17 @@ void Database::setDetectionAccuracy(int value)
     d->libface->setDetectionAccuracy(value);
 }
 
-int Database::detectionAccuracy()
+int Database::detectionAccuracy() const
 {
     return d->libface->getDetectionAccuracy();
 }
 
-int Database::peopleCount()
+int Database::peopleCount() const
 {
     return d->libface->count();
 }
 
-int Database::count(int id)
+int Database::count(int id) const
 {
     return d->libface->count(id);
 }
