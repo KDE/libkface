@@ -46,8 +46,6 @@
 namespace KFaceIface
 {
 
-class RecognitionDatabasePriv;
-
 class KFACE_EXPORT RecognitionDatabase
 {
 
@@ -118,9 +116,13 @@ public:
 
 private:
 
+    class RecognitionDatabasePriv;
+
     RecognitionDatabase(QExplicitlySharedDataPointer<RecognitionDatabasePriv> d);
 
     QExplicitlySharedDataPointer<RecognitionDatabasePriv> d;
+
+    friend class RecognitionDatabaseStaticPriv;
 };
 
 } // namespace KFaceIface

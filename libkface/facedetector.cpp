@@ -41,7 +41,7 @@ public:
 
     FaceDetectorPriv()
     {
-        db = 0;
+        db                = 0;
         detectionAccuracy = -1;
     }
 
@@ -50,9 +50,11 @@ public:
         delete db;
     }
 
-    int       detectionAccuracy;
+    int detectionAccuracy;
 
-    Database *database()
+public:
+
+    Database* database()
     {
         if (!db)
         {
@@ -63,18 +65,18 @@ public:
         return db;
     }
 
-    const Database *constDatabase() const
+    const Database* constDatabase() const
     {
         return db;
     }
 
 private:
 
-    Database *db;
+    Database* db;
 };
 
 FaceDetector::FaceDetector()
-        : d(new FaceDetectorPriv)
+            : d(new FaceDetectorPriv)
 {
 }
 
@@ -116,4 +118,3 @@ int FaceDetector::detectionAccuracy() const
 }
 
 } // namespace KFaceIface
-

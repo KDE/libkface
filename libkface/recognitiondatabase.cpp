@@ -67,20 +67,20 @@ public:
         defaultPath = KStandardDirs::locateLocal("data", "libkface/database/", true);
     }
 
-    QExplicitlySharedDataPointer<RecognitionDatabasePriv> database(const QString& key);
+    QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv> database(const QString& key);
     void removeDatabase(const QString& key);
 
-    QString defaultPath;
-    QMutex mutex;
+    QString                                                               defaultPath;
+    QMutex                                                                mutex;
 
     // Important: Do not hold an QExplicitlySharedDataPointer here, or the objects will never be freed!
-    typedef QHash<QString, RecognitionDatabasePriv*> DatabaseHash;
-    DatabaseHash databases;
+    typedef QHash<QString, RecognitionDatabase::RecognitionDatabasePriv*> DatabaseHash;
+    DatabaseHash                                                          databases;
 };
 
 K_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
 
-class RecognitionDatabasePriv : public QSharedData
+class RecognitionDatabase::RecognitionDatabasePriv : public QSharedData
 {
 private:
 
@@ -99,30 +99,30 @@ public:
     }
 
     const QString configPath;
-    QMutex mutex;
+    QMutex        mutex;
 
     // call under lock
-    Database *database() const
+    Database* database() const
     {
         if (!db)
             const_cast<RecognitionDatabasePriv*>(this)->db = new Database(Database::InitRecognition, configPath);
         return db;
     }
 
-    const Database *constDatabase() const
+    const Database* constDatabase() const
     {
         return db;
     }
 
 private:
 
-    Database *db;
+    Database* db;
 };
 
-QExplicitlySharedDataPointer<RecognitionDatabasePriv> RecognitionDatabaseStaticPriv::database(const QString& path)
+QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv> RecognitionDatabaseStaticPriv::database(const QString& path)
 {
     QMutexLocker lock(&mutex);
-    QString configPath = path.isNull() ? path : defaultPath;
+    QString configPath        = path.isNull() ? path : defaultPath;
     DatabaseHash::iterator it = databases.find(configPath);
     if (it != databases.end())
     {
@@ -133,7 +133,7 @@ QExplicitlySharedDataPointer<RecognitionDatabasePriv> RecognitionDatabaseStaticP
          */
         if (it.value()->ref.fetchAndAddOrdered(1) != 0)
         {
-            QExplicitlySharedDataPointer<RecognitionDatabasePriv> p(it.value());
+            QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv> p(it.value());
             it.value()->ref.deref(); // We incremented above
             return p;
         }
@@ -141,7 +141,7 @@ QExplicitlySharedDataPointer<RecognitionDatabasePriv> RecognitionDatabaseStaticP
          * safe to access it, because the destructor has not yet completed - otherwise it'd not be in the hash.
          */
     }
-    return QExplicitlySharedDataPointer<RecognitionDatabasePriv>(new RecognitionDatabasePriv(configPath));
+    return QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv>(new RecognitionDatabase::RecognitionDatabasePriv(configPath));
 }
 
 void RecognitionDatabaseStaticPriv::removeDatabase(const QString& key)
@@ -157,7 +157,7 @@ RecognitionDatabase RecognitionDatabase::addDatabase(const QString& configuratio
 }
 
 RecognitionDatabase::RecognitionDatabase(QExplicitlySharedDataPointer<RecognitionDatabasePriv> d)
-        : d(d)
+                   : d(d)
 {
 }
 

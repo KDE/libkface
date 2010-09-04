@@ -58,9 +58,9 @@ public:
      */
 
     FaceDetector();
-
     FaceDetector(const FaceDetector& other);
     ~FaceDetector();
+
     FaceDetector& operator=(const FaceDetector& other);
 
     /**
