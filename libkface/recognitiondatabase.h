@@ -69,9 +69,14 @@ public:
      */
     static RecognitionDatabase addDatabase(const QString& configurationPath = QString());
 
+    /// Constructs a null database
+    RecognitionDatabase();
+
     RecognitionDatabase(const RecognitionDatabase& other);
     ~RecognitionDatabase();
     RecognitionDatabase& operator=(const RecognitionDatabase& other);
+
+    bool isNull() const;
 
     /**
      * Explicitly save configuration. Automatically done in destructor.
@@ -91,7 +96,8 @@ public:
      * Function to recognize faces in a QList of Faces which hold the face images.
      * Recognized faces will have their ID's changed in the Face objects
      * @param faces A QList of Face's, which hold the face image too, for recongition.
-     * @return A QList of "closeness" of recognized faces, in the same order as the argument
+     * @return A QList of "closeness" of recognized faces, in the same order as the argument;
+     * or an empty list, if an error occurred or no recognition data is available.
      */
     QList<double> recognizeFaces(QList<Face>& faces);
 

@@ -156,6 +156,10 @@ RecognitionDatabase RecognitionDatabase::addDatabase(const QString& configuratio
     return RecognitionDatabase(d);
 }
 
+RecognitionDatabase::RecognitionDatabase()
+{
+}
+
 RecognitionDatabase::RecognitionDatabase(QExplicitlySharedDataPointer<RecognitionDatabasePriv> d)
                    : d(d)
 {
@@ -177,21 +181,30 @@ RecognitionDatabase::~RecognitionDatabase()
     saveConfig();
 }
 
+bool RecognitionDatabase::isNull() const
+{
+    return !d;
+}
+
 bool RecognitionDatabase::updateFaces(QList<Face>& faces)
 {
+    if (!d)
+        return false;
     QMutexLocker lock(&d->mutex);
     return d->database()->updateFaces(faces);
 }
 
 QList<double> RecognitionDatabase::recognizeFaces(QList<Face>& faces)
 {
+    if (!d)
+        return QList<double>();
     QMutexLocker lock(&d->mutex);
     return d->database()->recognizeFaces(faces);
 }
 
 void RecognitionDatabase::saveConfig()
 {
-    if (d->constDatabase())
+    if (d && d->constDatabase())
     {
         QMutexLocker lock(&d->mutex);
         d->database()->saveConfig();
@@ -200,17 +213,23 @@ void RecognitionDatabase::saveConfig()
 
 QString RecognitionDatabase::configPath() const
 {
+    if (!d)
+        return QString();
     return d->configPath;
 }
 
 int RecognitionDatabase::peopleCount() const
 {
+    if (!d)
+        return 0;
     QMutexLocker lock(&d->mutex);
     return d->database()->peopleCount();
 }
 
 int RecognitionDatabase::count(int id) const
 {
+    if (!d)
+        return 0;
     QMutexLocker lock(&d->mutex);
     return d->database()->count(id);
 }
