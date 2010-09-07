@@ -100,7 +100,7 @@ QList<Face> FaceDetector::detectFaces(const Image& image)
     return d->database()->detectFaces(image);
 }
 
-void FaceDetector::setDetectionAccuracy(int value)
+void FaceDetector::setAccuracy(int value)
 {
     // deferred creation
     if (d->constDatabase())
@@ -109,7 +109,7 @@ void FaceDetector::setDetectionAccuracy(int value)
         d->detectionAccuracy = value;
 }
 
-int FaceDetector::detectionAccuracy() const
+int FaceDetector::accuracy() const
 {
     if (d->constDatabase())
         return d->constDatabase()->detectionAccuracy();

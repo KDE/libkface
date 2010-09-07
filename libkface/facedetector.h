@@ -77,8 +77,8 @@ public:
      * The default value in libface is automatically set as 3.
      * @param value The degree of accuracy (1 to 5)
      */
-    void setDetectionAccuracy(int value);
-    int  detectionAccuracy() const;
+    void setAccuracy(int value);
+    int  accuracy() const;
 
 private:
 
