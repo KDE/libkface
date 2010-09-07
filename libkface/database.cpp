@@ -221,14 +221,8 @@ bool Database::updateFaces(QList<Face>& faces)
 QList<double> Database::recognizeFaces(QList<Face>& faces)
 {
     QList<double> closeness;
-    if(faces.isEmpty())
+    if(faces.isEmpty() || !d->libface->count())
     {
-        return closeness;
-    }
-
-    if(!QFile::exists(d->configPath + d->mappingFilename))
-    {
-        kError(51005) << "ERROR: No database exists.";
         return closeness;
     }
 
