@@ -36,6 +36,10 @@
 #include <opencv/cxcore.h>
 #include <opencv/highgui.h>
 
+// Libface includes
+
+#include <libface/LibFace.h>
+
 // Local includes
 
 #include "image_p.h"
@@ -114,6 +118,11 @@ const ImageData Image::imageData() const
 QImage Image::toQImage() const
 {
     return KFaceUtils::IplImage2QImage(d->image);
+}
+
+int Image::recommendedSizeForDetection()
+{
+    return libface::LibFace::getRecommendedImageSizeForDetection();
 }
 
 } // namespace KFaceIface
