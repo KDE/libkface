@@ -42,7 +42,8 @@ public:
     FaceDetectorPriv()
     {
         db                = 0;
-        detectionAccuracy = -1;
+        accuracy          = -1;
+        specificity       = -1;
     }
 
     ~FaceDetectorPriv()
@@ -50,7 +51,8 @@ public:
         delete db;
     }
 
-    int detectionAccuracy;
+    double accuracy;
+    double specificity;
 
 public:
 
@@ -59,8 +61,10 @@ public:
         if (!db)
         {
             db = new Database(Database::InitDetection);
-            if (detectionAccuracy != -1)
-                db->setDetectionAccuracy(detectionAccuracy);
+            if (accuracy != -1)
+                db->setDetectionAccuracy(accuracy);
+            if (specificity != -1)
+                db->setDetectionSpecificity(specificity);
         }
         return db;
     }
@@ -100,21 +104,38 @@ QList<Face> FaceDetector::detectFaces(const Image& image)
     return d->database()->detectFaces(image);
 }
 
-void FaceDetector::setAccuracy(int value)
+void FaceDetector::setAccuracy(double value)
 {
     // deferred creation
     if (d->constDatabase())
         d->database()->setDetectionAccuracy(value);
     else
-        d->detectionAccuracy = value;
+        d->accuracy = value;
 }
 
-int FaceDetector::accuracy() const
+double FaceDetector::accuracy() const
 {
     if (d->constDatabase())
         return d->constDatabase()->detectionAccuracy();
     else
-        return 3;
+        return 0.8;
+}
+
+void FaceDetector::setSpecificity(double value)
+{
+    // deferred creation
+    if (d->constDatabase())
+        d->database()->setDetectionSpecificity(value);
+    else
+        d->specificity = value;
+}
+
+double FaceDetector::specificity() const
+{
+    if (d->constDatabase())
+        return d->constDatabase()->detectionSpecificity();
+    else
+        return 0.8;
 }
 
 } // namespace KFaceIface

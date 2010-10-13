@@ -72,13 +72,12 @@ public:
     QList<Face> detectFaces(const Image& image);
 
     /**
-     * Set the accuracy of Face Detection. This is measured on a 5-point scale, from 1 to 5.
-     * 1 means least accuracy, but very high speed. 5 means highest accuracy but very low speed.
-     * The default value in libface is automatically set as 3.
-     * @param value The degree of accuracy (1 to 5)
+     * Set the accuracy and specificity of Face Detection.
      */
-    void setAccuracy(int value);
-    int  accuracy() const;
+    void   setAccuracy(double value);
+    double accuracy() const;
+    void   setSpecificity(double value);
+    double specificity() const;
 
 private:
 
