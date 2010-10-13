@@ -105,6 +105,19 @@ QSize Image::size() const
     return QSize(d->image->width, d->image->height);
 }
 
+void Image::setOriginalSize(const QSize& size)
+{
+    if (!d)
+        return;
+
+    d->originalSize = size;
+}
+
+QSize Image::originalSize() const
+{
+    return d->originalSize;
+}
+
 ImageData Image::imageData()
 {
     return d ? d->image : 0;

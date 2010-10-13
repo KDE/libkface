@@ -51,7 +51,9 @@ public:
     Image();
     /** Load the image from the given file. */
     Image(const QString& filePath);
-    /** Create an image from the given QImage object */
+    /** Create an image from the given QImage object.
+     *  If the image has been scaled down, please call setOriginalSize.
+     */
     Image(const QImage& image);
     /**
      *  Create an image from the given data.
@@ -62,6 +64,7 @@ public:
      *  if false, the fourth channel shall be ignored and can assumed to be set to 0xFF.
      *  Ownership of the data buffer remains with the caller, this constructor will take a copy
      *  of the data.
+     *  If the image has been scaled down, please call setOriginalSize.
      */
     Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data);
 
@@ -93,6 +96,12 @@ public:
     bool isNull() const;
 
     QSize size() const;
+
+    /**
+     * If the image has been scaled down already, give the original size.
+     */
+    void setOriginalSize(const QSize& size);
+    QSize originalSize() const;
 
     ImageData imageData();
     const ImageData imageData() const;
