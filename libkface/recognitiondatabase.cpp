@@ -128,7 +128,7 @@ QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv> Recog
     {
         /* There is a race condition: The last Priv is dereferenced, the destructor called.
          * Now database() has been called and locks the mutex after this dereferencing, but before removeDatabase is executed.
-         * So we only can use this cached data if it's reference count is non-zero.
+         * So we only can use this cached data if its reference count is non-zero.
          * Atomically to testing, we increase the reference count to reserve it for our usage.
          */
         if (it.value()->ref.fetchAndAddOrdered(1) != 0)
@@ -141,7 +141,9 @@ QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv> Recog
          * safe to access it, because the destructor has not yet completed - otherwise it'd not be in the hash.
          */
     }
-    return QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv>(new RecognitionDatabase::RecognitionDatabasePriv(configPath));
+    RecognitionDatabase::RecognitionDatabasePriv *d = new RecognitionDatabase::RecognitionDatabasePriv(configPath);
+    databases[configPath] = d;
+    return QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv>(d);
 }
 
 void RecognitionDatabaseStaticPriv::removeDatabase(const QString& key)
