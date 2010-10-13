@@ -70,7 +70,19 @@ public:
     ~DatabasePriv()
     {
         saveConfig();
-        delete libface;
+
+        try
+        {
+            delete libface;
+        }
+        catch (cv::Exception& e)
+        {
+            kError() << "cv::Exception:" << e.what();
+        }
+        catch(...)
+        {
+            kDebug() << "cv::Exception";
+        }
     }
 
     libface::LibFace*   libface;
@@ -81,8 +93,19 @@ public:
 
     void saveConfig()
     {
-        if (initFlags & Database::InitRecognition)
-            libface->saveConfig(configPath.toStdString());
+        try
+        {
+            if (initFlags & Database::InitRecognition)
+                libface->saveConfig(configPath.toStdString());
+        }
+        catch (cv::Exception& e)
+        {
+            kError() << "cv::Exception:" << e.what();
+        }
+        catch(...)
+        {
+            kDebug() << "cv::Exception";
+        }
     }
 };
 
@@ -147,11 +170,14 @@ Database::~Database()
 QList<Face> Database::detectFaces(const Image& image)
 {
     const IplImage* img = image.imageData();
+    CvSize originalSize = cvSize(0,0);
+    if (!image.originalSize().isNull())
+        originalSize = cvSize(image.originalSize().width(), image.originalSize().height());
 
     std::vector<libface::Face> result;
     try
     {
-        result = d->libface->detectFaces(img);
+        result = d->libface->detectFaces(img, originalSize);
     }
     catch (cv::Exception& e)
     {
@@ -277,14 +303,24 @@ QString Database::configPath() const
     return d->configPath;
 }
 
-void Database::setDetectionAccuracy(int value)
+void Database::setDetectionAccuracy(double value)
 {
     d->libface->setDetectionAccuracy(value);
 }
 
-int Database::detectionAccuracy() const
+double Database::detectionAccuracy() const
 {
     return d->libface->getDetectionAccuracy();
+}
+
+void Database::setDetectionSpecificity(double value)
+{
+    d->libface->setDetectionSpecificity(value);
+}
+
+double Database::detectionSpecificity() const
+{
+    return d->libface->getDetectionSpecificity();
 }
 
 int Database::peopleCount() const

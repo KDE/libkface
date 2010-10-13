@@ -127,19 +127,29 @@ public:
     QString configPath() const;
 
     /**
-     * Set the accuracy of Face Detection. This is measured on a 5-point scale, from 1 to 5.
-     * 1 means least accuracy, but very high speed. 5 means highest accuracy but very low speed.
-     * The default value in libface is automatically set as 3.
-     * @param value The degree of accuracy (1 to 5)
+     * Set the accuracy of Face Detection, in an interval between 0 and 1.
+     * 0 means least accuracy, but very high speed. 1 means highest accuracy but very low speed.
+     * The default value in libface is automatically set as 0.8.
+     * @param value The degree of accuracy in [0;1]
      */
-    void setDetectionAccuracy(int value);
+    void setDetectionAccuracy(double value);
 
     /**
-     * Get the currently set accuracy of Face Detection on a 5-point scale.
-     * 1 means least accuracy, but very high speed. 5 means highest accuracy but very low speed.
-     * @return The degree of accuracy (1 to 5)
+     * Set the detection specificity between 0 and 1.
+     * Trades sensitivity vs. specificity:
+     * 0 means many faces will be found, but also many false positives.
+     * 1 means some faces will not be found, but most returned faces are
+     * true positives.
+     * This parameter is orthogonal to the speed vs accuracy dimension.
+     * Default is 0.8.
      */
-    int detectionAccuracy() const;
+    void setDetectionSpecificity(double value);
+
+    /**
+     * Get the currently set accuracy and specificity of Face Detection.
+     */
+    double detectionAccuracy() const;
+    double detectionSpecificity() const;
 
     /**
      * Get the number of people in the database
