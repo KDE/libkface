@@ -83,7 +83,7 @@ public:
      * Returns the recommended size if you want to scale images for detection.
      * Larger images can be passed, but may be downscaled.
      */
-    int recommendedImageSize(const QSize& availableSize = QSize());
+    int recommendedImageSize(const QSize& availableSize = QSize()) const;
 
 private:
 

@@ -236,7 +236,7 @@ int RecognitionDatabase::count(int id) const
     return d->database()->count(id);
 }
 
-QSize RecognitionDatabase::recommendedImageSize(const QSize& availableSize)
+QSize RecognitionDatabase::recommendedImageSize(const QSize& availableSize) const
 {
     if (!d)
         return QSize();

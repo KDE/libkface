@@ -333,12 +333,12 @@ int Database::count(int id) const
     return d->libface->count(id);
 }
 
-int Database::recommendedImageSizeForDetection(const QSize& size)
+int Database::recommendedImageSizeForDetection(const QSize& size) const
 {
     return d->libface->getRecommendedImageSizeForDetection(KFaceUtils::toCvSize(size));
 }
 
-QSize Database::recommendedImageSizeForRecognition(const QSize& size)
+QSize Database::recommendedImageSizeForRecognition(const QSize& size) const
 {
     return KFaceUtils::fromCvSize(d->libface->getRecommendedImageSizeForRecognition(KFaceUtils::toCvSize(size)));
 }
