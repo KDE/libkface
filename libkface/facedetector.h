@@ -79,6 +79,12 @@ public:
     void   setSpecificity(double value);
     double specificity() const;
 
+    /**
+     * Returns the recommended size if you want to scale images for detection.
+     * Larger images can be passed, but may be downscaled.
+     */
+    int recommendedImageSize(const QSize& availableSize = QSize());
+
 private:
 
     class FaceDetectorPriv;

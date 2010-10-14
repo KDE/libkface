@@ -236,4 +236,13 @@ int RecognitionDatabase::count(int id) const
     return d->database()->count(id);
 }
 
+QSize RecognitionDatabase::recommendedImageSize(const QSize& availableSize)
+{
+    if (!d)
+        return QSize();
+    QMutexLocker lock(&d->mutex);
+    return d->database()->recommendedImageSizeForRecognition(availableSize);
+}
+
+
 } // namespace KFaceIface

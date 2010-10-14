@@ -108,12 +108,6 @@ public:
 
     QImage toQImage() const;
 
-    /**
-     * Returns the recommended size if you want to scale images for detection.
-     * Larger images can be passed, but may be downscaled.
-     */
-    static int recommendedSizeForDetection();
-
 private:
 
     class ImagePriv;

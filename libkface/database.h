@@ -164,6 +164,18 @@ public:
      */
     int count(int id) const;
 
+    /**
+     * Returns the recommended size if you want to scale images for detection.
+     * Larger images can be passed, but may be downscaled.
+     */
+    int recommendedImageSizeForDetection(const QSize& availableSize = QSize());
+
+    /**
+     * Returns the recommended size if you want to scale images for recognition.
+     * Larger images can be passed, but may be downscaled.
+     */
+    QSize recommendedImageSizeForRecognition(const QSize& availableSize = QSize());
+
 private:
 
     class DatabasePriv;

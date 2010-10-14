@@ -273,4 +273,15 @@ void KFaceUtils::addNameToFile(const QString& fileName, const QString& name, con
     file.close();
 }
 
+QSize KFaceUtils::fromCvSize(const CvSize& size)
+{
+    return QSize(size.width, size.height);
+}
+
+CvSize KFaceUtils::toCvSize(const QSize& size)
+{
+    return cvSize(size.width(), size.height());
+}
+
+
 } // namespace KFaceIface

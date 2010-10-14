@@ -133,9 +133,4 @@ QImage Image::toQImage() const
     return KFaceUtils::IplImage2QImage(d->image);
 }
 
-int Image::recommendedSizeForDetection()
-{
-    return libface::LibFace::getRecommendedImageSizeForDetection();
-}
-
 } // namespace KFaceIface

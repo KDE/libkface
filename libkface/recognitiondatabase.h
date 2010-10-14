@@ -120,6 +120,12 @@ public:
      */
     int count(int id) const;
 
+    /**
+     * Returns the recommended size if you want to scale images for recognition.
+     * Larger images can be passed, but may be downscaled.
+     */
+    QSize recommendedImageSize(const QSize& availableSize = QSize());
+
 private:
 
     class RecognitionDatabasePriv;

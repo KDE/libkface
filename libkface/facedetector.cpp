@@ -138,4 +138,10 @@ double FaceDetector::specificity() const
         return 0.8;
 }
 
+int FaceDetector::recommendedImageSize(const QSize& availableSize)
+{
+    return d->database()->recommendedImageSizeForDetection(availableSize);
+}
+
+
 } // namespace KFaceIface
