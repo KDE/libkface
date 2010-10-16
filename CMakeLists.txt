@@ -43,7 +43,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 
 FIND_PACKAGE(LibFace REQUIRED)
 FIND_PACKAGE(OpenCV REQUIRED)
-SET(OpenCV_LIBS ${OpenCV_LIBRARIES})
+#SET(OpenCV_LIBS ${OpenCV_LIBRARIES})
 
 # =======================================================
 # Information to update before to release this library.
