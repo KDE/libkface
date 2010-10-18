@@ -64,7 +64,8 @@ public:
     DatabasePriv()
         : mappingFilename(QString("/dictionary"))
     {
-        libface = 0;
+        libface      = 0;
+        configDirty  = false;
     }
 
     ~DatabasePriv()
@@ -89,14 +90,18 @@ public:
     Database::InitFlags initFlags;
     QHash<QString, int> hash;
     QString             configPath;
+    bool                configDirty;
     const QString       mappingFilename;
 
     void saveConfig()
     {
         try
         {
-            if (initFlags & Database::InitRecognition)
+            if (initFlags & Database::InitRecognition && configDirty)
+            {
                 libface->saveConfig(configPath.toStdString());
+                configDirty = false;
+            }
         }
         catch (cv::Exception& e)
         {
@@ -240,6 +245,8 @@ bool Database::updateFaces(QList<Face>& faces)
             d->hash[faces[i].name()] = faces[i].id();
         }
     }
+
+    d->configDirty = true;
 
     return true;
 }

@@ -122,7 +122,7 @@ private:
 QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv> RecognitionDatabaseStaticPriv::database(const QString& path)
 {
     QMutexLocker lock(&mutex);
-    QString configPath        = path.isNull() ? path : defaultPath;
+    QString configPath        = path.isNull() ? defaultPath : path;
     DatabaseHash::iterator it = databases.find(configPath);
     if (it != databases.end())
     {
@@ -180,7 +180,7 @@ RecognitionDatabase& RecognitionDatabase::operator=(const KFaceIface::Recognitio
 
 RecognitionDatabase::~RecognitionDatabase()
 {
-    saveConfig();
+    // saveConfig() called from KFace::Database Priv destructor
 }
 
 bool RecognitionDatabase::isNull() const
