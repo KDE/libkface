@@ -82,14 +82,6 @@ K_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
 
 class RecognitionDatabase::RecognitionDatabasePriv : public QSharedData
 {
-private:
-
-    friend class RecognitionDatabaseStaticPriv;
-    RecognitionDatabasePriv(const QString& configPath)
-        : configPath(configPath), mutex(QMutex::Recursive), db(0)
-    {
-    }
-
 public:
 
     ~RecognitionDatabasePriv()
@@ -112,6 +104,15 @@ public:
     const Database* constDatabase() const
     {
         return db;
+    }
+
+private:
+
+    friend class RecognitionDatabaseStaticPriv;
+
+    RecognitionDatabasePriv(const QString& configPath)
+        : configPath(configPath), mutex(QMutex::Recursive), db(0)
+    {
     }
 
 private:
@@ -141,8 +142,8 @@ QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv> Recog
          * safe to access it, because the destructor has not yet completed - otherwise it'd not be in the hash.
          */
     }
-    RecognitionDatabase::RecognitionDatabasePriv *d = new RecognitionDatabase::RecognitionDatabasePriv(configPath);
-    databases[configPath] = d;
+    RecognitionDatabase::RecognitionDatabasePriv* d = new RecognitionDatabase::RecognitionDatabasePriv(configPath);
+    databases[configPath]                           = d;
     return QExplicitlySharedDataPointer<RecognitionDatabase::RecognitionDatabasePriv>(d);
 }
 
@@ -243,6 +244,5 @@ QSize RecognitionDatabase::recommendedImageSize(const QSize& availableSize) cons
     QMutexLocker lock(&d->mutex);
     return d->database()->recommendedImageSizeForRecognition(availableSize);
 }
-
 
 } // namespace KFaceIface

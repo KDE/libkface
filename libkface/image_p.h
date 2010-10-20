@@ -70,9 +70,9 @@ class ImageData
 {
 public:
 
-    ImageData() : image(0) {}
-
+    ImageData()                : image(0)     {}
     ImageData(IplImage* image) : image(image) {}
+
     ImageData& operator=(IplImage* im)        { image = im; return *this; }
     operator IplImage *()                     { return image; }
     operator const IplImage *() const         { return image; }

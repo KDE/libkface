@@ -123,8 +123,8 @@ Database::Database(InitFlags flags, const QString& configurationPath)
     else
         d->configPath = configurationPath;
 
-    d->hash       = KFaceUtils::hashFromFile(d->configPath + d->mappingFilename);
-    d->initFlags  = flags;
+    d->hash      = KFaceUtils::hashFromFile(d->configPath + d->mappingFilename);
+    d->initFlags = flags;
 
     try
     {
@@ -176,6 +176,7 @@ QList<Face> Database::detectFaces(const Image& image)
 {
     const IplImage* img = image.imageData();
     CvSize originalSize = cvSize(0,0);
+
     if (!image.originalSize().isNull())
         originalSize = KFaceUtils::toCvSize(image.originalSize());
 
@@ -193,12 +194,14 @@ QList<Face> Database::detectFaces(const Image& image)
         kDebug() << "cv::Exception";
     }
 
-    QList<Face> faceList;
+    QList<Face>                          faceList;
     std::vector<libface::Face>::iterator it;
+
     for (it = result.begin(); it != result.end(); ++it)
     {
         faceList << Face::fromFace(*it, Face::ShallowCopy);
     }
+
     return faceList;
 }
 

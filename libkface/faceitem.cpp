@@ -56,15 +56,15 @@ public:
 
     FaceItemPriv()
     {
-        faceName      = 0;
-        nameRect      = 0;
-        rejectButton  = 0;
-        acceptButton  = 0;
-        faceMarquee   = 0;
+        faceName               = 0;
+        nameRect               = 0;
+        rejectButton           = 0;
+        acceptButton           = 0;
+        faceMarquee            = 0;
         suggestionAcceptButton = 0;
         suggestionRejectButton = 0;
-        suggestionMode = false;
-        name = "";
+        suggestionMode         = false;
+        name                   = QString();
     }
 
     bool               suggestionMode;
@@ -94,13 +94,12 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
 {
     setAcceptHoverEvents(true);
 
-    d->origScale = originalscale;
-    d->scale     = scale;
-    d->origRect  = rect;
-    FancyRect* fancy;
-
-    d->sceneWidth  = scene->width();
-    d->sceneHeight = scene->height();
+    d->origScale     = originalscale;
+    d->scale         = scale;
+    d->origRect      = rect;
+    FancyRect* fancy = 0;
+    d->sceneWidth    = scene->width();
+    d->sceneHeight   = scene->height();
 
     // Scale all coordinates to fit the initial size of the scene
     d->x1 = rect.topLeft().x()*scale;
@@ -114,7 +113,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     scaledRect.setBottomRight(QPoint(d->x2, d->y2));
 
     // marquee
-    fancy = new FancyRect(scaledRect);
+    fancy          = new FancyRect(scaledRect);
     d->faceMarquee = new Marquee(fancy);
     scene->addItem(d->faceMarquee);
 
@@ -157,7 +156,7 @@ FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& re
     d->rejectButton->show();
 
     QString s1("dialog-ok");
-    KIcon* icon1       = new KIcon(s1);
+    KIcon* icon1      = new KIcon(s1);
     QPixmap acceptPix = icon1->pixmap(QSize(16,16));
 
     d->acceptButton   = new Button( acceptPix, acceptPix);
@@ -243,8 +242,8 @@ void FaceItem::update()
         }
     }
 
-    QPointF bl     = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).bottomLeft();
-    QPointF br     = d->nameRect->mapRectToScene(d->nameRect->boundingRect()).bottomRight();
+    QPointF bl = d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).bottomLeft();
+    QPointF br = d->nameRect->mapRectToScene(d->nameRect->boundingRect()).bottomRight();
     d->faceName->setPos(bl.x() + 5, bl.y() + 5);
 
     d->rejectButton->setPos(bl.x() - 16, bl.y() + 9);
@@ -253,18 +252,20 @@ void FaceItem::update()
     d->suggestionAcceptButton->setPos(br.x() + 4, bl.y() + 11);
     d->suggestionRejectButton->setPos(br.x() + 20, bl.y() + 11);
 
-    QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
+    QRectF r      = d->faceName->mapRectToScene(d->faceName->boundingRect());
     d->nameRect->setRect(r);
-
     QRect newRect = this->d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).toRect();
-    qDebug()<<"Origscale is : "<<d->origScale<<" and scale is "<<d->scale;
+    kDebug() << "Origscale is : " << d->origScale << " and scale is " << d->scale;
+
     QSize s(newRect.size());
     s.scale(newRect.width()*sqrt(d->origScale), newRect.height()*sqrt(d->origScale), Qt::KeepAspectRatio);
     newRect.setSize(s);
+
     //newRect.setRect(x,y,w,h);
-    qDebug()<<"Orig before"<<d->origRect;
+    kDebug() << "Orig before" << d->origRect;
+
     //d->origRect = newRect;
-    qDebug()<<"Orig after"<<d->origRect;
+    kDebug() << "Orig after" << d->origRect;
 }
 
 void FaceItem::setVisible(bool visible)
@@ -339,7 +340,7 @@ void FaceItem::reject()
 
 void FaceItem::suggest(const QString& name)
 {
-    qDebug()<<"suggested name is "<<name;
+    kDebug() << "suggested name is " << name;
     d->name = name;
     this->switchToSuggestionMode();
 }

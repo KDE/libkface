@@ -41,18 +41,15 @@ public:
 
     FaceDetectorPriv()
     {
-        db                = 0;
-        accuracy          = -1;
-        specificity       = -1;
+        db          = 0;
+        accuracy    = -1;
+        specificity = -1;
     }
 
     ~FaceDetectorPriv()
     {
         delete db;
     }
-
-    double accuracy;
-    double specificity;
 
 public:
 
@@ -73,6 +70,11 @@ public:
     {
         return db;
     }
+
+public:
+
+    double accuracy;
+    double specificity;
 
 private:
 
@@ -142,6 +144,5 @@ int FaceDetector::recommendedImageSize(const QSize& availableSize) const
 {
     return d->database()->recommendedImageSizeForDetection(availableSize);
 }
-
 
 } // namespace KFaceIface

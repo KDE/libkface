@@ -180,7 +180,7 @@ void Marquee::mousePressEvent(QGraphicsSceneMouseEvent* e)
     }
     if (d->hbr->isUnderMouse())
     {
-        d->resizing = true;
+        d->resizing   = true;
         d->resizeType = 3;
         return;
     }

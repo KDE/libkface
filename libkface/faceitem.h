@@ -60,6 +60,7 @@ public:
 
     void setText(const QString& newName);
     QString text() const;
+
     QRect originalRect();
     double originalScale();
 
