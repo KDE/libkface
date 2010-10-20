@@ -49,12 +49,15 @@ public:
 
     /** Creates a null Image */
     Image();
+
     /** Load the image from the given file. */
     Image(const QString& filePath);
+
     /** Create an image from the given QImage object.
      *  If the image has been scaled down, please call setOriginalSize.
      */
     Image(const QImage& image);
+
     /**
      *  Create an image from the given data.
      *  The image data is in the BGRA format, in a buffer suitable for the given image size.
