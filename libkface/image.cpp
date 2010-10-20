@@ -94,7 +94,7 @@ Image::~Image()
 
 bool Image::isNull() const
 {
-    return d;
+    return d ? false : true;
 }
 
 QSize Image::size() const
