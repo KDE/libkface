@@ -158,13 +158,6 @@ public:
     int peopleCount() const;
 
     /**
-     * Get the number of occurences of a person
-     * @param id The ID of the person
-     * @return The number of occurences of the person in the Database
-     */
-    int count(int id) const;
-
-    /**
      * Returns the recommended size if you want to scale images for detection.
      * Larger images can be passed, but may be downscaled.
      */

@@ -229,14 +229,6 @@ int RecognitionDatabase::peopleCount() const
     return d->database()->peopleCount();
 }
 
-int RecognitionDatabase::count(int id) const
-{
-    if (!d)
-        return 0;
-    QMutexLocker lock(&d->mutex);
-    return d->database()->count(id);
-}
-
 QSize RecognitionDatabase::recommendedImageSize(const QSize& availableSize) const
 {
     if (!d)

@@ -338,11 +338,6 @@ int Database::peopleCount() const
     return d->libface->count();
 }
 
-int Database::count(int id) const
-{
-    return d->libface->count(id);
-}
-
 int Database::recommendedImageSizeForDetection(const QSize& size) const
 {
     return d->libface->getRecommendedImageSizeForDetection(KFaceUtils::toCvSize(size));
