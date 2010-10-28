@@ -41,7 +41,7 @@
 // libkface includes
 
 #include "libkface/database.h"
-#include "libkface/kface.h"
+#include "libkface/face.h"
 
 using namespace KFaceIface;
 

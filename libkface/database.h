@@ -41,7 +41,7 @@
 // Local includes
 
 #include "libkface_export.h"
-#include "kface.h"
+#include "face.h"
 #include "image.h"
 
 namespace KFaceIface
@@ -112,6 +112,13 @@ public:
     bool updateFaces(QList<Face>& faces);
 
     /**
+     * Clear the training database for a single name or id.
+     * Use with care, this can deleted carefully accumulated data!
+     */
+    void clearTraining(const QString& name);
+    void clearTraining(int id);
+
+    /**
      * Function to recognize faces in a QList of Faces which hold the face images.
      * Recognized faces will have their ID's changed in the Face objects
      * @param faces A QList of Face's, which hold the face image too, for recongition.
@@ -156,6 +163,27 @@ public:
      * @return Number of unique ID's in the database
      */
     int peopleCount() const;
+
+    /**
+     * Returns all ids in the database
+     */
+    QList<int> allIds() const;
+
+    /**
+     * Returns all names in the database
+     */
+    QStringList allNames() const;
+
+    /**
+     * Returns the first name associated with the given id, or
+     * a null string. Note there may be multiple names per id.
+     */
+    QString nameForId(int id) const;
+
+    /**
+     * Returns the id for the given name, or -1 if this name is not know.
+     */
+    int idForName(const QString& name) const;
 
     /**
      * Returns the recommended size if you want to scale images for detection.

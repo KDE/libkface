@@ -303,6 +303,18 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     return closeness;
 }
 
+void Database::clearTraining(const QString& name)
+{
+    Q_UNUSED(name)
+    //TODO
+}
+
+void Database::clearTraining(int id)
+{
+    Q_UNUSED(id)
+    //TODO
+}
+
 void Database::saveConfig()
 {
     d->saveConfig();
@@ -336,6 +348,26 @@ double Database::detectionSpecificity() const
 int Database::peopleCount() const
 {
     return d->libface->count();
+}
+
+QString Database::nameForId(int id) const
+{
+    return d->hash.key(id);
+}
+
+int Database::idForName(const QString& name) const
+{
+    return d->hash.value(name, -1);
+}
+
+QList<int> Database::allIds() const
+{
+    return d->hash.values();
+}
+
+QStringList Database::allNames() const
+{
+    return d->hash.keys();
 }
 
 int Database::recommendedImageSizeForDetection(const QSize& size) const

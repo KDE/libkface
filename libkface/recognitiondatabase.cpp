@@ -237,4 +237,52 @@ QSize RecognitionDatabase::recommendedImageSize(const QSize& availableSize) cons
     return d->database()->recommendedImageSizeForRecognition(availableSize);
 }
 
+void RecognitionDatabase::clearTraining(const QString& name)
+{
+    if (!d)
+        return;
+    QMutexLocker lock(&d->mutex);
+    return d->database()->clearTraining(name);
+}
+
+void RecognitionDatabase::clearTraining(int id)
+{
+    if (!d)
+        return;
+    QMutexLocker lock(&d->mutex);
+    return d->database()->clearTraining(id);
+}
+
+QList<int> RecognitionDatabase::allIds() const
+{
+    if (!d)
+        return QList<int>();
+    QMutexLocker lock(&d->mutex);
+    return d->database()->allIds();
+}
+
+QStringList RecognitionDatabase::allNames() const
+{
+    if (!d)
+        return QStringList();
+    QMutexLocker lock(&d->mutex);
+    return d->database()->allNames();
+}
+
+QString RecognitionDatabase::nameForId(int id) const
+{
+    if (!d)
+        return QString();
+    QMutexLocker lock(&d->mutex);
+    return d->database()->nameForId(id);
+}
+
+int RecognitionDatabase::idForName(const QString& name) const
+{
+    if (!d)
+        return -1;
+    QMutexLocker lock(&d->mutex);
+    return d->database()->idForName(name);
+}
+
 } // namespace KFaceIface

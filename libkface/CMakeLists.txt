@@ -36,7 +36,7 @@ REMOVE_DEFINITIONS(-DQT_NO_STL)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 SET(kface_LIB_SRCS database.cpp
-                   kface.cpp
+                   face.cpp
                    kfaceutils.cpp
                    image.cpp
                    facedetector.cpp
@@ -62,7 +62,7 @@ SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
 INSTALL(TARGETS kface ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 INSTALL(FILES database.h
-              kface.h
+              face.h
               image.h
               facedetector.h
               recognitiondatabase.h

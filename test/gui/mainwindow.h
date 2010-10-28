@@ -41,7 +41,7 @@
 // libkface includes
 
 #include "database.h"
-#include "kface.h"
+#include "face.h"
 #include "faceitem.h"
 
 namespace Ui

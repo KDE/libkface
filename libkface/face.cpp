@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "kface.h"
+#include "face.h"
 #include "kfaceutils.h"
 #include "image.h"
 #include "image_p.h"
