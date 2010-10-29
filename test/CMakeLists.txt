@@ -23,6 +23,7 @@
 # ============================================================
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkface)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 SET(detect_SRCS detect.cpp)
 KDE4_ADD_EXECUTABLE(detect ${detect_SRCS})
