@@ -41,9 +41,14 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKFACE_AREA_CODE_GENERAL})
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
-FIND_PACKAGE(LibFace REQUIRED)
+FIND_PACKAGE(LibFace)
 FIND_PACKAGE(OpenCV REQUIRED)
 #SET(OpenCV_LIBS ${OpenCV_LIBRARIES})
+
+INCLUDE_DIRECTORIES( ${LIBFACE_INCLUDE_DIR}
+                     ${OpenCV_INCLUDE_DIRS}
+                     ${CMAKE_CURRENT_SOURCE_DIR}
+                   )
 
 # =======================================================
 # Information to update before to release this library.
@@ -82,8 +87,23 @@ SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_
 # =======================================================
 
 IF (NOT LIBFACE_FOUND)
-  # libface not found, fail to configure the build
-  MESSAGE(FATAL_ERROR "libface was not found, can not build without it: http://libface.sourceforge.net")
+    SET(face_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceUtils.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/FaceDetect.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/Face.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/Eigenfaces.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFace.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/Haarcascades.cpp
+       )
+
+    # NOTE: update libface version ID when code is updated from SF.net
+    SET(libface_MAJOR_VERSION 0)
+    SET(libface_MINOR_VERSION 1)
+
+    SET(DEBUG_MODE 0)
+    SET(LIB_TYPE STATIC)
+    CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/libface/LibFaceConfig.h.cmake" "${PROJECT_BINARY_DIR}/libface/LibFaceConfig.h")
+
+    MESSAGE(STATUS "External libface was not found, use internal version instead...")
 ENDIF (NOT LIBFACE_FOUND)
 
 SUBDIRS(libkface)

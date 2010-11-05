@@ -25,10 +25,6 @@
 # To handle OpenCV C++ exceptions.
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
-INCLUDE_DIRECTORIES( ${LIBFACE_INCLUDE_DIR}
-                     ${OpenCV_INCLUDE_DIRS}
-                   )
-
 ADD_DEFINITIONS(${LIBFACE_DEFINITIONS})
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 REMOVE_DEFINITIONS(-DQT_NO_STL)
@@ -47,7 +43,7 @@ SET(kface_LIB_SRCS database.cpp
                    fancyrect.cpp
    )
 
-KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS})
+KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${face_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${KDE4_KDEUI_LIBS}
