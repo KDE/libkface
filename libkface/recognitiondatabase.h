@@ -107,6 +107,7 @@ public:
      */
     void clearTraining(const QString& name);
     void clearTraining(int id);
+    void clearAllTraining();
 
     /**
      * Returns the directory path of the config file

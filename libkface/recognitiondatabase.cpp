@@ -253,6 +253,14 @@ void RecognitionDatabase::clearTraining(int id)
     return d->database()->clearTraining(id);
 }
 
+void RecognitionDatabase::clearAllTraining()
+{
+    if (!d)
+        return;
+    QMutexLocker lock(&d->mutex);
+    return d->database()->clearAllTraining();
+}
+
 QList<int> RecognitionDatabase::allIds() const
 {
     if (!d)
