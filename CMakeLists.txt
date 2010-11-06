@@ -34,7 +34,7 @@ INCLUDE(MacroOptionalFindPackage)
 INCLUDE(FindPackageHandleStandardArgs)
 
 ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
-INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${KDE4_INCLUDES})
 
 SET(LIBKFACE_AREA_CODE_GENERAL 51005)
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKFACE_AREA_CODE_GENERAL})
@@ -47,7 +47,6 @@ FIND_PACKAGE(OpenCV REQUIRED)
 
 INCLUDE_DIRECTORIES( ${LIBFACE_INCLUDE_DIR}
                      ${OpenCV_INCLUDE_DIRS}
-                     ${CMAKE_CURRENT_SOURCE_DIR}
                    )
 
 # =======================================================
@@ -87,6 +86,8 @@ SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_
 # =======================================================
 
 IF (NOT LIBFACE_FOUND)
+    INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libface )
+
     SET(face_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceUtils.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/libface/FaceDetect.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/libface/Face.cpp
@@ -95,13 +96,16 @@ IF (NOT LIBFACE_FOUND)
                       ${CMAKE_CURRENT_SOURCE_DIR}/libface/Haarcascades.cpp
        )
 
+    SET(LIBFACE_LIBRARIES "")
+
     # NOTE: update libface version ID when code is updated from SF.net
     SET(libface_MAJOR_VERSION 0)
     SET(libface_MINOR_VERSION 1)
 
     SET(DEBUG_MODE 0)
     SET(LIB_TYPE STATIC)
-    CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/libface/LibFaceConfig.h.cmake" "${PROJECT_BINARY_DIR}/libface/LibFaceConfig.h")
+    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceConfig.h.cmake"
+                   "${CMAKE_CURRENT_BINARY_DIR}/libface/LibFaceConfig.h")
 
     MESSAGE(STATUS "External libface was not found, use internal version instead...")
 ENDIF (NOT LIBFACE_FOUND)

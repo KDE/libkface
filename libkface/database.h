@@ -117,6 +117,7 @@ public:
      */
     void clearTraining(const QString& name);
     void clearTraining(int id);
+    void clearAllTraining();
 
     /**
      * Function to recognize faces in a QList of Faces which hold the face images.

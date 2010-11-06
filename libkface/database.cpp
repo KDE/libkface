@@ -315,6 +315,11 @@ void Database::clearTraining(int id)
     //TODO
 }
 
+void Database::clearAllTraining()
+{
+    d->libface->loadConfig(std::map<std::string, std::string>());
+}
+
 void Database::saveConfig()
 {
     d->saveConfig();
