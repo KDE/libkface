@@ -28,7 +28,12 @@
 
 // Qt includes
 
-#include <Qt/QtGui>
+#include <QtGui/QGraphicsItem>
+#include <QtGui/QGraphicsRectItem>
+#include <QtCore/QRectF>
+#include <QtGui/QPainter>
+#include <QtGui/QStyleOptionGraphicsItem>
+#include <QtGui/QWidget>
 
 // Local includes
 

@@ -30,7 +30,10 @@
 
 // Qt includes
 
-#include <QGraphicsItemGroup>
+#include <QPointF>
+#include <QPen>
+#include <QString>
+#include <QGraphicsSimpleTextItem>
 
 // KDE includes
 

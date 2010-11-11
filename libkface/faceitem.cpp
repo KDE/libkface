@@ -28,6 +28,10 @@
 
 #include "faceitem.moc"
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QWidget>
@@ -43,6 +47,8 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kicon.h>
+
+// Local includes
 
 #include "marquee.h"
 #include "fancyrect.h"
