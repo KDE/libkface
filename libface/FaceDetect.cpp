@@ -297,7 +297,7 @@ void FaceDetect::setSpecificity(double sensitivityVsSpecificity)
     d->sensitivityVsSpecificity = max(0.0, min(1.0, sensitivityVsSpecificity));
 }
 
-void FaceDetect::updateParameters(const CvSize& scaledSize, const CvSize& originalSize)
+void FaceDetect::updateParameters(const CvSize& /*scaledSize*/, const CvSize& originalSize)
 {
     double origSize = double(max(originalSize.width, originalSize.height)) / 1000;
 
@@ -358,9 +358,11 @@ void FaceDetect::updateParameters(const CvSize& scaledSize, const CvSize& origin
              << " flags " << d->primaryParams.flags
              << " min size " << d->primaryParams.minSize.width << endl
              << " primary cascades: ";
-        for (int i=0; i<d->cascadeProperties.size(); i++)
+
+        for (unsigned int i=0; i<d->cascadeProperties.size(); i++)
             if (d->cascadeProperties[i].primaryCascade)
                 cout << d->cascadeSet->getCascade(i).name << " ";
+
         cout << endl
              << " maxDistance " << d->maxDistance
              << " minDuplicates " << d->minDuplicates << endl;
@@ -487,7 +489,7 @@ bool FaceDetect::verifyFace(const IplImage* inputImage, const Face &face)
 {
     // check if we need to verify
     int verifyingCascades = 0;
-    for (int i = 0; i <= d->cascadeProperties.size(); ++i)
+    for (unsigned int i = 0; i <= d->cascadeProperties.size(); ++i)
         if (d->cascadeProperties[i].verifyingCascade)
             verifyingCascades++;
 
@@ -621,7 +623,7 @@ bool FaceDetect::verifyFace(const IplImage* inputImage, const Face &face)
     return verified;
 }
 
-vector<Face> FaceDetect::mergeFaces(const IplImage* inputImage, vector<vector<Face> > combo, int maxdist, int mindups)
+vector<Face> FaceDetect::mergeFaces(const IplImage* /*inputImage*/, vector<vector<Face> > combo, int maxdist, int mindups)
 {
     clock_t      finalStage;
     vector<Face> finalResult;
@@ -635,7 +637,7 @@ vector<Face> FaceDetect::mergeFaces(const IplImage* inputImage, vector<vector<Fa
 
     // used only one cascade? No need to merge then
     int primaryCascades = 0;
-    for (int i = 0; i <= d->cascadeProperties.size(); ++i)
+    for (unsigned int i = 0; i <= d->cascadeProperties.size(); ++i)
         if (d->cascadeProperties[i].primaryCascade)
             primaryCascades++;
 
@@ -649,7 +651,7 @@ vector<Face> FaceDetect::mergeFaces(const IplImage* inputImage, vector<vector<Fa
         consider them to be "overlapping" face frames and delete the "duplicate" from the vector.
         Remember that only faces to the RIGHT of the reference face will be deleted.
         */
-        vector<int>  genuineness;
+        vector<int> genuineness;
         if (DEBUG)
             finalStage = clock();
 
@@ -676,10 +678,11 @@ vector<Face> FaceDetect::mergeFaces(const IplImage* inputImage, vector<vector<Fa
                 i--;
             }
         }
-            /*
-            Note that the index of the reference element will be the same as the index of it's number of duplicates
-            in the genuineness vector, so win-win!.
-            */
+
+        /*
+        Note that the index of the reference element will be the same as the index of it's number of duplicates
+        in the genuineness vector, so win-win!.
+        */
 
         if (DEBUG)
         {
