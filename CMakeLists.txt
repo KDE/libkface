@@ -41,8 +41,11 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKFACE_AREA_CODE_GENERAL})
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
-FIND_PACKAGE(LibFace)
-FIND_PACKAGE(OpenCV REQUIRED)
+#FIND_PACKAGE(LibFace)
+FIND_PACKAGE(OpenCV)
+
+if (OpenCV_FOUND)
+
 #SET(OpenCV_LIBS ${OpenCV_LIBRARIES})
 
 INCLUDE_DIRECTORIES( ${LIBFACE_INCLUDE_DIR}
@@ -120,6 +123,9 @@ IF(NOT WIN32)
 ENDIF(NOT WIN32)
 
 # Install find cmake script to the system for client applications.
+#   ###### This is wrong. FindFoo must not be installed by Foo!
 
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKface.cmake
-        DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
+#INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKface.cmake
+#DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
+
+endif (OpenCV_FOUND)
