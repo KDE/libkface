@@ -49,7 +49,7 @@ TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${KDE4_KDEUI_LIBS}
                             ${QT_QTGUI_LIBRARY}
                             ${LIBFACE_LIBRARIES}
-                            ${OpenCV_LIBS}
+                            ${OpenCV_LIBRARIES}
                             )
 
 SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}

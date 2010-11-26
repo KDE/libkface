@@ -46,8 +46,6 @@ FIND_PACKAGE(OpenCV)
 
 if (OpenCV_FOUND)
 
-#SET(OpenCV_LIBS ${OpenCV_LIBRARIES})
-
 INCLUDE_DIRECTORIES( ${LIBFACE_INCLUDE_DIR}
                      ${OpenCV_INCLUDE_DIRS}
                    )
