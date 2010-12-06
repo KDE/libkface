@@ -540,6 +540,7 @@ std::vector<int> Eigenfaces::update(vector<Face>& newFaceArr)
                 d->indexMap.push_back(id);
             }
         }
+        result.at(i) = newFaceArr.at(i).getId();
     }
 
     update = clock() - update;
