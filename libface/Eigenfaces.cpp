@@ -115,11 +115,12 @@ public:
 /**
  * Performs PCA on the current training data, projects the training faces, and stores them in a DB.
  */
-void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* /*newFace*/)
+void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* newFace)
 {
     int i;
     std::vector<IplImage*> tempFaces;
 
+    tempFaces.push_back(newFace);
     tempFaces.push_back(faceImgArr.at(index));
 
     float* projectedFace = (float*)malloc(sizeof(float));
