@@ -24,6 +24,9 @@
 
 PROJECT(libkface)
 
+MESSAGE(STATUS "----------------------------------------------------------------------------------")
+MESSAGE(STATUS "Starting CMake configuration for: libkface")
+
 FIND_PACKAGE(Qt4 4.6.0 REQUIRED)
 FIND_PACKAGE(KDE4 REQUIRED)
 
