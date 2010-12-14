@@ -34,7 +34,6 @@ MACRO(DBG_MSG _MSG)
   #  MESSAGE(STATUS "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}):\n${_MSG}")
 ENDMACRO(DBG_MSG)
 
-
 # required cv components with header and library if COMPONENTS unspecified
 IF    (NOT OpenCV_FIND_COMPONENTS)
   # default
