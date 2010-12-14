@@ -47,6 +47,13 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 FIND_PACKAGE(LibFace)
 FIND_PACKAGE(OpenCV REQUIRED)
 
+# there are two versions of FindOpenCV.cmake in the wild, one defining
+# OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
+# both cases.
+IF (NOT OpenCV_LIBRARIES)
+  SET(OPENCV_LIBRARIES ${OpenCV_LIBS})
+ENDIF (NOT OpenCV_LIBRARIES)
+
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 IF (LIBFACE_FOUND)
   INCLUDE_DIRECTORIES(${LIBFACE_INCLUDE_DIR})
