@@ -122,3 +122,7 @@ IF(NOT WIN32)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 ENDIF(NOT WIN32)
 
+# Install find cmake script to the system for client applications.
+
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKface.cmake
+        DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
