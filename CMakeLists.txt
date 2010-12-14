@@ -57,11 +57,12 @@ endif (LIBFACE_FOUND)
 
 # Library version history:
 # API      ABI
-# 0.1.0 => 0.1.0     (Released with KDE 4.6.0)
+# 0.1.0 => 0.1.0     (During digiKam GoSC2010)
+# 2.0.0 => 1.0.0     (Included into digiKam 2.0.0 Software Collection)
 
 # Library API version
-SET(KFACE_LIB_MAJOR_VERSION "0")
-SET(KFACE_LIB_MINOR_VERSION "1")
+SET(KFACE_LIB_MAJOR_VERSION "2")
+SET(KFACE_LIB_MINOR_VERSION "0")
 SET(KFACE_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
@@ -75,8 +76,8 @@ SET(KFACE_LIB_SUFFIX_VERSION "-svn")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(KFACE_LIB_SO_CUR_VERSION "0")
-SET(KFACE_LIB_SO_REV_VERSION "1")
+SET(KFACE_LIB_SO_CUR_VERSION "1")
+SET(KFACE_LIB_SO_REV_VERSION "0")
 SET(KFACE_LIB_SO_AGE_VERSION "0")
 
 # =======================================================
