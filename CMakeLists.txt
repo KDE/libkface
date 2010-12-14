@@ -72,7 +72,7 @@ SET(KFACE_LIB_PATCH_VERSION "0")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final relase. Can be used in production.
-SET(KFACE_LIB_SUFFIX_VERSION "-svn")
+SET(KFACE_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
