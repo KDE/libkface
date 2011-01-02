@@ -31,8 +31,12 @@ TARGET_LINK_LIBRARIES(detect kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${Q
 
 # -----------------------------------------------------------------------------
 
-SET(libfaceGUI_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
-                    ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
+SET(libfaceGUI_SRCS gui/main.cpp
+                    gui/mainwindow.cpp
+                    gui/faceitem.cpp
+                    gui/button.cpp
+                    gui/marquee.cpp
+                    gui/fancyrect.cpp
    )
 
 KDE4_ADD_UI_FILES(libfaceGUI_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)

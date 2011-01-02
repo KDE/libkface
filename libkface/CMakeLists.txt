@@ -37,10 +37,6 @@ SET(kface_LIB_SRCS database.cpp
                    image.cpp
                    facedetector.cpp
                    recognitiondatabase.cpp
-                   faceitem.cpp
-                   button.cpp
-                   marquee.cpp
-                   fancyrect.cpp
    )
 
 KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${face_LIB_SRCS})
