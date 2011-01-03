@@ -58,10 +58,6 @@ INSTALL(FILES database.h
               image.h
               facedetector.h
               recognitiondatabase.h
-              faceitem.h
-              button.h
-              marquee.h
-              fancyrect.h
               libkface_export.h
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
