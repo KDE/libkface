@@ -489,7 +489,7 @@ bool FaceDetect::verifyFace(const IplImage* inputImage, const Face &face)
 {
     // check if we need to verify
     int verifyingCascades = 0;
-    for (unsigned int i = 0; i <= d->cascadeProperties.size(); ++i)
+    for (unsigned int i = 0; i < d->cascadeProperties.size(); ++i)
         if (d->cascadeProperties[i].verifyingCascade)
             verifyingCascades++;
 
@@ -637,7 +637,7 @@ vector<Face> FaceDetect::mergeFaces(const IplImage* /*inputImage*/, vector<vecto
 
     // used only one cascade? No need to merge then
     int primaryCascades = 0;
-    for (unsigned int i = 0; i <= d->cascadeProperties.size(); ++i)
+    for (unsigned int i = 0; i < d->cascadeProperties.size(); ++i)
         if (d->cascadeProperties[i].primaryCascade)
             primaryCascades++;
 
