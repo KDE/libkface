@@ -43,15 +43,26 @@ SET(LIBKFACE_AREA_CODE_GENERAL 51005)
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKFACE_AREA_CODE_GENERAL})
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
-# some users have problems with the FindOpenCV.cmake that we ship.
-# specify -DKFACE_EXTERNAL_FINDOPENCV:BOOL=TRUE as an argument to cmake to use
-# the FindOpenCV.cmake which is installed on your system
-IF (NOT KFACE_EXTERNAL_FINDOPENCV)
-  SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules_opencv)
-ENDIF (NOT KFACE_EXTERNAL_FINDOPENCV)
 
 FIND_PACKAGE(LibFace)
-FIND_PACKAGE(OpenCV REQUIRED)
+
+# BEGIN SPECIAL OPENCV HANDLING
+
+# On some systems, OpenCV can be found using FIND_PACKAGE(OpenCV), for other systems
+# we ship our own version of FindOpenCV.cmake. But that does not work on all systems.
+# Therefore, first try finding OpenCV using FIND_PACKAGE(OpenCV), and if that fails,
+# add our FindOpenCV.cmake to the search path and search again.
+
+MESSAGE(STATUS "First try at finding OpenCV...")
+FIND_PACKAGE(OpenCV)
+
+IF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
+  MESSAGE(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
+  SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules_opencv)
+  FIND_PACKAGE(OpenCV REQUIRED)
+ELSE (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
+  MESSAGE(STATUS "Great, found OpenCV on the first try.")
+ENDIF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
 
 # there are two versions of FindOpenCV.cmake in the wild, one defining
 # OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
@@ -64,6 +75,8 @@ ENDIF (NOT OpenCV_LIBRARIES)
 IF (NOT OpenCV_INCLUDE_DIRS)
   SET(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIR})
 ENDIF (NOT OpenCV_INCLUDE_DIRS)
+
+# END SPECIAL OPENCV HANDLING
 
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 IF (LIBFACE_FOUND)
