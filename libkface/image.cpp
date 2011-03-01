@@ -27,6 +27,8 @@
  *
  * ============================================================ */
 
+#include "image_p.h"
+
 // Qt includes
 
 #include <QFile>
@@ -43,7 +45,6 @@
 
 // Local includes
 
-#include "image_p.h"
 #include "kfaceutils.h"
 
 namespace KFaceIface

@@ -53,7 +53,7 @@ class KFACE_EXPORT Marquee : public QObject, public QGraphicsItemGroup
 
 public:
 
-    Marquee(FancyRect* rect, QGraphicsItem* parent = 0);
+    explicit Marquee(FancyRect* rect, QGraphicsItem* parent = 0);
     ~Marquee();
 
     QRectF boundingRect() const;

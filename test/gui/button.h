@@ -49,7 +49,7 @@ class KFACE_EXPORT Button : public QObject, public QGraphicsItem
 public:
 
     Button(QGraphicsItem* parent = 0);
-    Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* parent = 0);
+    explicit Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* parent = 0);
     ~Button();
 
     Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* parent = 0);

@@ -32,7 +32,7 @@
 
 // Qt includes
 
-#include <QExplicitlySharedDataPointer>
+#include <QtCore/QExplicitlySharedDataPointer>
 #include <QtGui/QImage>
 #include <QtCore/QString>
 
@@ -77,7 +77,7 @@ public:
      * @param rect The QRect for the Face object
      * @param image The QImage for the face image
      */
-    Face(const QRect& rect, const Image& image = Image());
+    explicit Face(const QRect& rect, const Image& image = Image());
 
     /**
      * Face constructor which constructs a face object from another Face.

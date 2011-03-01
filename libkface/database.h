@@ -70,7 +70,7 @@ public:
      * @param configurationPath The path where the Database configuration file will be stored.
      * The default configuration path will be located by KStandardDirs by "data", "libkface/database/".
      */
-    Database(InitFlags flags = InitAll, const QString& configurationPath = QString());
+    explicit Database(InitFlags flags = InitAll, const QString& configurationPath = QString());
 
     /**
      * Copy constructor for database

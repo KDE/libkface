@@ -61,8 +61,7 @@ void detectFaces(Database* d, const QString& file)
     }
 
     kDebug() << "Coordinates of detected faces : ";
-    Face f;
-    foreach(f, result)
+    foreach(const Face& f, result)
     {
         QRect r = f.toRect();
         kDebug() << r;

@@ -231,12 +231,12 @@ QString FaceItem::text() const
 
 void FaceItem::update()
 {
-    if(text() == QString())
+    if(text().isEmpty())
     {
         d->faceName->setDefaultTextColor(QColor("white"));
         d->nameRect->setPen(QPen(QColor("white")));
         d->acceptButton->hide();
-        d->name = QString();
+        d->name.clear();
     }
     else
     {

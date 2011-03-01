@@ -27,6 +27,8 @@
  *
  * ============================================================ */
 
+#include "kfaceutils.h"
+
 // C++ includes
 
 #include <cassert>
@@ -39,10 +41,6 @@
 // KDE include
 
 #include <kdebug.h>
-
-// Local includes
-
-#include "kfaceutils.h"
 
 // OpenCV includes.
 

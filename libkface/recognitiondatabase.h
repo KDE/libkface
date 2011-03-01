@@ -32,7 +32,7 @@
 
 // Qt includes
 
-#include <QExplicitlySharedDataPointer>
+#include <QtCore/QExplicitlySharedDataPointer>
 
 // KDE includes
 

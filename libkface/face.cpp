@@ -27,6 +27,8 @@
  *
  * ============================================================ */
 
+#include "face.h"
+
 // Libface includes
 
 #include <libface/Face.h>
@@ -34,7 +36,6 @@
 
 // Local includes
 
-#include "face.h"
 #include "kfaceutils.h"
 #include "image.h"
 #include "image_p.h"
@@ -183,7 +184,7 @@ QPoint Face::center() const
 void Face::clearRecognition()
 {
     setId(-1);
-    d->name = QString();
+    d->name.clear();
 }
 
 // Static methods ---------------------------------------------------------
