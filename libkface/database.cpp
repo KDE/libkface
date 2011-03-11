@@ -178,13 +178,10 @@ QList<Face> Database::detectFaces(const Image& image)
     const IplImage* img = image.imageData();
     CvSize originalSize = cvSize(0,0);
 
-    if (!image.originalSize().isNull())
-        originalSize = KFaceUtils::toCvSize(image.originalSize());
-
-    std::vector<libface::Face> result;
+    std::vector<libface::Face> *result = 0;
     try
     {
-        result = d->libface->detectFaces(img, originalSize);
+        result = d->libface->detectFaces(img);
     }
     catch (cv::Exception& e)
     {
@@ -198,7 +195,7 @@ QList<Face> Database::detectFaces(const Image& image)
     QList<Face>                          faceList;
     std::vector<libface::Face>::iterator it;
 
-    for (it = result.begin(); it != result.end(); ++it)
+    for (it = result->begin(); it != result->end(); ++it)
     {
         faceList << Face::fromFace(*it, Face::ShallowCopy);
     }
@@ -222,10 +219,10 @@ bool Database::updateFaces(QList<Face>& faces)
         faceVec.push_back(face.toFace(Face::ShallowCopy));
     }
 
-    std::vector<int> ids;
     try
     {
-        ids = d->libface->update(&faceVec);
+	//The IDs are set to the faces internally.
+        d->libface->update(&faceVec);
     }
     catch (cv::Exception& e)
     {
@@ -236,9 +233,9 @@ bool Database::updateFaces(QList<Face>& faces)
         kDebug() << "cv::Exception";
     }
 
-    for(int i = 0; i<(int)ids.size(); ++i)
+    for(int i = 0; i<(int)faceVec.size(); ++i)
     {
-        faces[i].setId(ids.at(i));
+        faces[i].setId(faceVec.at(i).getId());
 
         // If the name was not in the mapping before (new name), add it to the dictionary
         if(!d->hash.contains(faces[i].name()))
@@ -269,7 +266,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         faceVec.push_back(face.toFace(Face::ShallowCopy));
     }
 
-    std::vector< std::pair<int, double> > result;
+    std::vector< std::pair<int, float> > result;
     try
     {
         result = d->libface->recognise(&faceVec);
@@ -339,16 +336,6 @@ void Database::setDetectionAccuracy(double value)
 double Database::detectionAccuracy() const
 {
     return d->libface->getDetectionAccuracy();
-}
-
-void Database::setDetectionSpecificity(double value)
-{
-    d->libface->setDetectionSpecificity(value);
-}
-
-double Database::detectionSpecificity() const
-{
-    return d->libface->getDetectionSpecificity();
 }
 
 int Database::peopleCount() const

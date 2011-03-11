@@ -144,21 +144,9 @@ public:
     void setDetectionAccuracy(double value);
 
     /**
-     * Set the detection specificity between 0 and 1.
-     * Trades sensitivity vs. specificity:
-     * 0 means many faces will be found, but also many false positives.
-     * 1 means some faces will not be found, but most returned faces are
-     * true positives.
-     * This parameter is orthogonal to the speed vs accuracy dimension.
-     * Default is 0.8.
-     */
-    void setDetectionSpecificity(double value);
-
-    /**
      * Get the currently set accuracy and specificity of Face Detection.
      */
     double detectionAccuracy() const;
-    double detectionSpecificity() const;
 
     /**
      * Get the number of people in the database

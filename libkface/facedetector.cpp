@@ -44,7 +44,6 @@ public:
     {
         db          = 0;
         accuracy    = -1;
-        specificity = -1;
     }
 
     ~FaceDetectorPriv()
@@ -61,8 +60,6 @@ public:
             db = new Database(Database::InitDetection);
             if (accuracy != -1)
                 db->setDetectionAccuracy(accuracy);
-            if (specificity != -1)
-                db->setDetectionSpecificity(specificity);
         }
         return db;
     }
@@ -75,7 +72,6 @@ public:
 public:
 
     double accuracy;
-    double specificity;
 
 private:
 
@@ -120,23 +116,6 @@ double FaceDetector::accuracy() const
 {
     if (d->constDatabase())
         return d->constDatabase()->detectionAccuracy();
-    else
-        return 0.8;
-}
-
-void FaceDetector::setSpecificity(double value)
-{
-    // deferred creation
-    if (d->constDatabase())
-        d->database()->setDetectionSpecificity(value);
-    else
-        d->specificity = value;
-}
-
-double FaceDetector::specificity() const
-{
-    if (d->constDatabase())
-        return d->constDatabase()->detectionSpecificity();
     else
         return 0.8;
 }
