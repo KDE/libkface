@@ -175,13 +175,14 @@ Database::~Database()
 
 QList<Face> Database::detectFaces(const Image& image)
 {
-    const IplImage* img = image.imageData();
-    CvSize originalSize = cvSize(0,0);
+    const IplImage* const img = image.imageData();
 
-    std::vector<libface::Face> *result = 0;
+    std::vector<libface::Face> result;
     try
     {
-        result = d->libface->detectFaces(img);
+        // We pass cvSize(0, 0), but libface detects this and
+        // uses the real images size instead.
+        result = d->libface->detectFaces(img, cvSize(0,0));
     }
     catch (cv::Exception& e)
     {
@@ -195,7 +196,7 @@ QList<Face> Database::detectFaces(const Image& image)
     QList<Face>                          faceList;
     std::vector<libface::Face>::iterator it;
 
-    for (it = result->begin(); it != result->end(); ++it)
+    for (it = result.begin(); it != result.end(); ++it)
     {
         faceList << Face::fromFace(*it, Face::ShallowCopy);
     }
@@ -266,7 +267,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         faceVec.push_back(face.toFace(Face::ShallowCopy));
     }
 
-    std::vector< std::pair<int, float> > result;
+    std::vector< std::pair<int, double> > result;
     try
     {
         result = d->libface->recognise(&faceVec);
