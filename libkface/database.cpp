@@ -175,14 +175,16 @@ Database::~Database()
 
 QList<Face> Database::detectFaces(const Image& image)
 {
-    const IplImage* const img = image.imageData();
+    const IplImage* img = image.imageData();
+    CvSize originalSize = cvSize(0,0);
+
+    if (!image.originalSize().isNull())
+        originalSize = KFaceUtils::toCvSize(image.originalSize());
 
     std::vector<libface::Face> result;
     try
     {
-        // We pass cvSize(0, 0), but libface detects this and
-        // uses the real images size instead.
-        result = d->libface->detectFaces(img, cvSize(0,0));
+        result = d->libface->detectFaces(img, originalSize);
     }
     catch (cv::Exception& e)
     {
@@ -220,10 +222,10 @@ bool Database::updateFaces(QList<Face>& faces)
         faceVec.push_back(face.toFace(Face::ShallowCopy));
     }
 
+    std::vector<int> ids;
     try
     {
-	//The IDs are set to the faces internally.
-        d->libface->update(&faceVec);
+        ids = d->libface->update(&faceVec);
     }
     catch (cv::Exception& e)
     {
@@ -234,9 +236,9 @@ bool Database::updateFaces(QList<Face>& faces)
         kDebug() << "cv::Exception";
     }
 
-    for(int i = 0; i<(int)faceVec.size(); ++i)
+    for(int i = 0; i<(int)ids.size(); ++i)
     {
-        faces[i].setId(faceVec.at(i).getId());
+        faces[i].setId(ids.at(i));
 
         // If the name was not in the mapping before (new name), add it to the dictionary
         if(!d->hash.contains(faces[i].name()))
@@ -337,6 +339,16 @@ void Database::setDetectionAccuracy(double value)
 double Database::detectionAccuracy() const
 {
     return d->libface->getDetectionAccuracy();
+}
+
+void Database::setDetectionSpecificity(double value)
+{
+    d->libface->setDetectionSpecificity(value);
+}
+
+double Database::detectionSpecificity() const
+{
+    return d->libface->getDetectionSpecificity();
 }
 
 int Database::peopleCount() const

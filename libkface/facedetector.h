@@ -77,6 +77,8 @@ public:
      */
     void   setAccuracy(double value);
     double accuracy() const;
+    void   setSpecificity(double value);
+    double specificity() const;
 
     /**
      * Returns the recommended size if you want to scale images for detection.
