@@ -7,11 +7,11 @@
  * @date   2010-06-16
  * @brief  This is a derivative of Face class
  *
- * @author Copyright (C) 2010 by Marcel Wiesweg
+ * @author Copyright (C) 2010-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
- * @author Copyright (C) 2010 by Aditya Bhatt
+ * @author Copyright (C) 2010-2011 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -28,6 +28,10 @@
  * ============================================================ */
 
 #include "face.h"
+
+// Qt includes
+
+#include <QDir>
 
 // Libface includes
 
@@ -203,6 +207,18 @@ QString LibFaceVersion()
 QString version()
 {
     return QString(kface_version);
+}
+
+bool OpenCVCascadeDataDirExist()
+{
+    QDir dir;
+#ifdef WIN32
+    dir.setPath(QString(OPENCVDIR) + QString("/data/haarcascades"));
+#else
+    dir.setPath(QString(OPENCVDIR) + QString("/haarcascades"));
+#endif
+
+    return dir.exists();
 }
 
 } // namespace KFaceIface
