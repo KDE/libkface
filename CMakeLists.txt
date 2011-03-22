@@ -136,9 +136,10 @@ IF (NOT LIBFACE_FOUND)
 
     # NOTE: update libface version ID when code is updated from SF.net
     SET(libface_MAJOR_VERSION 0)
-    SET(libface_MINOR_VERSION 1)
+    SET(libface_MINOR_VERSION 2)
 
     SET(DEBUG_MODE 0)
+    SET(LOG_LEVEL "libfaceINFO")
     SET(LIB_TYPE STATIC)
     CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceConfig.h.cmake"
                    "${CMAKE_CURRENT_BINARY_DIR}/libface/LibFaceConfig.h")

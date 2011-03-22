@@ -32,6 +32,7 @@
 #define LibFace_VERSION_MAJOR @libface_MAJOR_VERSION@
 #define LibFace_VERSION_MINOR @libface_MINOR_VERSION@
 #define DEBUG @DEBUG_MODE@
+#define LOG_LEVEL @LOG_LEVEL@
 #define APPLE @IS_APPLE@
 #define OPENCVDIR "@OpenCV_DIR@"
 
