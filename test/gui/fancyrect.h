@@ -43,7 +43,7 @@
 namespace KFaceIface
 {
 
-class KFACE_EXPORT FancyRect : public QGraphicsRectItem
+class FancyRect : public QGraphicsRectItem
 {
 
 public:

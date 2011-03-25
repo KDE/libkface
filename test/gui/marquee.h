@@ -47,7 +47,7 @@ namespace KFaceIface
 
 class FancyRect;
 
-class KFACE_EXPORT Marquee : public QObject, public QGraphicsItemGroup
+class Marquee : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 

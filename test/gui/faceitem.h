@@ -46,7 +46,7 @@
 namespace KFaceIface
 {
 
-class KFACE_EXPORT FaceItem : public QGraphicsObject
+class FaceItem : public QGraphicsObject
 {
     Q_OBJECT
 
