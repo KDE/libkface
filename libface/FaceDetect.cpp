@@ -134,10 +134,10 @@ public:
      *  For frontal face cascades, returns the given parameter unchanged. */
     CvRect faceROI(const CvRect& faceRect) const
     {
-        return cvRect(faceRect.x + xROI * faceRect.width,
-                      faceRect.y + yROI * faceRect.height,
-                      widthROI * faceRect.width,
-                      heightROI * faceRect.height);
+        return cvRect(lround(faceRect.x + xROI      * faceRect.width),
+                      lround(faceRect.y + yROI      * faceRect.height),
+                      lround(             widthROI  * faceRect.width),
+                      lround(             heightROI * faceRect.height));
     }
 
     /**
