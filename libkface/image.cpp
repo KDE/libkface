@@ -117,7 +117,7 @@ void Image::setOriginalSize(const QSize& size)
 
 QSize Image::originalSize() const
 {
-    return d->originalSize;
+    return d ? d->originalSize : QSize();
 }
 
 ImageData Image::imageData()
@@ -132,7 +132,7 @@ const ImageData Image::imageData() const
 
 QImage Image::toQImage() const
 {
-    return KFaceUtils::IplImage2QImage(d->image);
+    return d ? KFaceUtils::IplImage2QImage(d->image) : QImage();
 }
 
 } // namespace KFaceIface
