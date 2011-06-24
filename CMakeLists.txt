@@ -65,6 +65,8 @@ ELSE (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
   MESSAGE(STATUS "Great, found OpenCV on the first try.")
 ENDIF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
 
+MESSAGE(STATUS "OpenCV Root directory is ${OpenCV_DIR}")
+
 # there are two versions of FindOpenCV.cmake in the wild, one defining
 # OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
 # both cases.
