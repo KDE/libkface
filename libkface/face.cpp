@@ -212,12 +212,7 @@ QString version()
 bool OpenCVCascadeDataDirExist()
 {
     QDir dir;
-#ifdef WIN32
-    dir.setPath(QString(OPENCVDIR) + QString("/data/haarcascades"));
-#else
     dir.setPath(QString(OPENCVDIR) + QString("/haarcascades"));
-#endif
-
     return dir.exists();
 }
 

@@ -65,14 +65,10 @@ public:
      * @param type Type of the face recognition/detection/both to use. ALL by default.
      * @param configDir Config directory of the libface library. If there is libface.xml library will try to load it.
      * By default it is empty ("").
-     * @param cascadeDir Directory where haar cascade is. By default it is /usr/share/opencv/haarcascades
+     * @param cascadeDir Directory where haar cascade is. By default it is OPENCVDIR/haarcascades
      */
-
-#ifdef WIN32
-    LibFace(Mode type = ALL, const std::string& configDir = ".", const std::string& cascadeDir = std::string(OPENCVDIR)+"/data/haarcascades");
-#else
-    LibFace(Mode type = ALL, const std::string& configDir = ".", const std::string& cascadeDir = std::string(OPENCVDIR)+"/haarcascades");
-#endif
+    LibFace(Mode type = ALL, const std::string& configDir = ".",
+            const std::string& cascadeDir = std::string(OPENCVDIR)+"/haarcascades");
 
     /**
      * Deconstructor for the library.
