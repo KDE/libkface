@@ -63,10 +63,11 @@ class Database::DatabasePriv : public QSharedData
 public:
 
     DatabasePriv()
-        : mappingFilename(QString("/dictionary"))
+        : mappingFilename(QString("/dictionary")),
+          haarCascasdePath(KStandardDirs::installPath("data") + QString("libkface/haarcascades"))
     {
-        libface      = 0;
-        configDirty  = false;
+        libface          = 0;
+        configDirty      = false;
     }
 
     ~DatabasePriv()
@@ -93,6 +94,7 @@ public:
     QString             configPath;
     bool                configDirty;
     const QString       mappingFilename;
+    const QString       haarCascasdePath;
 
     void saveConfig()
     {
@@ -131,7 +133,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
     {
         if (flags == InitDetection)
         {
-            d->libface = new libface::LibFace(libface::DETECT);
+            d->libface = new libface::LibFace(libface::DETECT, d->configPath.toStdString(), d->haarCascasdePath.toStdString());
         }
         else
         {
@@ -141,7 +143,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
             else
                 mode = libface::EIGEN;
 
-            d->libface = new libface::LibFace(mode, d->configPath.toStdString());
+            d->libface = new libface::LibFace(mode, d->configPath.toStdString(), d->haarCascasdePath.toStdString());
         }
     }
     catch (cv::Exception& e)

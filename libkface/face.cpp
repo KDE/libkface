@@ -209,11 +209,4 @@ QString version()
     return QString(kface_version);
 }
 
-bool OpenCVCascadeDataDirExist()
-{
-    QDir dir;
-    dir.setPath(QString(OPENCVDIR) + QString("/haarcascades"));
-    return dir.exists();
-}
-
 } // namespace KFaceIface

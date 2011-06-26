@@ -61,10 +61,6 @@ KFACE_EXPORT QString LibFaceVersion();
  */
 KFACE_EXPORT QString version();
 
-/** Return true if Cascade data directory from OpenCV installation exist
- */
-KFACE_EXPORT bool OpenCVCascadeDataDirExist();
-
 class KFACE_EXPORT Face
 {
 
