@@ -110,9 +110,9 @@ IplImage* KFaceUtils::QImage2GrayscaleIplImage(const QImage& qimg)
     uchar* dptr         = (uchar *)iplImg->imageData;
     const int iplStep   = iplImg->widthStep / sizeof(uchar);
 
-    for (int y=0; y<height; y++)
+    for (int y=0; y<height; ++y)
     {
-        for (int x=0; x<width; x++)
+        for (int x=0; x<width; ++x)
         {
             dptr[x] = qGray(sptr[x]);
         }
@@ -150,9 +150,9 @@ IplImage* KFaceUtils::Data2GrayscaleIplImage(uint width, uint height, bool sixte
     {
         const ushort* sptr = (const ushort*)data;
 
-        for (uint y=0; y<height; y++)
+        for (uint y=0; y<height; ++y)
         {
-            for (uint x=0; x<width; x++)
+            for (uint x=0; x<width; ++x)
             {
                 dptr[x] = qGray((sptr[2] * 255UL) / 65535UL,    // R
                                 (sptr[1] * 255UL) / 65535UL,    // G
@@ -166,9 +166,9 @@ IplImage* KFaceUtils::Data2GrayscaleIplImage(uint width, uint height, bool sixte
     {
         const uchar* sptr = data;
 
-        for (uint y=0; y<height; y++)
+        for (uint y=0; y<height; ++y)
         {
-            for (uint x=0; x<width; x++)
+            for (uint x=0; x<width; ++x)
             {
                 dptr[x] = qGray(sptr[2], sptr[1], sptr[0]);
                 sptr += 4;
@@ -198,9 +198,9 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
 
         char r=0, g=0, b=0, a = 0;
 
-        for (int y = 0; y < h; y++, data += iplImg->widthStep)
+        for (int y = 0; y < h; ++y, data += iplImg->widthStep)
         {
-            for (int x = 0; x < w; x++)
+            for (int x = 0; x < w; ++x)
             {
                 if (channels == 1)
                 {

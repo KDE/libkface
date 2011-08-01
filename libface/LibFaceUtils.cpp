@@ -127,9 +127,9 @@ CvMat* LibFaceUtils::reshape(CvMat* src)
     int i, j, t = 0;
     CvMat* row  = cvCreateMat(src->rows*src->cols, 1, src->type);
 
-    for (i=0; i < src->rows; i++)
+    for (i=0; i < src->rows; ++i)
     {
-        for (j=0; j < src->cols; j++)
+        for (j=0; j < src->cols; ++j)
         {
             cvSet1D(row, t, cvGet2D(src, i, j));
             t++;
@@ -168,9 +168,9 @@ CvMat* LibFaceUtils::combine(CvMat* src, CvMat* vector)
     int i, j;
     CvMat* result = cvCreateMat(src->rows, src->cols + 1, src->type);
 
-    for (i = 0; i < src->rows; i++)
+    for (i = 0; i < src->rows; ++i)
     {
-        for (j = 0; j <= src->cols; j++)
+        for (j = 0; j <= src->cols; ++j)
         {
             if (j != src->cols)
                 cvSet2D(result, i, j, cvGet2D(src, i, j));
@@ -196,7 +196,7 @@ CvMat* LibFaceUtils::reverseOrder(CvMat* src)
 
     for (j = src->cols - 1; j >= 0; j--)
     {
-        for (i = 0; i < src->rows; i++)
+        for (i = 0; i < src->rows; ++i)
         {
             cvSet2D(result, i, src->cols - j - 1, cvGet2D(src, i, j));
         }
@@ -215,9 +215,9 @@ void LibFaceUtils::sqrVec(CvMat* src)
 {
     int i, j;
 
-    for (i = 0; i < src->rows; i++)
+    for (i = 0; i < src->rows; ++i)
     {
-        for (j = 0; j < src->cols; j++)
+        for (j = 0; j < src->cols; ++j)
         {
             double value = cvGet2D(src, i, j).val[0];
             double sqr   = value * value;
@@ -239,7 +239,7 @@ double LibFaceUtils::sumVecToDouble(CvMat* src)
     double sum = 0;
     int i;
 
-    for (i = 0; i < src->rows; i++)
+    for (i = 0; i < src->rows; ++i)
     {
         sum = sum + cvGet1D(src, i).val[0];
     }
@@ -257,9 +257,9 @@ void LibFaceUtils::divVec(CvMat* src, double value)
 {
     int i, j;
 
-    for (i = 0; i < src->rows; i++)
+    for (i = 0; i < src->rows; ++i)
     {
-        for (j = 0; j < src->cols; j++)
+        for (j = 0; j < src->cols; ++j)
         {
             double val = cvGet2D(src, i, j).val[0];
             double res = val / value;
@@ -278,9 +278,9 @@ void LibFaceUtils::printMatrix(CvMat* src)
 {
     int i, j;
 
-    for (i = 0; i < src->rows; i++)
+    for (i = 0; i < src->rows; ++i)
     {
-        for (j = 0; j < src->cols; j++)
+        for (j = 0; j < src->cols; ++j)
         {
             printf("%f \t", cvGet2D(src, i, j).val[0]);
         }
@@ -297,9 +297,9 @@ CvMat* LibFaceUtils::multScalar(CvMat* src, double value)
 
     int i, j;
 
-    for (i = 0; i < src->rows; i++)
+    for (i = 0; i < src->rows; ++i)
     {
-        for (j = 0; j < src->cols; j++)
+        for (j = 0; j < src->cols; ++j)
         {
             double value1 = cvGet2D(src, i, j).val[0];
             double res    = value1 * value;
@@ -324,10 +324,10 @@ CvMat* LibFaceUtils::mean(CvMat* src)
     double mean;
     CvMat* result = cvCreateMat(src->rows, 1, src->type);
 
-    for (i = 0; i < src->rows; i++)
+    for (i = 0; i < src->rows; ++i)
     {
         mean = 0;
-        for (j = 0; j < src->cols; j++)
+        for (j = 0; j < src->cols; ++j)
         {
             mean = mean + cvGet2D(src, i, j).val[0];
         }
@@ -390,9 +390,9 @@ IplImage* LibFaceUtils::stringToImage(const string& data, int depth, int channel
     int i, j;
 
     //Create matrix and transfer data to the matrix.
-    for(i=0 ; i < rows ; i++)
+    for(i=0 ; i < rows ; ++i)
     {
-        for(j=0;j<cols;j++)
+        for(j=0;j<cols;++j)
         {
             cvSetAt(img,cvScalarAll(values.at(cols*i+j)),i,j);
         }
@@ -448,9 +448,9 @@ CvMat* LibFaceUtils::stringToMatrix(const string & data, int type)
     int i, j;
 
     //Create matrix and transfer data to the matrix.
-    for(i=0 ; i < rows ; i++)
+    for(i=0 ; i < rows ; ++i)
     {
-        for(j=0 ; j<cols ; j++)
+        for(j=0 ; j<cols ; ++j)
         {
             cvSetAt(matrix, cvScalarAll(values.at(cols*i+j)), i, j);
         }
@@ -511,9 +511,9 @@ string LibFaceUtils::imageToString(IplImage* img)
     stringstream matrix;
     int          i, j;
 
-    for(i=0 ; i < img->height ; i++)
+    for(i=0 ; i < img->height ; ++i)
     {
-        for(j=0 ; j < img->width ; j++)
+        for(j=0 ; j < img->width ; ++j)
         {
             string data;
             matrix << cvGet2D(img, i, j).val[0] << "\t";
@@ -537,9 +537,9 @@ string LibFaceUtils::matrixToString(CvMat* src)
     stringstream matrix;
     int          i, j;
 
-    for(i=0 ; i < src->rows ; i++)
+    for(i=0 ; i < src->rows ; ++i)
     {
-        for(j=0 ; j < src->cols ; j++)
+        for(j=0 ; j < src->cols ; ++j)
         {
             string data;
             matrix << cvmGet(src, i, j) << "\t";
@@ -563,9 +563,9 @@ CvMat* LibFaceUtils::subtract(CvMat* src1, CvMat* src2)
     int    i, j;
     CvMat* result = cvCreateMat(src1->rows, src1->cols, src1->type);
 
-    for (i = 0 ; i < src1->rows ; i++)
+    for (i = 0 ; i < src1->rows ; ++i)
     {
-        for (j=0 ; j < src1->cols ; j++)
+        for (j=0 ; j < src1->cols ; ++j)
         {
             double value1 = cvGet2D(src1, i, j).val[0];
             double value2 = cvGet1D(src2, i).val[0];
@@ -590,7 +590,7 @@ CvMat* LibFaceUtils::getColoumn(CvMat* src, int col)
     int i;
     CvMat* result = cvCreateMat(src->rows, 1, src->type);
 
-    for (i = 0 ; i < src->rows ; i++)
+    for (i = 0 ; i < src->rows ; ++i)
     {
         cvSet1D(result, i, cvGet2D(src, i, col));
     }
@@ -611,7 +611,7 @@ CvMat* LibFaceUtils::addScalar(CvMat* src, CvScalar value)
     CvMat* result = cvCreateMat(src->rows+1,1,src->type);
     int i;
 
-    for (i=0 ; i < src->rows ; i++)
+    for (i=0 ; i < src->rows ; ++i)
     {
         cvSet1D(result, i, cvGet1D(src, i));
     }
