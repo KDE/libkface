@@ -39,6 +39,7 @@
 // KDE include
 
 #include <kdebug.h>
+#include <kfiledialog.h>
 
 using namespace KFaceIface;
 
@@ -109,8 +110,12 @@ void MainWindow::changeEvent(QEvent* e)
 
 void MainWindow::openImage()
 {
-    QString file = QFileDialog::getOpenFileName(this,
-            "Open Image", lastFileOpenPath, "Image Files (*.png *.jpg *.bmp *.pgm)");
+    QString file = KFileDialog::getOpenFileName(
+            lastFileOpenPath,
+            "Image Files (*.png *.jpg *.bmp *.pgm)",
+            this,
+            "Open Image"
+        );
 
     if (file.isEmpty())
         return;
@@ -141,7 +146,11 @@ void MainWindow::openImage()
 
 void MainWindow::openConfig()
 {
-    QString directory = QFileDialog::getExistingDirectory(this, "Select Config Directory", QDir::currentPath());
+    QString directory = KFileDialog::getExistingDirectory(
+            QDir::currentPath(),
+            this,
+            "Select Config Directory"
+        );
 
     ui->configLocation->setText(directory);
 

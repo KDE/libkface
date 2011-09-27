@@ -27,6 +27,9 @@
  *
  * ============================================================ */
 
+#ifndef FANCYRECT_H
+#define FANCYRECT_H
+
 // Qt includes
 
 #include <QtGui/QGraphicsItem>
@@ -57,3 +60,5 @@ public:
 };
 
 } // namespace KFaceIface
+
+#endif /* FANCYRECT_H */

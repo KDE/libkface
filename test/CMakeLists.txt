@@ -44,6 +44,7 @@ KDE4_ADD_EXECUTABLE(libfaceGUI ${libfaceGUI_SRCS})
 
 TARGET_LINK_LIBRARIES(libfaceGUI kface ${KDE4_KDECORE_LIBS}
                                        ${KDE4_KDEUI_LIBS}
+                                       ${KDE4_KIO_LIBS}
                                        ${QT_QTCORE_LIBRARY}
                                        ${QT_QTGUI_LIBRARY}
                      )
