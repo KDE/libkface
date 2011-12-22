@@ -42,7 +42,7 @@
 
 #include <kdebug.h>
 
-// OpenCV includes.
+// OpenCV includes
 
 #include <opencv/cxcore.h>
 #include <opencv/highgui.h>
