@@ -214,7 +214,7 @@ bool Database::updateFaces(QList<Face>& faces)
         return false;
 
     std::vector<libface::Face> faceVec;
-    foreach (Face face, faces)
+    foreach(Face face, faces)
     {
         // If a name is already there in the dictionary, then set the ID from the dictionary, so that libface won't set it's own ID
         if(d->hash.contains(face.name()))
@@ -266,7 +266,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
     }
 
     std::vector<libface::Face> faceVec;
-    foreach (const Face& face, faces)
+    foreach(const Face& face, faces)
     {
         faceVec.push_back(face.toFace(Face::ShallowCopy));
     }

@@ -74,7 +74,7 @@ void detectFaces(Database* d, const QString& file)
     fullImage->setPixmap(QPixmap::fromImage(img.scaled(250, 250, Qt::KeepAspectRatio)));
     layout->addWidget(fullImage);
 
-    foreach (const Face& f, result)
+    foreach(const Face& f, result)
     {
         QLabel* label = new QLabel;
         label->setScaledContents(false);
