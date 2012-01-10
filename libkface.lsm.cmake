@@ -9,7 +9,7 @@ Author:         caulier dot gilles at gmail dot com (Gilles Caulier)
                 adityabhatt1991 at gmail dot com (Aditya Bhatt)
 Maintained-by:
 Primary-site:   http://www.digikam.org
-Alternate-site: http://www.kipi-plugins.org
+Alternate-site: http://www.digikam.org
 Original-site:
 Platforms:      Linux and other Unices, MacOs-X, Win32. Needs KDE 4.x
 Copying-policy: GPL
