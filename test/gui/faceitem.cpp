@@ -265,7 +265,7 @@ void FaceItem::update()
     kDebug() << "Origscale is : " << d->origScale << " and scale is " << d->scale;
 
     QSize s(newRect.size());
-    s.scale(newRect.width()*sqrt(d->origScale), newRect.height()*sqrt(d->origScale), Qt::KeepAspectRatio);
+    s.scale(newRect.width()*std::sqrt(d->origScale), newRect.height()*std::sqrt(d->origScale), Qt::KeepAspectRatio);
     newRect.setSize(s);
 
     //newRect.setRect(x,y,w,h);
