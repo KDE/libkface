@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010-2011 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2011 by Gilles Caulier
+ * @author Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -51,7 +51,7 @@ namespace KFaceIface
 
 /** Return a string version of LibOpenCV release in format "major.minor.patch"
  */
-QString KFACE_EXPORT LibOpenCVVersion();
+KFACE_EXPORT QString LibOpenCVVersion();
 
 /** Return a string version of LibFace release in format "major.minor.patch"
  */
@@ -151,7 +151,7 @@ public:
     /** Will return a QImage version of the internal face image stored in the KFace object
      * @return The QImage version of the internal face image
      */
-    Image image()  const;
+    Image image() const;
 
     /** Will set the co-ordinates of KFace object to the specified rectangle
      * @param rect The QRect rectangle which is to be set as the rectangle for KFace instance

@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -67,14 +67,14 @@ namespace KFaceUtils
      * @param data Unsigned char* image data
      * @return A pointer to the new IplImage
      */
-    IplImage* Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data);
+    IplImage* Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data);
 
     /**
      * Takes a pointer to an IplImage and returns a Qimage
      * @param img IplImage pointer
      * @return QImage version of image
      */
-    QImage IplImage2QImage(const IplImage* img);
+    QImage IplImage2QImage(const IplImage* const img);
 
     /**
      * Takes a filename and returns a string to integer hash.

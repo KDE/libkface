@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -45,7 +45,8 @@ class Image::ImagePriv : public QSharedData
 {
 public:
 
-    ImagePriv() : image(0)
+    ImagePriv()
+        : image(0)
     {
     }
 
@@ -75,8 +76,8 @@ public:
     ImageData(IplImage* image) : image(image) {}
 
     ImageData& operator=(IplImage* im)        { image = im; return *this; }
-    operator IplImage *()                     { return image; }
-    operator const IplImage *() const         { return image; }
+    operator IplImage* ()                     { return image; }
+    operator const IplImage* () const         { return image; }
 
 public:
 

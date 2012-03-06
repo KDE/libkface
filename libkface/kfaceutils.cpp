@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -85,10 +85,9 @@ IplImage* KFaceUtils::QImage2GrayscaleIplImage(const QImage& qimg)
     }
     // I'm a bit paranoid not to cause a deep copy when calling bits()
     const QImage& image = localImage;
-
-    const int width  = image.width();
-    const int height = image.height();
-    IplImage* iplImg;
+    const int width     = image.width();
+    const int height    = image.height();
+    IplImage* iplImg    = 0;
 
     try
     {
@@ -107,7 +106,7 @@ IplImage* KFaceUtils::QImage2GrayscaleIplImage(const QImage& qimg)
 
     const quint32* sptr = (const quint32*)image.bits();
     const int imageStep = image.bytesPerLine() / sizeof(quint32);
-    uchar* dptr         = (uchar *)iplImg->imageData;
+    uchar* dptr         = (uchar*)iplImg->imageData;
     const int iplStep   = iplImg->widthStep / sizeof(uchar);
 
     for (int y=0; y<height; ++y)
@@ -123,11 +122,11 @@ IplImage* KFaceUtils::QImage2GrayscaleIplImage(const QImage& qimg)
     return iplImg;
 }
 
-IplImage* KFaceUtils::Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* data)
+IplImage* KFaceUtils::Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data)
 {
     Q_UNUSED(alpha);
 
-    IplImage* img;
+    IplImage* img = 0;
     try
     {
         img = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1);
@@ -180,7 +179,7 @@ IplImage* KFaceUtils::Data2GrayscaleIplImage(uint width, uint height, bool sixte
     return img;
 }
 
-QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
+QImage KFaceUtils::IplImage2QImage(const IplImage* const iplImg)
 {
     try
     {
@@ -212,7 +211,7 @@ QImage KFaceUtils::IplImage2QImage(const IplImage* iplImg)
                 {
                     r = data[x * channels + 2];
                     g = data[x * channels + 1];
-                    b = data[x * channels];
+                    b = data[x * channels    ];
                 }
 
                 if (channels == 4)
