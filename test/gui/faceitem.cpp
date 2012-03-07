@@ -11,7 +11,7 @@
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -96,7 +96,8 @@ public:
     Button*            suggestionAcceptButton;
 };
 
-FaceItem::FaceItem(QGraphicsItem* parent, QGraphicsScene* scene, const QRect& rect, double scale, const QString& name, double originalscale)
+FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, const QRect& rect, 
+                   double scale, const QString& name, double originalscale)
         : QGraphicsObject(parent), d(new FaceItemPriv)
 {
     setAcceptHoverEvents(true);
@@ -212,7 +213,7 @@ QRectF FaceItem::boundingRect() const
 {
     qreal adjust = 0.5;
     return QRectF(-18 - adjust, -22 - adjust,
-                  36 + adjust, 60 + adjust);
+                   36 + adjust,  60 + adjust);
 }
 
 void FaceItem::paint(QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)

@@ -11,7 +11,7 @@
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  *         Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- *         Copyright (C) 2010 by Gilles Caulier
+ *         Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -43,9 +43,9 @@
 
 using namespace KFaceIface;
 
-MainWindow::MainWindow(QWidget* parent)
-          : QMainWindow(parent),
-            ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget* const parent)
+    : QMainWindow(parent),
+      ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -130,13 +130,13 @@ void MainWindow::openImage()
     lastPhotoItem  = new QGraphicsPixmapItem(*photo);
     currentPhoto   = photo->toImage();
 
-    if(1.*ui->widget->width()/photo->width() < 1.*ui->widget->height()/photo->height())
+    if(1.0*ui->widget->width()/photo->width() < 1.*ui->widget->height()/photo->height())
     {
-        scale = 1.*ui->widget->width()/photo->width();
+        scale = 1.0*ui->widget->width()/photo->width();
     }
     else
     {
-        scale = 1.*ui->widget->height()/photo->height();
+        scale = 1.0*ui->widget->height()/photo->height();
     }
 
     lastPhotoItem->setScale(scale);

@@ -11,7 +11,7 @@
  *         <a href="mailto:madcat at mymadcat dot com">madcat at mymadcat dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -38,23 +38,23 @@
 namespace KFaceIface
 {
 
-FancyRect::FancyRect(QGraphicsItem* parent)
-         : QGraphicsRectItem(parent)
+FancyRect::FancyRect(QGraphicsItem* const parent)
+    : QGraphicsRectItem(parent)
 {
 }
 
-FancyRect::FancyRect(const QRectF& rect, QGraphicsItem* parent)
-         : QGraphicsRectItem(rect, parent)
+FancyRect::FancyRect(const QRectF& rect, QGraphicsItem* const parent)
+    : QGraphicsRectItem(rect, parent)
 {
 }
 
-FancyRect::FancyRect(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* parent)
-         : QGraphicsRectItem(x, y, w, h, parent)
+FancyRect::FancyRect(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* const parent)
+    : QGraphicsRectItem(x, y, w, h, parent)
 {
 }
 
-FancyRect::FancyRect(QGraphicsRectItem* other, QGraphicsItem* parent)
-         : QGraphicsRectItem(parent)
+FancyRect::FancyRect(QGraphicsRectItem* const other, QGraphicsItem* const parent)
+    : QGraphicsRectItem(parent)
 {
     setPos(other->pos());
     setRect(other->rect());

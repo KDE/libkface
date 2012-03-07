@@ -11,7 +11,7 @@
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -52,8 +52,9 @@ class FaceItem : public QGraphicsObject
 
 public:
 
-    explicit FaceItem(QGraphicsItem* parent = 0, QGraphicsScene* scene = 0, const QRect& rect = QRect(0, 0, 0, 0),
-             double scale = 1, const QString& name = QString(), double originalscale = 1);
+    explicit FaceItem(QGraphicsItem* const parent = 0, QGraphicsScene* const scene = 0, 
+                      const QRect& rect = QRect(0, 0, 0, 0),
+                      double scale = 1, const QString& name = QString(), double originalscale = 1);
     ~FaceItem();
 
     QRectF boundingRect() const;

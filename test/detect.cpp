@@ -46,7 +46,7 @@
 
 using namespace KFaceIface;
 
-void detectFaces(Database* d, const QString& file)
+void detectFaces(Database* const d, const QString& file)
 {
     kDebug() << "Loading" << file;
     QImage img(file);

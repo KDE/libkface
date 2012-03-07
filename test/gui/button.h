@@ -8,7 +8,7 @@
  * @brief  Pressable Button class using QGraphicsItem
  *
  * @author Copyright (C) 2010 by Frederico Duarte
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -48,11 +48,11 @@ class Button : public QObject, public QGraphicsItem
 
 public:
 
-    Button(QGraphicsItem* parent = 0);
-    explicit Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* parent = 0);
+    Button(QGraphicsItem* const parent = 0);
+    explicit Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* const parent = 0);
     ~Button();
 
-    Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* parent = 0);
+    Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* const parent = 0);
 
     QRectF boundingRect() const;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
