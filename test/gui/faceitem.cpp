@@ -327,7 +327,7 @@ void FaceItem::accepted()
     d->acceptButton->hide();
     d->faceName->setDefaultTextColor(QColor("white"));
     d->nameRect->setPen(QPen(QColor("white")));
-    emit this->acceptButtonClicked(this->text(), this->originalRect());
+    emit acceptButtonClicked(this->text(), this->originalRect());
 }
 
 QRect FaceItem::originalRect()
@@ -342,7 +342,7 @@ double FaceItem::originalScale()
 
 void FaceItem::reject()
 {
-    emit this->rejectButtonClicked(this->text(), this->originalRect());
+    emit rejectButtonClicked(this->text(), this->originalRect());
     clearAndHide();
 }
 
@@ -378,14 +378,14 @@ void FaceItem::slotSuggestionAccepted()
     switchToEditMode();
     d->faceName->setHtml("<b>" + d->name + "</b>");
     accepted();
-    emit this->suggestionAcceptButtonClicked(this->text(), this->originalRect());
+    emit suggestionAcceptButtonClicked(this->text(), this->originalRect());
 }
 
 void FaceItem::slotSuggestionRejected()
 {
     switchToEditMode();
     d->faceName->setHtml("<b>" + QString() + "</b>");
-    emit this->suggestionRejectButtonClicked(this->text(), this->originalRect());
+    emit suggestionRejectButtonClicked(this->text(), this->originalRect());
 }
 
 } // namespace KFaceIface
