@@ -43,7 +43,7 @@
 #include <highgui.h>
 #else
 #include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include <opencv2/highgui/highgui_c.h>
 #endif
 
 #include "Haarcascades.h"

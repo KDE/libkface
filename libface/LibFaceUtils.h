@@ -38,7 +38,7 @@
 #include <cxcore.h>
 #include <cv.h>
 #else
-#include <opencv/highgui.h>
+#include <opencv2/highgui/highgui_c.h>
 #include <opencv/cxcore.h>
 #include <opencv/cv.h>
 #endif
