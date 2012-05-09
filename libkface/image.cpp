@@ -35,13 +35,7 @@
 
 // OpenCV includes
 
-#if defined(__APPLE__)
-#include <opencv2/opencv.hpp>
-#else
-#include <opencv/cv.h>
-#include <opencv/cxcore.h>
-#include <opencv2/highgui/highgui_c.h>
-#endif
+#include "libopencv.h"
 
 // Libface includes
 

@@ -35,13 +35,7 @@
 #include <cmath>
 #include <ctime>
 
-#if defined (__APPLE__)
-#include <opencv2/opencv.hpp>
-#else
-#include <opencv/cv.h>
-#include <opencv2/highgui/highgui_c.h>
-#endif
-
+#include "libopencv.h"
 #include "LibFaceUtils.h"
 #include "Haarcascades.h"
 #include "FaceDetect.h"

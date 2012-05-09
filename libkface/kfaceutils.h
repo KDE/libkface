@@ -32,11 +32,7 @@
 
 // OpenCV includes
 
-#if defined(__APPLE__)
-#include <opencv2/opencv.hpp>
-#else
-#include <opencv/cv.h>
-#endif
+#include "libopencv.h"
 
 // Qt includes
 

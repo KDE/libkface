@@ -33,12 +33,7 @@
 #ifndef _LIBFACECORE_H_
 #define _LIBFACECORE_H_
 
-#if defined (__APPLE__)
-#include <opencv2/opencv.hpp>
-#else
-#include <opencv/cv.h>
-#endif
-
+#include "libopencv.h"
 #include "Face.h"
 
 namespace libface

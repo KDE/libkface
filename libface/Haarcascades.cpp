@@ -38,14 +38,7 @@
 #include <ctime>
 #include <cctype>
 
-#if defined (__APPLE__)
-#include <opencv2/opencv.hpp>
-#include <opencv2/highgui/highgui_c.h>
-#else
-#include <opencv/cv.h>
-#include <opencv2/highgui/highgui_c.h>
-#endif
-
+#include "libopencv.h"
 #include "Haarcascades.h"
 
 // TODO: Free memory before erasing cascades from vector, LOTS of exception handling

@@ -43,7 +43,7 @@
 
 // OpenCV includes
 
-#include <opencv/cxcore.h>
+#include "libopencv.h"
 
 // Libface includes
 

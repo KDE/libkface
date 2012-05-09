@@ -30,16 +30,9 @@
 #ifndef KFACE_IMAGE_P_H
 #define KFACE_IMAGE_P_H
 
-// OpenCV includes
-
-#if defined(__APPLE__)
-#include <opencv2/opencv.hpp>
-#else
-#include <opencv/cv.h>
-#endif
-
 // Local includes
 
+#include "libopencv.h"
 #include "image.h"
 
 namespace KFaceIface
