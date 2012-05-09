@@ -51,8 +51,8 @@
 #include <iterator>
 
 #if defined (__APPLE__)
-#include <cvaux.h>
-#include <cv.h>
+#include <opencv2/opencv.hpp>
+#include <opencv/cvaux.h>
 #else
 #include <opencv/cvaux.h>
 #include <opencv/cv.h>

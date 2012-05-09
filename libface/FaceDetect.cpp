@@ -36,8 +36,7 @@
 #include <ctime>
 
 #if defined (__APPLE__)
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/opencv.hpp>
 #else
 #include <opencv/cv.h>
 #include <opencv2/highgui/highgui_c.h>
