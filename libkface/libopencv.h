@@ -28,7 +28,13 @@
 
 // OpenCV includes
 
-#if defined(__APPLE__)
+#include <opencv2/core/version.hpp>
+
+#define OPENCV_MAKE_VERSION(major,minor,patch) (((major) << 16) | ((minor) << 8) | (patch))
+#define OPENCV_VERSION                         OPENCV_MAKE_VERSION(CV_MAJOR_VERSION,CV_MINOR_VERSION,CV_SUBMINOR_VERSION)
+#define OPENCV_TEST_VERSION(major,minor,patch) ( OPENCV_VERSION >= OPENCV_MAKE_VERSION(major,minor,patch) )
+
+#if OPENCV_TEST_VERSION(2,3,0)
 #include <opencv2/opencv.hpp>
 #include <opencv/cvaux.h>
 #else
