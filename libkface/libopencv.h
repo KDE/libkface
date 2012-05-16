@@ -36,12 +36,13 @@
 
 #if OPENCV_TEST_VERSION(2,3,0)
 #include <opencv2/opencv.hpp>
+#include <opencv2/legacy/compat.hpp>
 #include <opencv/cvaux.h>
 #else
 #include <opencv/cv.h>
 #include <opencv/cvaux.h>
 #include <opencv/cxcore.h>
-#include <opencv2/highgui/highgui_c.h>
+#include <opencv/highgui.h>
 #endif
 
 #endif // LIB_OPEN_CV_H
