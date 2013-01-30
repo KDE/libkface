@@ -11,7 +11,7 @@
  *         <a href="mailto:madcat at mymadcat dot com">madcat at mymadcat dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2012 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -49,16 +49,21 @@
 namespace KFaceIface
 {
 
-class Marquee::MarqueePriv
+class Marquee::Private
 {
 public:
 
-    MarqueePriv()
+    Private()
     {
-        htr   = 0;
-        hbr   = 0;
-        hbl   = 0;
-        label = 0;
+        htl        = 0;
+        rect       = 0;
+        htr        = 0;
+        hbr        = 0;
+        hbl        = 0;
+        label      = 0;
+        moving     = false;
+        resizing   = false;
+        resizeType = 0;
     }
 
     QPen                     rectPen;    // The pen used to draw the frames
@@ -81,7 +86,7 @@ public:
 };
 
 Marquee::Marquee(FancyRect* const rect, QGraphicsItem* const parent)
-    : QObject(0), QGraphicsItemGroup(parent), d(new MarqueePriv)
+    : QObject(0), QGraphicsItemGroup(parent), d(new Private)
 {
     d->rect = rect;
     d->rectPen.setColor(Qt::red);

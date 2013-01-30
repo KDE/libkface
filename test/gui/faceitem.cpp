@@ -11,7 +11,7 @@
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2012 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -57,11 +57,11 @@
 namespace KFaceIface
 {
 
-class FaceItem::FaceItemPriv
+class FaceItem::Private
 {
 public:
 
-    FaceItemPriv()
+    Private()
     {
         faceName               = 0;
         nameRect               = 0;
@@ -72,6 +72,14 @@ public:
         suggestionRejectButton = 0;
         suggestionMode         = false;
         name                   = QString();
+        sceneWidth             = 0;
+        sceneHeight            = 0;
+        x1                     = 0;
+        x2                     = 0;
+        y1                     = 0;
+        y2                     = 0;
+        origScale              = 0.0;
+        scale                  = 0.0;
     }
 
     bool               suggestionMode;
@@ -98,7 +106,7 @@ public:
 
 FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, const QRect& rect, 
                    double scale, const QString& name, double originalscale)
-        : QGraphicsObject(parent), d(new FaceItemPriv)
+        : QGraphicsObject(parent), d(new Private)
 {
     setAcceptHoverEvents(true);
 
@@ -130,7 +138,7 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
     d->faceName = new QGraphicsTextItem (name, 0, scene);
 
     // Make the bounding box for the name update itself to cover all the text whenever contents are changed
-    QTextDocument* doc = d->faceName->document();
+    QTextDocument* const doc = d->faceName->document();
     QTextOption o;
     o.setAlignment(Qt::AlignCenter);
     doc->setDefaultTextOption(o);
@@ -156,18 +164,18 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
     //---------------------
 
     QString s("dialog-close");
-    KIcon* icon       = new KIcon(s);
-    QPixmap rejectPix = icon->pixmap(QSize(16,16));
+    KIcon* const icon  = new KIcon(s);
+    QPixmap rejectPix  = icon->pixmap(QSize(16,16));
 
-    d->rejectButton   = new Button( rejectPix, rejectPix);
+    d->rejectButton    = new Button( rejectPix, rejectPix);
     scene->addItem(d->rejectButton);
     d->rejectButton->show();
 
     QString s1("dialog-ok");
-    KIcon* icon1      = new KIcon(s1);
-    QPixmap acceptPix = icon1->pixmap(QSize(16,16));
+    KIcon* const icon1 = new KIcon(s1);
+    QPixmap acceptPix  = icon1->pixmap(QSize(16,16));
 
-    d->acceptButton   = new Button( acceptPix, acceptPix);
+    d->acceptButton    = new Button( acceptPix, acceptPix);
     scene->addItem(d->acceptButton);
     //d->acceptButton->show();
 
@@ -243,6 +251,7 @@ void FaceItem::update()
     {
         d->nameRect->setPen(QPen(QColor("yellow")));
         d->faceName->setDefaultTextColor(QColor("yellow"));
+
         if(!d->suggestionMode)
         {
             d->acceptButton->show();

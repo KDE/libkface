@@ -11,7 +11,7 @@
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  *         Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- *         Copyright (C) 2010-2012 by Gilles Caulier
+ *         Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -47,6 +47,9 @@ MainWindow::MainWindow(QWidget* const parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow)
 {
+    lastPhotoItem = 0;
+    scale         = 0.0;
+
     ui->setupUi(this);
 
     connect(ui->openImageBtn, SIGNAL(clicked()),
@@ -65,12 +68,12 @@ MainWindow::MainWindow(QWidget* const parent)
             this, SLOT(updateConfig()));
 
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),
-	    this, SLOT(updateAccuracy()));
+            this, SLOT(updateAccuracy()));
 
 
-    myScene             = new QGraphicsScene();
-    QGridLayout* layout = new QGridLayout;
-    myView              = new QGraphicsView(myScene);
+    myScene                   = new QGraphicsScene();
+    QGridLayout* const layout = new QGridLayout;
+    myView                    = new QGraphicsView(myScene);
 
     myView->setCacheMode(QGraphicsView::CacheBackground);
     myScene->setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -126,9 +129,9 @@ void MainWindow::openImage()
 
     kDebug() << "Opened file " << file.toAscii().data();
 
-    QPixmap* photo = new QPixmap(file);
-    lastPhotoItem  = new QGraphicsPixmapItem(*photo);
-    currentPhoto   = photo->toImage();
+    QPixmap* const photo = new QPixmap(file);
+    lastPhotoItem        = new QGraphicsPixmapItem(*photo);
+    currentPhoto         = photo->toImage();
 
     if(1.0*ui->widget->width()/photo->width() < 1.*ui->widget->height()/photo->height())
     {
@@ -165,6 +168,7 @@ void MainWindow::detectFaces()
     kDebug() << "libkface detected : " << currentFaces.size() << " faces.";
 
     FaceItem* item=0;
+
     foreach(item, faceitems)
         item->setVisible(false);
 
