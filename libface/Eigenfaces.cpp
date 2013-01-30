@@ -80,7 +80,7 @@ public:
     /**
      * Performs PCA on the current training data, projects the training faces, and stores them in a DB.
      */
-    void learn(int index, IplImage* newFace);
+    void learn(int index, IplImage* const newFace);
 
     /**
      * Converts integer to string, convenience function. TODO: Move to Utils
@@ -109,7 +109,7 @@ public:
 /**
  * Performs PCA on the current training data, projects the training faces, and stores them in a DB.
  */
-void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* newFace)
+void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* const newFace)
 {
     int i;
     std::vector<IplImage*> tempFaces;
@@ -117,22 +117,24 @@ void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* newFace)
     tempFaces.push_back(newFace);
     tempFaces.push_back(faceImgArr.at(index));
 
-    float* projectedFace = (float*)malloc(sizeof(float));
+    float* const projectedFace    = (float*)malloc(sizeof(float));
 
-    CvSize size=cvSize(FACE_WIDTH, FACE_HEIGHT);
+    CvSize size                   = cvSize(FACE_WIDTH, FACE_HEIGHT);
 
     //Set PCA's termination criterion
-    CvTermCriteria mycrit = cvTermCriteria(CV_TERMCRIT_NUMBER,
+    CvTermCriteria mycrit         = cvTermCriteria(CV_TERMCRIT_NUMBER,
             1,0);
     //Initialise pointer to the pointers with eigen objects
-    IplImage** eigenObjects = new IplImage *[2];
+    IplImage** const eigenObjects = new IplImage *[2];
 
-    float* eigenValues;
+    float* eigenValues = 0;
+
     //Initialize array with eigen values
     if( !(eigenValues = (float*) cvAlloc( 2*sizeof(float) ) ) )
         cout<<"Problems initializing eigenValues..."<<endl;
 
-    IplImage* pAvgTrainImg;
+    IplImage* pAvgTrainImg = 0;
+
     //Initialize pointer to the average image
     if( !(pAvgTrainImg = cvCreateImage( size, IPL_DEPTH_32F, 1) ) )
         cout<<"Problems initializing pAvgTrainImg..."<<endl;
@@ -146,14 +148,14 @@ void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* newFace)
 
     //Perform PCA
     cvCalcEigenObjects(2, &tempFaces.front(), eigenObjects,
-            CV_EIGOBJ_NO_CALLBACK, 0, NULL, &mycrit, pAvgTrainImg, eigenValues );
+                       CV_EIGOBJ_NO_CALLBACK, 0, NULL, &mycrit, pAvgTrainImg, eigenValues );
 
     cvEigenDecomposite(tempFaces.at(0), 1, eigenObjects,
-            CV_EIGOBJ_NO_CALLBACK, NULL, pAvgTrainImg, projectedFace );
+                       CV_EIGOBJ_NO_CALLBACK, NULL, pAvgTrainImg, projectedFace );
 
-    IplImage* proj = cvCreateImage(size, IPL_DEPTH_8U, 1);
+    IplImage* const proj = cvCreateImage(size, IPL_DEPTH_8U, 1);
     cvEigenProjection(eigenObjects, 1,
-            CV_EIGOBJ_NO_CALLBACK, NULL, projectedFace, pAvgTrainImg, proj);
+                      CV_EIGOBJ_NO_CALLBACK, NULL, projectedFace, pAvgTrainImg, proj);
 
     //LibFaceUtils::showImage(proj);
 
@@ -171,7 +173,8 @@ void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* newFace)
     tempFaces.clear();
 }
 
-string Eigenfaces::EigenfacesPriv::stringify(unsigned int x) const {
+string Eigenfaces::EigenfacesPriv::stringify(unsigned int x) const
+{
     ostringstream o;
     if (!(o << x))
     {
@@ -336,26 +339,29 @@ pair<int, float> Eigenfaces::recognize(IplImage* input)
     tempFaces.push_back(input);
 
     unsigned int j, i;
-    for( j = 0; j<d->faceImgArr.size(); j++)
+
+    for( j = 0; j < d->faceImgArr.size(); j++)
     {
         tempFaces.push_back(d->faceImgArr.at(j));
 
-        float* eigenValues;
+        float* eigenValues = 0;
+
         //Initialize array with eigen values
-        if( !(eigenValues = (float*) cvAlloc( 2*sizeof(float) ) ) )
+        if( !(eigenValues = (float*) cvAlloc(2*sizeof(float))) )
             cout << "Problems initializing eigenValues..." << endl;
 
-        float* projectedTestFace = (float*)malloc(sizeof(float));
+        float* const projectedTestFace = (float*)malloc(sizeof(float));
 
-        CvSize size=cvSize(tempFaces.at(0)->width, tempFaces.at(0)->height);
+        CvSize size                    = cvSize(tempFaces.at(0)->width, tempFaces.at(0)->height);
 
         //Set PCA's termination criterion
-        CvTermCriteria mycrit = cvTermCriteria(CV_TERMCRIT_NUMBER,
+        CvTermCriteria mycrit          = cvTermCriteria(CV_TERMCRIT_NUMBER,
                 1,0);
         //Initialise pointer to the pointers with eigen objects
-        IplImage** eigenObjects = new IplImage *[2];
+        IplImage** const eigenObjects  = new IplImage *[2];
 
-        IplImage* pAvgTrainImg;
+        IplImage* pAvgTrainImg = 0;
+
         //Initialize pointer to the average image
         if( !(pAvgTrainImg = cvCreateImage( size, IPL_DEPTH_32F, 1) ) )
             cout<<"Problems initializing pAvgTrainImg..."<<endl;
@@ -363,20 +369,21 @@ pair<int, float> Eigenfaces::recognize(IplImage* input)
         for(i = 0; i < 2; i++ )
         {
             eigenObjects[i] = cvCreateImage( size, IPL_DEPTH_32F, 1 );
+
             if(!(eigenObjects[i] ) )
                 cout<<"Problems initializing eigenObjects"<<endl;
         }
 
         //Perform PCA
         cvCalcEigenObjects(2, &tempFaces.front(), eigenObjects,
-                CV_EIGOBJ_NO_CALLBACK, 0, NULL, &mycrit, pAvgTrainImg, eigenValues );
+                           CV_EIGOBJ_NO_CALLBACK, 0, NULL, &mycrit, pAvgTrainImg, eigenValues );
 
         //This is a simple min distance mechanism for recognition. Perhaps we should check similarity of
         //images.
         if(eigenValues[0] < minDist)
         {
             minDist = eigenValues[0];
-            id = j;
+            id      = j;
         }
 
         //cvEigenDecomposite(tempFaces.at(0), nEigens, eigenObjects,
@@ -398,14 +405,14 @@ pair<int, float> Eigenfaces::recognize(IplImage* input)
     }
 
     tempFaces.clear();
-
     recog = clock() - recog;
+
     if (DEBUG)
         printf("Recognition took: %f sec.\n", (double)recog / ((double)CLOCKS_PER_SEC));
 
     if(minDist > d->THRESHOLD)
     {
-        id = -1;
+        id      = -1;
         minDist = -1;
 
         if(DEBUG)
@@ -440,10 +447,10 @@ int Eigenfaces::saveConfig(const string& dir)
     unsigned int nIds = d->faceImgArr.size(), i;
 
     // Write some initial params and matrices
-    cvWriteInt( fileStorage, "nIds", nIds );
-    cvWriteInt( fileStorage, "FACE_WIDTH", d->FACE_WIDTH);
-    cvWriteInt( fileStorage, "FACE_HEIGHT", d->FACE_HEIGHT);
-    cvWriteReal( fileStorage, "THRESHOLD", d->THRESHOLD);
+    cvWriteInt( fileStorage,  "nIds",        nIds );
+    cvWriteInt( fileStorage,  "FACE_WIDTH",  d->FACE_WIDTH);
+    cvWriteInt( fileStorage,  "FACE_HEIGHT", d->FACE_HEIGHT);
+    cvWriteReal( fileStorage, "THRESHOLD",   d->THRESHOLD);
 
     // Write all the training faces
     for ( i = 0; i < nIds; i++ )
@@ -468,6 +475,7 @@ int Eigenfaces::saveConfig(const string& dir)
 std::vector<int> Eigenfaces::update(vector<Face>& newFaceArr)
 {
     std::vector<int> result (newFaceArr.size(),-1);
+
     if (newFaceArr.size() == 0)
     {
         if (DEBUG)
@@ -514,6 +522,7 @@ std::vector<int> Eigenfaces::update(vector<Face>& newFaceArr)
             find (d->indexMap.begin(), d->indexMap.end(), id);
 
             std::vector<int>::iterator it = find(d->indexMap.begin(), d->indexMap.end(), id);//d->indexMap.
+
             if(it != d->indexMap.end())
             {
                 //unsigned int j = 0;
@@ -535,10 +544,12 @@ std::vector<int> Eigenfaces::update(vector<Face>& newFaceArr)
                 d->indexMap.push_back(id);
             }
         }
+
         result.at(i) = newFaceArr.at(i).getId();
     }
 
     update = clock() - update;
+
     if (DEBUG)
         printf("Updating took: %f sec.\n", (double)update / ((double)CLOCKS_PER_SEC));
 
