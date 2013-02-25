@@ -380,7 +380,7 @@ pair<int, float> Eigenfaces::recognize(IplImage* input)
 
         //This is a simple min distance mechanism for recognition. Perhaps we should check similarity of
         //images.
-        if(eigenValues[0] < minDist)
+        if(eigenValues[0] && eigenValues[0] < minDist)
         {
             minDist = eigenValues[0];
             id      = j;
