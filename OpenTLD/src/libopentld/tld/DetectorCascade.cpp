@@ -283,8 +283,6 @@ void DetectorCascade::detect(const Mat &img)
     varianceFilter->nextIteration(img); //Calculates integral images
     ensembleClassifier->nextIteration(img);
 
-    #pragma omp parallel for
-
     for(int i = 0; i < numWindows; i++)
     {
 

@@ -159,8 +159,8 @@ void Clustering::cluster(float *distances, int *clusterIndices)
         //Search for the shortest distance
         float shortestDist = -1;
         int shortestDistIndex = -1;
-        int i1;
-        int i2;
+        int i1 = 0;
+        int i2 = 0;
         int distIndex = 0;
 
         for(int i = 0; i < numConfidentIndices; i++)   //Row index
