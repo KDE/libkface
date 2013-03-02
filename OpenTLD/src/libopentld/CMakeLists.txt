@@ -1,40 +1,24 @@
 include_directories(tld
-                    ../../tldinterface
-                    )
-include_directories(mftracker
-                    tld
                     ../3rdparty/cvblobs
                     ../../tldinterface
-                    ${OpenCV_INCLUDE_DIRS}
-                                 )
+                    )
+
 link_directories(${OpenCV_LIB_DIR})
 
-add_library(opentld    mftracker/BB.cpp
-                       mftracker/BBPredict.cpp
-                       mftracker/FBTrack.cpp
-                       mftracker/Lk.cpp
-                       mftracker/Median.cpp
-                       tld/Clustering.cpp
+add_library(opentld    tld/Clustering.cpp
                        tld/DetectionResult.cpp
                        tld/DetectorCascade.cpp
                        tld/EnsembleClassifier.cpp
                        tld/ForegroundDetector.cpp
-                       tld/MedianFlowTracker.cpp
                        tld/NNClassifier.cpp
                        tld/TLD.cpp
                        tld/TLDUtil.cpp
                        tld/VarianceFilter.cpp
-                       mftracker/BB.h
-                       mftracker/BBPredict.h
-                       mftracker/FBTrack.h
-                       mftracker/Lk.h
-                       mftracker/Median.h
                        tld/Clustering.h
                        tld/DetectionResult.h
                        tld/DetectorCascade.h
                        tld/EnsembleClassifier.h
                        tld/ForegroundDetector.h
-                       tld/MedianFlowTracker.h
                        tld/NNClassifier.h
                        tld/TLD.h
                        tld/TLDUtil.h

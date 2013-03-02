@@ -1,6 +1,5 @@
 #include "Main.h"
 
-#include "Config.h"
 #include "TLDUtil.h"
 #include <fstream>
 #include <iostream>

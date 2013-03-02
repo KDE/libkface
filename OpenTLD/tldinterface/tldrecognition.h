@@ -36,11 +36,9 @@
 
 // OpenTLD includes
 
-#include "Config.h"
+#include "Main.h"
 
 using namespace tld;
-using           tld::Config;
-using           tld::Settings;
 
 namespace libface
 {

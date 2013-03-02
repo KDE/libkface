@@ -48,14 +48,12 @@ public:
     }
 
     Main*  main;
-    Config config;
 };
 
 Tldrecognition::Tldrecognition()
     : d(new Private)
 {
     d->main = new Main();
-    d->config.configure(d->main);
     srand(d->main->seed);
 }
 

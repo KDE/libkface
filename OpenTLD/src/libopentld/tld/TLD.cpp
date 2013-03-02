@@ -39,7 +39,6 @@ namespace tld
 
 TLD::TLD()
 {
-    trackerEnabled = true;
     detectorEnabled = true;
     learningEnabled = true;
     alternating = false;
@@ -51,7 +50,6 @@ TLD::TLD()
     detectorCascade = new DetectorCascade();
     nnClassifier = detectorCascade->nnClassifier;
 
-    medianFlowTracker = new MedianFlowTracker();
 }
 
 TLD::~TLD()
@@ -59,13 +57,11 @@ TLD::~TLD()
     storeCurrentData();
 
     delete detectorCascade;
-    delete medianFlowTracker;
 }
 
 void TLD::release()
 {
     detectorCascade->release();
-    medianFlowTracker->cleanPreviousData();
     delete currBB;
 }
 
@@ -77,7 +73,6 @@ void TLD::storeCurrentData()
     prevBB = currBB;        //Store old bounding box (if any)
 
     detectorCascade->cleanPreviousData(); //Reset detector results
-    medianFlowTracker->cleanPreviousData();
 
     wasValid = valid;
 }
@@ -109,12 +104,7 @@ void TLD::processImage(const Mat &img)
     cvtColor(img, grey_frame, CV_RGB2GRAY);
     currImg = grey_frame; // Store new image , right after storeCurrentData();
 
-    if(trackerEnabled)
-    {
-        medianFlowTracker->track(prevImg, currImg, prevBB);
-    }
-
-    if(detectorEnabled && (!alternating || medianFlowTracker->trackerBB == NULL))
+    if(detectorEnabled && !alternating )
     {
         detectorCascade->detect(grey_frame);
     }
@@ -127,7 +117,6 @@ void TLD::processImage(const Mat &img)
 
 void TLD::fuseHypotheses()
 {
-    Rect *trackerBB = medianFlowTracker->trackerBB;
     int numClusters = detectorCascade->detectionResult->numClusters;
     Rect *detectorBB = detectorCascade->detectionResult->detectorBB;
 
@@ -139,44 +128,14 @@ void TLD::fuseHypotheses()
     if(numClusters == 1)
     {
         confDetector = nnClassifier->classifyBB(currImg, detectorBB);
-    }
-
-    if(trackerBB != NULL)
-    {
-        float confTracker = nnClassifier->classifyBB(currImg, trackerBB);
-        if(numClusters == 1 && confDetector > confTracker && tldOverlapRectRect(*trackerBB, *detectorBB) < 0.5)
-        {
-
-            currBB = tldCopyRect(detectorBB);
-            currConf = confDetector;
-        }
-        else
-        {
-            currBB = tldCopyRect(trackerBB);
-            currConf = confTracker;
-
-            if(confTracker > nnClassifier->thetaTP)
-            {
-                valid = true;
-            }
-            else if(wasValid && confTracker > nnClassifier->thetaFP)
-            {
-                valid = true;
-            }
-        }
-    }
-    else if(numClusters == 1)
-    {
         currBB = tldCopyRect(detectorBB);
         currConf = confDetector;
-    }
-    /*
-    float var = CalculateVariance(patch.values, nn->patch_size*nn->patch_size);
 
-    if(var < min_var) { //TODO: Think about incorporating this
-        printf("%f, %f: Variance too low \n", var, classifier->min_var);
-        valid = 0;
-    }*/
+    }
+
+    else if(numClusters == 1)
+    {
+    }
 }
 
 void TLD::initialLearning()

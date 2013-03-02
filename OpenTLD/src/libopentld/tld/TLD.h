@@ -29,7 +29,6 @@
 
 #include <opencv/cv.h>
 
-#include "MedianFlowTracker.h"
 #include "DetectorCascade.h"
 #include "tldface.h"
 
@@ -45,12 +44,10 @@ class TLD
     void learn();
     void initialLearning();
 public:
-    bool trackerEnabled;
     bool detectorEnabled;
     bool learningEnabled;
     bool alternating;
 
-    MedianFlowTracker *medianFlowTracker;
     DetectorCascade *detectorCascade;
     NNClassifier *nnClassifier;
     bool valid;
