@@ -277,7 +277,7 @@ double CBlob::ExternPerimeter( IplImage *maskImage, bool xBorder /* = true */, b
 								  m_storage );
 	cvStartAppendToSeq( externalPoints, &writer );
 	previousPoint.x = -1;
-    previousPoint.yb= -1;
+        previousPoint.y = -1;
 
 	// which contour pixels touch border?
 	for( j=0; j< externContour->total; j++)
