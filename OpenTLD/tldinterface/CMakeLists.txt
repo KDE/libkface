@@ -1,7 +1,6 @@
 include_directories(../../libkface
                     ../src/opentld/main
                     ../src/libopentld/tld
-                    /usr/lib/qt4
                     )
 add_library(tldinterface    tldclassify.cpp
                             tlddatabase.cpp
@@ -12,4 +11,4 @@ add_library(tldinterface    tldclassify.cpp
                             tldface.h
                             tldrecognition.h
                             )
-target_link_libraries(tldinterface libkface sqlite3 QtSql)
+target_link_libraries(tldinterface main)

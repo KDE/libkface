@@ -34,7 +34,7 @@
 
 using namespace std;
 
-namespace KFaceIface
+namespace libface
 {
 
 class Tldrecognition::Private
@@ -81,4 +81,4 @@ int Tldrecognition::updateDatabase(IplImage* const /*inputImage*/, const char* c
     return 0;
 }
 
-} // namespace KFaceIface
+} // namespace libface

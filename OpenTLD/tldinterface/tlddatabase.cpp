@@ -32,7 +32,7 @@
 
 #include "tlddatabase.h"
 
-namespace KFaceIface
+namespace libface
 {
 
 Tlddatabase::Tlddatabase()
@@ -161,4 +161,4 @@ IplImage* Tlddatabase::QImage2IplImage(QImage& qimg) const
     return imgHeader;
 }
 
-} // namespace KFaceIface
+} // namespace libface

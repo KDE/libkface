@@ -49,12 +49,11 @@
 
 // Local includes
 
-#include "kfaceutils.h"
 #include "tldrecognition.h"
 
 using namespace std;
 
-namespace KFaceIface
+namespace libface
 {
 
 class Tlddatabase
@@ -80,4 +79,4 @@ private:
     QSqlDatabase faceDatabase;
 };
 
-} // namespace KFaceIface
+} // namespace libface

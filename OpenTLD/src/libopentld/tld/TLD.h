@@ -33,7 +33,7 @@
 #include "DetectorCascade.h"
 #include "tldface.h"
 
-using namespace KFaceIface;
+using namespace libface;
 
 namespace tld
 {

@@ -35,7 +35,7 @@
 
 using namespace std;
 
-namespace KFaceIface
+namespace libface
 {
 
 unitFaceModel::unitFaceModel()

@@ -40,7 +40,7 @@
 #include <QBuffer>
 #include <QVariant>
 
-namespace KFaceIface
+namespace libface
 {
 
 class unitFaceModel

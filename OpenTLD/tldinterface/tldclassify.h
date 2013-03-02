@@ -32,7 +32,7 @@
 
 #include <iostream>
 
-using namespace KFaceIface;
+using namespace libface;
 
 class Tldclassify
 {

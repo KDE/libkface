@@ -42,7 +42,7 @@ using namespace tld;
 using           tld::Config;
 using           tld::Settings;
 
-namespace KFaceIface
+namespace libface
 {
 
 class Tldrecognition
@@ -64,4 +64,4 @@ private:
     Private* const d;
 };
 
-} // namespace KFaceIface
+} // namespace libface
