@@ -25,7 +25,7 @@
 
 #include "ForegroundDetector.h"
 
-#include "../cvblobs/BlobResult.h"
+#include "BlobResult.h"
 
 using namespace cv;
 

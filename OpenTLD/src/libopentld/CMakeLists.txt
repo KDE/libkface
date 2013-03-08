@@ -1,6 +1,6 @@
 include_directories(tld
-                    ../3rdparty/cvblobs
-                    ../../tldinterface
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/cvblobs
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../tldinterface
                     )
 
 link_directories(${OpenCV_LIB_DIR})
@@ -25,3 +25,20 @@ add_library(opentld    tld/Clustering.cpp
                        tld/VarianceFilter.h
                        )
 
+target_link_libraries(opentld cvblobs)
+
+install(TARGETS opentld ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install(FILES    tld/Clustering.h
+                 tld/DetectionResult.h
+                 tld/DetectorCascade.h
+                 tld/EnsembleClassifier.h
+                 tld/ForegroundDetector.h
+                 tld/NNClassifier.h
+                 tld/TLD.h
+                 tld/TLDUtil.h
+                 tld/VarianceFilter.h
+                 tld/IntegralImage.h
+                 tld/NormalizedPatch.h
+              DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
+                 )
