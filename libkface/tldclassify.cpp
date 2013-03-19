@@ -30,6 +30,9 @@
 
 #include "tldclassify.h"
 
+namespace KFaceIface
+{
+
 void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
 {
     for(int i=0;i< inputFaceList.size();i++)//resize images and initialise all faces status as not tagged(false)
@@ -46,7 +49,9 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
         resizedinputFaceList.append(tmpfaceList);
         tagged.append(singlephototagged);
     }
+
     Tlddatabase *tlddatabase = new Tlddatabase;
+
     for (int i = 1; i <= tlddatabase->queryNumfacesinDatabase();i++ )//first grouping based on data present in database
     {
         int numfacesingroup = -1;
@@ -66,12 +71,14 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
                 delete tmpTLD;
             }
         }
+
         if(numfacesingroup >= 0)
         {
             allGrouped.append(recognisedGroup);
             groupnames.append(tlddatabase->querybyFaceid(i));
         }
     }
+
     for(int i=0;i<inputFaceList.size()-1;i++)//group similar faces and not recognised from database
     {
         for(int j=0;j<inputFaceList.at(i).size();j++)
@@ -109,7 +116,9 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
             }
         }
     }
+
     QList<IplImage *> tmpgroup;
+
     for(int i=0; i<resizedinputFaceList.size(); i++)//group all faces not classified anywhere above(unknown new faces)
     {
         for (int j=0; j<resizedinputFaceList.at(i).size();j++)
@@ -127,3 +136,5 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
     groupnames.append("unknown");
     allGrouped.append(tmpgroup);
 }
+
+} // namespace KFaceIface

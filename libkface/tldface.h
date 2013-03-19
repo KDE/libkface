@@ -43,10 +43,14 @@
 #include <QBuffer>
 #include <QVariant>
 
-namespace libface
+// Local includes
+
+#include "libkface_export.h"
+
+namespace KFaceIface
 {
 
-class unitFaceModel
+class KFACE_EXPORT unitFaceModel
 {
 public:
 
@@ -78,6 +82,6 @@ public:
     float   minVar;
 };
 
-} // namespace libface
+} // namespace KFaceIface
 
 #endif // TLD_FACE_H

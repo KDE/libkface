@@ -41,11 +41,12 @@
 
 #include "tldface.h"
 #include "libopencv.h"
+#include "libkface_export.h"
 
-namespace libface
+namespace KFaceIface
 {
 
-class Tldrecognition
+class KFACE_EXPORT Tldrecognition
 {
 public:
 
@@ -64,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace libface
+} // namespace KFaceIface
 
 #endif // TLD_RECOGNITION_H

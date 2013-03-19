@@ -39,14 +39,16 @@
 
 #include "tlddatabase.h"
 #include "libopencv.h"
+#include "libkface_export.h"
 
-using namespace libface;
+namespace KFaceIface
+{
 
-class Tldclassify
+class KFACE_EXPORT Tldclassify
 {
 public:
 
-    void groupFaces(QList<QList<IplImage *> > inputFaceList);
+    void groupFaces(QList<QList<IplImage*> > inputFaceList);
 
 public:
 
@@ -54,7 +56,9 @@ public:
     QList<QList<bool> >      tagged;
     QList<QString>           groupnames;
     QList<QList<IplImage*> > allGrouped;
-    QList<unitFaceModel *>   modelsToStore;
+    QList<unitFaceModel*>    modelsToStore;
 };
+
+} // namespace KFaceIface
 
 #endif // TLD_CLASSIFY_H

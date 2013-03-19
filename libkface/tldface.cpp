@@ -35,7 +35,7 @@
 
 using namespace std;
 
-namespace libface
+namespace KFaceIface
 {
 
 unitFaceModel::unitFaceModel()
@@ -156,4 +156,5 @@ QList<QList<QList<int> > > unitFaceModel::deserialiseLeaves() const
     return allLeaves;
 }
 
-} // namespace libface
+} // namespace KFaceIface
+

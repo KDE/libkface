@@ -53,13 +53,14 @@
 // Local includes
 
 #include "tldrecognition.h"
+#include "libkface_export.h"
 
 using namespace std;
 
-namespace libface
+namespace KFaceIface
 {
 
-class Tlddatabase
+class KFACE_EXPORT Tlddatabase
 {
 public:
 
@@ -82,6 +83,6 @@ private:
     QSqlDatabase faceDatabase;
 };
 
-} // namespace libface
+} // namespace KFaceIface
 
 #endif // TLD_DATABASE_H
