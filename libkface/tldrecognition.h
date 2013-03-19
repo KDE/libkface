@@ -30,15 +30,17 @@
  *
  * ============================================================ */
 
+#ifndef TLD_RECOGNITION_H
+#define TLD_RECOGNITION_H
+
 // Qt includes
 
 #include <QImage>
 
 // OpenTLD includes
 
-#include "Main.h"
-
-using namespace tld;
+#include "tldface.h"
+#include "libopencv.h"
 
 namespace libface
 {
@@ -63,3 +65,5 @@ private:
 };
 
 } // namespace libface
+
+#endif // TLD_RECOGNITION_H

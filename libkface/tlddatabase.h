@@ -30,6 +30,9 @@
  *
  * ============================================================ */
 
+#ifndef TLD_DATABASE_H
+#define TLD_DATABASE_H
+
 // C++ includes
 
 #include <iostream>
@@ -70,9 +73,9 @@ public:
     int querybyName(const QString&)           const;
     int queryNumfacesinDatabase()             const;
 
-    QString querybyFaceid(int faceid)       const;
-    unitFaceModel* getFaceModel(int faceid) const;
-    IplImage* QImage2IplImage(QImage&)      const;
+    QString        querybyFaceid(int faceid)  const;
+    unitFaceModel* getFaceModel(int faceid)   const;
+    IplImage*      QImage2IplImage(QImage&)   const;
 
 private:
 
@@ -80,3 +83,5 @@ private:
 };
 
 } // namespace libface
+
+#endif // TLD_DATABASE_H

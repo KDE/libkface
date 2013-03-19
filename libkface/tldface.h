@@ -30,6 +30,9 @@
  *
  * ============================================================ */
 
+#ifndef TLD_FACE_H
+#define TLD_FACE_H
+
 // C++ includes
 
 #include <iostream>
@@ -76,3 +79,5 @@ public:
 };
 
 } // namespace libface
+
+#endif // TLD_FACE_H

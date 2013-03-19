@@ -31,6 +31,7 @@
  * ============================================================ */
 
 #include "tldrecognition.h"
+#include "Main.h"
 
 using namespace std;
 

@@ -28,6 +28,9 @@
  *
  * ============================================================ */
 
+#ifndef TLD_CLASSIFY_H
+#define TLD_CLASSIFY_H
+
 // C++ includes
 
 #include <iostream>
@@ -48,8 +51,10 @@ public:
 public:
 
     QList<QList<IplImage*> > resizedinputFaceList;
-    QList<QList<bool> > tagged;
-    QList<QString> groupnames;
+    QList<QList<bool> >      tagged;
+    QList<QString>           groupnames;
     QList<QList<IplImage*> > allGrouped;
-    QList<unitFaceModel *> modelsToStore;
+    QList<unitFaceModel *>   modelsToStore;
 };
+
+#endif // TLD_CLASSIFY_H
