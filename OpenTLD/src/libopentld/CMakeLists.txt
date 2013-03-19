@@ -1,6 +1,6 @@
 include_directories(tld
                     ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/cvblobs
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../../tldinterface
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../../libkface
                     )
 
 link_directories(${OpenCV_LIB_DIR})
