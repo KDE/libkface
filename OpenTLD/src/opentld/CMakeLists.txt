@@ -6,7 +6,6 @@ include_directories(main
                     )
 
 add_library(main    main/Main.cpp
-                    main/Main.h
                     )
 
 #install(TARGETS main ${INSTALL_TARGETS_DEFAULT_ARGS})

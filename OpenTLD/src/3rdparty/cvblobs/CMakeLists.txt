@@ -5,7 +5,8 @@ ADD_LIBRARY(cvblobs    blob.cpp
                        BlobResult.cpp
                        ComponentLabeling.cpp
                        )
-#install(TARGETS cvblobs ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+#INSTALL(TARGETS cvblobs ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 #INSTALL(FILES    blob.h
 #                 BlobContour.h
