@@ -27,18 +27,26 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include "tlddatabase.h"
-#include <opencv/cv.h>
+
+// C++ includes
 
 #include <iostream>
+
+// Local incudes
+
+#include "tlddatabase.h"
+#include "libopencv.h"
 
 using namespace libface;
 
 class Tldclassify
 {
 public:
+
     void groupFaces(QList<QList<IplImage *> > inputFaceList);
+
 public:
+
     QList<QList<IplImage*> > resizedinputFaceList;
     QList<QList<bool> > tagged;
     QList<QString> groupnames;

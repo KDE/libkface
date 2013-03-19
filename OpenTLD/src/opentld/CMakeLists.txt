@@ -9,8 +9,8 @@ add_library(main    main/Main.cpp
                     main/Main.h
                     )
 
-install(TARGETS main ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS main ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES    main/Main.h
-                 DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
-                 )
+#install(FILES    main/Main.h
+#        DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
+#       )

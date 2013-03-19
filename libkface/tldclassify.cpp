@@ -30,7 +30,6 @@
 
 #include "tldclassify.h"
 
-
 void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
 {
     for(int i=0;i< inputFaceList.size();i++)//resize images and initialise all faces status as not tagged(false)

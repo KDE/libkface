@@ -27,18 +27,18 @@ add_library(opentld    tld/Clustering.cpp
 
 target_link_libraries(opentld cvblobs)
 
-install(TARGETS opentld ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS opentld ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES    tld/Clustering.h
-                 tld/DetectionResult.h
-                 tld/DetectorCascade.h
-                 tld/EnsembleClassifier.h
-                 tld/ForegroundDetector.h
-                 tld/NNClassifier.h
-                 tld/TLD.h
-                 tld/TLDUtil.h
-                 tld/VarianceFilter.h
-                 tld/IntegralImage.h
-                 tld/NormalizedPatch.h
-              DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
-                 )
+#install(FILES    tld/Clustering.h
+#                 tld/DetectionResult.h
+#                 tld/DetectorCascade.h
+#                 tld/EnsembleClassifier.h
+#                 tld/ForegroundDetector.h
+#                 tld/NNClassifier.h
+#                 tld/TLD.h
+#                 tld/TLDUtil.h
+#                 tld/VarianceFilter.h
+#                 tld/IntegralImage.h
+#                 tld/NormalizedPatch.h
+#        DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
+#       )
