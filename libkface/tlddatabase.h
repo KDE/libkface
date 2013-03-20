@@ -36,6 +36,7 @@
 // C++ includes
 
 #include <iostream>
+#include <kstandarddirs.h>
 
 // SQlite includes
 
