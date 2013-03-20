@@ -1,10 +1,15 @@
-ADD_LIBRARY(cvblobs    blob.cpp
-                       BlobContour.cpp
-                       BlobOperators.cpp
-                       BlobProperties.cpp
-                       BlobResult.cpp
-                       ComponentLabeling.cpp
-                       )
+ADD_LIBRARY(cvblobs blob.cpp
+                    BlobContour.cpp
+                    BlobOperators.cpp
+                    BlobProperties.cpp
+                    BlobResult.cpp
+                    ComponentLabeling.cpp
+           )
+
+IF(NOT MSVC)
+    SET_TARGET_PROPERTIES(cvblobs PROPERTIES COMPILE_FLAGS "-fPIC")
+ENDIF(NOT MSVC)
+
 
 #INSTALL(TARGETS cvblobs ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -56,10 +56,10 @@ TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${OpenCV_LIBRARIES}
 
                             ${QT_QTSQL_LIBRARY}
-                            main
+                            sqlite3
                             opentld
                             cvblobs
-                            sqlite3
+                            main
                       )
 
 SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
