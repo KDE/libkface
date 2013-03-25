@@ -35,6 +35,10 @@
 #include <QtGui/QImage>
 #include <QtCore/QSharedDataPointer>
 
+// OpenCV includes
+
+#include "libopencv.h"
+
 // Local includes
 
 #include "libkface_export.h"
@@ -112,6 +116,7 @@ public:
     const ImageData imageData() const;
 
     QImage toQImage() const;
+    IplImage* toIplImage() const;
 
 private:
 

@@ -33,10 +33,6 @@
 
 #include <QFile>
 
-// OpenCV includes
-
-#include "libopencv.h"
-
 // Libface includes
 
 #include <libface/LibFace.h>
@@ -139,6 +135,11 @@ const ImageData Image::imageData() const
 QImage Image::toQImage() const
 {
     return d ? KFaceUtils::IplImage2QImage(d->image) : QImage();
+}
+
+IplImage* Image::toIplImage() const
+{
+    return d->originalImage;
 }
 
 } // namespace KFaceIface
