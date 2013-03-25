@@ -66,6 +66,7 @@ public:
         : mappingFilename(QString("/dictionary")),
           haarCascasdePath(KStandardDirs::installPath("data") + QString("libkface/haarcascades"))
     {
+        colorMode        = Database::grayscale;
         libface          = 0;
         configDirty      = false;
     }
@@ -95,6 +96,7 @@ public:
     bool                configDirty;
     const QString       mappingFilename;
     const QString       haarCascasdePath;
+    Database::requestedColourMode colorMode;
 
     void saveConfig()
     {
@@ -118,7 +120,7 @@ public:
 };
 
 Database::Database(InitFlags flags, const QString& configurationPath)
-        : d(new DatabasePriv)
+    : d(new DatabasePriv)
 {
     // Note: same lines in RecognitionDatabase. Keep in sync.
     if (configurationPath.isNull())
@@ -178,8 +180,14 @@ Database::~Database()
 QList<Face> Database::detectFaces(const Image& image)
 {
     const IplImage* img = image.imageData();
-    CvSize originalSize = cvSize(0,0);
 
+    if(d->colorMode == color)
+    {
+        const IplImage* colorImg = image.colorImageData();
+        d->libface->setColorImg(colorImg);
+    }
+
+    CvSize originalSize = cvSize(0,0);
     if (!image.originalSize().isNull())
         originalSize = KFaceUtils::toCvSize(image.originalSize());
 
@@ -321,6 +329,30 @@ void Database::clearTraining(int id)
 void Database::clearAllTraining()
 {
     d->libface->loadConfig(std::map<std::string, std::string>());
+}
+
+void Database::setColorMode(const char *mode)
+{
+    if(mode == "grayscale")
+    {
+        d->colorMode = grayscale;
+    }
+    else
+    {
+        d->colorMode = color;
+    }
+}
+
+const char* Database::getColorMode()
+{
+    if(d->colorMode == grayscale )
+    {
+        return "grayscale";
+    }
+    else
+    {
+        return "color";
+    }
 }
 
 void Database::saveConfig()

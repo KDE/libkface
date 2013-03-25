@@ -75,6 +75,7 @@ public:
      */
     ~LibFace();
 
+    void setColorImg(const IplImage *);
     // OpenCV compatibility methods
 
     std::vector<int> update(const IplImage* img, std::vector<Face>* faces, int scaleFactor = 1);

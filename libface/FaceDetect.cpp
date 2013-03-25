@@ -175,7 +175,7 @@ public:
             return 1.0;
 
         if (faceSize.width / faceToFeatureRelationMin() >= windowSize.width
-            && faceSize.height / faceToFeatureRelationMin() >= windowSize.height)
+                && faceSize.height / faceToFeatureRelationMin() >= windowSize.height)
             return 1.0;
 
         return max(double(windowSize.width) * faceToFeatureRelationPresumed() / faceSize.width,
@@ -195,6 +195,7 @@ public:
 
     FaceDetectPriv()
     {
+        colorMode                = FaceDetect::grayscale;
         cascadeSet               = 0;
         storage                  = 0;
         scaleFactor              = 1.0;
@@ -220,10 +221,12 @@ public:
 
     double        speedVsAccuracy;
     double        sensitivityVsSpecificity;
+    const IplImage*     coloredImage;
+    FaceDetect::requestedColorMode colorMode;
 };
 
 FaceDetect::FaceDetect(const string& cascadeDir)
-          : d(new FaceDetectPriv)
+    : d(new FaceDetectPriv)
 {
     d->cascadeSet = new Haarcascades(cascadeDir);
 
@@ -443,13 +446,13 @@ vector<Face> FaceDetect::cascadeResult(const IplImage* inputImage, CvHaarClassif
             << " min size " << params.minSize.width << " " << params.minSize.height << endl;*/
 
     faces = cvHaarDetectObjects(inputImage,
-            casc,
-            d->storage,
-            params.searchIncrement,                // Increase search scale by 5% everytime
-            params.grouping,                       // Drop groups of less than n detections
-            params.flags,                          // Optionally, pre-test regions by edge detection
-            params.minSize                         // Minimum face size to look for
-    );
+                                casc,
+                                d->storage,
+                                params.searchIncrement,                // Increase search scale by 5% everytime
+                                params.grouping,                       // Drop groups of less than n detections
+                                params.flags,                          // Optionally, pre-test regions by edge detection
+                                params.minSize                         // Minimum face size to look for
+                                );
 
     // Loop the number of faces found.
     for (int i = 0; i < (faces ? faces->total : 0); i++)
@@ -693,6 +696,12 @@ int FaceDetect::getRecommendedImageSizeForDetection()
     return 800;
 }
 
+void FaceDetect::setColorImg(const IplImage *colorImg)
+{
+    d->colorMode = color;
+    d->coloredImage = colorImg;
+}
+
 vector<Face> FaceDetect::detectFaces(const IplImage* inputImage, const CvSize& size)
 {
     if (inputImage->imageData == 0)
@@ -748,7 +757,7 @@ vector<Face> FaceDetect::detectFaces(const IplImage* inputImage, const CvSize& s
             {
                 duration = clock() - detect;
                 cout <<"Primary detection with " <<  d->cascadeSet->getCascade(i).name << ": "
-                     << ((double)duration / ((double)CLOCKS_PER_SEC)) << " sec" << endl;
+                    << ((double)duration / ((double)CLOCKS_PER_SEC)) << " sec" << endl;
             }
         }
     }
@@ -771,6 +780,15 @@ vector<Face> FaceDetect::detectFaces(const IplImage* inputImage, const CvSize& s
     if (scaled)
         cvReleaseImage(&scaled);
 
+    const IplImage *fullImage;
+    if (d->colorMode == grayscale)
+    {
+        fullImage = inputImage;
+    }
+    else
+    {
+        fullImage = d->coloredImage;
+    }
     // Insert extracted images into face
     for (vector<Face>::iterator it = finalResult.begin(); it != finalResult.end(); ++it)
     {
@@ -785,7 +803,8 @@ vector<Face> FaceDetect::detectFaces(const IplImage* inputImage, const CvSize& s
 
         //Extract face-image from whole-image.
         CvRect rect       = cvRect(it->getX1(), it->getY1(), it->getWidth(), it->getHeight());
-        IplImage* faceImg = LibFaceUtils::copyRect(inputImage, rect);
+
+        IplImage* faceImg = LibFaceUtils::copyRect(fullImage, rect);
         it->setFace(faceImg);
     }
 

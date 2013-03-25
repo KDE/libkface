@@ -55,18 +55,21 @@ Image::Image()
 Image::Image(const QString& filePath)
     : d(new ImagePriv)
 {
+    d->originalImage = cvLoadImage(QFile::encodeName(filePath));
     d->image = cvLoadImage(QFile::encodeName(filePath), CV_LOAD_IMAGE_GRAYSCALE);
 }
 
 Image::Image(const QImage& givenImage)
     : d(new ImagePriv)
 {
+    d->originalImage =  KFaceUtils::QImage2IplImage(givenImage);
     d->image = KFaceUtils::QImage2GrayscaleIplImage(KFaceUtils::QImage2Grayscale(givenImage));
 }
 
 Image::Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data)
     : d(new ImagePriv)
 {
+    d->originalImage = KFaceUtils::Data2IplImage(width, height, sixteenBit, alpha, data);
     d->image = KFaceUtils::Data2GrayscaleIplImage(width, height, sixteenBit, alpha, data);
 }
 
@@ -121,6 +124,11 @@ QSize Image::originalSize() const
 ImageData Image::imageData()
 {
     return d ? d->image : 0;
+}
+
+const ImageData Image::colorImageData() const
+{
+    return d ? d->originalImage : 0;
 }
 
 const ImageData Image::imageData() const

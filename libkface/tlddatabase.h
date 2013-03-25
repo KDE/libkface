@@ -77,7 +77,7 @@ public:
 
     QString        querybyFaceid(int faceid)  const;
     unitFaceModel* getFaceModel(int faceid)   const;
-    IplImage*      QImage2IplImage(QImage&)   const;
+    IplImage*      QImage2IplImage(QImage)   const;
 
 private:
 

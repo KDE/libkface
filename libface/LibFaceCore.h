@@ -98,6 +98,7 @@ public:
 
     virtual ~LibFaceDetectCore() {};
 
+    virtual void setColorImg(const IplImage *colorImg) = 0;
     virtual std::vector<Face> detectFaces(const IplImage* inputImage, const CvSize& originalSize = cvSize(0,0)) = 0;
     virtual std::vector<Face> detectFaces(const std::string& filename) = 0;
     virtual double accuracy() const = 0;

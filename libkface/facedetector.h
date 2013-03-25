@@ -75,6 +75,8 @@ public:
     /**
      * Set the accuracy and specificity of Face Detection.
      */
+    void setColorMode(const char*);
+    const char* getColorMode();
     void   setAccuracy(double value);
     double accuracy() const;
     void   setSpecificity(double value);

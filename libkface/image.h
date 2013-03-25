@@ -108,6 +108,7 @@ public:
     QSize originalSize() const;
 
     ImageData imageData();
+    const ImageData colorImageData() const;
     const ImageData imageData() const;
 
     QImage toQImage() const;

@@ -376,7 +376,7 @@ IplImage* LibFaceUtils::stringToImage(const string& data, int depth, int channel
             values.insert(values.end(),atof(value.c_str()));
 
             if(copy == "")
-                    extract = 0;
+                extract = 0;
 
             cols++;
         }
@@ -662,9 +662,9 @@ IplImage* LibFaceUtils::scaledSection(const IplImage* src, const CvRect& sourceR
         return copyRect(src, sourceRect);
 
     return scaledSection(src, sourceRect, cvSize(
-                         lround(double(sourceRect.width) * scaleFactor),
-                         lround(double(sourceRect.height) * scaleFactor) )
-                        );
+                             lround(double(sourceRect.width) * scaleFactor),
+                             lround(double(sourceRect.height) * scaleFactor) )
+                         );
 }
 
 IplImage* LibFaceUtils::scaledSection(const IplImage* src, const CvRect& sourceRect, const CvSize& destSize)

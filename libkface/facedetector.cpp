@@ -83,7 +83,7 @@ private:
 };
 
 FaceDetector::FaceDetector()
-            : d(new FaceDetectorPriv)
+    : d(new FaceDetectorPriv)
 {
 }
 
@@ -144,6 +144,16 @@ double FaceDetector::specificity() const
 int FaceDetector::recommendedImageSize(const QSize& availableSize) const
 {
     return d->database()->recommendedImageSizeForDetection(availableSize);
+}
+
+void FaceDetector::setColorMode(const char *mode)
+{
+    d->database()->setColorMode(mode);
+}
+
+const char* FaceDetector::getColorMode()
+{
+    return d->database()->getColorMode();
 }
 
 } // namespace KFaceIface

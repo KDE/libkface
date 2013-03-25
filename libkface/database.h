@@ -53,6 +53,12 @@ class KFACE_EXPORT Database
 
 public:
 
+    enum requestedColourMode
+    {
+        grayscale,
+        color
+    };
+
     enum InitFlag
     {
         InitDetection   = 0x01,
@@ -127,6 +133,9 @@ public:
      * @return A QList of "closeness" of recognized faces, in the same order as the argument;
      * or an empty list, if an error occurred or no recognition data is available.
      */
+    void setColorMode(const char *);
+    const char * getColorMode();
+
     QList<double> recognizeFaces(QList<Face>& faces);
 
     /**

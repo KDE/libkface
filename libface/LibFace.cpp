@@ -81,7 +81,7 @@ public:
 
 LibFace::LibFace(Mode type, const string& configDir, const string& cascadeDir)
     : d(new LibFacePriv)
- {
+{
     d->type = type;
 
     cout << "Cascade directory located as : " << cascadeDir << endl;
@@ -90,18 +90,18 @@ LibFace::LibFace(Mode type, const string& configDir, const string& cascadeDir)
     // So there is a case for everything.
     switch (d->type)
     {
-        case DETECT:
-            d->cascadeDir      = cascadeDir;
-            d->detectionCore   = new FaceDetect(d->cascadeDir);
-            break;
-        case EIGEN:
-            d->recognitionCore = new Eigenfaces(configDir);
-            break;
-        default:    // Initialize both detector and Eigenfaces
-            d->cascadeDir      = cascadeDir;
-            d->detectionCore   = new FaceDetect(d->cascadeDir);
-            d->recognitionCore = new Eigenfaces(configDir);
-            break;
+    case DETECT:
+        d->cascadeDir      = cascadeDir;
+        d->detectionCore   = new FaceDetect(d->cascadeDir);
+        break;
+    case EIGEN:
+        d->recognitionCore = new Eigenfaces(configDir);
+        break;
+    default:    // Initialize both detector and Eigenfaces
+        d->cascadeDir      = cascadeDir;
+        d->detectionCore   = new FaceDetect(d->cascadeDir);
+        d->recognitionCore = new Eigenfaces(configDir);
+        break;
     }
 }
 
@@ -109,16 +109,16 @@ LibFace::~LibFace()
 {
     switch(d->type)
     {
-        case DETECT:
-            delete d->detectionCore;
-            break;
-        case EIGEN:
-            delete d->recognitionCore;
-            break;
-        default:
-            delete d->detectionCore;
-            delete d->recognitionCore;
-            break;
+    case DETECT:
+        delete d->detectionCore;
+        break;
+    case EIGEN:
+        delete d->recognitionCore;
+        break;
+    default:
+        delete d->detectionCore;
+        delete d->recognitionCore;
+        break;
     }
     cvReleaseImage(&d->lastImage);
 
@@ -168,7 +168,7 @@ map<string,string> LibFace::getConfig()
 int LibFace::loadConfig(const string& /*dir*/)
 {
     int result = 0;
-/*
+    /*
     d->recognitionCore->loadData(dir);
 */
 
@@ -327,7 +327,7 @@ int LibFace::saveConfig(const string& dir)
 int LibFace::train(const string& /*dir*/)
 {
     int result = 0;
-//    d->recognitionCore->train(dir);
+    //    d->recognitionCore->train(dir);
     return result;
 }
 
@@ -484,6 +484,10 @@ int LibFace::getRecommendedImageSizeForDetection(const CvSize&) const
 CvSize LibFace::getRecommendedImageSizeForRecognition(const CvSize&) const
 {
     return cvSize(d->facesize(), d->facesize());
+}
+void LibFace::setColorImg(const IplImage *colorImg)
+{
+    d->detectionCore->setColorImg(colorImg);
 }
 
 } // namespace libface

@@ -43,7 +43,7 @@ class Image::ImagePriv : public QSharedData
 public:
 
     ImagePriv()
-        : image(0)
+        : image(0),originalImage(0)
     {
     }
 
@@ -57,8 +57,10 @@ public:
     {
         if (image)
             cvReleaseImage(&image);
+            cvReleaseImage(&originalImage);
     }
 
+    IplImage* originalImage;
     IplImage* image;
     QSize     originalSize;
 };

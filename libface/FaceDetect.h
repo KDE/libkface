@@ -46,6 +46,11 @@ class FACEAPI FaceDetect : public LibFaceDetectCore
 {
 public:
 
+    enum requestedColorMode
+    {
+        grayscale,
+        color
+    };
     /**
      * Default constructor for the FaceDetect class. Initialises the cascade to a cascade in the
      * specified directory.
@@ -65,6 +70,8 @@ public:
      * @param inputImage A pointer to the image in which faces are to be detected
      * @return The vector of detected faces
      */
+    void setColorImg(const IplImage *colorImg);
+
     std::vector<Face> detectFaces(const IplImage* inputImage, const CvSize& originalSize = cvSize(0,0));
 
     /**

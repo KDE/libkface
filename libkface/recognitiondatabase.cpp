@@ -87,7 +87,7 @@ K_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
 
 class RecognitionDatabase::Private : public QSharedData
 {
-public:
+    public:
 
     ~Private()
     {
@@ -112,7 +112,7 @@ public:
         return db;
     }
 
-private:
+    private:
 
     friend class RecognitionDatabaseStaticPriv;
 
@@ -123,7 +123,7 @@ private:
     {
     }
 
-private:
+    private:
 
     Database* db;
 };
