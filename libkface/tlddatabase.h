@@ -73,6 +73,7 @@ public:
 
     int insertFaceModel(unitFaceModel* const) const;
     int querybyName(const QString&)           const;
+    int queryFaceID(int id)                   const;
     int queryNumfacesinDatabase()             const;
 
     QString        querybyFaceid(int faceid)  const;

@@ -69,7 +69,8 @@ void Tlddatabase::createFaceTable()
                    "positivepatches varchar, "
                    "negativepatches varchar, "
                    "allfeatures varchar, "
-                   "allleaves varchar)");
+                   "allleaves varchar, "
+                   "faceid integer)");
     }
 }
 
@@ -105,6 +106,17 @@ int Tlddatabase::querybyName(const QString& nametoquery) const
     return -1;
 }
 
+int Tlddatabase::queryFaceID(int id) const
+{
+    QSqlQuery query(QString("select * from faceDatabase where id = %1").arg(id));
+
+    if (query.next())
+    {
+        return query.value(9).toInt();
+    }
+
+    return int();
+}
 int Tlddatabase::insertFaceModel(unitFaceModel* const facemodel) const
 {
     int newId = -1;
@@ -113,10 +125,10 @@ int Tlddatabase::insertFaceModel(unitFaceModel* const facemodel) const
     if (faceDatabase.isOpen())
     {
         QSqlQuery query;
-        ret = query.exec(QString("insert into faceDatabase values(NULL,'%1',%2,%3,%4,'%5','%6','%7','%8')")
+        ret = query.exec(QString("insert into faceDatabase values(NULL,'%1',%2,%3,%4,'%5','%6','%7','%8',%9)")
                          .arg(facemodel->Name).arg(facemodel->objHeight).arg(facemodel->objWidth).arg(facemodel->minVar)
                          .arg(facemodel->serialisedPositivePatches).arg(facemodel->serialisedNegativePatches)
-                         .arg(facemodel->serialisedFeatures).arg(facemodel->serialisedLeaves));
+                         .arg(facemodel->serialisedFeatures).arg(facemodel->serialisedLeaves).arg(facemodel->faceid));
         // Get database given autoincrement value
         if (ret)
         {
@@ -143,6 +155,7 @@ unitFaceModel* Tlddatabase::getFaceModel(int faceid) const
         facemodel->serialisedNegativePatches = query.value(6).toString();
         facemodel->serialisedFeatures        = query.value(7).toString() ;
         facemodel->serialisedLeaves          = query.value(8).toString();
+        facemodel->faceid                    = query.value(9).toInt();
     }
 
     return facemodel;
