@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -331,9 +331,9 @@ void Database::clearAllTraining()
     d->libface->loadConfig(std::map<std::string, std::string>());
 }
 
-void Database::setColorMode(const char *mode)
+void Database::setColorMode(const char* const mode)
 {
-    if(mode == "grayscale")
+    if(QString(mode) == QString("grayscale"))
     {
         d->colorMode = grayscale;
     }
@@ -343,7 +343,7 @@ void Database::setColorMode(const char *mode)
     }
 }
 
-const char* Database::getColorMode()
+const char* Database::getColorMode() const
 {
     if(d->colorMode == grayscale )
     {
