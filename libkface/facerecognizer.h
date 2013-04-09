@@ -28,15 +28,15 @@
 #ifndef KFACE_FACERECOGNIZER_H
 #define KFACE_FACERECOGNIZER_H
 
-// Local includes
-
 #include "face.h"
 #include "image.h"
+
+#include "libkface_export.h"
 
 namespace KFaceIface
 {
 
-class FaceRecognizer
+class KFACE_EXPORT FaceRecognizer
 {
 
 public:
@@ -44,15 +44,15 @@ public:
     FaceRecognizer();
     ~FaceRecognizer();
 
-    QList<float> recognizeFaces(const QList<Face>& faces);
-    void storeFaces(const QList<Face>& faces);
+    QList<float> recognizeFaces(QList<Face> &faces);
+    void storeFaces(QList<Face> &faces);
 
     //void   setThreshold(float value);
 
 private:
 
-    class Private;
-    Private* const d;
+    class FaceRecognizerPriv;
+    FaceRecognizerPriv* const d;
 };
 
 } // namespace KFaceIface
