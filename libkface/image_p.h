@@ -48,10 +48,12 @@ public:
     {
     }
 
-    ImagePriv(const ImagePriv& other) : QSharedData(other)
+    ImagePriv(const ImagePriv& other)
+        : QSharedData(other)
     {
         // this code is called of we want to detach()
-        image = cvCloneImage(other.image);
+        originalImage = cvCloneImage(other.originalImage);
+        image         = cvCloneImage(other.image);
     }
 
     ~ImagePriv()
