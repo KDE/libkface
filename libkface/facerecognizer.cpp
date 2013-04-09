@@ -98,7 +98,7 @@ QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
     {
         vector<float> recognitionconfidence;
 
-        IplImage *img1 = faces[faceindex].image().toIplImage();
+        IplImage *img1 = d->database()->QImage2IplImage(faces[faceindex].image().toColorQImage());
         IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
         cvResize(img1, inputfaceimage);
 
@@ -141,7 +141,7 @@ void FaceRecognizer::storeFaces(QList<Face> &faces)
 {
     foreach(Face face, faces)
     {
-        IplImage  *img1 = face.image().toIplImage();// tlddatabase->QImage2IplImage(face.image().toQImage());
+        IplImage *img1 = d->database()->QImage2IplImage(face.image().toColorQImage());
 
         IplImage* const inputfaceimage                    = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
         cvResize(img1,inputfaceimage);

@@ -72,8 +72,8 @@ public:
      */
     QList<Face> detectFaces(const Image& image);
 
-    void        setColorMode(const char* const);
-    const char* getColorMode();
+    void        setColorMode(int);
+    int  getColorMode();
 
     /**
      * Set the accuracy and specificity of Face Detection.

@@ -149,12 +149,12 @@ int FaceDetector::recommendedImageSize(const QSize& availableSize) const
     return d->database()->recommendedImageSizeForDetection(availableSize);
 }
 
-void FaceDetector::setColorMode(const char* const mode)
+void FaceDetector::setColorMode(int mode)
 {
     d->database()->setColorMode(mode);
 }
 
-const char* FaceDetector::getColorMode()
+int FaceDetector::getColorMode()
 {
     return d->database()->getColorMode();
 }

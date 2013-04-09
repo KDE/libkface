@@ -135,8 +135,8 @@ public:
      * @return A QList of "closeness" of recognized faces, in the same order as the argument;
      * or an empty list, if an error occurred or no recognition data is available.
      */
-    void setColorMode(const char* const);
-    const char* getColorMode() const;
+    void setColorMode(int);
+    int getColorMode() const;
 
     QList<double> recognizeFaces(QList<Face>& faces);
 

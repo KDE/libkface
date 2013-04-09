@@ -345,27 +345,26 @@ void Database::clearAllTraining()
     d->libface->loadConfig(std::map<std::string, std::string>());
 }
 
-void Database::setColorMode(const char* const mode)
+void Database::setColorMode(int mode)
 {
-    if(QString(mode) == QString("grayscale"))
+    switch(mode)
     {
+    case 0:
         d->colorMode = grayscale;
-    }
-    else
-    {
+    case 1:
         d->colorMode = color;
     }
 }
 
-const char* Database::getColorMode() const
+int Database::getColorMode() const
 {
     if(d->colorMode == grayscale )
     {
-        return "grayscale";
+        return 0;
     }
     else
     {
-        return "color";
+        return 1;
     }
 }
 
