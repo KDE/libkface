@@ -40,6 +40,7 @@ SET(kface_LIB_SRCS database.cpp
                    kfaceutils.cpp
                    image.cpp
                    facedetector.cpp
+                   facerecognizer.cpp
                    recognitiondatabase.cpp
                    tlddatabase.cpp
                    tldface.cpp
@@ -70,6 +71,7 @@ INSTALL(FILES database.h
               face.h
               image.h
               facedetector.h
+              facerecognizer.h
               recognitiondatabase.h
               libkface_export.h
 
