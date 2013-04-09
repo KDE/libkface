@@ -25,7 +25,8 @@ unitFaceModel * Main::generatefacemodel(IplImage* img)
     Rect bb = tldArrayToRect(initialBB);
     tld->selectObject(grey, &bb);
     cvtColor(cv::Mat(img), grey, CV_BGR2GRAY);
-    return tld->putObjModel();
+    unitFaceModel * const facemodeltostore = tld->putObjModel();
+    return facemodeltostore;
 }
 float Main::getrecognitionconfidence(IplImage* img, unitFaceModel *comparemodel)
 {

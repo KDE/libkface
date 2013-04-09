@@ -66,7 +66,8 @@ Tldrecognition::~Tldrecognition()
 
 unitFaceModel* Tldrecognition::getModeltoStore(IplImage* const inputImage) const
 {
-    return d->main->generatefacemodel(inputImage);
+    unitFaceModel *const facemodeltostore = d->main->generatefacemodel(inputImage);
+    return facemodeltostore;
 }
 
 float Tldrecognition::getRecognitionConfidence(IplImage* const inputImage, unitFaceModel* const comparemodel) const
