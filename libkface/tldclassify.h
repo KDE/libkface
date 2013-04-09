@@ -1,8 +1,8 @@
 /** ===========================================================
  * @file
  *
- * This file is a part of libface project
- * <a href="http://libface.sourceforge.net">http://libface.sourceforge.net</a>
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date    2010-03-03
  * @brief   openTLD interface.

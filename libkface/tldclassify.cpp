@@ -1,8 +1,8 @@
 /** ===========================================================
  * @file
  *
- * This file is a part of libface project
- * <a href="http://libface.sourceforge.net">http://libface.sourceforge.net</a>
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date    2010-03-03
  * @brief   openTLD interface.
@@ -39,6 +39,7 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
     {
         QList<IplImage*> tmpfaceList;
         QList<bool> singlephototagged;
+
         for (int j=0;j<inputFaceList.at(i).size();j++)
         {
             IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),inputFaceList.at(i).at(j)->depth,inputFaceList.at(i).at(j)->nChannels);
@@ -46,28 +47,32 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
             tmpfaceList.append(inputfaceimage);
             singlephototagged.append(false);
         }
+
         resizedinputFaceList.append(tmpfaceList);
         tagged.append(singlephototagged);
     }
 
-    Tlddatabase *tlddatabase = new Tlddatabase;
+    Tlddatabase* const tlddatabase = new Tlddatabase;
 
     for (int i = 1; i <= tlddatabase->queryNumfacesinDatabase();i++ )//first grouping based on data present in database
     {
-        int numfacesingroup = -1;
+        int numfacesingroup               = -1;
         unitFaceModel* const comparemodel = tlddatabase->getFaceModel(i);
         QList<IplImage*> recognisedGroup;
+
         for(int j=0;j< inputFaceList.size();j++)
         {
             for (int k=0;k<inputFaceList.at(j).size();k++)
             {
-                Tldrecognition* const tmpTLD      = new Tldrecognition;
+                Tldrecognition* const tmpTLD = new Tldrecognition;
+
                 if (tmpTLD->getRecognitionConfidence(resizedinputFaceList.at(j).at(k),comparemodel) > 0.6)
                 {
                     recognisedGroup.append(resizedinputFaceList.at(j).at(k));
                     tagged[j].replace(k,true);
                     numfacesingroup++;
                 }
+
                 delete tmpTLD;
             }
         }
@@ -86,18 +91,20 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
             if(tagged.at(i).at(j) == false)
             {
                 Tldrecognition* const tmpTLD      = new Tldrecognition;
-                unitFaceModel *comparemodel = tmpTLD->getModeltoStore(resizedinputFaceList.at(i).at(j));
+                unitFaceModel* const comparemodel = tmpTLD->getModeltoStore(resizedinputFaceList.at(i).at(j));
                 delete tmpTLD;
                 QList<IplImage*> tmpGroup;
                 tmpGroup.append(resizedinputFaceList.at(i).at(j));
                 int tmpfacecount = 0;
+
                 for(int m=i+1; m < resizedinputFaceList.size(); m++)
                 {
                     for (int n=0; n< resizedinputFaceList.at(m).size(); n++)
                     {
                         if(tagged.at(m).at(n) == false)
                         {
-                            Tldrecognition* const tmpTLD      = new Tldrecognition;
+                            Tldrecognition* const tmpTLD = new Tldrecognition;
+
                             if(tmpTLD->getRecognitionConfidence(resizedinputFaceList.at(m).at(n),comparemodel) > 0.6)
                             {
                                 tmpGroup.append(resizedinputFaceList.at(m).at(n));
@@ -107,6 +114,7 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
                         }
                     }
                 }
+
                 if(tmpfacecount > 0)
                 {
                     groupnames.append("found similar");
@@ -117,7 +125,7 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
         }
     }
 
-    QList<IplImage *> tmpgroup;
+    QList<IplImage*> tmpgroup;
 
     for(int i=0; i<resizedinputFaceList.size(); i++)//group all faces not classified anywhere above(unknown new faces)
     {
@@ -125,7 +133,7 @@ void Tldclassify::groupFaces(QList<QList<IplImage*> > inputFaceList)
         {
             if(tagged.at(i).at(j) == false)
             {
-                Tldrecognition* const tmpTLD      = new Tldrecognition;
+                Tldrecognition* const tmpTLD = new Tldrecognition;
                 modelsToStore.append(tmpTLD->getModeltoStore(resizedinputFaceList.at(i).at(j)));
                 delete tmpTLD;
                 tmpgroup.append(resizedinputFaceList.at(i).at(j));

@@ -1,8 +1,8 @@
 /** ===========================================================
  * @file
  *
- * This file is a part of libface project
- * <a href="http://libface.sourceforge.net">http://libface.sourceforge.net</a>
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date    2010-03-03
  * @brief   openTLD interface.
@@ -16,7 +16,7 @@
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
- *
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -48,7 +48,7 @@ public:
         main  = 0;
     }
 
-    Main*  main;
+    Main* main;
 };
 
 Tldrecognition::Tldrecognition()
