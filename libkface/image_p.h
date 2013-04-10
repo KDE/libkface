@@ -38,17 +38,17 @@
 namespace KFaceIface
 {
 
-class Image::ImagePriv : public QSharedData
+class Image::Private : public QSharedData
 {
 public:
 
-    ImagePriv()
+    Private()
         : originalImage(0),
           image(0)
     {
     }
 
-    ImagePriv(const ImagePriv& other)
+    Private(const Private& other)
         : QSharedData(other)
     {
         // this code is called of we want to detach()
@@ -56,13 +56,15 @@ public:
         image         = cvCloneImage(other.image);
     }
 
-    ~ImagePriv()
+    ~Private()
     {
         if (image)
             cvReleaseImage(&image);
 
         cvReleaseImage(&originalImage);
     }
+
+public:
 
     IplImage* originalImage;
     IplImage* image;
@@ -78,7 +80,7 @@ public:
     ImageData()                : image(0)     {}
     ImageData(IplImage* image) : image(image) {}
 
-    ImageData& operator=(IplImage* im)        { image = im; return *this; }
+    ImageData& operator=(IplImage* const im)  { image = im; return *this; }
     operator IplImage* ()                     { return image; }
     operator const IplImage* () const         { return image; }
 
