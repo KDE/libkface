@@ -12,7 +12,7 @@
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="adityabhatt at gmail dot com">adityabhatt at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
@@ -81,7 +81,7 @@ public:
      * @param test The test IplImage * image to be recognized
      * @return The ID of the closest face
      */
-    virtual std::pair<int, float> recognize(IplImage* test) = 0 ;
+    virtual std::pair<int, float> recognize(IplImage* const test) = 0 ;
 
     /**
      * Abstract method to return the count of faces in the DB
@@ -98,8 +98,8 @@ public:
 
     virtual ~LibFaceDetectCore() {};
 
-    virtual void setColorImg(const IplImage *colorImg) = 0;
-    virtual std::vector<Face> detectFaces(const IplImage* inputImage, const CvSize& originalSize = cvSize(0,0)) = 0;
+    virtual void setColorImg(const IplImage* const colorImg) = 0;
+    virtual std::vector<Face> detectFaces(const IplImage* const inputImage, const CvSize& originalSize = cvSize(0, 0)) = 0;
     virtual std::vector<Face> detectFaces(const std::string& filename) = 0;
     virtual double accuracy() const = 0;
     virtual void setAccuracy(double value) = 0;
