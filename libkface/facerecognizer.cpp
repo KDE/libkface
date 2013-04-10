@@ -25,16 +25,13 @@
  *
  * ============================================================ */
 
-//Qt includes
+//KDE includes
+#include <KDebug>
 
+//Qt includes
 #include <QList>
 
-//KDE includes
-
-#include <kdebug.h>
-
 //local includes
-
 #include "facerecognizer.h"
 #include "libopencv.h"
 #include "tlddatabase.h"
@@ -43,18 +40,17 @@
 namespace KFaceIface
 {
 
-class FaceRecognizer::Private
+class FaceRecognizer::FaceRecognizerPriv
 {
 public:
 
-    Private()
+    FaceRecognizerPriv()
     {
-        tldRecognitionCore = 0;
-        db                 = 0;
-        threshold          = 0.3;
+        db = 0;
+        threshold  = 0.3;
     }
 
-    ~Private()
+    ~FaceRecognizerPriv()
     {
         delete db;
     }
@@ -67,29 +63,27 @@ public:
         {
             db = new Tlddatabase();
         }
-
         return db;
     }
 
-    Tldrecognition* recognition() const
+    Tldrecognition* recognition()
     {
-        return (new Tldrecognition);
+        tldRecognitionCore = new Tldrecognition();
+        return tldRecognitionCore;
     }
 
 public:
 
-    float           threshold;
+    float threshold;
 
 private:
 
-    Tldrecognition* tldRecognitionCore;
-    Tlddatabase*    db;
+    Tldrecognition*  tldRecognitionCore;
+    Tlddatabase* db;
 };
 
-// -------------------------------------------------------------------------------
-
 FaceRecognizer::FaceRecognizer()
-    : d(new Private())
+    : d(new FaceRecognizerPriv())
 {
 }
 
@@ -97,33 +91,34 @@ FaceRecognizer::~FaceRecognizer()
 {
 }
 
-QList<float> FaceRecognizer::recognizeFaces(const QList<Face>& faces)
+QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
 {
     QList<float> recognitionRate;
-
-    foreach(Face face, faces)
+    for(int faceindex = 0; faceindex < faces.size() ;faceindex++)
     {
         vector<float> recognitionconfidence;
 
-        IplImage* const img1           = face.image().toIplImage();
+        IplImage *img1 = faces[faceindex].image().toIplImage();
         IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
-        int count                      = -1;
         cvResize(img1, inputfaceimage);
 
-        for (int i = 1; i <= d->database()->queryNumfacesinDatabase(); i++)
+        int count                      = -1;
+
+        for (int i = 1; i <= d->database()->queryNumfacesinDatabase();i++ )
         {
             unitFaceModel* const comparemodel = d->database()->getFaceModel(i);
             recognitionconfidence.push_back(d->recognition()->getRecognitionConfidence(inputfaceimage,comparemodel));
             count++;
+            kDebug() << "............................." << count;
         }
 
         float maxConfidence = recognitionconfidence[0];
 
         if(count != -1)
         {
-            int maxConfIndex = 0;
+            int maxConfIndex    = 0;
 
-            for(int tmpInt = 0; tmpInt <= count; tmpInt++ )
+            for(int tmpInt = 0; tmpInt <= count ; tmpInt++ )
             {
                 if(recognitionconfidence[tmpInt] > maxConfidence)
                 {
@@ -132,24 +127,21 @@ QList<float> FaceRecognizer::recognizeFaces(const QList<Face>& faces)
                 }
             }
 
-            if(maxConfidence > d->threshold )
-            {
-                face.setName(d->database()->querybyFaceid(maxConfIndex+1));
-                kDebug() << "person  " << qPrintable(d->database()->querybyFaceid(maxConfIndex+1));
-            }
+            faces[faceindex].setName(d->database()->querybyFaceid(maxConfIndex+1));
+            faces[faceindex].setId(d->database()->queryFaceID(maxConfIndex+1));
+            kDebug() << "preson  " << qPrintable(d->database()->querybyFaceid(maxConfIndex+1));
         }
-
         recognitionRate.append(maxConfidence);
+        kDebug() << maxConfidence ;
     }
-
     return recognitionRate;
 }
 
-void FaceRecognizer::storeFaces(const QList<Face>& faces)
+void FaceRecognizer::storeFaces(QList<Face> &faces)
 {
     foreach(Face face, faces)
     {
-        IplImage* const img1                              = face.image().toIplImage();// tlddatabase->QImage2IplImage(face.image().toQImage());
+        IplImage  *img1 = face.image().toIplImage();// tlddatabase->QImage2IplImage(face.image().toQImage());
 
         IplImage* const inputfaceimage                    = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
         cvResize(img1,inputfaceimage);
@@ -157,6 +149,8 @@ void FaceRecognizer::storeFaces(const QList<Face>& faces)
         KFaceIface::unitFaceModel* const facemodeltostore = d->recognition()->getModeltoStore(inputfaceimage);
         facemodeltostore->Name                            = face.name();
         facemodeltostore->faceid                          = face.id();
+
+        kDebug() << face.name() << face.id() ;
 
         d->database()->insertFaceModel(facemodeltostore);             //store facemodel in tlddatabase
     }
