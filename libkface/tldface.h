@@ -39,9 +39,9 @@
 
 // Qt includes
 
-#include <QList>
-#include <QBuffer>
-#include <QVariant>
+#include <QtCore/QList>
+#include <QtCore/QBuffer>
+#include <QtCore/QVariant>
 
 // Local includes
 

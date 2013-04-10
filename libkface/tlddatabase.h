@@ -36,7 +36,6 @@
 // C++ includes
 
 #include <iostream>
-#include <kstandarddirs.h>
 
 // SQlite includes
 
@@ -44,12 +43,16 @@
 
 // Qt includes
 
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlTableModel>
-#include <QDebug>
-#include <QObject>
-#include <QImage>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlTableModel>
+#include <QtCore/QDebug>
+#include <QtCore/QObject>
+#include <QtGui/QImage>
+
+// KDE includes
+
+#include <kstandarddirs.h>
 
 // Local includes
 
