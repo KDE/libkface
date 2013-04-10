@@ -6,6 +6,9 @@
  *
  * @date    2010-03-03
  * @brief   openTLD interface.
+ * @section DESCRIPTION
+ *
+ * Face detection through openTLD interface.
  *
  * @author Copyright (C) 2012-2013 by Mahesh Hegde
  *         <a href="mailto:maheshmhegade at gmail dot com">maheshmhegade at gmail dot com</a>
