@@ -36,18 +36,18 @@
 namespace KFaceIface
 {
 
-class FaceDetector::FaceDetectorPriv : public QSharedData
+class FaceDetector::Private : public QSharedData
 {
 public:
 
-    FaceDetectorPriv()
+    Private()
     {
         db          = 0;
         accuracy    = -1;
         specificity = -1;
     }
 
-    ~FaceDetectorPriv()
+    ~Private()
     {
         delete db;
     }
@@ -59,11 +59,14 @@ public:
         if (!db)
         {
             db = new Database(Database::InitDetection);
+
             if (accuracy != -1)
                 db->setDetectionAccuracy(accuracy);
+
             if (specificity != -1)
                 db->setDetectionSpecificity(specificity);
         }
+
         return db;
     }
 
@@ -74,8 +77,8 @@ public:
 
 public:
 
-    double accuracy;
-    double specificity;
+    double    accuracy;
+    double    specificity;
 
 private:
 
@@ -83,7 +86,7 @@ private:
 };
 
 FaceDetector::FaceDetector()
-    : d(new FaceDetectorPriv)
+    : d(new Private)
 {
 }
 
@@ -146,7 +149,7 @@ int FaceDetector::recommendedImageSize(const QSize& availableSize) const
     return d->database()->recommendedImageSizeForDetection(availableSize);
 }
 
-void FaceDetector::setColorMode(const char *mode)
+void FaceDetector::setColorMode(const char* const mode)
 {
     d->database()->setColorMode(mode);
 }
