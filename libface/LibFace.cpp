@@ -12,7 +12,7 @@
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="adityabhatt at gmail dot com">adityabhatt at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2010 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -56,12 +56,12 @@ using namespace std;
 namespace libface
 {
 
-class LibFace::LibFacePriv
+class LibFace::Private
 {
 
 public:
 
-    LibFacePriv()
+    Private()
     {
         detectionCore   = 0;
         recognitionCore = 0;
@@ -80,7 +80,7 @@ public:
 };
 
 LibFace::LibFace(Mode type, const string& configDir, const string& cascadeDir)
-    : d(new LibFacePriv)
+    : d(new Private)
 {
     d->type = type;
 
@@ -90,18 +90,18 @@ LibFace::LibFace(Mode type, const string& configDir, const string& cascadeDir)
     // So there is a case for everything.
     switch (d->type)
     {
-    case DETECT:
-        d->cascadeDir      = cascadeDir;
-        d->detectionCore   = new FaceDetect(d->cascadeDir);
-        break;
-    case EIGEN:
-        d->recognitionCore = new Eigenfaces(configDir);
-        break;
-    default:    // Initialize both detector and Eigenfaces
-        d->cascadeDir      = cascadeDir;
-        d->detectionCore   = new FaceDetect(d->cascadeDir);
-        d->recognitionCore = new Eigenfaces(configDir);
-        break;
+        case DETECT:
+            d->cascadeDir      = cascadeDir;
+            d->detectionCore   = new FaceDetect(d->cascadeDir);
+            break;
+        case EIGEN:
+            d->recognitionCore = new Eigenfaces(configDir);
+            break;
+        default:    // Initialize both detector and Eigenfaces
+            d->cascadeDir      = cascadeDir;
+            d->detectionCore   = new FaceDetect(d->cascadeDir);
+            d->recognitionCore = new Eigenfaces(configDir);
+            break;
     }
 }
 
@@ -109,17 +109,18 @@ LibFace::~LibFace()
 {
     switch(d->type)
     {
-    case DETECT:
-        delete d->detectionCore;
-        break;
-    case EIGEN:
-        delete d->recognitionCore;
-        break;
-    default:
-        delete d->detectionCore;
-        delete d->recognitionCore;
-        break;
+        case DETECT:
+            delete d->detectionCore;
+            break;
+        case EIGEN:
+            delete d->recognitionCore;
+            break;
+        default:
+            delete d->detectionCore;
+            delete d->recognitionCore;
+            break;
     }
+
     cvReleaseImage(&d->lastImage);
 
     delete d;
@@ -148,13 +149,13 @@ vector<Face> LibFace::detectFaces(const string& filename, int /*scaleFactor*/)
     return d->detectionCore->detectFaces(d->lastImage);
 }
 
-vector<Face> LibFace::detectFaces(const char* arr, int width, int height, int step, int depth, int channels, int /*scaleFactor*/)
+vector<Face> LibFace::detectFaces(const char* const arr, int width, int height, int step, int depth, int channels, int /*scaleFactor*/)
 {
-    IplImage* image = LibFaceUtils::charToIplImage(arr, width, height, step, depth, channels);
+    IplImage* const image = LibFaceUtils::charToIplImage(arr, width, height, step, depth, channels);
     return d->detectionCore->detectFaces(image);
 }
 
-vector<Face> LibFace::detectFaces(const IplImage* image, const CvSize& originalSize)
+vector<Face> LibFace::detectFaces(const IplImage* const image, const CvSize& originalSize)
 {
     return d->detectionCore->detectFaces(image, originalSize);
 }
@@ -168,9 +169,8 @@ map<string,string> LibFace::getConfig()
 int LibFace::loadConfig(const string& /*dir*/)
 {
     int result = 0;
-    /*
-    d->recognitionCore->loadData(dir);
-*/
+
+    //d->recognitionCore->loadData(dir);
 
     return result;
 }
@@ -181,7 +181,7 @@ int LibFace::loadConfig(const map<string, string>& config)
     return result;
 }
 
-vector<pair<int, double> > LibFace::recognise(const string& filename, vector<Face>* faces, int scaleFactor)
+vector<pair<int, double> > LibFace::recognise(const string& filename, vector<Face>* const faces, int scaleFactor)
 {
     IplImage* img                  = cvLoadImage(filename.data(), CV_LOAD_IMAGE_GRAYSCALE); // grayscale
     vector<pair<int, double> > ret = this->recognise(img, faces, scaleFactor);
@@ -189,7 +189,7 @@ vector<pair<int, double> > LibFace::recognise(const string& filename, vector<Fac
     return ret;
 }
 
-vector<pair<int, double> > LibFace::recognise(const IplImage* img, vector<Face>* faces, int /*scaleFactor*/)
+vector<pair<int, double> > LibFace::recognise(const IplImage* const img, vector<Face>* const faces, int /*scaleFactor*/)
 {
     vector<pair<int, double> > result;
 
@@ -215,6 +215,7 @@ vector<pair<int, double> > LibFace::recognise(const IplImage* img, vector<Face>*
     vector<IplImage*> newFaceImgArr;
 
     int size = faces->size();
+
     for (int i=0 ; i<size ; i++)
     {
         Face* const face = &faces->at(i);
@@ -246,13 +247,13 @@ vector<pair<int, double> > LibFace::recognise(const IplImage* img, vector<Face>*
     return result;
 }
 
-vector<pair<int, double> > LibFace::recognise(const char* arr, vector<Face>* faces, int width, int height, int step, int depth, int channels, int scaleFactor)
+vector<pair<int, double> > LibFace::recognise(const char* const arr, vector<Face>* const faces, int width, int height, int step, int depth, int channels, int scaleFactor)
 {
     IplImage* const img = LibFaceUtils::charToIplImage(arr, width, height, step, depth, channels);
     return this->recognise(img, faces, scaleFactor);
 }
 
-vector<pair<int, double> > LibFace::recognise(vector<Face>* faces, int /*scaleFactor*/)
+vector<pair<int, double> > LibFace::recognise(vector<Face>* const faces, int /*scaleFactor*/)
 {
     vector<pair<int, double> > result;
 
@@ -331,7 +332,7 @@ int LibFace::train(const string& /*dir*/)
     return result;
 }
 
-std::vector<int> LibFace::update(const IplImage* img, vector<Face>* faces, int /*scaleFactor*/)
+std::vector<int> LibFace::update(const IplImage* const img, vector<Face>* faces, int /*scaleFactor*/)
 {
     std::vector<int> assignedIDs;
 
@@ -386,13 +387,13 @@ std::vector<int> LibFace::update(const IplImage* img, vector<Face>* faces, int /
     return assignedIDs;
 }
 
-std::vector<int> LibFace::update(const char* arr, vector<Face>* faces, int width, int height, int step, int depth, int channels, int scaleFactor)
+std::vector<int> LibFace::update(const char* const arr, vector<Face>* const faces, int width, int height, int step, int depth, int channels, int scaleFactor)
 {
     IplImage* const img = LibFaceUtils::charToIplImage(arr, width, height, step, depth, channels);
     return this->update(img, faces, scaleFactor);
 }
 
-std::vector<int> LibFace::update(const string& filename, vector<Face>* faces, int scaleFactor)
+std::vector<int> LibFace::update(const string& filename, vector<Face>* const faces, int scaleFactor)
 {
     IplImage* img        = cvLoadImage(filename.data(), CV_LOAD_IMAGE_GRAYSCALE); //grayscale
     std::vector<int> ret = this->update(img, faces, scaleFactor);
@@ -400,7 +401,7 @@ std::vector<int> LibFace::update(const string& filename, vector<Face>* faces, in
     return ret;
 }
 
-std::vector<int> LibFace::update(vector<Face>* faces, int /*scaleFactor*/)
+std::vector<int> LibFace::update(vector<Face>* const faces, int /*scaleFactor*/)
 {
     std::vector<int> assignedIDs;
 
@@ -485,7 +486,7 @@ CvSize LibFace::getRecommendedImageSizeForRecognition(const CvSize&) const
 {
     return cvSize(d->facesize(), d->facesize());
 }
-void LibFace::setColorImg(const IplImage *colorImg)
+void LibFace::setColorImg(const IplImage* const colorImg)
 {
     d->detectionCore->setColorImg(colorImg);
 }
