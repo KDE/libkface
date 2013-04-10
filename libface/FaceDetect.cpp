@@ -84,13 +84,15 @@ public:
     }
 
     /** Assumptions on the relation of the size of a facial feature to the whole face.
-     *  Basically, we say the size is between 1/10 and 1/4, approx 1/6 */
+     *  Basically, we say the size is between 1/10 and 1/4, approx 1/6
+     */
     static double faceToFeatureRelationMin()      { return 10; }
     static double faceToFeatureRelationMax()      { return 4;  }
     static double faceToFeatureRelationPresumed() { return 6;  }
 
     /** A primary cascade does the initial scan on the whole image area
-     *  A verifying cascade scans the area reported by the primary cascade */
+     *  A verifying cascade scans the area reported by the primary cascade
+     */
     void setPrimaryCascade(bool isPrimary = true)
     {
         primaryCascade   = isPrimary;
@@ -112,7 +114,8 @@ public:
 
     /** given the full face rect (relative to whole image), returns the rectangle
      *  of the region of interest of this cascade (still relative to whole image).
-     *  For frontal face cascades, returns the given parameter unchanged. */
+     *  For frontal face cascades, returns the given parameter unchanged.
+     */
     CvRect faceROI(const CvRect& faceRect) const
     {
         return cvRect(lround(faceRect.x + xROI      * faceRect.width),
@@ -135,13 +138,13 @@ public:
         if (!isFacialFeature())
         {
             // Start with a size slightly smaller than the presumed face
-            minSize = cvSize(lround(double(faceSize.width) * 0.6),
+            minSize = cvSize(lround(double(faceSize.width)  * 0.6),
                              lround(double(faceSize.height) * 0.6));
         }
         else
         {
             // for a feature, which is smaller than the face, start with a significantly smaller min size
-            minSize = cvSize(lround(double(faceSize.width) / faceToFeatureRelationMin()),
+            minSize = cvSize(lround(double(faceSize.width)  / faceToFeatureRelationMin()),
                              lround(double(faceSize.height) / faceToFeatureRelationMin()));
         }
 
@@ -163,8 +166,8 @@ public:
         if (!isFacialFeature())
             return 1.0;
 
-        if (faceSize.width / faceToFeatureRelationMin() >= windowSize.width
-                && faceSize.height / faceToFeatureRelationMin() >= windowSize.height)
+        if (faceSize.width  / faceToFeatureRelationMin() >= windowSize.width &&
+            faceSize.height / faceToFeatureRelationMin() >= windowSize.height)
             return 1.0;
 
         return max(double(windowSize.width)  * faceToFeatureRelationPresumed() / faceSize.width,
@@ -344,6 +347,7 @@ void FaceDetect::updateParameters(const CvSize& /*scaledSize*/, const CvSize& or
      * the number of operations and thus speed */
     if (d->speedVsAccuracy < 0.75)
         minSize += 100 * (0.75 - d->speedVsAccuracy);
+
     // Cascade minimum is 20 for most of our cascades (one is 24). Passing 0 will use the cascade minimum.
     if (minSize < 20)
         minSize = 0;
@@ -463,23 +467,23 @@ vector<Face> FaceDetect::cascadeResult(const IplImage* const inputImage, CvHaarC
                                 params.grouping,                       // Drop groups of less than n detections
                                 params.flags,                          // Optionally, pre-test regions by edge detection
                                 params.minSize                         // Minimum face size to look for
-                                );
+                               );
 
     // Loop the number of faces found.
     for (int i = 0; i < (faces ? faces->total : 0); i++)
     {
         // Create a new rectangle for drawing the face
 
-        CvRect* r = (CvRect*) cvGetSeqElem(faces, i);
+        CvRect* const r = (CvRect*) cvGetSeqElem(faces, i);
 
         // Find the dimensions of the face
 
-        pt1.x     = r->x;
-        pt2.x     = r->x + r->width;
-        pt1.y     = r->y;
-        pt2.y     = r->y + r->height;
+        pt1.x           = r->x;
+        pt2.x           = r->x + r->width;
+        pt1.y           = r->y;
+        pt2.y           = r->y + r->height;
 
-        Face face = Face(pt1.x,pt1.y,pt2.x,pt2.y);
+        Face face       = Face(pt1.x,pt1.y,pt2.x,pt2.y);
 
         result.push_back(face);
     }
@@ -762,6 +766,7 @@ vector<Face> FaceDetect::detectFaces(const IplImage* const inputImage, const CvS
     {
         if (DEBUG)
             cout << "downscaling input image" << endl;
+
         scaled = libface::LibFaceUtils::resizeToArea(inputImage, 786432, d->scaleFactor);
     }
 
