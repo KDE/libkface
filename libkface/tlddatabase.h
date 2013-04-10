@@ -71,14 +71,14 @@ public:
     void openFaceDatabase();
     void createFaceTable();
 
-    int insertFaceModel(unitFaceModel* const) const;
-    int querybyName(const QString&)           const;
-    int queryFaceID(int id)                   const;
-    int queryNumfacesinDatabase()             const;
+    int insertFaceModel(unitFaceModel* const)     const;
+    int querybyName(const QString&)               const;
+    int queryFaceID(int id)                       const;
+    int queryNumfacesinDatabase()                 const;
 
-    QString        querybyFaceid(int faceid)  const;
-    unitFaceModel* getFaceModel(int faceid)   const;
-    IplImage*      QImage2IplImage(QImage)   const;
+    QString        querybyFaceid(int faceid)      const;
+    unitFaceModel* getFaceModel(int faceid)       const;
+    IplImage*      QImage2IplImage(const QImage&) const;
 
 private:
 

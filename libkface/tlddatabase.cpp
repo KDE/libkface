@@ -117,6 +117,7 @@ int Tlddatabase::queryFaceID(int id) const
 
     return int();
 }
+
 int Tlddatabase::insertFaceModel(unitFaceModel* const facemodel) const
 {
     int newId = -1;
@@ -161,7 +162,7 @@ unitFaceModel* Tlddatabase::getFaceModel(int faceid) const
     return facemodel;
 }
 
-IplImage* Tlddatabase::QImage2IplImage(QImage qimg) const
+IplImage* Tlddatabase::QImage2IplImage(const QImage& qimg) const
 {
 
     IplImage* const imgHeader = cvCreateImageHeader(cvSize(qimg.width(), qimg.height()), IPL_DEPTH_8U, 4);
