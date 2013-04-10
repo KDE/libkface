@@ -87,7 +87,7 @@ K_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
 
 class RecognitionDatabase::Private : public QSharedData
 {
-    public:
+public:
 
     ~Private()
     {
@@ -112,7 +112,7 @@ class RecognitionDatabase::Private : public QSharedData
         return db;
     }
 
-    private:
+private:
 
     friend class RecognitionDatabaseStaticPriv;
 
@@ -123,7 +123,7 @@ class RecognitionDatabase::Private : public QSharedData
     {
     }
 
-    private:
+private:
 
     Database* db;
 };
@@ -164,11 +164,7 @@ void RecognitionDatabaseStaticPriv::removeDatabase(const QString& key)
     databases.remove(key);
 }
 
-RecognitionDatabase RecognitionDatabase::addDatabase(const QString& configurationPath)
-{
-    QExplicitlySharedDataPointer<Private> d = static_d->database(configurationPath);
-    return RecognitionDatabase(d);
-}
+// ----------------------------------------------------------------------------------------------
 
 RecognitionDatabase::RecognitionDatabase()
 {
@@ -193,6 +189,12 @@ RecognitionDatabase& RecognitionDatabase::operator=(const KFaceIface::Recognitio
 RecognitionDatabase::~RecognitionDatabase()
 {
     // saveConfig() called from KFace::Database Priv destructor
+}
+
+RecognitionDatabase RecognitionDatabase::addDatabase(const QString& configurationPath)
+{
+    QExplicitlySharedDataPointer<Private> d = static_d->database(configurationPath);
+    return RecognitionDatabase(d);
 }
 
 bool RecognitionDatabase::isNull() const
