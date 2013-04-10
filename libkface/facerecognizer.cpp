@@ -112,8 +112,12 @@ QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
             kDebug() << "............................." << count;
         }
 
+        if(!d->database()->queryNumfacesinDatabase())
+        {
+            return recognitionRate;
+        }
         float maxConfidence = recognitionconfidence[0];
-
+       
         if(count != -1)
         {
             int maxConfIndex    = 0;
