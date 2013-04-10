@@ -28,6 +28,8 @@
 #ifndef KFACE_FACERECOGNIZER_H
 #define KFACE_FACERECOGNIZER_H
 
+// Local includes
+
 #include "face.h"
 #include "image.h"
 
@@ -42,15 +44,15 @@ public:
     FaceRecognizer();
     ~FaceRecognizer();
 
-    QList<float> recognizeFaces(QList<Face> &faces);
-    void storeFaces(QList<Face> &faces);
+    QList<float> recognizeFaces(QList<Face>& faces);
+    void storeFaces(QList<Face>& faces);
 
     //void   setThreshold(float value);
 
 private:
 
-    class FaceRecognizerPriv;
-    FaceRecognizerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace KFaceIface
