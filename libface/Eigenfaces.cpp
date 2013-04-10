@@ -13,7 +13,7 @@
  *
  * @author Copyright (C) 2009-2010 by Alex Jironkin
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
@@ -62,12 +62,12 @@ using namespace std;
 namespace libface
 {
 
-class Eigenfaces::EigenfacesPriv
+class Eigenfaces::Private
 {
 
 public:
 
-    EigenfacesPriv()
+    Private()
     {
         CUT_OFF     = 10000000.0; //50000000.0;
         UPPER_DIST  = 10000000;
@@ -109,7 +109,7 @@ public:
 /**
  * Performs PCA on the current training data, projects the training faces, and stores them in a DB.
  */
-void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* const newFace)
+void Eigenfaces::Private::learn(int index, IplImage* const newFace)
 {
     int i;
     std::vector<IplImage*> tempFaces;
@@ -142,6 +142,7 @@ void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* const newFace)
     for(i = 0; i < 2; i++ )
     {
         eigenObjects[i] = cvCreateImage( size, IPL_DEPTH_32F, 1 );
+
         if(!(eigenObjects[i] ) )
             cout<<"Problems initializing eigenObjects"<<endl;
     }
@@ -173,9 +174,10 @@ void Eigenfaces::EigenfacesPriv::learn(int index, IplImage* const newFace)
     tempFaces.clear();
 }
 
-string Eigenfaces::EigenfacesPriv::stringify(unsigned int x) const
+string Eigenfaces::Private::stringify(unsigned int x) const
 {
     ostringstream o;
+
     if (!(o << x))
     {
         if (DEBUG)
@@ -185,8 +187,10 @@ string Eigenfaces::EigenfacesPriv::stringify(unsigned int x) const
     return o.str();
 }
 
+// -------------------------------------------------------------------
+
 Eigenfaces::Eigenfaces(const string& dir)
-          : d(new EigenfacesPriv)
+    : d(new Private)
 {
 
     struct stat stFileInfo;
@@ -196,6 +200,7 @@ Eigenfaces::Eigenfaces(const string& dir)
         cout << "Config location: " << d->configFile << endl;
 
     int intStat = stat(d->configFile.c_str(),&stFileInfo);
+
     if (intStat == 0)
     {
         if (DEBUG)
@@ -260,10 +265,12 @@ int Eigenfaces::loadConfig(const string& dir)
 
     CvFileStorage* fileStorage = cvOpenFileStorage(d->configFile.data(), 0, CV_STORAGE_READ);
     cout << "opened" << endl;
+
     if (!fileStorage)
     {
         if (DEBUG)
             cout << "Can't open config file for reading :" << d->configFile << endl;
+
         return 1;
     }
 
@@ -299,8 +306,9 @@ int Eigenfaces::loadConfig(const map<string, string>& c)
 {
     // FIXME: Because std::map has no convenient const accessor, make a copy.
     map<string, string> config(c);
+
     if (DEBUG)
-        cout<<"Load config data from a map"<<endl;
+        cout << "Load config data from a map" << endl;
 
     int nIds  = atoi(config["nIds"].c_str()), i;
 
@@ -322,7 +330,7 @@ int Eigenfaces::loadConfig(const map<string, string>& c)
     return 0;
 }
 
-pair<int, float> Eigenfaces::recognize(IplImage* input)
+pair<int, float> Eigenfaces::recognize(IplImage* const input)
 {
     if (input == 0)
     {

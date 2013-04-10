@@ -14,7 +14,7 @@
  *
  * @author Copyright (C) 2010 by Alex Jironkin
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
@@ -37,7 +37,7 @@
 namespace libface
 {
 
-Face::Face(int x1, int y1, int x2, int y2, int id, const IplImage* face)
+Face::Face(int x1, int y1, int x2, int y2, int id, const IplImage* const face)
 {
     //Set coordinates of the face rectangle;
     this->x1     = x1;
@@ -88,7 +88,7 @@ void Face::setId(int id)
     this->id = id;
 }
 
-void Face::setFace(const IplImage* face)
+void Face::setFace(const IplImage* const face)
 {
     this->face = face;
 }
@@ -104,7 +104,7 @@ IplImage* Face::takeFace() const
 const IplImage* Face::getFace() const
 {
     if (this->face)
-	return this->face;
+        return this->face;
 
     return 0;
 }

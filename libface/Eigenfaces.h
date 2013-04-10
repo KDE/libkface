@@ -13,7 +13,7 @@
  *
  * @author Copyright (C) 2009-2010 by Alex Jironkin
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
@@ -99,7 +99,7 @@ public:
      * @return A pair with ID and closeness of the closest face.
      *
      */
-    std::pair<int, float> recognize(IplImage* input);
+    std::pair<int, float> recognize(IplImage* const input);
 
     /**
      * Saves the config is a given directory.
@@ -127,8 +127,8 @@ public:
 
 private:
 
-    class EigenfacesPriv;
-    EigenfacesPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace libface
