@@ -67,6 +67,8 @@ public:
     };
     Q_DECLARE_FLAGS(InitFlags, InitFlag)
 
+public:
+
     /**
      * Constructor for Database
      * @param flags Flags that specify type of usage for the Database instance.
@@ -210,8 +212,8 @@ public:
 
 private:
 
-    class DatabasePriv;
-    QExplicitlySharedDataPointer<DatabasePriv> d;
+    class Private;
+    QExplicitlySharedDataPointer<Private> d;
 };
 
 } // namespace KFaceIface
