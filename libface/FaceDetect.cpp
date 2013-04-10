@@ -58,10 +58,10 @@ public:
         minSize         = cvSize(0,0);
     }
 
-    double        searchIncrement;
-    int           grouping;
-    int           flags;
-    CvSize        minSize;
+    double searchIncrement;
+    int    grouping;
+    int    flags;
+    CvSize minSize;
 };
 
 // --------------------------------------------------------------------------------
@@ -552,7 +552,7 @@ bool FaceDetect::verifyFace(const IplImage* const inputImage, const Face& face)
                 IplImage* feature = LibFaceUtils::copyRect(inputImage, roi);
                 foundFaces        = cascadeResult(feature, d->cascadeSet->getCascade(i).haarcasc, d->verifyingParams);
 
-                if (foundFaces.size())
+                if (!foundFaces.empty())
                     facialFeatureVotes++;
 
                 /*
@@ -598,7 +598,7 @@ bool FaceDetect::verifyFace(const IplImage* const inputImage, const Face& face)
                 foundFaces = cascadeResult(extendedFaceImg, d->cascadeSet->getCascade(i).haarcasc, d->verifyingParams);
 
                 // We dont need to check the size of found regions, the minSize in verifyingParams is large enough
-                if (foundFaces.size())
+                if (!foundFaces.empty())
                     frontalFaceVotes++;
             }
 
@@ -835,7 +835,7 @@ vector<Face> FaceDetect::detectFaces(const IplImage* const inputImage, const CvS
         }
 
         //Extract face-image from whole-image.
-        CvRect rect       = cvRect(it->getX1(), it->getY1(), it->getWidth(), it->getHeight());
+        CvRect rect             = cvRect(it->getX1(), it->getY1(), it->getWidth(), it->getHeight());
 
         IplImage* const faceImg = LibFaceUtils::copyRect(fullImage, rect);
         it->setFace(faceImg);
