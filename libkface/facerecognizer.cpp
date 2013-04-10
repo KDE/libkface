@@ -100,45 +100,55 @@ QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
 
         IplImage *img1 = d->database()->QImage2IplImage(faces[faceindex].image().toColorQImage());
         IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
-        cvResize(img1, inputfaceimage);
-
-        int count                      = -1;
-
-        for (int i = 1; i <= d->database()->queryNumfacesinDatabase();i++ )
+        try
         {
-            unitFaceModel* const comparemodel = d->database()->getFaceModel(i);
-            recognitionconfidence.push_back(d->recognition()->getRecognitionConfidence(inputfaceimage,comparemodel));
-            count++;
-            kDebug() << "............................." << count;
-        }
+            cvResize(img1, inputfaceimage);
 
-        if(d->database()->queryNumfacesinDatabase() == 0)
-        {
-            kDebug() << "ooooooooooooooooooooook";
-            return recognitionRate;
-        }
+            int count                      = -1;
 
-        float maxConfidence = recognitionconfidence[0];
-       
-        if(count != -1)
-        {
-            int maxConfIndex    = 0;
-
-            for(int tmpInt = 0; tmpInt <= count ; tmpInt++ )
+            for (int i = 1; i <= d->database()->queryNumfacesinDatabase();i++ )
             {
-                if(recognitionconfidence[tmpInt] > maxConfidence)
-                {
-                    maxConfIndex  = tmpInt;
-                    maxConfidence = recognitionconfidence[tmpInt];
-                }
+                unitFaceModel* const comparemodel = d->database()->getFaceModel(i);
+                recognitionconfidence.push_back(d->recognition()->getRecognitionConfidence(inputfaceimage,comparemodel));
+                count++;
+                kDebug() << "............................." << count;
             }
 
-            faces[faceindex].setName(d->database()->querybyFaceid(maxConfIndex+1));
-            faces[faceindex].setId(d->database()->queryFaceID(maxConfIndex+1));
-            kDebug() << "preson  " << qPrintable(d->database()->querybyFaceid(maxConfIndex+1));
+            if(d->database()->queryNumfacesinDatabase() == 0)
+            {
+                return recognitionRate;
+            }
+
+            float maxConfidence = recognitionconfidence[0];
+
+            if(count != -1)
+            {
+                int maxConfIndex    = 0;
+
+                for(int tmpInt = 0; tmpInt <= count ; tmpInt++ )
+                {
+                    if(recognitionconfidence[tmpInt] > maxConfidence)
+                    {
+                        maxConfIndex  = tmpInt;
+                        maxConfidence = recognitionconfidence[tmpInt];
+                    }
+                }
+
+                faces[faceindex].setName(d->database()->querybyFaceid(maxConfIndex+1));
+                faces[faceindex].setId(d->database()->queryFaceID(maxConfIndex+1));
+                kDebug() << "preson  " << qPrintable(d->database()->querybyFaceid(maxConfIndex+1));
+            }
+            recognitionRate.append(maxConfidence);
+            kDebug() << maxConfidence ;
         }
-        recognitionRate.append(maxConfidence);
-        kDebug() << maxConfidence ;
+        catch (cv::Exception& e)
+        {
+            kError() << "cv::Exception:" << e.what();
+        }
+        catch(...)
+        {
+            kDebug() << "cv::Exception";
+        }
     }
     return recognitionRate;
 }
