@@ -56,8 +56,8 @@ QImage KFaceUtils::QImage2Grayscale(const QImage& qimg)
     if (img.width() == 0 || img.height() == 0)
         return img;
 
-    int pixels         = img.width() * img.height() ;
-    unsigned int* data = (unsigned int*)img.bits();
+    int pixels               = img.width() * img.height() ;
+    unsigned int* const data = (unsigned int*)img.bits();
 
     int val;
 
