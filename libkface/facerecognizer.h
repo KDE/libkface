@@ -44,8 +44,8 @@ public:
     FaceRecognizer();
     ~FaceRecognizer();
 
-    QList<float> recognizeFaces(QList<Face>& faces);
-    void storeFaces(QList<Face>& faces);
+    QList<float> recognizeFaces(const QList<Face>& faces);
+    void storeFaces(const QList<Face>& faces);
 
     //void   setThreshold(float value);
 

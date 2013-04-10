@@ -97,7 +97,7 @@ FaceRecognizer::~FaceRecognizer()
 {
 }
 
-QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
+QList<float> FaceRecognizer::recognizeFaces(const QList<Face>& faces)
 {
     QList<float> recognitionRate;
 
@@ -105,7 +105,7 @@ QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
     {
         vector<float> recognitionconfidence;
 
-        IplImage* img1                 = face.image().toIplImage();
+        IplImage* const img1           = face.image().toIplImage();
         IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
         int count                      = -1;
         cvResize(img1, inputfaceimage);
@@ -145,11 +145,11 @@ QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
     return recognitionRate;
 }
 
-void FaceRecognizer::storeFaces(QList<Face>& faces)
+void FaceRecognizer::storeFaces(const QList<Face>& faces)
 {
     foreach(Face face, faces)
     {
-        IplImage* img1 = face.image().toIplImage();// tlddatabase->QImage2IplImage(face.image().toQImage());
+        IplImage* const img1                              = face.image().toIplImage();// tlddatabase->QImage2IplImage(face.image().toQImage());
 
         IplImage* const inputfaceimage                    = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
         cvResize(img1,inputfaceimage);
