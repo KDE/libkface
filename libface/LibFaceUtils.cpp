@@ -12,7 +12,7 @@
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="adityabhatt at gmail dot com">adityabhatt at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
@@ -49,7 +49,7 @@ namespace libface
  * @param ratio The scaling factor, to be passed as reference
  * @return The resized image
  */
-IplImage* LibFaceUtils::resizeToArea(const IplImage* img, int area, double& ratio)
+IplImage* LibFaceUtils::resizeToArea(const IplImage* const img, int area, double& ratio)
 {
     // Area of input image
     int W = img->width;
@@ -95,7 +95,7 @@ CvPoint LibFaceUtils::center(const Face& f)
  * @param p2 The second CvPoint
  * @return The distance between the two points
  */
-int LibFaceUtils::distance(CvPoint p1, CvPoint p2)
+int LibFaceUtils::distance(const CvPoint& p1, const CvPoint& p2)
 {
     return (int)sqrt( (double)(((p1.x - p2.x)*(p1.x - p2.x)) + ((p1.y - p2.y)*(p1.y - p2.y))) );    // Euclidean distance
 }
@@ -122,7 +122,7 @@ int LibFaceUtils::distance(const Face& f1, const Face& f2)
  *
  * @return Returns the pointer to the reshaped vector.
  */
-CvMat* LibFaceUtils::reshape(CvMat* src)
+CvMat* LibFaceUtils::reshape(CvMat* const src)
 {
     int i, j, t = 0;
     CvMat* row  = cvCreateMat(src->rows*src->cols, 1, src->type);
@@ -146,7 +146,7 @@ CvMat* LibFaceUtils::reshape(CvMat* src)
  *
  * @return Returns a pointer to the transposed matrix.
  */
-CvMat* LibFaceUtils::transpose(CvMat* src)
+CvMat* LibFaceUtils::transpose(CvMat* const src)
 {
     CvMat* result = cvCreateMat(src->cols, src->rows, src->type);
     cvTranspose(src, result);
@@ -163,7 +163,7 @@ CvMat* LibFaceUtils::transpose(CvMat* src)
  *
  * @return Returns a pointer to the new matrix with added column.
  */
-CvMat* LibFaceUtils::combine(CvMat* src, CvMat* vector)
+CvMat* LibFaceUtils::combine(CvMat* const src, CvMat* const vector)
 {
     int i, j;
     CvMat* result = cvCreateMat(src->rows, src->cols + 1, src->type);
@@ -189,7 +189,7 @@ CvMat* LibFaceUtils::combine(CvMat* src, CvMat* vector)
  *
  * @return Returns a pointer to the new matrix.
  */
-CvMat* LibFaceUtils::reverseOrder(CvMat* src)
+CvMat* LibFaceUtils::reverseOrder(CvMat* const src)
 {
     int j, i;
     CvMat* result = cvCreateMat(src->rows, src->cols, src->type);
@@ -211,7 +211,7 @@ CvMat* LibFaceUtils::reverseOrder(CvMat* src)
  * @param src A pointer to the matrix where every element will be squared.
  *
  */
-void LibFaceUtils::sqrVec(CvMat* src)
+void LibFaceUtils::sqrVec(CvMat* const src)
 {
     int i, j;
 
@@ -234,7 +234,7 @@ void LibFaceUtils::sqrVec(CvMat* src)
  *
  * @return Returns sum of all rows in a vector as a double.
  */
-double LibFaceUtils::sumVecToDouble(CvMat* src)
+double LibFaceUtils::sumVecToDouble(CvMat* const src)
 {
     double sum = 0;
     int i;
@@ -253,7 +253,7 @@ double LibFaceUtils::sumVecToDouble(CvMat* src)
  *  @param src A pointer to a matrix.
  *  @param value A value to be divided by.
  */
-void LibFaceUtils::divVec(CvMat* src, double value)
+void LibFaceUtils::divVec(CvMat* const src, double value)
 {
     int i, j;
 
@@ -274,7 +274,7 @@ void LibFaceUtils::divVec(CvMat* src, double value)
  *
  *  @param src A pointer to a matrix.
  */
-void LibFaceUtils::printMatrix(CvMat* src)
+void LibFaceUtils::printMatrix(CvMat* const src)
 {
     int i, j;
 
@@ -291,7 +291,7 @@ void LibFaceUtils::printMatrix(CvMat* src)
 /**
  * Method for multiplying every element by a single value. New matrix is created and returned.
  */
-CvMat* LibFaceUtils::multScalar(CvMat* src, double value)
+CvMat* LibFaceUtils::multScalar(CvMat* const src, double value)
 {
     CvMat* result = cvCreateMat(src->rows, src->cols, src->type);
 
@@ -318,7 +318,7 @@ CvMat* LibFaceUtils::multScalar(CvMat* src, double value)
  *
  *  @return Returns a pointer to the matrix containing means for every row.
  */
-CvMat* LibFaceUtils::mean(CvMat* src)
+CvMat* LibFaceUtils::mean(CvMat* const src)
 {
     int    i, j;
     double mean;
@@ -410,7 +410,7 @@ IplImage* LibFaceUtils::stringToImage(const string& data, int depth, int channel
  *
  *  @return Returns the pointer matrix with the values contained in the string.
  */
-CvMat* LibFaceUtils::stringToMatrix(const string & data, int type)
+CvMat* LibFaceUtils::stringToMatrix(const string& data, int type)
 {
     std::string::size_type start, stop;
     start    = 0;
@@ -464,7 +464,7 @@ CvMat* LibFaceUtils::stringToMatrix(const string & data, int type)
  *
  * @param src A pointer to the matrix to be displayed.
  */
-void LibFaceUtils::showImage(CvArr* src, const string& title)
+void LibFaceUtils::showImage(CvArr* const src, const string& title)
 {
     cvNamedWindow(title.data(),CV_WINDOW_AUTOSIZE);
     cvShowImage(title.data(), src);
@@ -478,7 +478,7 @@ void LibFaceUtils::showImage(CvArr* src, const string& title)
  * @param img Pointer to IplImage to be displayed.
  * @param faces vector of Face's to be drawn on the image.
  */
-void LibFaceUtils::showImage(const IplImage* img, const vector<Face>& faces, double scale, const string& title)
+void LibFaceUtils::showImage(const IplImage* const img, const vector<Face>& faces, double scale, const string& title)
 {
     IplImage* copy = cvCloneImage(img);
 
@@ -506,7 +506,7 @@ void LibFaceUtils::showImage(const IplImage* img, const vector<Face>& faces, dou
  *
  *  @return String is returned containing the data of the image.
  */
-string LibFaceUtils::imageToString(IplImage* img)
+string LibFaceUtils::imageToString(IplImage* const img)
 {
     stringstream matrix;
     int          i, j;
@@ -532,7 +532,7 @@ string LibFaceUtils::imageToString(IplImage* img)
  *
  *  @return String is returned containing the data of the matrix.
  */
-string LibFaceUtils::matrixToString(CvMat* src)
+string LibFaceUtils::matrixToString(CvMat* const src)
 {
     stringstream matrix;
     int          i, j;
@@ -558,7 +558,7 @@ string LibFaceUtils::matrixToString(CvMat* src)
  *
  *  @return Returns a pointer to the new matrix.
  */
-CvMat* LibFaceUtils::subtract(CvMat* src1, CvMat* src2)
+CvMat* LibFaceUtils::subtract(CvMat* const src1, CvMat* const src2)
 {
     int    i, j;
     CvMat* result = cvCreateMat(src1->rows, src1->cols, src1->type);
@@ -585,7 +585,7 @@ CvMat* LibFaceUtils::subtract(CvMat* src1, CvMat* src2)
  *
  *  @return Returns the pointer to the coloumn.
  */
-CvMat* LibFaceUtils::getColoumn(CvMat* src, int col)
+CvMat* LibFaceUtils::getColoumn(CvMat* const src, int col)
 {
     int i;
     CvMat* result = cvCreateMat(src->rows, 1, src->type);
@@ -606,7 +606,7 @@ CvMat* LibFaceUtils::getColoumn(CvMat* src, int col)
  *
  * @return Returns a pointer to the new vector.
  */
-CvMat* LibFaceUtils::addScalar(CvMat* src, CvScalar value)
+CvMat* LibFaceUtils::addScalar(CvMat* const src, const CvScalar& value)
 {
     CvMat* result = cvCreateMat(src->rows+1,1,src->type);
     int i;
@@ -621,7 +621,7 @@ CvMat* LibFaceUtils::addScalar(CvMat* src, CvScalar value)
     return result;
 }
 
-IplImage* LibFaceUtils::charToIplImage(const char* img, int width, int height, int step, int depth, int channels)
+IplImage* LibFaceUtils::charToIplImage(const char* const img, int width, int height, int step, int depth, int channels)
 {
     cout << "Inside charToIplImage" << endl;
 
@@ -642,7 +642,7 @@ IplImage* LibFaceUtils::charToIplImage(const char* img, int width, int height, i
     return imgHeader;
 }
 
-IplImage* LibFaceUtils::copyRect(const IplImage* src, const CvRect& rect)
+IplImage* LibFaceUtils::copyRect(const IplImage* const src, const CvRect& rect)
 {
     // Create a non-const header to set the ROI
     IplImage* srcHeader  = cvCreateImageHeader(cvSize(src->width, src->height), src->depth, src->nChannels);
@@ -656,7 +656,7 @@ IplImage* LibFaceUtils::copyRect(const IplImage* src, const CvRect& rect)
     return result;
 }
 
-IplImage* LibFaceUtils::scaledSection(const IplImage* src, const CvRect& sourceRect, double scaleFactor)
+IplImage* LibFaceUtils::scaledSection(const IplImage* const src, const CvRect& sourceRect, double scaleFactor)
 {
     if (scaleFactor == 1.0)
         return copyRect(src, sourceRect);
@@ -667,7 +667,7 @@ IplImage* LibFaceUtils::scaledSection(const IplImage* src, const CvRect& sourceR
                          );
 }
 
-IplImage* LibFaceUtils::scaledSection(const IplImage* src, const CvRect& sourceRect, const CvSize& destSize)
+IplImage* LibFaceUtils::scaledSection(const IplImage* const src, const CvRect& sourceRect, const CvSize& destSize)
 {
     if (destSize.width == sourceRect.width && destSize.height == sourceRect.height)
         return copyRect(src, sourceRect);
