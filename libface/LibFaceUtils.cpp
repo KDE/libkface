@@ -63,11 +63,11 @@ IplImage* LibFaceUtils::resizeToArea(const IplImage* const img, int area, double
      */
 
     CvSize s;
-    double z      = sqrt((double)(W) * (double)(H) / (double)(area));
-    s.width       = (int)(W/z);
-    s.height      = (int)(H/z);
-    ratio         = z;
-    IplImage* out = cvCreateImage(s, img->depth, img->nChannels);
+    double z            = sqrt((double)(W) * (double)(H) / (double)(area));
+    s.width             = (int)(W/z);
+    s.height            = (int)(H/z);
+    ratio               = z;
+    IplImage* const out = cvCreateImage(s, img->depth, img->nChannels);
     cvResize(img, out);
 
     return out;
@@ -125,7 +125,7 @@ int LibFaceUtils::distance(const Face& f1, const Face& f2)
 CvMat* LibFaceUtils::reshape(CvMat* const src)
 {
     int i, j, t = 0;
-    CvMat* row  = cvCreateMat(src->rows*src->cols, 1, src->type);
+    CvMat* const row  = cvCreateMat(src->rows*src->cols, 1, src->type);
 
     for (i=0; i < src->rows; ++i)
     {
@@ -148,7 +148,7 @@ CvMat* LibFaceUtils::reshape(CvMat* const src)
  */
 CvMat* LibFaceUtils::transpose(CvMat* const src)
 {
-    CvMat* result = cvCreateMat(src->cols, src->rows, src->type);
+    CvMat* const result = cvCreateMat(src->cols, src->rows, src->type);
     cvTranspose(src, result);
 
     return result;
@@ -166,7 +166,7 @@ CvMat* LibFaceUtils::transpose(CvMat* const src)
 CvMat* LibFaceUtils::combine(CvMat* const src, CvMat* const vector)
 {
     int i, j;
-    CvMat* result = cvCreateMat(src->rows, src->cols + 1, src->type);
+    CvMat* const result = cvCreateMat(src->rows, src->cols + 1, src->type);
 
     for (i = 0; i < src->rows; ++i)
     {
@@ -192,7 +192,7 @@ CvMat* LibFaceUtils::combine(CvMat* const src, CvMat* const vector)
 CvMat* LibFaceUtils::reverseOrder(CvMat* const src)
 {
     int j, i;
-    CvMat* result = cvCreateMat(src->rows, src->cols, src->type);
+    CvMat* const result = cvCreateMat(src->rows, src->cols, src->type);
 
     for (j = src->cols - 1; j >= 0; j--)
     {
@@ -237,7 +237,7 @@ void LibFaceUtils::sqrVec(CvMat* const src)
 double LibFaceUtils::sumVecToDouble(CvMat* const src)
 {
     double sum = 0;
-    int i;
+    int i      = 0;
 
     for (i = 0; i < src->rows; ++i)
     {
@@ -255,7 +255,7 @@ double LibFaceUtils::sumVecToDouble(CvMat* const src)
  */
 void LibFaceUtils::divVec(CvMat* const src, double value)
 {
-    int i, j;
+    int i=0, j=0;
 
     for (i = 0; i < src->rows; ++i)
     {
@@ -276,7 +276,7 @@ void LibFaceUtils::divVec(CvMat* const src, double value)
  */
 void LibFaceUtils::printMatrix(CvMat* const src)
 {
-    int i, j;
+    int i=0, j=0;
 
     for (i = 0; i < src->rows; ++i)
     {
@@ -293,9 +293,9 @@ void LibFaceUtils::printMatrix(CvMat* const src)
  */
 CvMat* LibFaceUtils::multScalar(CvMat* const src, double value)
 {
-    CvMat* result = cvCreateMat(src->rows, src->cols, src->type);
+    CvMat* const result = cvCreateMat(src->rows, src->cols, src->type);
 
-    int i, j;
+    int i=0, j=0;
 
     for (i = 0; i < src->rows; ++i)
     {
@@ -320,9 +320,9 @@ CvMat* LibFaceUtils::multScalar(CvMat* const src, double value)
  */
 CvMat* LibFaceUtils::mean(CvMat* const src)
 {
-    int    i, j;
+    int    i=0, j=0;
     double mean;
-    CvMat* result = cvCreateMat(src->rows, 1, src->type);
+    CvMat* const result = cvCreateMat(src->rows, 1, src->type);
 
     for (i = 0; i < src->rows; ++i)
     {
@@ -386,8 +386,8 @@ IplImage* LibFaceUtils::stringToImage(const string& data, int depth, int channel
         rows++;
     }
 
-    IplImage* img = cvCreateImage(cvSize(rows, cols), depth, channels);
-    int i, j;
+    IplImage* const img = cvCreateImage(cvSize(rows, cols), depth, channels);
+    int i=0, j=0;
 
     //Create matrix and transfer data to the matrix.
     for(i=0 ; i < rows ; ++i)
@@ -444,8 +444,8 @@ CvMat* LibFaceUtils::stringToMatrix(const string& data, int type)
         rows++;
     }
 
-    CvMat* matrix = cvCreateMat(rows, cols, type);
-    int i, j;
+    CvMat* const matrix = cvCreateMat(rows, cols, type);
+    int i=0, j=0;
 
     //Create matrix and transfer data to the matrix.
     for(i=0 ; i < rows ; ++i)
@@ -480,7 +480,7 @@ void LibFaceUtils::showImage(CvArr* const src, const string& title)
  */
 void LibFaceUtils::showImage(const IplImage* const img, const vector<Face>& faces, double scale, const string& title)
 {
-    IplImage* copy = cvCloneImage(img);
+    IplImage* const copy = cvCloneImage(img);
 
     for (unsigned int i = 0; i < faces.size(); ++i)    // Draw squares over detected faces
     {
@@ -509,7 +509,7 @@ void LibFaceUtils::showImage(const IplImage* const img, const vector<Face>& face
 string LibFaceUtils::imageToString(IplImage* const img)
 {
     stringstream matrix;
-    int          i, j;
+    int          i=0, j=0;
 
     for(i=0 ; i < img->height ; ++i)
     {
@@ -518,6 +518,7 @@ string LibFaceUtils::imageToString(IplImage* const img)
             string data;
             matrix << cvGet2D(img, i, j).val[0] << "\t";
         }
+
         matrix << "\n";
     }
 
@@ -535,7 +536,7 @@ string LibFaceUtils::imageToString(IplImage* const img)
 string LibFaceUtils::matrixToString(CvMat* const src)
 {
     stringstream matrix;
-    int          i, j;
+    int          i=0, j=0;
 
     for(i=0 ; i < src->rows ; ++i)
     {
@@ -544,6 +545,7 @@ string LibFaceUtils::matrixToString(CvMat* const src)
             string data;
             matrix << cvmGet(src, i, j) << "\t";
         }
+
         matrix << "\n";
     }
 
@@ -560,8 +562,8 @@ string LibFaceUtils::matrixToString(CvMat* const src)
  */
 CvMat* LibFaceUtils::subtract(CvMat* const src1, CvMat* const src2)
 {
-    int    i, j;
-    CvMat* result = cvCreateMat(src1->rows, src1->cols, src1->type);
+    int    i=0, j=0;
+    CvMat* const result = cvCreateMat(src1->rows, src1->cols, src1->type);
 
     for (i = 0 ; i < src1->rows ; ++i)
     {
@@ -574,6 +576,7 @@ CvMat* LibFaceUtils::subtract(CvMat* const src1, CvMat* const src2)
             cvSet2D(result, i, j, cvScalarAll(res));
         }
     }
+
     return result;
 }
 
@@ -587,8 +590,8 @@ CvMat* LibFaceUtils::subtract(CvMat* const src1, CvMat* const src2)
  */
 CvMat* LibFaceUtils::getColoumn(CvMat* const src, int col)
 {
-    int i;
-    CvMat* result = cvCreateMat(src->rows, 1, src->type);
+    int i = 0;
+    CvMat* const result = cvCreateMat(src->rows, 1, src->type);
 
     for (i = 0 ; i < src->rows ; ++i)
     {
@@ -608,8 +611,8 @@ CvMat* LibFaceUtils::getColoumn(CvMat* const src, int col)
  */
 CvMat* LibFaceUtils::addScalar(CvMat* const src, const CvScalar& value)
 {
-    CvMat* result = cvCreateMat(src->rows+1,1,src->type);
-    int i;
+    CvMat* const result = cvCreateMat(src->rows+1,1,src->type);
+    int i = 0;
 
     for (i=0 ; i < src->rows ; ++i)
     {
@@ -625,7 +628,7 @@ IplImage* LibFaceUtils::charToIplImage(const char* const img, int width, int hei
 {
     cout << "Inside charToIplImage" << endl;
 
-    IplImage* imgHeader  = cvCreateImageHeader(cvSize(width, height), depth, channels);
+    IplImage* const imgHeader  = cvCreateImageHeader(cvSize(width, height), depth, channels);
     imgHeader->widthStep = step;
 
     cout << "made header" << endl;
@@ -645,11 +648,11 @@ IplImage* LibFaceUtils::charToIplImage(const char* const img, int width, int hei
 IplImage* LibFaceUtils::copyRect(const IplImage* const src, const CvRect& rect)
 {
     // Create a non-const header to set the ROI
-    IplImage* srcHeader  = cvCreateImageHeader(cvSize(src->width, src->height), src->depth, src->nChannels);
-    srcHeader->imageData = const_cast<char*>(src->imageData);
+    IplImage* srcHeader    = cvCreateImageHeader(cvSize(src->width, src->height), src->depth, src->nChannels);
+    srcHeader->imageData   = const_cast<char*>(src->imageData);
     cvSetImageROI(srcHeader, rect);
 
-    IplImage* result = cvCreateImage(cvSize(rect.width, rect.height), src->depth, src->nChannels);
+    IplImage* const result = cvCreateImage(cvSize(rect.width, rect.height), src->depth, src->nChannels);
     cvCopy(srcHeader, result, NULL);
 
     cvReleaseImageHeader(&srcHeader);
@@ -661,10 +664,8 @@ IplImage* LibFaceUtils::scaledSection(const IplImage* const src, const CvRect& s
     if (scaleFactor == 1.0)
         return copyRect(src, sourceRect);
 
-    return scaledSection(src, sourceRect, cvSize(
-                             lround(double(sourceRect.width) * scaleFactor),
-                             lround(double(sourceRect.height) * scaleFactor) )
-                         );
+    return scaledSection(src, sourceRect, cvSize(lround(double(sourceRect.width)  * scaleFactor),
+                                                 lround(double(sourceRect.height) * scaleFactor)));
 }
 
 IplImage* LibFaceUtils::scaledSection(const IplImage* const src, const CvRect& sourceRect, const CvSize& destSize)
@@ -673,11 +674,11 @@ IplImage* LibFaceUtils::scaledSection(const IplImage* const src, const CvRect& s
         return copyRect(src, sourceRect);
 
     // Create a non-const header to set the ROI
-    IplImage* srcHeader  = cvCreateImageHeader(cvSize(src->width, src->height), src->depth, src->nChannels);
-    srcHeader->imageData = const_cast<char*>(src->imageData);
+    IplImage* srcHeader    = cvCreateImageHeader(cvSize(src->width, src->height), src->depth, src->nChannels);
+    srcHeader->imageData   = const_cast<char*>(src->imageData);
     cvSetImageROI(srcHeader, sourceRect);
 
-    IplImage* result = cvCreateImage(cvSize(destSize.width, destSize.height), src->depth, src->nChannels);
+    IplImage* const result = cvCreateImage(cvSize(destSize.width, destSize.height), src->depth, src->nChannels);
     cvResize(srcHeader, result);
 
     cvReleaseImageHeader(&srcHeader);
