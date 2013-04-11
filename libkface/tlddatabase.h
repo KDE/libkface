@@ -68,18 +68,45 @@ class KFACE_EXPORT Tlddatabase
 {
 public:
 
+    /**
+     * @brief Tlddatabase:Convinience class to Store and retrie facemodel data to/from dedicated database file
+     *(faceDatabase.db).
+     */
     Tlddatabase();
     ~Tlddatabase();
 
     void openFaceDatabase();
     void createFaceTable();
 
+
     int insertFaceModel(unitFaceModel* const)     const;
+
+    /**
+     * @brief querybyName
+     * @return the index of faceModel in database and "not the tagID"
+     */
     int querybyName(const QString&)               const;
+
+    /**
+     * @brief queryFaceID
+     * @param id:index of the facemodel in the database.
+     * @return tagID corresponding to faceModel
+     */
     int queryFaceID(int id)                       const;
+
+    /**
+     * @brief queryNumfacesinDatabase
+     * @return How many face currently exist in the recognition database.
+     */
     int queryNumfacesinDatabase()                 const;
 
+    /**
+     * @brief querybyFaceid
+     * @param faceid:index corresponding to faceModel
+     * @return Name corresponding faceModel
+     */
     QString        querybyFaceid(int faceid)      const;
+
     unitFaceModel* getFaceModel(int faceid)       const;
     IplImage*      QImage2IplImage(const QImage&) const;
 

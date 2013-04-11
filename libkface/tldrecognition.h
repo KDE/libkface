@@ -50,13 +50,30 @@ class KFACE_EXPORT Tldrecognition
 {
 public:
 
+    /**
+     * @brief Tldrecognition
+     *This is convinient class to interface OpenTLD core recognition modules
+     */
     Tldrecognition();
    ~Tldrecognition();
 
+    /**
+     * @brief getModeltoStore
+     * @param is face IplImage* typically coloured face image as arguments to get facemodel obtained from initial learning
+     * performed by OpenTLD core recognition
+     * @return facemodel containing all features and face details in the form of OpenTLD compatible
+     * mathematical features.
+     */
     unitFaceModel* getModeltoStore(IplImage* const) const;
 
     int updateDatabase(IplImage* const, const char* const) const;
 
+    /**
+     * @brief getRecognitionConfidence
+     * @param comparemodel are image to be recognized and mathematical model
+     * typically models retrieced from database(confirmed face entry).
+     * @return recognition confidence as float number (1(confident) through 0(not confident))
+     */
     float getRecognitionConfidence(IplImage* const, unitFaceModel* const comparemodel) const;
 
 private:

@@ -54,14 +54,26 @@ class KFACE_EXPORT unitFaceModel
 {
 public:
 
+    /**
+     * @brief unitFaceModel:describe single face.(OpenTLD communicates about the face data through this class object)
+     * This is a Convinient class to hold facemodel to be compatible for OpenTLD demanding features of object(face)
+     * Objects of this class are used to set parameters of OpenTLD recognizer(tld).
+     */
     unitFaceModel();
     ~unitFaceModel();
 
+    /**
+     * @brief Following four methoods used to serialise the dynamic data generated during initial learning of OpenTLD
+     * so that data can be stored in database
+     */
     void serialisePositivePatches(const QList<QList<float> >&);
     void serialiseNegativePatches(const QList<QList<float> >&);
     void serialiseFeatures(const QList<QList<QList<float> > >&);
     void serialiseLeaves(const QList<QList<QList<int> > >&);
 
+    /**
+     * @Perform reverse of the above operation
+     */
     QList<QList<float> > deserialisePositivePatches()  const;
     QList<QList<float> >  deserialiseNegativePatches() const;
     QList<QList<QList<float> > > deserialiseFeatures() const;

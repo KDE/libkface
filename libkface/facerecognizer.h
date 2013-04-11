@@ -41,10 +41,26 @@ class KFACE_EXPORT FaceRecognizer
 
 public:
 
+
+    /**
+     * @brief FaceRecognizer:Master class to control entire recognition using OpenTLD
+     */
     FaceRecognizer();
     ~FaceRecognizer();
 
+    /**
+     * @brief recognizeFaces : sets the name() field and id()(tadid) field of the recognized face(s) in faces[]
+     * @param faces:List of faces to be recognized
+     * @return Confidence in recognition process,each entry corresponds to each face in argument faces[]
+     */
     QList<float> recognizeFaces(QList<Face> &faces);
+
+    /**
+     * @brief storeFaces:Currently training is not enabled with OpenTLD,so faces are performed with
+     * initial training only to generate Mathematical model corresponding face which has intensity normalised positive
+     * and/or negative patches and features in the form of trees and leaves.
+     * @param faces
+     */
     void storeFaces(QList<Face> &faces);
 
     //void   setThreshold(float value);
