@@ -94,6 +94,7 @@ FaceRecognizer::FaceRecognizer()
 
 FaceRecognizer::~FaceRecognizer()
 {
+    delete d;
 }
 
 QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
