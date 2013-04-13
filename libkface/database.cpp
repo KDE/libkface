@@ -347,18 +347,15 @@ void Database::clearAllTraining()
 
 void Database::setColorMode(int mode)
 {
-    switch(mode)
-    {
-    case 0:
+    if (mode == 0)
         d->colorMode = grayscale;
-    case 1:
+    else
         d->colorMode = color;
-    }
 }
 
 int Database::getColorMode() const
 {
-    if(d->colorMode == grayscale )
+    if(d->colorMode == grayscale)
     {
         return 0;
     }
