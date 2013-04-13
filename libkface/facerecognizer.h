@@ -41,7 +41,6 @@ class KFACE_EXPORT FaceRecognizer
 
 public:
 
-
     /**
      * @brief FaceRecognizer:Master class to control entire recognition using OpenTLD
      */
@@ -53,7 +52,7 @@ public:
      * @param faces:List of faces to be recognized
      * @return Confidence in recognition process,each entry corresponds to each face in argument faces[]
      */
-    QList<float> recognizeFaces(QList<Face> &faces);
+    QList<float> recognizeFaces(QList<Face>& faces);
 
     /**
      * @brief storeFaces:Currently training is not enabled with OpenTLD,so faces are performed with
@@ -61,14 +60,14 @@ public:
      * and/or negative patches and features in the form of trees and leaves.
      * @param faces
      */
-    void storeFaces(QList<Face> &faces);
+    void storeFaces(const QList<Face>& faces);
 
     //void   setThreshold(float value);
 
 private:
 
-    class FaceRecognizerPriv;
-    FaceRecognizerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace KFaceIface
