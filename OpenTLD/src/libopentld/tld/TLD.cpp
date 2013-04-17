@@ -392,12 +392,11 @@ void TLD::getObjModel(unitFaceModel *faceModel)
     ec->initFeatureOffsets();
 }
 
-unitFaceModel *TLD::putObjModel()
+unitFaceModel *TLD::putObjModel(unitFaceModel *faceModel)
 {
     NNClassifier *nn = detectorCascade->nnClassifier;
     EnsembleClassifier *ec = detectorCascade->ensembleClassifier;
 
-    unitFaceModel *faceModel = new unitFaceModel;
     faceModel->objWidth = detectorCascade->objWidth;
     faceModel->objHeight = detectorCascade->objHeight;
     faceModel->minVar = detectorCascade->varianceFilter->minVar;

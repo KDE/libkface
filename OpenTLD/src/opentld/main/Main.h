@@ -56,7 +56,7 @@ public:
         delete tld;
     }
 
-    unitFaceModel *generatefacemodel(IplImage* );
+    void generatefacemodel(IplImage* , unitFaceModel *modeltostore);
     float getrecognitionconfidence(IplImage* , unitFaceModel *comparemodel);
     void printFaceModel();
 };

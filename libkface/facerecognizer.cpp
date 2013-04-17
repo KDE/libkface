@@ -80,6 +80,7 @@ public:
 public:
 
     float threshold;
+    unitFaceModel *facemodeltostore;
 
 private:
 
@@ -178,7 +179,8 @@ void FaceRecognizer::storeFaces(const QList<Face>& faces)
         IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
         cvResize(img1,inputfaceimage);
 
-        unitFaceModel* const facemodeltostore = d->recognition()->getModeltoStore(inputfaceimage);
+        unitFaceModel* facemodeltostore = new unitFaceModel;
+        d->recognition()->getModeltoStore(inputfaceimage,facemodeltostore);
         facemodeltostore->Name                = face.name();
         facemodeltostore->faceid              = face.id();
 

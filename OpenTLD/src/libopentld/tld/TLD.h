@@ -65,7 +65,7 @@ public:
     void selectObject(const cv::Mat &img, cv::Rect *bb);
     void processImage(const cv::Mat &img);
     void getObjModel(unitFaceModel *);
-    unitFaceModel *putObjModel();
+    unitFaceModel *putObjModel(unitFaceModel *faceModel);
 };
 
 } /* namespace tld */

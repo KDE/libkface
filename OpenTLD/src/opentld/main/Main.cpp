@@ -6,7 +6,7 @@ using namespace std;
 using namespace tld;
 using namespace cv;
 
-unitFaceModel * Main::generatefacemodel(IplImage* img)
+void Main::generatefacemodel(IplImage* img, unitFaceModel *modeltostore)
 {
     Mat grey(img->height, img->width, CV_8UC1);
 
@@ -24,9 +24,10 @@ unitFaceModel * Main::generatefacemodel(IplImage* img)
     Rect bb = tldArrayToRect(initialBB);
     tld->selectObject(grey, &bb);
     cvtColor(cv::Mat(img), grey, CV_BGR2GRAY);
-    unitFaceModel * const facemodeltostore = tld->putObjModel();
-    return facemodeltostore;
+    tld->putObjModel(modeltostore);
+
 }
+
 float Main::getrecognitionconfidence(IplImage* img, unitFaceModel *comparemodel)
 {
     Mat grey(img->height, img->width, CV_8UC1);
