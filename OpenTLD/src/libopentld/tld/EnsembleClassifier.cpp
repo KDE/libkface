@@ -44,15 +44,7 @@ namespace tld
 
 EnsembleClassifier::EnsembleClassifier() :
     featureOffsets(NULL),
-    features(NULL),
-    posteriors(NULL),
-    positives(NULL),
-    negatives(NULL),
-    imgWidthStep(NULL),
-    numScales(NULL),
-    scales(NULL),
-    windowOffsets(NULL),
-    numIndices(NULL),
+    numIndices(0),
     detectionResult(NULL)
 {
     numTrees = 10;
