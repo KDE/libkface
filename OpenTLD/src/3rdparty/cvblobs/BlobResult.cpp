@@ -933,28 +933,30 @@ void CBlobResult::PrintBlobs( char *nom_fitxer ) const
 
 	fitxer_sortida = fopen( nom_fitxer, "w" );
 
-	for(i=0; i<GetNumBlobs(); i++)
-	{
-		fprintf( fitxer_sortida, "blob %d ->\t "
-                                 "a=%7.0f\t "
-                                 "p=%8.2f "
-                                 "(%8.2f extern)\t "
-                                 "pconvex=%8.2f\t "
-                                 "ext=%.0f\t "
-//                                 "m=%7.2f\t "
-                                 "c=%3.2f\t "
-                                 "l=%8.2f\n"
-                                 ,
-                 i,
-                 area[i],
-                 perimetre[i],
-                 externPerimeter[i],
-                 perimetreConvex[i],
-                 exterior[i],
-                 compacitat[i],
-                 longitud[i]
-               );
-	}
-	fclose( fitxer_sortida );
-
+    if (fitxer_sortida != NULL)
+    {
+        for(i=0; i<GetNumBlobs(); i++)
+        {
+            fprintf( fitxer_sortida, "blob %d ->\t "
+                                     "a=%7.0f\t "
+                                     "p=%8.2f "
+                                     "(%8.2f extern)\t "
+                                     "pconvex=%8.2f\t "
+                                     "ext=%.0f\t "
+//                                   "m=%7.2f\t "
+                                     "c=%3.2f\t "
+                                     "l=%8.2f\n"
+                                     ,
+                     i,
+                     area[i],
+                     perimetre[i],
+                     externPerimeter[i],
+                     perimetreConvex[i],
+                     exterior[i],
+                     compacitat[i],
+                     longitud[i]
+                   );
+        }
+        fclose( fitxer_sortida );
+    }
 }

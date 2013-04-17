@@ -162,9 +162,14 @@ bool ComponentLabeling(	IplImage* inputImage,
 
 		}
 		
-		for (i = 0; i < imageWidth; i++, pInputImage++, pMask++, pAboveInputImage++, pBelowInputImage++,
-										 pAboveMask++, pBelowMask++ )
+        for (i = 0; i < imageWidth; i++, pInputImage++, pAboveInputImage++, pBelowInputImage++)
 		{
+            if (pMask != NULL)
+            {
+                pMask++;
+                pAboveMask++;
+                pBelowMask++;
+            }
 			// ignore background pixels or 0 pixels in mask
 			if ( (*pInputImage == backgroundColor) || (maskImage && *pMask == 0 ))
 			{

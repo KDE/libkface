@@ -152,7 +152,7 @@ QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
 
                 faces[faceindex].setName(d->database()->querybyFaceid(maxConfIndex+1));
                 faces[faceindex].setId(d->database()->queryFaceID(maxConfIndex+1));
-                kDebug() << "preson  " << qPrintable(d->database()->querybyFaceid(maxConfIndex+1));
+                kDebug() << "preson  " << qPrintable(d->database()->querybyFaceid(maxConfIndex+1)) << "recognized";
             }
 
             recognitionRate.append(maxConfidence);

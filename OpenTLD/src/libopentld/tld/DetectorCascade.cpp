@@ -71,6 +71,7 @@ DetectorCascade::~DetectorCascade()
 {
     release();
 
+    delete clustering;
     delete foregroundDetector;
     delete varianceFilter;
     delete ensembleClassifier;

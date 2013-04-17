@@ -77,6 +77,7 @@ void DetectionResult::reset()
 void DetectionResult::release()
 {
     fgList->clear();
+    delete fgList;
     delete[] variances;
     variances = NULL;
     delete[] posteriors;
