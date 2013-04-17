@@ -187,6 +187,7 @@ void FaceRecognizer::storeFaces(const QList<Face>& faces)
         kDebug() << face.name() << face.id() ;
 
         d->database()->insertFaceModel(facemodeltostore);             //store facemodel in tlddatabase
+        delete facemodeltostore;
     }
 }
 
