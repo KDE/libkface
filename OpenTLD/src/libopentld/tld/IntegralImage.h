@@ -43,6 +43,8 @@ public:
 
     IntegralImage(cv::Size size)
     {
+        height = size.height;
+        width = size.width;
         data = new T[size.width * size.height];
     }
 

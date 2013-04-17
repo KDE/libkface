@@ -3,6 +3,11 @@
 
 CBlobContour::CBlobContour()
 {
+    m_moments.m00 = m_moments.m01 =m_moments.m02 = m_moments.m03
+            = m_moments.m10 = m_moments.m11 = m_moments.m12 = m_moments.m20
+            = m_moments.m21 = m_moments.m30 = m_moments.mu02 = m_moments.mu03
+            = m_moments.mu11 = m_moments.mu12 = m_moments.mu20 =m_moments.mu21
+            = m_moments.mu30 = m_moments.inv_sqrt_m00 = -1;
 	m_startPoint.x = 0;
 	m_startPoint.y = 0;
 	m_area = -1;

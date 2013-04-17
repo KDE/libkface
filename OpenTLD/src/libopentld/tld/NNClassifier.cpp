@@ -36,6 +36,9 @@ namespace tld
 
 NNClassifier::NNClassifier()
 {
+    windows = NULL;
+    enabled = false;
+
     thetaFP = .5;
     thetaTP = .65;
 

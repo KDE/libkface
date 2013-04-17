@@ -38,7 +38,8 @@ namespace tld
 //TODO: Convert this to a function
 #define sub2idx(x,y,imgWidthStep) ((int) (floor((x)+0.5) + floor((y)+0.5)*(imgWidthStep)))
 
-DetectorCascade::DetectorCascade()
+DetectorCascade::DetectorCascade():
+    numScales(1)
 {
     objWidth = -1; //MUST be set before calling init
     objHeight = -1; //MUST be set before calling init

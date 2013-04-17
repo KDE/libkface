@@ -40,6 +40,8 @@ VarianceFilter::VarianceFilter()
     minVar = 0;
     integralImg = NULL;
     integralImg_squared = NULL;
+    windowOffsets = NULL;
+    detectionResult = NULL;
 }
 
 VarianceFilter::~VarianceFilter()

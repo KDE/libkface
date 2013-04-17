@@ -36,6 +36,7 @@ namespace tld
 
 Clustering::Clustering()
 {
+    detectionResult = NULL;
     cutoff = .5;
     windows = NULL;
     numWindows = 0;

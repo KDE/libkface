@@ -31,9 +31,10 @@ CBlob::CBlob( t_labelType id, CvPoint startPoint, CvSize originalImageSize )
 	m_id = id;
 	m_area = m_perimeter = -1;
 	m_externPerimeter = m_meanGray = m_stdDevGray = -1;
-	m_boundingBox.width = -1;
+    m_boundingBox.x = m_boundingBox.y = m_boundingBox.height =  m_boundingBox.width = -1;
+    m_ellipse.angle = 0;
 	m_ellipse.size.width = -1;
-	m_storage = cvCreateMemStorage();
+    m_storage = cvCreateMemStorage();
 	m_externalContour = CBlobContour(startPoint, m_storage);
 	m_originalImageSize = originalImageSize;
 }

@@ -34,6 +34,7 @@ namespace tld
 
 ForegroundDetector::ForegroundDetector()
 {
+    detectionResult = NULL;
     fgThreshold = 16;
     minBlobSize = 0;
 }

@@ -47,7 +47,13 @@ EnsembleClassifier::EnsembleClassifier() :
     features(NULL),
     posteriors(NULL),
     positives(NULL),
-    negatives(NULL)
+    negatives(NULL),
+    imgWidthStep(NULL),
+    numScales(NULL),
+    scales(NULL),
+    windowOffsets(NULL),
+    numIndices(NULL),
+    detectionResult(NULL)
 {
     numTrees = 10;
     numFeatures = 13;
