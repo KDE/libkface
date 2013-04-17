@@ -56,7 +56,6 @@ TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${OpenCV_LIBRARIES}
 
                             ${QT_QTSQL_LIBRARY}
-                            sqlite3
                             opentld
                             cvblobs
                             main

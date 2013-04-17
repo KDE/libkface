@@ -3,7 +3,7 @@
 
 
 #include "list"
-#include <opencv/cv.h>
+#include "libopencv.h"
 //#include "cxtypes.h"  //AO
 #include <opencv/cxcore.h>   //
 

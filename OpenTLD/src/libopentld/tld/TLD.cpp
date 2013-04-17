@@ -29,7 +29,7 @@
 
 #include "NNClassifier.h"
 #include "TLDUtil.h"
-#include <opencv/highgui.h>
+#include "libopencv.h"
 
 using namespace std;
 using namespace cv;

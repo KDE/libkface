@@ -28,7 +28,7 @@
 
 #include <vector>
 
-#include <opencv/cv.h>
+#include "libopencv.h"
 
 #include "NormalizedPatch.h"
 #include "DetectionResult.h"

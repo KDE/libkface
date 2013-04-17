@@ -27,7 +27,7 @@
 #ifndef TLD_H_
 #define TLD_H_
 
-#include <opencv/cv.h>
+#include "libopencv.h"
 
 #include "DetectorCascade.h"
 #include "tldface.h"

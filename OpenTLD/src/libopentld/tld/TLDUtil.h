@@ -29,7 +29,7 @@
 
 #include <utility>
 
-#include <opencv/cv.h>
+#include "libopencv.h"
 
 namespace tld
 {

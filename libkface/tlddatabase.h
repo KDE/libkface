@@ -37,13 +37,9 @@
 
 #include <iostream>
 
-// SQlite includes
-
-#include <sqlite3.h>
-
 // Qt includes
 
-#include <QtSql/QSqlDatabase>
+//#include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlTableModel>
 #include <QtCore/QDebug>
