@@ -82,7 +82,7 @@ CBlob& CBlob::operator=(const CBlob &src )
 		m_internalContours.clear();
 
 		// copy all internal contours
-		if( src.m_internalContours.size() )
+		if( !src.m_internalContours.empty() )
 		{
 			m_internalContours = t_contourList( src.m_internalContours.size() );
 			t_contourList::const_iterator itSrc;
@@ -97,8 +97,8 @@ CBlob& CBlob::operator=(const CBlob &src )
 				if( (*itSrc).m_contour )
 					(*it).m_contour = cvCloneSeq( (*itSrc).m_contour, m_storage);
 
-				it++;
-				itSrc++;
+				++it;
+				++itSrc;
 			}
 		}
 	}
@@ -123,7 +123,7 @@ void CBlob::ClearContours()
 	while (it != m_internalContours.end())
 	{
 		(*it).ResetChainCode();
-		it++;
+		++it;
 	}	
 	m_internalContours.clear();
 
@@ -167,7 +167,7 @@ double CBlob::Area()
 	while (itContour != m_internalContours.end() )
 	{
 		area -= (*itContour).GetArea();
-		itContour++;
+		++itContour;
 	}
 	return area;
 }
@@ -197,7 +197,7 @@ double CBlob::Perimeter()
 	while (itContour != m_internalContours.end() )
 	{
 		perimeter += (*itContour).GetPerimeter();
-		itContour++;
+		++itContour;
 	}
 	return perimeter;
 
@@ -390,7 +390,7 @@ double CBlob::Moment(int p, int q)
 	while (itContour != m_internalContours.end() )
 	{
 		moment -= (*itContour).GetMoment(p,q);
-		itContour++;
+		++itContour;
 	}
 	return moment;
 }
@@ -446,7 +446,7 @@ double CBlob::Mean( IplImage *image )
 	{
 		cvDrawContours( mask, (*it).GetContourPoints(), CV_RGB(0,0,0), CV_RGB(0,0,0),0, CV_FILLED, 8,
 					offset );
-		it++;
+		++it;
 	}
 
 	cvSetImageROI( image, m_boundingBox );
