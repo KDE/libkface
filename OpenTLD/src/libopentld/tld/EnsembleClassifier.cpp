@@ -43,13 +43,22 @@ namespace tld
 #define sub2idx(x,y,widthstep) ((int) (floor((x)+0.5) + floor((y)+0.5)*(widthstep)))
 
 EnsembleClassifier::EnsembleClassifier() :
+    img(NULL),
     featureOffsets(NULL),
     numIndices(0),
     detectionResult(NULL)
 {
-    numTrees = 10;
-    numFeatures = 13;
-    enabled = true;
+    numTrees      = 10;
+    numFeatures   = 13;
+    enabled       = true;
+    imgWidthStep  = 0;
+    numScales     = 0;
+    scales        = 0;
+    windowOffsets = 0;
+    features      = 0;
+    posteriors    = 0;
+    positives     = 0;
+    negatives     = 0;
 }
 
 EnsembleClassifier::~EnsembleClassifier()
