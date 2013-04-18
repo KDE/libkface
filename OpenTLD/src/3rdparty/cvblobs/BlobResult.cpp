@@ -920,7 +920,6 @@ void CBlobResult::PrintBlobs( char *nom_fitxer ) const
 {
 	double_stl_vector area, /*perimetre,*/ exterior, compacitat, longitud, 
 					  externPerimeter, perimetreConvex, perimetre;
-	int i;
 	FILE *fitxer_sortida;
 
  	area      = GetSTLResult( CBlobGetArea());
@@ -935,7 +934,7 @@ void CBlobResult::PrintBlobs( char *nom_fitxer ) const
 
     if (fitxer_sortida != NULL)
     {
-        for(i=0; i<GetNumBlobs(); i++)
+        for(int i=0; i<GetNumBlobs(); i++)
         {
             fprintf( fitxer_sortida, "blob %d ->\t "
                                      "a=%7.0f\t "
