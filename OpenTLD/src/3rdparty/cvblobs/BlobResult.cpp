@@ -148,8 +148,8 @@ CBlobResult::CBlobResult( const CBlobResult &source )
 		// vector de CBlob*. Per tant, creem un blob nou a partir del
 		// blob original
 		*pBlobsDst = new CBlob(**pBlobsSrc);
-		pBlobsSrc++;
-		pBlobsDst++;
+		++pBlobsSrc;
+		++pBlobsDst;
 	}
 }
 
@@ -231,8 +231,8 @@ CBlobResult& CBlobResult::operator=(const CBlobResult& source)
 			// vector de CBlob*. Per tant, creem un blob nou a partir del
 			// blob original
 			*pBlobsDst = new CBlob(**pBlobsSrc);
-			pBlobsSrc++;
-			pBlobsDst++;
+			++pBlobsSrc;
+			++pBlobsDst;
 		}
 	}
 	return *this;
@@ -279,9 +279,9 @@ CBlobResult CBlobResult::operator+( const CBlobResult& source ) const
 	// insertem els blobs de l'origen a l'actual
 	while( pBlobsSrc != source.m_blobs.end() )
 	{
-		pBlobsDst--;
+		--pBlobsDst;
 		*pBlobsDst = new CBlob(**pBlobsSrc);
-		pBlobsSrc++;
+		++pBlobsSrc;
 	}
 	
 	return resultat;
@@ -355,8 +355,8 @@ double_vector CBlobResult::GetResult( funcio_calculBlob *evaluador ) const
 	while( itBlobs != m_blobs.end() )
 	{
 		*itResult = (*evaluador)(**itBlobs);
-		itBlobs++;
-		itResult++;
+		++itBlobs;
+		++itResult;
 	}
 	return result;
 }
@@ -405,8 +405,8 @@ double_stl_vector CBlobResult::GetSTLResult( funcio_calculBlob *evaluador ) cons
 	while( itBlobs != m_blobs.end() )
 	{
 		*itResult = (*evaluador)(**itBlobs);
-		itBlobs++;
-		itResult++;
+		++itBlobs;
+		++itResult;
 	}
 	return result;
 }
@@ -580,7 +580,7 @@ void CBlobResult::Filter(CBlobResult &dst,
 		for( int i = 0; i < numBlobs; i++ )
 		{
 			delete *itBlobs;
-			itBlobs++;
+			++itBlobs;
 		}
 		m_blobs.erase( m_blobs.begin(), itBlobs );
 	}
@@ -800,7 +800,7 @@ void CBlobResult::GetNthBlob( funcio_calculBlob *criteri, int nBlob, CBlob &dst 
 			trobatBlob = true;
 			dst = CBlob( GetBlob(indexBlob));
 		}
-		itAvaluacio++;
+		++itAvaluacio;
 		indexBlob++;
 	}
 }
@@ -832,7 +832,7 @@ void CBlobResult::ClearBlobs()
 	while( itBlobs != m_blobs.end() )
 	{
 		delete *itBlobs;
-		itBlobs++;
+		++itBlobs;
 	}
 
 	m_blobs.clear();
