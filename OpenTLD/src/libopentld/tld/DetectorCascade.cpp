@@ -39,7 +39,8 @@ namespace tld
 #define sub2idx(x,y,imgWidthStep) ((int) (floor((x)+0.5) + floor((y)+0.5)*(imgWidthStep)))
 
 DetectorCascade::DetectorCascade():
-    numScales(1)
+    numScales(1),
+    scales(0)
 {
     objWidth = -1; //MUST be set before calling init
     objHeight = -1; //MUST be set before calling init
@@ -53,8 +54,11 @@ DetectorCascade::DetectorCascade():
     minSize = 25;
     imgWidthStep = -1;
 
-    numTrees = 13;
-    numFeatures = 10;
+    numTrees      = 13;
+    numFeatures   = 10;
+    numWindows    = 0;
+    windows       = 0;
+    windowOffsets = 0;
 
     initialised = false;
 
