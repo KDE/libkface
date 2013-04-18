@@ -43,7 +43,7 @@ double CBlobProperties::GetArea()
 	while (itContour != m_internalContours.end() )
 	{
 		area += (*itContour).GetArea();
-		itContour++;
+		++itContour;
 	}
 	return area;
 }
@@ -73,7 +73,7 @@ double CBlobProperties::GetPerimeter()
 	while (itContour != m_internalContours.end() )
 	{
 		perimeter += (*itContour).GetPerimeter();
-		itContour++;
+		++itContour;
 	}
 	return perimeter;
 }
