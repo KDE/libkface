@@ -36,14 +36,15 @@ namespace tld
 
 NNClassifier::NNClassifier()
 {
-    windows = NULL;
-    enabled = false;
+    detectionResult = NULL;
+    windows         = NULL;
+    enabled         = false;
 
-    thetaFP = .5;
-    thetaTP = .65;
+    thetaFP         = .5;
+    thetaTP         = .65;
 
-    truePositives = new vector<NormalizedPatch>();
-    falsePositives = new vector<NormalizedPatch>();
+    truePositives   = new vector<NormalizedPatch>();
+    falsePositives  = new vector<NormalizedPatch>();
 
 }
 
