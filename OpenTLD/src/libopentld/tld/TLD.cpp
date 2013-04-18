@@ -125,17 +125,12 @@ void TLD::fuseHypotheses()
     currConf = 0;
     valid = false;
 
-    float confDetector = 0;
     if(numClusters == 1)
     {
-        confDetector = nnClassifier->classifyBB(currImg, detectorBB);
+        float confDetector = nnClassifier->classifyBB(currImg, detectorBB);
         currBB = tldCopyRect(detectorBB);
         currConf = confDetector;
 
-    }
-
-    else if(numClusters == 1)
-    {
     }
 }
 
