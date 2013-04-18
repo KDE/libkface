@@ -27,7 +27,7 @@ public:
 
 	operator COperadorBlob*()
 	{
-		return (COperadorBlob*)this;
+		return dynamic_cast<COperadorBlob*>(this);
 	}
 };
 
