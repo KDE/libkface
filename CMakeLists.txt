@@ -6,7 +6,7 @@
 # @date   2010-06-16
 # @brief  LibFace library interface for KDE
 #
-# @author Copyright (C) 2010-2012 by Gilles Caulier
+# @author Copyright (C) 2010-2013 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -88,9 +88,11 @@ ENDIF (NOT OpenCV_INCLUDE_DIRS)
 # END SPECIAL OPENCV HANDLING
 
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
-IF (LIBFACE_FOUND)
-  INCLUDE_DIRECTORIES(${LIBFACE_INCLUDE_DIR})
-endif (LIBFACE_FOUND)
+
+# Disable external libface detection as version used internally have been improved to support Face Recognition
+#IF (LIBFACE_FOUND)
+#  INCLUDE_DIRECTORIES(${LIBFACE_INCLUDE_DIR})
+#ENDIF (LIBFACE_FOUND)
 
 # =======================================================
 # Information to update before to release this library.
@@ -130,7 +132,7 @@ SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_
 
 # =======================================================
 
-IF (NOT LIBFACE_FOUND)
+#IF (NOT LIBFACE_FOUND)
     INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libface )
 
     SET(face_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceUtils.cpp
@@ -153,8 +155,8 @@ IF (NOT LIBFACE_FOUND)
     CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceConfig.h.cmake"
                    "${CMAKE_CURRENT_BINARY_DIR}/libface/LibFaceConfig.h")
 
-    MESSAGE(STATUS "External libface was not found, use internal version instead...")
-ENDIF (NOT LIBFACE_FOUND)
+#    MESSAGE(STATUS "External libface was not found, use internal version instead...")
+#ENDIF (NOT LIBFACE_FOUND)
 
 SUBDIRS(libkface)
 SUBDIRS(test)
