@@ -28,9 +28,10 @@
 #ifndef KFACE_FACERECOGNIZER_H
 #define KFACE_FACERECOGNIZER_H
 
+// local includes
+
 #include "face.h"
 #include "image.h"
-
 #include "libkface_export.h"
 
 namespace KFaceIface
@@ -52,7 +53,7 @@ public:
      * @param faces:List of faces to be recognized
      * @return Confidence in recognition process,each entry corresponds to each face in argument faces[]
      */
-    QList<float> recognizeFaces(QList<Face>& faces);
+    QList<float> recognizeFaces(QList<Face>& faces) const;
 
     /**
      * @brief storeFaces:Currently training is not enabled with OpenTLD,so faces are performed with

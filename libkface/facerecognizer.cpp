@@ -50,6 +50,7 @@ public:
     Private()
     {
         threshold          = 0.3;
+        faceModelToStore   = 0;
         tldRecognitionCore = 0;
         db                 = 0;
     }
@@ -79,13 +80,13 @@ public:
 
 public:
 
-    float threshold;
-    unitFaceModel *facemodeltostore;
+    float           threshold;
+    unitFaceModel*  faceModelToStore;
 
 private:
 
-    Tldrecognition*  tldRecognitionCore;
-    Tlddatabase*     db;
+    Tldrecognition* tldRecognitionCore;
+    Tlddatabase*    db;
 };
 
 FaceRecognizer::FaceRecognizer()
@@ -98,7 +99,7 @@ FaceRecognizer::~FaceRecognizer()
     delete d;
 }
 
-QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
+QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces) const
 {
     QList<float> recognitionRate;
 
@@ -139,7 +140,7 @@ QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces)
 
             if(count != -1)
             {
-                int maxConfIndex    = 0;
+                int maxConfIndex = 0;
 
                 for(int tmpInt = 0; tmpInt <= count ; tmpInt++ )
                 {
@@ -175,19 +176,19 @@ void FaceRecognizer::storeFaces(const QList<Face>& faces)
 {
     foreach(Face face, faces)
     {
-        IplImage* const img1           = d->database()->QImage2IplImage(face.image().toColorQImage());
-        IplImage* const inputfaceimage = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
+        IplImage* const img1            = d->database()->QImage2IplImage(face.image().toColorQImage());
+        IplImage* const inputfaceimage  = cvCreateImage(cvSize(47,47),img1->depth,img1->nChannels);
         cvResize(img1,inputfaceimage);
 
-        unitFaceModel* facemodeltostore = new unitFaceModel;
-        d->recognition()->getModeltoStore(inputfaceimage,facemodeltostore);
-        facemodeltostore->Name                = face.name();
-        facemodeltostore->faceid              = face.id();
+        unitFaceModel* faceModelToStore = new unitFaceModel;
+        d->recognition()->getModeltoStore(inputfaceimage,faceModelToStore);
+        faceModelToStore->Name          = face.name();
+        faceModelToStore->faceid        = face.id();
 
         kDebug() << face.name() << face.id() ;
 
-        d->database()->insertFaceModel(facemodeltostore);             //store facemodel in tlddatabase
-        delete facemodeltostore;
+        d->database()->insertFaceModel(faceModelToStore);             //store facemodel in tlddatabase
+        delete faceModelToStore;
     }
 }
 
