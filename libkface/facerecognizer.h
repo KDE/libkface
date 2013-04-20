@@ -48,6 +48,7 @@ public:
     FaceRecognizer();
     ~FaceRecognizer();
 
+    void setRecognitionThreshold(const float threshold) const;
     /**
      * @brief recognizeFaces : sets the name() field and id()(tadid) field of the recognized face(s) in faces[]
      * @param faces:List of faces to be recognized

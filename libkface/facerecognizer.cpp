@@ -49,7 +49,7 @@ public:
 
     Private()
     {
-        threshold          = 0.3;
+        m_threshold          = 0.8;
         faceModelToStore   = 0;
         tldRecognitionCore = 0;
         db                 = 0;
@@ -80,7 +80,7 @@ public:
 
 public:
 
-    float           threshold;
+    float           m_threshold;
     unitFaceModel*  faceModelToStore;
 
 private:
@@ -97,6 +97,11 @@ FaceRecognizer::FaceRecognizer()
 FaceRecognizer::~FaceRecognizer()
 {
     delete d;
+}
+
+void FaceRecognizer::setRecognitionThreshold(const float threshold) const
+{
+    d->m_threshold = threshold;
 }
 
 QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces) const
@@ -151,9 +156,12 @@ QList<float> FaceRecognizer::recognizeFaces(QList<Face>& faces) const
                     }
                 }
 
-                faces[faceindex].setName(d->database()->querybyFaceid(maxConfIndex+1));
-                faces[faceindex].setId(d->database()->queryFaceID(maxConfIndex+1));
-                kDebug() << "preson  " << qPrintable(d->database()->querybyFaceid(maxConfIndex+1)) << "recognized";
+                if (maxConfidence >= d->m_threshold)
+                {
+                    faces[faceindex].setName(d->database()->querybyFaceid(maxConfIndex+1));
+                    faces[faceindex].setId(d->database()->queryFaceID(maxConfIndex+1));
+                    kDebug() << "preson  " << qPrintable(d->database()->querybyFaceid(maxConfIndex+1)) << "recognized";
+                }
             }
 
             recognitionRate.append(maxConfidence);
