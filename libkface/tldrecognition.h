@@ -64,7 +64,7 @@ public:
      * @return facemodel containing all features and face details in the form of OpenTLD compatible
      * mathematical features.
      */
-    void getModeltoStore(IplImage* const,unitFaceModel *facemodeltostore) const;
+    void getModeltoStore(IplImage* const, unitFaceModel* const facemodeltostore) const;
 
     int updateDatabase(IplImage* const, const char* const) const;
 

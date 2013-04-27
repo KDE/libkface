@@ -43,24 +43,24 @@ namespace KFaceIface
 
 namespace KFaceUtils
 {
-/**
+    /**
      * This code is adapted from code (C) Rik Hemsley <rik@kde.org>
      * and further adapted from code by Mosfet, ported from old KDE 3.5 imaging code.
      * @param img The image whose grayscale version is desired
      * @return A grayscale QImage, RGB+Alpha
      */
-QImage QImage2Grayscale(const QImage& img);
+    QImage QImage2Grayscale(const QImage& img);
 
-/**
+    /**
      * Takes QImage and converts returns a pointer to an IplImage
      * @param img The QImage to be converted.
      * @return the IplImage pointer
      */
-IplImage*      QImage2IplImage(const QImage& img);
-IplImage* QImage2GrayscaleIplImage(const QImage& img);
+    IplImage* QImage2IplImage(const QImage& img);
+    IplImage* QImage2GrayscaleIplImage(const QImage& img);
 
 
-/**
+    /**
      * Creates and returns a pointer to an IplImage from raw image data.
      * @param width Width of Image
      * @param height Height of Image
@@ -69,34 +69,35 @@ IplImage* QImage2GrayscaleIplImage(const QImage& img);
      * @param data Unsigned char* image data
      * @return A pointer to the new IplImage
      */
-IplImage* Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data);
-IplImage* Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data);
+    IplImage* Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data);
+    IplImage* Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data);
 
-/**
+    /**
      * Takes a pointer to an IplImage and returns a Qimage
      * @param img IplImage pointer
      * @return QImage version of image
      */
-QImage IplImage2QImage(const IplImage* const img);
+    QImage IplImage2QImage(const IplImage* const img);
 
-/**
+    /**
      * Takes a filename and returns a string to integer hash.
      * @param fileName The name of the file from which the hash is to be retrieved
      * @return A QHash<QString, int>, which maps the name of a person to his ID in the database
      */
-QHash<QString, int> hashFromFile(const QString& fileName);
+    QHash<QString, int> hashFromFile(const QString& fileName);
 
-/**
+    /**
      * Adds a person's name and ID to the specified file
      * @param fileName The QString name of the file which is to be update with the new person
      * @param name The QString name of the new person
      * @param id The integer ID of the new person
      */
-void addNameToFile(const QString& fileName, const QString& name, const int id);
+    void addNameToFile(const QString& fileName, const QString& name, const int id);
 
-QSize  fromCvSize(const CvSize& size);
-CvSize toCvSize(const QSize& size);
-}
+    QSize  fromCvSize(const CvSize& size);
+    CvSize toCvSize(const QSize& size);
+
+} // namespace KFaceUtils
 
 } // namespace KFaceIface
 

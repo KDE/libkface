@@ -47,8 +47,7 @@
 namespace KFaceIface
 {
 
-/*
- * What is all this code here about?
+/**
  * The RecognitionDatabaseStaticPriv holds a hash to all exising RecognitionDatabase data,
  * mutex protected.
  * When creating a RecognitionDatabase, either a new Private is created,
@@ -56,7 +55,6 @@ namespace KFaceIface
  * When the last RecognitionDatabase referencing a Private is destroyed,
  * the Private is destroyed as well, removing itself from the static hash.
  */
-
 class RecognitionDatabaseStaticPriv
 {
 public:
@@ -208,6 +206,7 @@ bool RecognitionDatabase::updateFaces(QList<Face>& faces)
         return false;
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->updateFaces(faces);
 }
 
@@ -217,6 +216,7 @@ QList<double> RecognitionDatabase::recognizeFaces(QList<Face>& faces)
         return QList<double>();
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->recognizeFaces(faces);
 }
 
@@ -243,6 +243,7 @@ int RecognitionDatabase::peopleCount() const
         return 0;
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->peopleCount();
 }
 
@@ -252,6 +253,7 @@ QSize RecognitionDatabase::recommendedImageSize(const QSize& availableSize) cons
         return QSize();
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->recommendedImageSizeForRecognition(availableSize);
 }
 
@@ -261,6 +263,7 @@ void RecognitionDatabase::clearTraining(const QString& name)
         return;
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->clearTraining(name);
 }
 
@@ -270,6 +273,7 @@ void RecognitionDatabase::clearTraining(int id)
         return;
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->clearTraining(id);
 }
 
@@ -279,6 +283,7 @@ void RecognitionDatabase::clearAllTraining()
         return;
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->clearAllTraining();
 }
 
@@ -288,6 +293,7 @@ QList<int> RecognitionDatabase::allIds() const
         return QList<int>();
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->allIds();
 }
 
@@ -297,6 +303,7 @@ QStringList RecognitionDatabase::allNames() const
         return QStringList();
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->allNames();
 }
 
@@ -306,6 +313,7 @@ QString RecognitionDatabase::nameForId(int id) const
         return QString();
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->nameForId(id);
 }
 
@@ -315,6 +323,7 @@ int RecognitionDatabase::idForName(const QString& name) const
         return -1;
 
     QMutexLocker lock(&d->mutex);
+
     return d->database()->idForName(name);
 }
 

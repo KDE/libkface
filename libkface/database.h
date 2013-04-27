@@ -136,7 +136,7 @@ public:
      * or an empty list, if an error occurred or no recognition data is available.
      */
     void setColorMode(int);
-    int getColorMode() const;
+    int  getColorMode() const;
 
     QList<double> recognizeFaces(QList<Face>& faces);
 

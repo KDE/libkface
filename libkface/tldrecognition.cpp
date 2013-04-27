@@ -64,7 +64,7 @@ Tldrecognition::~Tldrecognition()
     delete d;
 }
 
-void Tldrecognition::getModeltoStore(IplImage* const inputImage, unitFaceModel *facemodeltostore) const
+void Tldrecognition::getModeltoStore(IplImage* const inputImage, unitFaceModel* const facemodeltostore) const
 {
     d->main->generatefacemodel(inputImage,facemodeltostore);
 }

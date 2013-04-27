@@ -77,8 +77,8 @@ public:
 
 public:
 
-    double    accuracy;
-    double    specificity;
+    double accuracy;
+    double specificity;
 
 private:
 

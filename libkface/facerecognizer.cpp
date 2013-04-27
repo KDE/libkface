@@ -49,7 +49,7 @@ public:
 
     Private()
     {
-        m_threshold          = 0.8;
+        m_threshold        = 0.8;
         faceModelToStore   = 0;
         tldRecognitionCore = 0;
         db                 = 0;
