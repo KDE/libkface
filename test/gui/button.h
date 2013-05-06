@@ -48,7 +48,7 @@ class Button : public QObject, public QGraphicsItem
 
 public:
 
-    Button(QGraphicsItem* const parent = 0);
+    explicit Button(QGraphicsItem* const parent = 0);
     explicit Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* const parent = 0);
     ~Button();
 

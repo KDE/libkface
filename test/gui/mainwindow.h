@@ -59,7 +59,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    MainWindow(QWidget* const parent = 0);
+    explicit MainWindow(QWidget* const parent = 0);
     ~MainWindow();
 
 public Q_SLOTS:

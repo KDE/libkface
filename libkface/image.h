@@ -52,7 +52,7 @@ public:
     Image();
 
     /** Load the image from the given file. */
-    Image(const QString& filePath);
+    explicit Image(const QString& filePath);
 
     /** Create an image from the given QImage object.
      *  If the image has been scaled down, please call setOriginalSize.

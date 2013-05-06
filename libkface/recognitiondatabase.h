@@ -153,7 +153,7 @@ private:
 
     class Private;
 
-    RecognitionDatabase(QExplicitlySharedDataPointer<Private> d);
+    explicit RecognitionDatabase(QExplicitlySharedDataPointer<Private> d);
 
     QExplicitlySharedDataPointer<Private> d;
 

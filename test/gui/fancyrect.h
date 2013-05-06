@@ -51,7 +51,7 @@ class FancyRect : public QGraphicsRectItem
 
 public:
 
-    FancyRect(QGraphicsItem* const parent = 0);
+    explicit FancyRect(QGraphicsItem* const parent = 0);
     explicit FancyRect(const QRectF& rect, QGraphicsItem* const parent = 0);
     FancyRect(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* const parent = 0);
     FancyRect(QGraphicsRectItem* const other, QGraphicsItem* const parent);
