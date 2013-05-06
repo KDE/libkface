@@ -62,24 +62,26 @@ class FaceItem::Private
 public:
 
     Private()
+      : suggestionMode(false),
+        sceneWidth(0),
+        sceneHeight(0),
+        x1(0),
+        x2(0),
+        y1(0),
+        y2(0),
+        name(),
+        faceMarquee(0),
+        faceName(0),
+        nameRect(0),
+        origRect(),
+        origScale(0.0),
+        scale(0.0),
+        rejectButton(0),
+        acceptButton(0),
+        suggestionRejectButton(0),
+        suggestionAcceptButton(0)
     {
-        faceName               = 0;
-        nameRect               = 0;
-        rejectButton           = 0;
-        acceptButton           = 0;
-        faceMarquee            = 0;
-        suggestionAcceptButton = 0;
-        suggestionRejectButton = 0;
-        suggestionMode         = false;
-        name                   = QString();
-        sceneWidth             = 0;
-        sceneHeight            = 0;
-        x1                     = 0;
-        x2                     = 0;
-        y1                     = 0;
-        y2                     = 0;
-        origScale              = 0.0;
-        scale                  = 0.0;
+
     }
 
     bool               suggestionMode;
