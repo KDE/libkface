@@ -72,6 +72,9 @@ public:
      */
     QList<Face> detectFaces(const Image& image);
 
+    void        setColorMode(int);
+    int  getColorMode();
+
     /**
      * Set the accuracy and specificity of Face Detection.
      */
@@ -88,8 +91,8 @@ public:
 
 private:
 
-    class FaceDetectorPriv;
-    QExplicitlySharedDataPointer<FaceDetectorPriv> d;
+    class Private;
+    QExplicitlySharedDataPointer<Private> d;
 };
 
 } // namespace KFaceIface

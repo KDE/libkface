@@ -12,7 +12,7 @@
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="adityabhatt at gmail dot com">adityabhatt at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
@@ -48,35 +48,35 @@ class FACEAPI LibFaceUtils
 {
 public:
 
-    static IplImage*   resizeToArea(const IplImage* img, int area, double& ratio);
+    static IplImage*   resizeToArea(const IplImage* const img, int area, double& ratio);
     static CvPoint     center(const Face&);
-    static int         distance(CvPoint, CvPoint);
+    static int         distance(const CvPoint&, const CvPoint&);
     static int         distance(const Face&, const Face&);
 
-    static CvMat*      addScalar(CvMat* src, CvScalar value);
-    static CvMat*      combine(CvMat* src, CvMat* vector);
-    static void        divVec(CvMat* src, double value);
-    static CvMat*      getColoumn(CvMat* src, int col);
-    static CvMat*      mean(CvMat* src);
-    static CvMat*      multScalar(CvMat* src, double value);
-    static void        printMatrix(CvMat* src);
-    static CvMat*      reshape(CvMat* src);
-    static CvMat*      reverseOrder(CvMat* src);
-    static void        showImage(CvArr* src, const std::string& title = "Image");
-    static void        showImage(const IplImage* img, const std::vector<Face>& faces, double scale = 1, const std::string& title = "Image");
-    static void        sqrVec(CvMat* src);
+    static CvMat*      addScalar(CvMat* const src, const CvScalar& value);
+    static CvMat*      combine(CvMat* const src, CvMat* const vector);
+    static void        divVec(CvMat* const src, double value);
+    static CvMat*      getColoumn(CvMat* const src, int col);
+    static CvMat*      mean(CvMat* const src);
+    static CvMat*      multScalar(CvMat* const src, double value);
+    static void        printMatrix(CvMat* const src);
+    static CvMat*      reshape(CvMat* const src);
+    static CvMat*      reverseOrder(CvMat* const src);
+    static void        showImage(CvArr* const src, const std::string& title = "Image");
+    static void        showImage(const IplImage* const img, const std::vector<Face>& faces, double scale = 1, const std::string& title = "Image");
+    static void        sqrVec(CvMat* const src);
     static IplImage*   stringToImage(const std::string& data, int depth, int channels);
     static CvMat*      stringToMatrix(const std::string& data, int type);
-    static CvMat*      subtract(CvMat* src1, CvMat* src2);
-    static double      sumVecToDouble(CvMat* src);
-    static CvMat*      transpose(CvMat* src);
-    static IplImage*   charToIplImage(const char* img, int width, int height, int step, int depth, int channels);
-    static IplImage*   copyRect(const IplImage* src, const CvRect& rect);
-    static IplImage*   scaledSection(const IplImage* src, const CvRect& sourceRect, double scaleFactor);
-    static IplImage*   scaledSection(const IplImage* src, const CvRect& sourceRect, const CvSize& destSize);
+    static CvMat*      subtract(CvMat* const src1, CvMat* const src2);
+    static double      sumVecToDouble(CvMat* const src);
+    static CvMat*      transpose(CvMat* const src);
+    static IplImage*   charToIplImage(const char* const img, int width, int height, int step, int depth, int channels);
+    static IplImage*   copyRect(const IplImage* const src, const CvRect& rect);
+    static IplImage*   scaledSection(const IplImage* const src, const CvRect& sourceRect, double scaleFactor);
+    static IplImage*   scaledSection(const IplImage* const src, const CvRect& sourceRect, const CvSize& destSize);
 
-    static std::string imageToString(IplImage* src);
-    static std::string matrixToString(CvMat* src);
+    static std::string imageToString(IplImage* const src);
+    static std::string matrixToString(CvMat* const src);
 };
 
 } // namespace libface

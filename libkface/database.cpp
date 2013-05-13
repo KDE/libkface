@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -58,19 +58,20 @@
 namespace KFaceIface
 {
 
-class Database::DatabasePriv : public QSharedData
+class Database::Private : public QSharedData
 {
 public:
 
-    DatabasePriv()
+    Private()
         : mappingFilename(QString("/dictionary")),
           haarCascasdePath(KStandardDirs::installPath("data") + QString("libkface/haarcascades"))
     {
-        libface          = 0;
-        configDirty      = false;
+        colorMode   = Database::grayscale;
+        libface     = 0;
+        configDirty = false;
     }
 
-    ~DatabasePriv()
+    ~Private()
     {
         saveConfig();
 
@@ -87,14 +88,6 @@ public:
             kDebug() << "cv::Exception";
         }
     }
-
-    libface::LibFace*   libface;
-    Database::InitFlags initFlags;
-    QHash<QString, int> hash;
-    QString             configPath;
-    bool                configDirty;
-    const QString       mappingFilename;
-    const QString       haarCascasdePath;
 
     void saveConfig()
     {
@@ -115,10 +108,21 @@ public:
             kDebug() << "cv::Exception";
         }
     }
+
+public:
+
+    libface::LibFace*             libface;
+    Database::InitFlags           initFlags;
+    QHash<QString, int>           hash;
+    QString                       configPath;
+    bool                          configDirty;
+    const QString                 mappingFilename;
+    const QString                 haarCascasdePath;
+    Database::requestedColourMode colorMode;
 };
 
 Database::Database(InitFlags flags, const QString& configurationPath)
-        : d(new DatabasePriv)
+    : d(new Private)
 {
     // Note: same lines in RecognitionDatabase. Keep in sync.
     if (configurationPath.isNull())
@@ -138,6 +142,7 @@ Database::Database(InitFlags flags, const QString& configurationPath)
         else
         {
             libface::Mode mode;
+
             if (flags == InitAll)
                 mode = libface::ALL;
             else
@@ -177,13 +182,21 @@ Database::~Database()
 
 QList<Face> Database::detectFaces(const Image& image)
 {
-    const IplImage* img = image.imageData();
-    CvSize originalSize = cvSize(0,0);
+    const IplImage* const img = image.imageData();
+
+    if(d->colorMode == color)
+    {
+        const IplImage* const colorImg = image.colorImageData();
+        d->libface->setColorImg(colorImg);
+    }
+
+    CvSize originalSize = cvSize(0, 0);
 
     if (!image.originalSize().isNull())
         originalSize = KFaceUtils::toCvSize(image.originalSize());
 
     std::vector<libface::Face> result;
+
     try
     {
         result = d->libface->detectFaces(img, originalSize);
@@ -214,6 +227,7 @@ bool Database::updateFaces(QList<Face>& faces)
         return false;
 
     std::vector<libface::Face> faceVec;
+
     foreach(Face face, faces)
     {
         // If a name is already there in the dictionary, then set the ID from the dictionary, so that libface won't set it's own ID
@@ -221,10 +235,12 @@ bool Database::updateFaces(QList<Face>& faces)
         {
             face.setId(d->hash[face.name()]);
         }
+
         faceVec.push_back(face.toFace(Face::ShallowCopy));
     }
 
     std::vector<int> ids;
+
     try
     {
         ids = d->libface->update(&faceVec);
@@ -260,18 +276,21 @@ bool Database::updateFaces(QList<Face>& faces)
 QList<double> Database::recognizeFaces(QList<Face>& faces)
 {
     QList<double> closeness;
+
     if(faces.isEmpty() || !d->libface->count())
     {
         return closeness;
     }
 
     std::vector<libface::Face> faceVec;
+
     foreach(const Face& face, faces)
     {
         faceVec.push_back(face.toFace(Face::ShallowCopy));
     }
 
     std::vector< std::pair<int, double> > result;
+
     try
     {
         result = d->libface->recognise(&faceVec);
@@ -293,9 +312,11 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
         // Locate the name from the hash, pity we don't have a bi-directional hash in Qt
         QHashIterator<QString, int> it(d->hash);
         it.toFront();
+
         while(it.hasNext())
         {
             it.next();
+
             if(it.value() == faces[i].id())
             {
                 faces[i].setName(it.key());
@@ -303,6 +324,7 @@ QList<double> Database::recognizeFaces(QList<Face>& faces)
             }
         }
     }
+
     return closeness;
 }
 
@@ -321,6 +343,26 @@ void Database::clearTraining(int id)
 void Database::clearAllTraining()
 {
     d->libface->loadConfig(std::map<std::string, std::string>());
+}
+
+void Database::setColorMode(int mode)
+{
+    if (mode == 0)
+        d->colorMode = grayscale;
+    else
+        d->colorMode = color;
+}
+
+int Database::getColorMode() const
+{
+    if(d->colorMode == grayscale)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 void Database::saveConfig()

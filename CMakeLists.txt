@@ -6,7 +6,7 @@
 # @date   2010-06-16
 # @brief  LibFace library interface for KDE
 #
-# @author Copyright (C) 2010-2012 by Gilles Caulier
+# @author Copyright (C) 2010-2013 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -29,6 +29,12 @@ MESSAGE(STATUS "Starting CMake configuration for: libkface")
 
 FIND_PACKAGE(Qt4 4.6.0 REQUIRED)
 FIND_PACKAGE(KDE4 REQUIRED)
+
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+ADD_DEFINITIONS(${LIBFACE_DEFINITIONS})
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
+SUBDIRS(OpenTLD)
 
 INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
@@ -82,9 +88,11 @@ ENDIF (NOT OpenCV_INCLUDE_DIRS)
 # END SPECIAL OPENCV HANDLING
 
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
-IF (LIBFACE_FOUND)
-  INCLUDE_DIRECTORIES(${LIBFACE_INCLUDE_DIR})
-endif (LIBFACE_FOUND)
+
+# Disable external libface detection as version used internally have been improved to support Face Recognition
+#IF (LIBFACE_FOUND)
+#  INCLUDE_DIRECTORIES(${LIBFACE_INCLUDE_DIR})
+#ENDIF (LIBFACE_FOUND)
 
 # =======================================================
 # Information to update before to release this library.
@@ -93,9 +101,10 @@ endif (LIBFACE_FOUND)
 # API      ABI
 # 0.1.0 => 0.1.0     (During digiKam GoSC2010)
 # 2.0.0 => 1.0.0     (Included into digiKam 2.0.0 Software Collection)
+# 3.0.0 => 2.0.0     (Including OpenTLD for face recognition)
 
 # Library API version
-SET(KFACE_LIB_MAJOR_VERSION "2")
+SET(KFACE_LIB_MAJOR_VERSION "3")
 SET(KFACE_LIB_MINOR_VERSION "0")
 SET(KFACE_LIB_PATCH_VERSION "0")
 
@@ -110,7 +119,7 @@ SET(KFACE_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(KFACE_LIB_SO_CUR_VERSION "1")
+SET(KFACE_LIB_SO_CUR_VERSION "2")
 SET(KFACE_LIB_SO_REV_VERSION "0")
 SET(KFACE_LIB_SO_AGE_VERSION "0")
 
@@ -123,7 +132,7 @@ SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_
 
 # =======================================================
 
-IF (NOT LIBFACE_FOUND)
+#IF (NOT LIBFACE_FOUND)
     INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libface )
 
     SET(face_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceUtils.cpp
@@ -138,7 +147,7 @@ IF (NOT LIBFACE_FOUND)
 
     # NOTE: update libface version ID when code is updated from SF.net
     SET(libface_MAJOR_VERSION 0)
-    SET(libface_MINOR_VERSION 2)
+    SET(libface_MINOR_VERSION 3)
 
     SET(DEBUG_MODE 0)
     SET(LOG_LEVEL "libfaceINFO")
@@ -146,8 +155,8 @@ IF (NOT LIBFACE_FOUND)
     CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceConfig.h.cmake"
                    "${CMAKE_CURRENT_BINARY_DIR}/libface/LibFaceConfig.h")
 
-    MESSAGE(STATUS "External libface was not found, use internal version instead...")
-ENDIF (NOT LIBFACE_FOUND)
+#    MESSAGE(STATUS "External libface was not found, use internal version instead...")
+#ENDIF (NOT LIBFACE_FOUND)
 
 SUBDIRS(libkface)
 SUBDIRS(test)

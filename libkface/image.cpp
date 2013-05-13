@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2012 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -33,13 +33,14 @@
 
 #include <QFile>
 
-// OpenCV includes
-
-#include "libopencv.h"
-
 // Libface includes
 
 #include <libface/LibFace.h>
+
+
+// OpenCV includes
+
+#include "libopencv.h"
 
 // Local includes
 
@@ -53,21 +54,24 @@ Image::Image()
 }
 
 Image::Image(const QString& filePath)
-    : d(new ImagePriv)
+    : d(new Private)
 {
-    d->image = cvLoadImage(QFile::encodeName(filePath), CV_LOAD_IMAGE_GRAYSCALE);
+    d->originalImage = cvLoadImage(QFile::encodeName(filePath));
+    d->image         = cvLoadImage(QFile::encodeName(filePath), CV_LOAD_IMAGE_GRAYSCALE);
 }
 
 Image::Image(const QImage& givenImage)
-    : d(new ImagePriv)
+    : d(new Private)
 {
-    d->image = KFaceUtils::QImage2GrayscaleIplImage(KFaceUtils::QImage2Grayscale(givenImage));
+    d->originalImage = KFaceUtils::QImage2IplImage(givenImage);
+    d->image         = KFaceUtils::QImage2GrayscaleIplImage(KFaceUtils::QImage2Grayscale(givenImage));
 }
 
 Image::Image(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data)
-    : d(new ImagePriv)
+    : d(new Private)
 {
-    d->image = KFaceUtils::Data2GrayscaleIplImage(width, height, sixteenBit, alpha, data);
+    d->originalImage = KFaceUtils::Data2IplImage(width, height, sixteenBit, alpha, data);
+    d->image         = KFaceUtils::Data2GrayscaleIplImage(width, height, sixteenBit, alpha, data);
 }
 
 Image::Image(const Image& other)
@@ -76,7 +80,7 @@ Image::Image(const Image& other)
 }
 
 Image::Image(ImageData image)
-    : d(new ImagePriv)
+    : d(new Private)
 {
     // take ownership of IplImage
     d->image = image;
@@ -123,6 +127,11 @@ ImageData Image::imageData()
     return d ? d->image : 0;
 }
 
+const ImageData Image::colorImageData() const
+{
+    return d ? d->originalImage : 0;
+}
+
 const ImageData Image::imageData() const
 {
     return d ? d->image : 0;
@@ -131,6 +140,11 @@ const ImageData Image::imageData() const
 QImage Image::toQImage() const
 {
     return d ? KFaceUtils::IplImage2QImage(d->image) : QImage();
+}
+
+QImage Image::toColorQImage() const
+{
+    return KFaceUtils::IplImage2QImage(d->originalImage);
 }
 
 } // namespace KFaceIface

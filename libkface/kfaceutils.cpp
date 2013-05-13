@@ -52,24 +52,41 @@ namespace KFaceIface
 QImage KFaceUtils::QImage2Grayscale(const QImage& qimg)
 {
     QImage img = qimg;
-    if (img.width() == 0 || img.height() == 0)
-      return img;
 
-    int pixels         = img.width() * img.height() ;
-    unsigned int* data = (unsigned int*)img.bits();
+    if (img.width() == 0 || img.height() == 0)
+        return img;
+
+    int pixels               = img.width() * img.height() ;
+    unsigned int* const data = (unsigned int*)img.bits();
 
     int val;
+
     for(int i=0; i < pixels; ++i)
     {
         val     = qGray(data[i]);
         data[i] = qRgba(val, val, val, qAlpha(data[i]));
     }
+
     return img;
+}
+
+IplImage* KFaceUtils::QImage2IplImage(const QImage &img)
+{
+
+    IplImage* const imgHeader = cvCreateImageHeader(cvSize(img.width(), img.height()), IPL_DEPTH_8U, 4);
+    imgHeader->imageData      = (char*) img.bits();
+
+    uchar* const newdata      = (uchar*) malloc(sizeof(uchar) * img.byteCount());
+    memcpy(newdata, img.bits(), img.byteCount());
+    imgHeader->imageData      = (char*) newdata;
+
+    return imgHeader;
 }
 
 IplImage* KFaceUtils::QImage2GrayscaleIplImage(const QImage& qimg)
 {
     QImage localImage;
+
     switch (qimg.format())
     {
         case QImage::Format_RGB32:
@@ -82,6 +99,7 @@ IplImage* KFaceUtils::QImage2GrayscaleIplImage(const QImage& qimg)
             localImage = qimg.convertToFormat(QImage::Format_RGB32);
             break;
     }
+
     // I'm a bit paranoid not to cause a deep copy when calling bits()
     const QImage& image = localImage;
     const int width     = image.width();
@@ -121,14 +139,26 @@ IplImage* KFaceUtils::QImage2GrayscaleIplImage(const QImage& qimg)
     return iplImg;
 }
 
+IplImage* KFaceUtils::Data2IplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data)
+{
+    Q_UNUSED(sixteenBit);
+    Q_UNUSED(alpha);
+
+    IplImage* const imgHeader = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 4);
+    imgHeader->imageData      = (char*) data;
+
+    return imgHeader;
+}
+
 IplImage* KFaceUtils::Data2GrayscaleIplImage(uint width, uint height, bool sixteenBit, bool alpha, const uchar* const data)
 {
     Q_UNUSED(alpha);
 
     IplImage* img = 0;
+
     try
     {
-        img = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1);
+        img = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 1);
     }
     catch (cv::Exception& e)
     {

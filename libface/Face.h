@@ -14,7 +14,7 @@
  *
  * @author Copyright (C) 2010 by Alex Jironkin
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
@@ -59,7 +59,7 @@ public:
      * @param y2 Y coordinate of the bottom right corner of the face.
      * @param id ID of the face. -1 not not known.
      */
-    Face(int x1=-1, int y1=-1, int x2=-1, int y2=-1, int id=-1, const IplImage* face=0);
+    Face(int x1=-1, int y1=-1, int x2=-1, int y2=-1, int id=-1, const IplImage* const face=0);
 
     /**
      * Deconstructor that releases the pointer to IplImage.
@@ -101,7 +101,7 @@ public:
     * Note: Does not take ownership of the IplImage object, you need to release it after use
     * @param face pointer to the IplImage of the face.
     */
-    void setFace(const IplImage* face);
+    void setFace(const IplImage* const face);
 
     /**
     * Returns the non-const pointer to the image data.

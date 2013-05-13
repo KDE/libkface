@@ -10,7 +10,7 @@
  *
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="adityabhatt at gmail dot com">adityabhatt at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * @section LICENSE
@@ -48,12 +48,12 @@ using namespace std;
 namespace libface
 {
 
-class Haarcascades::HaarcascadesPriv
+class Haarcascades::Private
 {
 
 public:
 
-    HaarcascadesPriv()
+    Private()
     {
         size = 0;
     }
@@ -65,7 +65,7 @@ public:
 };
 
 Haarcascades::Haarcascades(const string& path)
-            : d(new HaarcascadesPriv)
+    : d(new Private)
 {
     this->d->cascadePath = path;
 }
@@ -105,12 +105,14 @@ bool Haarcascades::hasCascade(const string& name) const
         if (name == d->cascades[i].name)
             return true;
     }
+
     return false;
 }
 
 void Haarcascades::removeCascade(const string& name)
 {
-    int i;
+    int i = 0;
+
     for (i = 0; i < d->size-1; ++i)
     {
         if (name == d->cascades[i].name)
@@ -136,6 +138,7 @@ int Haarcascades::getWeight(const string& name) const
         if (name == d->cascades[i].name)
             return d->weights[i];
     }
+
     return -1;	// No such name found, return -1
 }
 
@@ -146,7 +149,8 @@ int Haarcascades::getWeight(int index) const
 
 void Haarcascades::setWeight(const string& name, int weight)
 {
-    int i;
+    int i = 0;
+
     for (i = 0; i < d->size-1; ++i)
     {
         if (name == d->cascades[i].name)
@@ -163,12 +167,14 @@ void Haarcascades::setWeight(int index, int weight)
 
 const Cascade& Haarcascades::getCascade(const string& name) const
 {
-    int i;
+    int i = 0;
+
     for (i = 0; i < d->size-1; ++i)
     {
         if (name == d->cascades[i].name)
             break;
     }
+
     return d->cascades[i];
 }
 
@@ -188,6 +194,7 @@ void Haarcascades::clear()
     {
         cvReleaseHaarClassifierCascade(&d->cascades[i].haarcasc);
     }
+
     d->cascades.clear();
     d->weights.clear();
     d->size = 0;

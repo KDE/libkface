@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010-2011 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2012 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -67,36 +67,6 @@ class KFACE_EXPORT Face
 public:
 
     /**
-     * Face constructor
-     */
-    Face();
-
-    /**
-     * Face constructor which constructs a face object out of a QRect and optionally a QImage.
-     * If no image is passed, it sets a blank image made by QImage()
-     * @param rect The QRect for the Face object
-     * @param image The QImage for the face image
-     */
-    explicit Face(const QRect& rect, const Image& image = Image());
-
-    /**
-     * Face constructor which constructs a face object from another Face.
-     * @param other The Face object
-     */
-    Face(const Face& other);
-
-    /** Assignment operator that assigns a KFace's data to another KFace
-     * @param other A reference to a KFace object
-     * @return A reference to the copied KFace object
-     */
-    Face& operator=(const Face& other);
-
-    /**
-     * Destructor
-     */
-    ~Face();
-
-    /**
      * This mode determines how the image data stored in the face is treated.
      */
     enum ImageOwnershipMode
@@ -129,6 +99,38 @@ public:
          */
         IgnoreData
     };
+
+public:
+
+    /**
+     * Face constructor
+     */
+    Face();
+
+    /**
+     * Face constructor which constructs a face object out of a QRect and optionally a QImage.
+     * If no image is passed, it sets a blank image made by QImage()
+     * @param rect The QRect for the Face object
+     * @param image The QImage for the face image
+     */
+    explicit Face(const QRect& rect, const Image& image = Image());
+
+    /**
+     * Face constructor which constructs a face object from another Face.
+     * @param other The Face object
+     */
+    Face(const Face& other);
+
+    /** Assignment operator that assigns a KFace's data to another KFace
+     * @param other A reference to a KFace object
+     * @return A reference to the copied KFace object
+     */
+    Face& operator=(const Face& other);
+
+    /**
+     * Destructor
+     */
+    ~Face();
 
    /**
      * Face constructor which constructs a face object from a libface::Face.
@@ -203,8 +205,8 @@ public:
 
 private:
 
-    class FacePriv;
-    QExplicitlySharedDataPointer<FacePriv> d;
+    class Private;
+    QExplicitlySharedDataPointer<Private> d;
 };
 
 } // namespace KFaceIface

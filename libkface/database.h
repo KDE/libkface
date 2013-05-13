@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -53,6 +53,12 @@ class KFACE_EXPORT Database
 
 public:
 
+    enum requestedColourMode
+    {
+        grayscale,
+        color
+    };
+
     enum InitFlag
     {
         InitDetection   = 0x01,
@@ -60,6 +66,8 @@ public:
         InitAll         = InitDetection | InitRecognition
     };
     Q_DECLARE_FLAGS(InitFlags, InitFlag)
+
+public:
 
     /**
      * Constructor for Database
@@ -127,6 +135,9 @@ public:
      * @return A QList of "closeness" of recognized faces, in the same order as the argument;
      * or an empty list, if an error occurred or no recognition data is available.
      */
+    void setColorMode(int);
+    int  getColorMode() const;
+
     QList<double> recognizeFaces(QList<Face>& faces);
 
     /**
@@ -201,8 +212,8 @@ public:
 
 private:
 
-    class DatabasePriv;
-    QExplicitlySharedDataPointer<DatabasePriv> d;
+    class Private;
+    QExplicitlySharedDataPointer<Private> d;
 };
 
 } // namespace KFaceIface

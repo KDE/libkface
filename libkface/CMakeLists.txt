@@ -31,12 +31,20 @@ REMOVE_DEFINITIONS(-DQT_NO_STL)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../OpenTLD/src/opentld/main
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../OpenTLD/src/libopentld/tld
+                   )
+
 SET(kface_LIB_SRCS database.cpp
                    face.cpp
                    kfaceutils.cpp
                    image.cpp
                    facedetector.cpp
+                   facerecognizer.cpp
                    recognitiondatabase.cpp
+                   tlddatabase.cpp
+                   tldface.cpp
+                   tldrecognition.cpp
    )
 
 KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${face_LIB_SRCS})
@@ -46,7 +54,12 @@ TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${QT_QTGUI_LIBRARY}
                             ${LIBFACE_LIBRARIES}
                             ${OpenCV_LIBRARIES}
-                            )
+
+                            ${QT_QTSQL_LIBRARY}
+                            opentld
+                            cvblobs
+                            main
+                      )
 
 SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
                             SOVERSION ${KFACE_LIB_SO_CUR_VERSION})
@@ -57,8 +70,14 @@ INSTALL(FILES database.h
               face.h
               image.h
               facedetector.h
+              facerecognizer.h
               recognitiondatabase.h
               libkface_export.h
+
+              tlddatabase.h
+              tldface.h
+              tldrecognition.h
+
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
        )
