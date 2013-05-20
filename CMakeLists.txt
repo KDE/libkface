@@ -89,11 +89,6 @@ ENDIF (NOT OpenCV_INCLUDE_DIRS)
 
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 
-# Disable external libface detection as version used internally have been improved to support Face Recognition
-#IF (LIBFACE_FOUND)
-#  INCLUDE_DIRECTORIES(${LIBFACE_INCLUDE_DIR})
-#ENDIF (LIBFACE_FOUND)
-
 # =======================================================
 # Information to update before to release this library.
 
@@ -131,32 +126,6 @@ SET(KFACE_LIB_VERSION_ID "0x0${KFACE_LIB_MAJOR_VERSION}0${KFACE_LIB_MINOR_VERSIO
 SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_VERSION}.${KFACE_LIB_SO_AGE_VERSION}")
 
 # =======================================================
-
-#IF (NOT LIBFACE_FOUND)
-    INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libface )
-
-    SET(face_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceUtils.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/FaceDetect.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/Face.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/Eigenfaces.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFace.cpp
-                      ${CMAKE_CURRENT_SOURCE_DIR}/libface/Haarcascades.cpp
-       )
-
-    SET(LIBFACE_LIBRARIES "")
-
-    # NOTE: update libface version ID when code is updated from SF.net
-    SET(libface_MAJOR_VERSION 0)
-    SET(libface_MINOR_VERSION 3)
-
-    SET(DEBUG_MODE 0)
-    SET(LOG_LEVEL "libfaceINFO")
-    SET(LIB_TYPE STATIC)
-    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libface/LibFaceConfig.h.cmake"
-                   "${CMAKE_CURRENT_BINARY_DIR}/libface/LibFaceConfig.h")
-
-#    MESSAGE(STATUS "External libface was not found, use internal version instead...")
-#ENDIF (NOT LIBFACE_FOUND)
 
 SUBDIRS(libkface)
 SUBDIRS(test)

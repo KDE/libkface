@@ -31,34 +31,42 @@ REMOVE_DEFINITIONS(-DQT_NO_STL)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../OpenTLD/src/opentld/main
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../OpenTLD/src/libopentld/tld
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../OpenTLD/src/libopentld/tld
+                    ${CMAKE_CURRENT_SOURCE_DIR}/database
+                    ${CMAKE_CURRENT_SOURCE_DIR}/detection
+                    ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opentld
                    )
 
-SET(kface_LIB_SRCS database.cpp
-                   face.cpp
-                   kfaceutils.cpp
-                   image.cpp
-                   facedetector.cpp
-                   facerecognizer.cpp
+SET(kface_LIB_SRCS facedetector.cpp
+                   detection/opencvfacedetector.cpp
+                   recognition-opentld/opentldfacerecognizer.cpp
+                   recognition-opentld/unitfacemodel.cpp
                    recognitiondatabase.cpp
-                   tlddatabase.cpp
-                   tldface.cpp
-                   tldrecognition.cpp
    )
 
-KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${face_LIB_SRCS})
+SET(kface_database_LIB_SRCS database/databaseaccess.cpp
+                            database/databasecorebackend.cpp
+                            database/databaseparameters.cpp
+                            database/dbactiontype.cpp
+                            database/schemaupdater.cpp
+                            database/databaseconfigelement.cpp
+                            database/databaseoperationgroup.cpp
+                            database/trainingdb.cpp
+                            database/sqlquery.cpp
+   )
+
+KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${face_LIB_SRCS} ${kface_database_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${KDE4_KDEUI_LIBS}
                             ${QT_QTGUI_LIBRARY}
+                            ${QT_QTXML_LIBRARY}
                             ${LIBFACE_LIBRARIES}
                             ${OpenCV_LIBRARIES}
 
                             ${QT_QTSQL_LIBRARY}
                             opentld
                             cvblobs
-                            main
                       )
 
 SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
@@ -66,18 +74,14 @@ SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
 
 INSTALL(TARGETS kface ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-INSTALL(FILES database.h
-              face.h
-              image.h
-              facedetector.h
-              facerecognizer.h
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
+        DESTINATION ${DATA_INSTALL_DIR}/libkface/database )
+
+INSTALL(FILES facedetector.h
               recognitiondatabase.h
+              identity.h
+              dataproviders.h
               libkface_export.h
-
-              tlddatabase.h
-              tldface.h
-              tldrecognition.h
-
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
        )

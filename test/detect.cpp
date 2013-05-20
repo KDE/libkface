@@ -27,9 +27,6 @@
 
 #include <QApplication>
 #include <QImage>
-#include <QGraphicsView>
-#include <QGraphicsScene>
-#include <QGraphicsPixmapItem>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPixmap>
@@ -41,29 +38,28 @@
 
 // libkface includes
 
-#include "libkface/database.h"
-#include "libkface/face.h"
+#include "libkface/facedetector.h"
 
 using namespace KFaceIface;
 
-void detectFaces(Database* const d, const QString& file)
+void detectFaces(const QString& file)
 {
     kDebug() << "Loading" << file;
     QImage img(file);
     kDebug() << "Detecting";
-    QList<Face> result = d->detectFaces(img);//QString::fromLocal8Bit(argv[1]));
+    FaceDetector detector;
+    QList<QRectF> faces = detector.detectFaces(img);
     kDebug() << "Detected";
 
-    if (result.isEmpty())
+    if (faces.isEmpty())
     {
         kDebug() << "No faces found";
         return;
     }
 
     kDebug() << "Coordinates of detected faces : ";
-    foreach(const Face& f, result)
+    foreach(const QRectF& r, faces)
     {
-        QRect r = f.toRect();
         kDebug() << r;
     }
 
@@ -74,11 +70,12 @@ void detectFaces(Database* const d, const QString& file)
     fullImage->setPixmap(QPixmap::fromImage(img.scaled(250, 250, Qt::KeepAspectRatio)));
     layout->addWidget(fullImage);
 
-    foreach(const Face& f, result)
+    foreach(const QRectF& rr, faces)
     {
         QLabel* label = new QLabel;
         label->setScaledContents(false);
-        QImage part   = img.copy(f.toRect());
+        QRect r = FaceDetector::toAbsoluteRect(rr, img.size());
+        QImage part   = img.copy(r);
         label->setPixmap(QPixmap::fromImage(part.scaled(200, 200, Qt::KeepAspectRatio)));
         layout->addWidget(label);
     }
@@ -95,14 +92,10 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    // Make a new instance of Database and then detect faces from the image
-    kDebug() << "Making DB";
-    Database* d = new Database(Database::InitDetection, QString("."));
-
     QApplication app(argc, argv);
     for (int i=1; i<argc; i++)
     {
-        detectFaces(d, QString::fromLocal8Bit(argv[i]));
+        detectFaces(QString::fromLocal8Bit(argv[i]));
     }
     app.exec();
 
