@@ -32,15 +32,13 @@
 
 // Qt includes
 
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QPair>
-#include <QtCore/QHash>
+#include <QExplicitlySharedDataPointer>
+#include <QImage>
+#include <QVariant>
 
 // Local includes
 
 #include "libkface_export.h"
-#include "face.h"
-#include "image.h"
 
 namespace KFaceIface
 {
@@ -50,44 +48,52 @@ class KFACE_EXPORT FaceDetector
 
 public:
 
-    /** This class is a wrapper around the Database object
-     *  providing the following additional guarantees:
-     *  - deferred creation: The detection backend is created only
-     *    when detectFaces is called for the first time
-     *  - reentrancy: This class is reentrant.
-     *    (Note: An object of this class is not thread-safe)
+    /**
+     * Provides face detection, that means the process of selecting
+     * those regions of a full image which contain face.
+     *
+     * This class provides shallow copying
+     * The class is fully reentrant (a single object and its copies are not thread-safe).
+     * Deferred creation is guaranteed, that means creation of a FaceDetector
+     * object is cheap, the expensive creation of the detection backend
+     * is performed when detectFaces is called for the first time.
      */
 
     FaceDetector();
     FaceDetector(const FaceDetector& other);
     ~FaceDetector();
 
+    QString backendIdentifier() const;
+
     FaceDetector& operator=(const FaceDetector& other);
 
     /**
      * Scan an image for faces. Return a list with regions possibly
      * containing faces.
-     * @param image The image in which faces are to be detected
-     * @return A QList of detected Face's, with the extracted face images loaded into them.
+     * If the image has been downscaled anywhere in the process,
+     * provide the original size of the image as this may be of importance in the detection process.
+     *
+     * Found faces are returned in relative coordinates.
      */
-    QList<Face> detectFaces(const Image& image);
-
-    void        setColorMode(int);
-    int  getColorMode();
+    QList<QRectF> detectFaces(const QImage& image, const QSize& originalSize = QSize());
 
     /**
-     * Set the accuracy and specificity of Face Detection.
+     * Tunes backend parameters.
      */
-    void   setAccuracy(double value);
-    double accuracy() const;
-    void   setSpecificity(double value);
-    double specificity() const;
+    void setParameter(const QString& parameter, const QVariant& value);
+    void setParameters(const QVariantMap& parameters);
+    QVariantMap parameters() const;
 
     /**
      * Returns the recommended size if you want to scale images for detection.
      * Larger images can be passed, but may be downscaled.
      */
     int recommendedImageSize(const QSize& availableSize = QSize()) const;
+
+    static QRectF toRelativeRect(const QRect& absoluteRect, const QSize& size);
+    static QRect toAbsoluteRect(const QRectF& relativeRect, const QSize& size);
+    static QList<QRectF> toRelativeRects(const QList<QRect>& absoluteRects, const QSize& size);
+    static QList<QRect> toAbsoluteRects(const QList<QRectF>& relativeRects, const QSize& size);
 
 private:
 

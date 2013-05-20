@@ -39,10 +39,6 @@
 #include <QtCore/qmath.h>
 #include <QDebug>
 
-// Local includes
-
-#include "kfaceutils.h"
-
 using namespace std;
 
 namespace KFaceIface
@@ -648,6 +644,7 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage)
         image = image.scaled(scaledSize);
     }
 
+    //TODO: move to common utils, opentldrecognition
     cv::Mat cvImageWrapper, cvImage;
 
     switch (image.format())

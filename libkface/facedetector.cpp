@@ -29,9 +29,14 @@
 
 #include <QSharedData>
 
+// KDE includes
+
+#include <kdebug.h>
+#include <kstandarddirs.h>
+
 // Local includes
 
-#include "database.h"
+#include "detection/opencvfacedetector.h"
 
 namespace KFaceIface
 {
@@ -41,48 +46,66 @@ class FaceDetector::Private : public QSharedData
 public:
 
     Private()
+        : m_backend(0)
     {
-        db          = 0;
-        accuracy    = -1;
-        specificity = -1;
     }
 
     ~Private()
     {
-        delete db;
+        delete m_backend;
     }
 
-public:
-
-    Database* database()
+    OpenCVFaceDetector* backend()
     {
-        if (!db)
+        if (!m_backend)
         {
-            db = new Database(Database::InitDetection);
-
-            if (accuracy != -1)
-                db->setDetectionAccuracy(accuracy);
-
-            if (specificity != -1)
-                db->setDetectionSpecificity(specificity);
+            QString cascadeDir = KStandardDirs::installPath("data") + QString("libkface/haarcascades");
+            m_backend = new OpenCVFaceDetector(cascadeDir);
+            applyParameters();
         }
 
-        return db;
+        return m_backend;
     }
 
-    const Database* constDatabase() const
+    const OpenCVFaceDetector* constBackend() const
     {
-        return db;
+        return m_backend;
+    }
+
+    void applyParameters()
+    {
+        if (!m_backend)
+        {
+            return;
+        }
+        for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+        {
+            if (it.key() == "accuracy")
+            {
+                backend()->setAccuracy(it.value().toDouble());
+            }
+            else if (it.key() == "speed")
+            {
+                backend()->setAccuracy(1.0 - it.value().toDouble());
+            }
+            else if (it.key() == "specificity")
+            {
+                backend()->setSpecificity(it.value().toDouble());
+            }
+            else if (it.key() == "sensitivity")
+            {
+                backend()->setSpecificity(1.0 - it.value().toDouble());
+            }
+        }
     }
 
 public:
 
-    double accuracy;
-    double specificity;
+    QVariantMap parameters;
 
 private:
 
-    Database* db;
+    OpenCVFaceDetector* m_backend;
 };
 
 FaceDetector::FaceDetector()
@@ -105,58 +128,106 @@ FaceDetector::~FaceDetector()
 {
 }
 
-QList<Face> FaceDetector::detectFaces(const Image& image)
+QString FaceDetector::backendIdentifier() const
 {
-    return d->database()->detectFaces(image);
+    return "OpenCV Cascades";
 }
 
-void FaceDetector::setAccuracy(double value)
+QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& originalSize)
 {
-    // deferred creation
-    if (d->constDatabase())
-        d->database()->setDetectionAccuracy(value);
+    QList<QRectF> result;
+    cv::Size cvOriginalSize;
+
+    if (originalSize.isValid())
+    {
+        cvOriginalSize = cv::Size(originalSize.width(), originalSize.height());
+    }
     else
-        d->accuracy = value;
+    {
+        cvOriginalSize = cv::Size(image.width(), image.height());
+    }
+
+    try
+    {
+        cv::Mat cvImage = d->backend()->prepareForDetection(image);
+        QList<QRect> absRects = d->backend()->detectFaces(cvImage, cvOriginalSize);
+        result = toRelativeRects(absRects, QSize(cvImage.cols, cvImage.rows));
+
+    }
+    catch (cv::Exception& e)
+    {
+        kError() << "cv::Exception:" << e.what();
+    }
+
+    return result;
 }
 
-double FaceDetector::accuracy() const
+void FaceDetector::setParameter(const QString& parameter, const QVariant& value)
 {
-    if (d->constDatabase())
-        return d->constDatabase()->detectionAccuracy();
-    else
-        return 0.8;
+    d->parameters.insert(parameter, value);
+    d->applyParameters();
 }
 
-void FaceDetector::setSpecificity(double value)
+void FaceDetector::setParameters(const QVariantMap& parameters)
 {
-    // deferred creation
-    if (d->constDatabase())
-        d->database()->setDetectionSpecificity(value);
-    else
-        d->specificity = value;
+    for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+    {
+        d->parameters.insert(it.key(), it.value());
+    }
+    d->applyParameters();
 }
 
-double FaceDetector::specificity() const
+QVariantMap FaceDetector::parameters() const
 {
-    if (d->constDatabase())
-        return d->constDatabase()->detectionSpecificity();
-    else
-        return 0.8;
+    return d->parameters;
 }
 
 int FaceDetector::recommendedImageSize(const QSize& availableSize) const
 {
-    return d->database()->recommendedImageSizeForDetection(availableSize);
+    Q_UNUSED(availableSize);
+    return OpenCVFaceDetector::recommendedImageSizeForDetection();
 }
 
-void FaceDetector::setColorMode(int mode)
+QRectF FaceDetector::toRelativeRect(const QRect& abs, const QSize& s)
 {
-    d->database()->setColorMode(mode);
+    if (s.isEmpty())
+    {
+        return QRectF();
+    }
+
+    return QRectF(qreal(abs.x())  / qreal(s.width()),
+                  qreal(abs.y())  / qreal(s.height()),
+                  qreal(abs.width())  / qreal(s.width()),
+                  qreal(abs.height())  / qreal(s.height()));
 }
 
-int FaceDetector::getColorMode()
+QRect FaceDetector::toAbsoluteRect(const QRectF& rel, const QSize& s)
 {
-    return d->database()->getColorMode();
+    return QRectF(rel.x() * s.width(),
+                  rel.y() * s.height(),
+                  rel.width() * s.width(),
+                  rel.height() * s.height()).toRect();
 }
+
+QList<QRectF> FaceDetector::toRelativeRects(const QList<QRect>& absoluteRects, const QSize& size)
+{
+    QList<QRectF> result;
+    foreach (const QRect& r, absoluteRects)
+    {
+        result << toRelativeRect(r, size);
+    }
+    return result;
+}
+
+QList<QRect> FaceDetector::toAbsoluteRects(const QList<QRectF>& relativeRects, const QSize& size)
+{
+    QList<QRect> result;
+    foreach (const QRectF& r, relativeRects)
+    {
+        result << toAbsoluteRect(r, size);
+    }
+    return result;
+}
+
 
 } // namespace KFaceIface
