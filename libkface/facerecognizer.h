@@ -9,6 +9,8 @@
  *
  * @author Copyright (C) 2012-2013 by Mahesh Hegde
  *         <a href="mailto:maheshmhegade at gmail dot com">maheshmhegade at gmail dot com</a>
+ * @author Copyright (C) 2013 by Marcel Wiesweg
+ *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  *
  * @section LICENSE
  *
@@ -25,19 +27,28 @@
  *
  * ============================================================ */
 
-#ifndef KFACE_FACERECOGNIZER_H
-#define KFACE_FACERECOGNIZER_H
+#ifndef KFACE_OPENTLDFACERECOGNIZER_H
+#define KFACE_OPENTLDFACERECOGNIZER_H
+
+// OpenCV includes
+
+#include "libopencv.h"
+
+// Qt include
+
+#include <QImage>
 
 // local includes
 
-#include "face.h"
-#include "image.h"
 #include "libkface_export.h"
+#include "unitfacemodel.h"
 
 namespace KFaceIface
 {
 
-class KFACE_EXPORT FaceRecognizer
+class DatabaseAccessData;
+
+class OpenTLDFaceRecognizer
 {
 
 public:
@@ -45,28 +56,31 @@ public:
     /**
      * @brief FaceRecognizer:Master class to control entire recognition using OpenTLD
      */
-    FaceRecognizer();
-    ~FaceRecognizer();
+    OpenTLDFaceRecognizer(DatabaseAccessData*);
+    ~OpenTLDFaceRecognizer();
 
-    void setRecognitionThreshold(const float threshold) const;
+    void setThreshold(float threshold) const;
+
+    /** Returns a cvMat created from the inputImage, optimized for recognition */
+    cv::Mat prepareForRecognition(const QImage& inputImage);
     /**
-     * @brief recognizeFaces : sets the name() field and id()(tadid) field of the recognized face(s) in faces[]
-     * @param faces:List of faces to be recognized
-     * @return Confidence in recognition process,each entry corresponds to each face in argument faces[]
+     *  Try to recognize the given image.
+     *  Returns the identity id.
+     *  If the identity cannot be recognized, returns -1.
      */
-    QList<float> recognizeFaces(QList<Face>& faces) const;
+    int recognize(const cv::Mat& inputImage);
 
     /**
-     * @brief storeFaces:Currently training is not enabled with OpenTLD,so faces are performed with
-     * initial training only to generate Mathematical model corresponding face which has intensity normalised positive
-     * and/or negative patches and features in the form of trees and leaves.
-     * @param faces
+     * Trains the given image, which represents a face of the given identity.
      */
-    void storeFaces(const QList<Face>& faces);
+    void train(int identity, const cv::Mat& inputImage);
 
     //void   setThreshold(float value);
 
 private:
+
+    float recognitionConfidence(const cv::Mat& im, const UnitFaceModel& compareModel);
+    void createFaceModel(const cv::Mat& im, UnitFaceModel& model);
 
     class Private;
     Private* const d;

@@ -30,133 +30,77 @@
  *
  * ============================================================ */
 
-#include "tldface.h"
-
-using namespace std;
+#include "unitfacemodel.h"
 
 namespace KFaceIface
 {
 
-unitFaceModel::unitFaceModel()
-{
-    faceid    = 0;
-    objHeight = 0;
-    objWidth  = 0;
-    minVar    = 0.0;
-}
-
-unitFaceModel::~unitFaceModel()
+UnitFaceModel::UnitFaceModel()
+    : objWidth(0),
+      objHeight(0),
+      minVar(0)
 {
 }
 
-void unitFaceModel::serialisePositivePatches(const QList<QList<float> >& allPositivePatches)
+UnitFaceModel::~UnitFaceModel()
 {
-    QByteArray byteArray;
-    QBuffer writeBuffer(&byteArray);
-    writeBuffer.open(QIODevice::WriteOnly);
-    QDataStream out(&writeBuffer);
-
-    out << allPositivePatches;
-
-    writeBuffer.close();
-
-    serialisedPositivePatches = QString(byteArray.toBase64());
 }
 
-void unitFaceModel::serialiseNegativePatches(const QList<QList<float> >& allNegativePatches)
+template <class List>
+static void serialize(const List& list, QByteArray& dest)
 {
-    QByteArray byteArray;
-    QBuffer writeBuffer(&byteArray);
-    writeBuffer.open(QIODevice::WriteOnly);
-    QDataStream out(&writeBuffer);
-
-    out << allNegativePatches;
-
-    writeBuffer.close();
-
-    serialisedNegativePatches = QString(byteArray.toBase64());
+    dest.clear();
+    QDataStream out(&dest, QIODevice::WriteOnly);
+    out << list;
 }
 
-void unitFaceModel::serialiseFeatures(const QList<QList<QList<float> > >& allFeatures)
+void UnitFaceModel::serialisePositivePatches(const QList<QList<float> >& allPositivePatches)
 {
-    QByteArray byteArray;
-    QBuffer writeBuffer(&byteArray);
-    writeBuffer.open(QIODevice::WriteOnly);
-    QDataStream out(&writeBuffer);
-
-    out << allFeatures;
-
-    writeBuffer.close();
-
-    serialisedFeatures = QString(byteArray.toBase64());
+    serialize(allPositivePatches, serialisedPositivePatches);
 }
 
-void unitFaceModel::serialiseLeaves(const QList<QList<QList<int> > >& allLeaves)
+void UnitFaceModel::serialiseNegativePatches(const QList<QList<float> >& allNegativePatches)
 {
-    QByteArray byteArray;
-    QBuffer writeBuffer(&byteArray);
-    writeBuffer.open(QIODevice::WriteOnly);
-    QDataStream out(&writeBuffer);
-
-    out << allLeaves;
-
-    writeBuffer.close();
-
-    serialisedLeaves = QString(byteArray.toBase64());
+    serialize(allNegativePatches, serialisedNegativePatches);
 }
 
-QList<QList<float> > unitFaceModel::deserialisePositivePatches() const
+void UnitFaceModel::serialiseFeatures(const QList<QList<QList<float> > >& allFeatures)
 {
-    QByteArray readArr = QByteArray::fromBase64( this->serialisedPositivePatches.toAscii());
-    QBuffer readBuffer(&readArr);
-    readBuffer.open(QIODevice::ReadOnly);
-    QDataStream in(&readBuffer);
-    QList<QList<float> > allPositivePatches;
-
-    in >> allPositivePatches;
-    return allPositivePatches;
+    serialize(allFeatures, serialisedFeatures);
 }
 
-QList<QList<float> > unitFaceModel::deserialiseNegativePatches() const
+void UnitFaceModel::serialiseLeaves(const QList<QList<QList<int> > >& allLeaves)
 {
-    QByteArray readArr = QByteArray::fromBase64( serialisedNegativePatches.toAscii());
-    QBuffer readBuffer(&readArr);
-    readBuffer.open(QIODevice::ReadOnly);
-    QDataStream in(&readBuffer);
-
-    QList<QList<float> > allNegativePatches;
-
-    in >> allNegativePatches;
-
-    return allNegativePatches;
+    serialize(allLeaves, serialisedLeaves);
 }
 
-QList<QList<QList<float> > > unitFaceModel::deserialiseFeatures() const
+template <class List>
+static List deserialize(const QByteArray& src)
 {
-    QByteArray readArr = QByteArray::fromBase64( serialisedFeatures.toAscii());
-    QBuffer readBuffer(&readArr);
-    readBuffer.open(QIODevice::ReadOnly);
-    QDataStream in(&readBuffer);
-
-    QList<QList<QList<float> > > allFeatures;
-
-    in >> allFeatures;
-
-    return allFeatures;
+    List list;
+    QDataStream in(src);
+    in >> list;
+    return list;
 }
 
-QList<QList<QList<int> > > unitFaceModel::deserialiseLeaves() const
+QList<QList<float> > UnitFaceModel::deserialisePositivePatches() const
 {
-    QByteArray readArr = QByteArray::fromBase64( serialisedLeaves.toAscii());
-    QBuffer readBuffer(&readArr);
-    readBuffer.open(QIODevice::ReadOnly);
-    QDataStream in(&readBuffer);
+    return deserialize<QList<QList<float> > >(serialisedPositivePatches);
+}
 
-    QList<QList<QList<int> > > allLeaves;
+QList<QList<float> > UnitFaceModel::deserialiseNegativePatches() const
+{
+    return deserialize<QList<QList<float> > >(serialisedNegativePatches);
+}
 
-    in >> allLeaves;
+QList<QList<QList<float> > > UnitFaceModel::deserialiseFeatures() const
+{
+    return deserialize<QList<QList<QList<float> > > >(serialisedFeatures);
+}
 
-    return allLeaves;
+QList<QList<QList<int> > > UnitFaceModel::deserialiseLeaves() const
+{
+    return deserialize<QList<QList<QList<int> > > >(serialisedLeaves);
 }
 
 } // namespace KFaceIface

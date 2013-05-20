@@ -50,17 +50,17 @@
 namespace KFaceIface
 {
 
-class KFACE_EXPORT unitFaceModel
+class KFACE_EXPORT UnitFaceModel
 {
 public:
 
     /**
-     * @brief unitFaceModel:describe single face.(OpenTLD communicates about the face data through this class object)
+     * @brief UnitFaceModel:describe single face.(OpenTLD communicates about the face data through this class object)
      * This is a Convinient class to hold facemodel to be compatible for OpenTLD demanding features of object(face)
      * Objects of this class are used to set parameters of OpenTLD recognizer(tld).
      */
-    unitFaceModel();
-    ~unitFaceModel();
+    UnitFaceModel();
+    ~UnitFaceModel();
 
     /**
      * @brief Following four methoods used to serialise the dynamic data generated during initial learning of OpenTLD
@@ -81,15 +81,13 @@ public:
 
 public:
 
-    QString serialisedPositivePatches;
-    QString serialisedNegativePatches;
-    QString serialisedFeatures;
-    QString serialisedLeaves;
-    QString Name;
+    QByteArray serialisedPositivePatches;
+    QByteArray serialisedNegativePatches;
+    QByteArray serialisedFeatures;
+    QByteArray serialisedLeaves;
 
-    int     faceid;
-    int     objHeight;
     int     objWidth;
+    int     objHeight;
 
     float   minVar;
 };
