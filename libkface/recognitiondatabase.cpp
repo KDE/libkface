@@ -34,18 +34,41 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QSharedData>
+#include <QUuid>
 
 // KDE includes
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kstandarddirs.h>
 
 // Local includes
 
-#include "database.h"
+#include "databaseaccess.h"
+#include "databaseoperationgroup.h"
+#include "databaseparameters.h"
+#include "recognition-opentld/opentldfacerecognizer.h"
+#include "trainingdb.h"
+#include "version.h"
 
 namespace KFaceIface
 {
+
+
+Identity::Identity()
+    : id(-1)
+{
+}
+
+bool Identity::isNull() const
+{
+    return id == -1;
+}
+
+bool Identity::operator==(const Identity& other) const
+{
+    return id == other.id;
+}
 
 /**
  * The RecognitionDatabaseStaticPriv holds a hash to all exising RecognitionDatabase data,
@@ -87,43 +110,41 @@ class RecognitionDatabase::Private : public QSharedData
 {
 public:
 
-    ~Private()
+    ~Private();
+
+    const QString       configPath;
+    QMutex              mutex;
+    DatabaseAccessData *db;
+
+    QVariantMap         parameters;
+    QList<Identity>     identityCache;
+
+public:
+
+    template <class T>
+    T* getObjectOrCreate(T* &ptr)
     {
-        static_d->removeDatabase(configPath);
-        delete db;
+        if (!ptr)
+        {
+            ptr = new T(db);
+        }
+        return ptr;
     }
 
-    const QString configPath;
-    QMutex        mutex;
+    OpenTLDFaceRecognizer* openTLD() { return getObjectOrCreate(opentld); }
+    OpenTLDFaceRecognizer* openTLDConst() const { return opentld; }
 
-    // call under lock
-    Database* database() const
-    {
-        if (!db)
-            const_cast<Private*>(this)->db = new Database(Database::InitRecognition, configPath);
-
-        return db;
-    }
-
-    const Database* constDatabase() const
-    {
-        return db;
-    }
+    void applyParameters();
 
 private:
 
     friend class RecognitionDatabaseStaticPriv;
-
-    Private(const QString& configPath)
-        : configPath(configPath),
-          mutex(QMutex::Recursive),
-          db(0)
-    {
-    }
+    // Protected creation by StaticPriv only
+    Private(const QString& configPath);
 
 private:
 
-    Database* db;
+    OpenTLDFaceRecognizer* opentld;
 };
 
 QExplicitlySharedDataPointer<RecognitionDatabase::Private> RecognitionDatabaseStaticPriv::database(const QString& path)
@@ -164,6 +185,27 @@ void RecognitionDatabaseStaticPriv::removeDatabase(const QString& key)
 
 // ----------------------------------------------------------------------------------------------
 
+RecognitionDatabase::Private::Private(const QString& configPath)
+    : configPath(configPath),
+      mutex(QMutex::Recursive),
+      db(DatabaseAccess::create()),
+      opentld(0)
+{
+    DatabaseParameters params = DatabaseParameters::parametersForSQLite(configPath + "/" + "recognition.db");
+    DatabaseAccess::setParameters(db, params);
+    if (DatabaseAccess::checkReadyForUse(db))
+    {
+        identityCache = DatabaseAccess(db).db()->identities();
+    }
+}
+
+RecognitionDatabase::Private::~Private()
+{
+    static_d->removeDatabase(configPath);
+    DatabaseAccess::destroy(db);
+}
+
+
 RecognitionDatabase::RecognitionDatabase()
 {
 }
@@ -200,131 +242,272 @@ bool RecognitionDatabase::isNull() const
     return !d;
 }
 
-bool RecognitionDatabase::updateFaces(QList<Face>& faces)
+QList<Identity> RecognitionDatabase::allIdentities()
 {
     if (!d)
-        return false;
+        return QList<Identity>();
+
+    QMutexLocker lock(&d->mutex);
+    return d->identityCache;
+}
+
+Identity RecognitionDatabase::identity(int id)
+{
+    if (!d)
+        return Identity();
 
     QMutexLocker lock(&d->mutex);
 
-    return d->database()->updateFaces(faces);
-}
-
-QList<double> RecognitionDatabase::recognizeFaces(QList<Face>& faces)
-{
-    if (!d)
-        return QList<double>();
-
-    QMutexLocker lock(&d->mutex);
-
-    return d->database()->recognizeFaces(faces);
-}
-
-void RecognitionDatabase::saveConfig()
-{
-    if (d && d->constDatabase())
+    foreach (const Identity& identity, d->identityCache)
     {
-        QMutexLocker lock(&d->mutex);
-        d->database()->saveConfig();
+        if (identity.id == id)
+        {
+            return identity;
+        }
+    }
+    return Identity();
+}
+
+Identity RecognitionDatabase::findIdentity(const QString& attribute, const QString& value)
+{
+    if (!d)
+        return Identity();
+
+    QMutexLocker lock(&d->mutex);
+
+    foreach (const Identity& identity, d->identityCache)
+    {
+        if (identity.attributes.value(attribute) == value)
+        {
+            return identity;
+        }
+    }
+    return Identity();
+}
+
+Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attributes)
+{
+    if (!d)
+        return Identity();
+
+    QMutexLocker lock(&d->mutex);
+
+    Identity identity;
+    {
+        DatabaseOperationGroup group(d->db);
+        int id = DatabaseAccess(d->db).db()->addIdentity();
+        identity.id = id;
+        identity.attributes = attributes;
+        identity.attributes["uuid"] = QUuid::createUuid().toString();
+        DatabaseAccess(d->db).db()->updateIdentity(identity);
+    }
+
+    d->identityCache << identity;
+    return identity;
+}
+
+void RecognitionDatabase::addIdentityAttributes(int id, const QMap<QString, QString>& attributes)
+{
+    if (!d)
+        return;
+
+    QMutexLocker lock(&d->mutex);
+
+    for (QList<Identity>::iterator it = d->identityCache.begin(); it != d->identityCache.end(); ++it)
+    {
+        if (it->id == id)
+        {
+            it->attributes.unite(attributes);
+            DatabaseAccess(d->db).db()->updateIdentity(*it);
+            return;
+       }
     }
 }
 
-QString RecognitionDatabase::configPath() const
-{
-    if (!d)
-        return QString();
-
-    return d->configPath;
-}
-
-int RecognitionDatabase::peopleCount() const
-{
-    if (!d)
-        return 0;
-
-    QMutexLocker lock(&d->mutex);
-
-    return d->database()->peopleCount();
-}
-
-QSize RecognitionDatabase::recommendedImageSize(const QSize& availableSize) const
-{
-    if (!d)
-        return QSize();
-
-    QMutexLocker lock(&d->mutex);
-
-    return d->database()->recommendedImageSizeForRecognition(availableSize);
-}
-
-void RecognitionDatabase::clearTraining(const QString& name)
+void RecognitionDatabase::addIdentityAttribute(int id, const QString& attribute, const QString& value)
 {
     if (!d)
         return;
 
     QMutexLocker lock(&d->mutex);
 
-    return d->database()->clearTraining(name);
+    for (QList<Identity>::iterator it = d->identityCache.begin(); it != d->identityCache.end(); ++it)
+    {
+        if (it->id == id)
+        {
+            it->attributes.insertMulti(attribute, value);
+            DatabaseAccess(d->db).db()->updateIdentity(*it);
+            return;
+       }
+    }
 }
 
-void RecognitionDatabase::clearTraining(int id)
+void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QString>& attributes)
 {
-    if (!d)
+   if (!d)
         return;
 
     QMutexLocker lock(&d->mutex);
 
-    return d->database()->clearTraining(id);
+    for (QList<Identity>::iterator it = d->identityCache.begin(); it != d->identityCache.end(); ++it)
+    {
+        if (it->id == id)
+        {
+            it->attributes = attributes;
+            DatabaseAccess(d->db).db()->updateIdentity(*it);
+            return;
+       }
+    }
 }
 
-void RecognitionDatabase::clearAllTraining()
+QString RecognitionDatabase::backendIdentifier() const
 {
-    if (!d)
+    return "opentld";
+}
+
+void RecognitionDatabase::Private::applyParameters()
+{
+    if (opentld)
+    {
+        for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+        {
+            if (it.key() == "threshold" || it.key() == "accuracy")
+            {
+                openTLD()->setThreshold(it.value().toFloat());
+            }
+        }
+    }
+}
+
+void RecognitionDatabase::setParameter(const QString& parameter, const QVariant& value)
+{
+   if (!d)
         return;
 
     QMutexLocker lock(&d->mutex);
 
-    return d->database()->clearAllTraining();
+    d->parameters.insert(parameter, value);
+    d->applyParameters();
 }
 
-QList<int> RecognitionDatabase::allIds() const
+void RecognitionDatabase::setParameters(const QVariantMap& parameters)
 {
-    if (!d)
-        return QList<int>();
+   if (!d)
+        return;
 
     QMutexLocker lock(&d->mutex);
 
-    return d->database()->allIds();
+    for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+    {
+        d->parameters.insert(it.key(), it.value());
+    }
+    d->applyParameters();
 }
 
-QStringList RecognitionDatabase::allNames() const
+QVariantMap RecognitionDatabase::parameters() const
 {
-    if (!d)
-        return QStringList();
+   if (!d)
+        return QVariantMap();
 
     QMutexLocker lock(&d->mutex);
 
-    return d->database()->allNames();
+    return d->parameters;
 }
 
-QString RecognitionDatabase::nameForId(int id) const
+int RecognitionDatabase::recommendedImageSize(const QSize& availableSize) const
 {
-    if (!d)
-        return QString();
+    // hardcoded for now, change when we know better.
+    Q_UNUSED(availableSize)
+    return 256;
+}
+
+Identity RecognitionDatabase::recognizeFace(const QImage& image)
+{
+    QList<Identity> result = recognizeFaces(QList<QImage>() << image);
+    return result.first();
+}
+
+QList<Identity> RecognitionDatabase::recognizeFaces(const QList<QImage>& images)
+{
+    QListImageListProvider provider(images);
+    return recognizeFaces(&provider);
+}
+
+QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* images)
+{
+   if (!d)
+        return QList<Identity>();
 
     QMutexLocker lock(&d->mutex);
 
-    return d->database()->nameForId(id);
+    QList<Identity> result;
+    for (; images->hasNext(); images->proceed())
+    {
+        cv::Mat cvImage = d->openTLD()->prepareForRecognition(images->image());
+        int id = d->openTLD()->recognize(cvImage);
+        if (id == -1)
+        {
+            result << Identity();
+        }
+        else
+        {
+            result << d->identityCache.value(id);
+        }
+    }
+
+    return result;
 }
 
-int RecognitionDatabase::idForName(const QString& name) const
+RecognitionDatabase::TrainingCostHint RecognitionDatabase::trainingCostHint() const
 {
-    if (!d)
-        return -1;
-
-    QMutexLocker lock(&d->mutex);
-
-    return d->database()->idForName(name);
+    return TrainingIsCheap;
 }
+
+void RecognitionDatabase::train(const Identity& identityToBeTrained, TrainingDataProvider* data,
+                                const QString& trainingContext)
+{
+    train(QList<Identity>() << identityToBeTrained, data, trainingContext);
+}
+
+void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* data,
+                                const QString& trainingContext)
+{
+   if (!d)
+        return;
+
+   QMutexLocker lock(&d->mutex);
+
+   foreach (const Identity& identity, identitiesToBeTrained)
+   {
+       ImageListProvider* images = data->newImages(identity);
+       for (; images->hasNext(); images->proceed())
+       {
+           cv::Mat cvImage = d->openTLD()->prepareForRecognition(images->image());
+           d->openTLD()->train(identity.id, cvImage);
+       }
+   }
+}
+
+void RecognitionDatabase::clearAllTraining(const QString& trainingContext)
+{
+   if (!d)
+        return;
+
+   QMutexLocker lock(&d->mutex);
+   //TODO
+}
+
+// --- Runtime version info static methods (declared in version.h)
+
+QString LibOpenCVVersion()
+{
+    return QString("%1").arg(CV_VERSION);
+}
+
+QString version()
+{
+    return QString(kface_version);
+}
+
 
 } // namespace KFaceIface
