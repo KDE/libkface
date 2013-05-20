@@ -37,28 +37,28 @@ namespace tld
 DetectionResult::DetectionResult()
 {
     containsValidData = false;
-    fgList = new vector<Rect>();
-    confidentIndices = new vector<int>();
+    fgList      = new vector<Rect>();
     numClusters = 0;
-    detectorBB = NULL;
+    detectorBB  = NULL;
 
-    variances = NULL;
-    posteriors = NULL;
-    featureVectors = NULL;
+    variances        = NULL;
+    posteriors       = NULL;
+    featureVectors   = NULL;
+    confidentIndices = NULL;
 }
 
 DetectionResult::~DetectionResult()
 {
     release();
+    delete fgList;
 }
 
 void DetectionResult::init(int numWindows, int numTrees)
 {
-    variances = new float[numWindows];
-    posteriors = new float[numWindows];
-    featureVectors = new int[numWindows * numTrees];
+    variances        = new float[numWindows];
+    posteriors       = new float[numWindows];
+    featureVectors   = new int[numWindows * numTrees];
     confidentIndices = new vector<int>();
-
 }
 
 void DetectionResult::reset()
@@ -77,17 +77,22 @@ void DetectionResult::reset()
 void DetectionResult::release()
 {
     fgList->clear();
-    delete fgList;
+
     delete[] variances;
     variances = NULL;
+
     delete[] posteriors;
     posteriors = NULL;
+
     delete[] featureVectors;
     featureVectors = NULL;
+
     delete confidentIndices;
     confidentIndices = NULL;
+
     delete detectorBB;
     detectorBB = NULL;
+
     containsValidData = false;
 }
 

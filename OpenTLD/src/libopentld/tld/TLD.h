@@ -27,10 +27,17 @@
 #ifndef TLD_H_
 #define TLD_H_
 
+// OpenCV includes
+
 #include "libopencv.h"
 
+// TLD includes
+
 #include "DetectorCascade.h"
-#include "tldface.h"
+
+// KFace includes
+
+#include "recognition-opentld/unitfacemodel.h"
 
 using namespace KFaceIface;
 
@@ -54,7 +61,6 @@ public:
     bool wasValid;
     cv::Mat prevImg;
     cv::Mat currImg;
-    cv::Rect *prevBB;
     cv::Rect *currBB;
     float currConf;
     bool learning;
@@ -64,8 +70,8 @@ public:
     void release();
     void selectObject(const cv::Mat &img, cv::Rect *bb);
     void processImage(const cv::Mat &img);
-    void getObjModel(unitFaceModel *);
-    unitFaceModel *putObjModel(unitFaceModel *faceModel);
+    void getObjModel(const UnitFaceModel& faceModel);
+    void putObjModel(UnitFaceModel& faceModel);
 };
 
 } /* namespace tld */

@@ -87,7 +87,7 @@ void DetectorCascade::init()
 {
     if(imgWidth == -1 || imgHeight == -1 || imgWidthStep == -1 || objWidth == -1 || objHeight == -1)
     {
-        //printf("Error: Window dimensions not set\n"); //TODO: Convert this to exception
+        printf("Error: Window dimensions not set\n"); //TODO: Convert this to exception
     }
 
     initWindowsAndScales();

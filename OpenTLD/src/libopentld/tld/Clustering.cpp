@@ -111,8 +111,16 @@ void Clustering::clusterConfidentIndices()
 {
     int numConfidentIndices = detectionResult->confidentIndices->size();
     float *distances = new float[numConfidentIndices * (numConfidentIndices - 1) / 2];
+    for (int i=0; i<numConfidentIndices * (numConfidentIndices - 1) / 2; i++)
+    {
+        distances[i] = 0;
+    }
     calcDistances(distances);
     int *clusterIndices = new int[numConfidentIndices];
+    for (int i=0; i<numConfidentIndices; i++)
+    {
+        clusterIndices[i] = 0;
+    }
     cluster(distances, clusterIndices);
 
     if(detectionResult->numClusters == 1)

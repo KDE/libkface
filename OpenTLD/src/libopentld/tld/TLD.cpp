@@ -45,7 +45,7 @@ TLD::TLD()
     valid = false;
     wasValid = false;
     learning = false;
-    currBB = prevBB = NULL;
+    currBB = NULL;
     currConf = 0;
 
     detectorCascade = new DetectorCascade();
@@ -70,8 +70,6 @@ void TLD::storeCurrentData()
 {
     prevImg.release();
     prevImg = currImg; //Store old image (if any)
-    delete prevBB;
-    prevBB = currBB;        //Store old bounding box (if any)
 
     detectorCascade->cleanPreviousData(); //Reset detector results
 
@@ -102,7 +100,14 @@ void TLD::processImage(const Mat &img)
 {
     storeCurrentData();
     Mat grey_frame;
-    cvtColor(img, grey_frame, CV_RGB2GRAY);
+    if (img.channels() == 3 || img.channels() == 4)
+    {
+        cvtColor(img, grey_frame, CV_RGB2GRAY);
+    }
+    else
+    {
+        grey_frame = img.clone(); // need deep copy?
+    }
     currImg = grey_frame; // Store new image , right after storeCurrentData();
 
     if(detectorEnabled && !alternating )
@@ -323,16 +328,16 @@ typedef struct
     int N;
 } TldExportEntry;
 
-void TLD::getObjModel(unitFaceModel *faceModel)
+void TLD::getObjModel(const UnitFaceModel& faceModel)
 {
     NNClassifier *nn = detectorCascade->nnClassifier;
     EnsembleClassifier *ec = detectorCascade->ensembleClassifier;
 
-    detectorCascade->objWidth = faceModel->objWidth;
-    detectorCascade->objHeight = faceModel->objWidth;
-    detectorCascade->varianceFilter->minVar = faceModel->minVar;
-    QList<QList<float> > allPositivePatches = faceModel->deserialisePositivePatches();
-    QList<QList<float> > allNegativePatches = faceModel->deserialiseNegativePatches();
+    detectorCascade->objWidth = faceModel.objWidth;
+    detectorCascade->objHeight = faceModel.objWidth;
+    detectorCascade->varianceFilter->minVar = faceModel.minVar;
+    QList<QList<float> > allPositivePatches = faceModel.deserialisePositivePatches();
+    QList<QList<float> > allNegativePatches = faceModel.deserialiseNegativePatches();
 
     for (int i=0 ;i < allPositivePatches.size() ;i++)
     {
@@ -352,8 +357,8 @@ void TLD::getObjModel(unitFaceModel *faceModel)
         }
         nn->falsePositives->push_back(patch);
     }
-    QList<QList<QList<float> > > allFeatures = faceModel->deserialiseFeatures();
-    QList<QList<QList<int> > > allLeaves = faceModel->deserialiseLeaves();
+    QList<QList<QList<float> > > allFeatures = faceModel.deserialiseFeatures();
+    QList<QList<QList<int> > > allLeaves = faceModel.deserialiseLeaves();
     ec->numFeatures = allFeatures.at(0).size();
     ec->numTrees = allFeatures.size();
     detectorCascade->numFeatures = ec->numFeatures;
@@ -388,14 +393,14 @@ void TLD::getObjModel(unitFaceModel *faceModel)
     ec->initFeatureOffsets();
 }
 
-unitFaceModel *TLD::putObjModel(unitFaceModel *faceModel)
+void TLD::putObjModel(UnitFaceModel& faceModel)
 {
     NNClassifier *nn = detectorCascade->nnClassifier;
     EnsembleClassifier *ec = detectorCascade->ensembleClassifier;
 
-    faceModel->objWidth = detectorCascade->objWidth;
-    faceModel->objHeight = detectorCascade->objHeight;
-    faceModel->minVar = detectorCascade->varianceFilter->minVar;
+    faceModel.objWidth = detectorCascade->objWidth;
+    faceModel.objHeight = detectorCascade->objHeight;
+    faceModel.minVar = detectorCascade->varianceFilter->minVar;
 
     QList<QList<float> > allPositivePatches;
     for(size_t s = 0; s < nn->truePositives->size(); s++)
@@ -407,7 +412,7 @@ unitFaceModel *TLD::putObjModel(unitFaceModel *faceModel)
         }
         allPositivePatches.append(unitPositivePatch);
     }
-    faceModel->serialisePositivePatches(allPositivePatches);
+    faceModel.serialisePositivePatches(allPositivePatches);
     QList<QList<float> > allNegativePatches;
     for(size_t s = 0; s < nn->falsePositives->size(); s++)
     {
@@ -418,7 +423,7 @@ unitFaceModel *TLD::putObjModel(unitFaceModel *faceModel)
         }
         allNegativePatches.append(unitNegativePatch);
     }
-    faceModel->serialiseNegativePatches(allNegativePatches);
+    faceModel.serialiseNegativePatches(allNegativePatches);
 
     detectorCascade->numTrees = ec->numTrees;
     detectorCascade->numFeatures = ec->numFeatures;
@@ -469,9 +474,8 @@ unitFaceModel *TLD::putObjModel(unitFaceModel *faceModel)
         }
         allLeaves.append(unitLeave);
     }
-    faceModel->serialiseFeatures(allFeatures);
-    faceModel->serialiseLeaves(allLeaves);
-    return faceModel;
+    faceModel.serialiseFeatures(allFeatures);
+    faceModel.serialiseLeaves(allLeaves);
 }
 
 } /* namespace tld */
