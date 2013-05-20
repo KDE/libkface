@@ -7,7 +7,7 @@
  * @date  2010-09-02
  * @brief Wrapper class for face recongition
  *
- * @author Copyright (C) 2010 by Marcel Wiesweg
+ * @author Copyright (C) 2010-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
@@ -32,17 +32,17 @@
 
 // Qt includes
 
-#include <QtCore/QExplicitlySharedDataPointer>
-
-// KDE includes
-
-#include <kstandarddirs.h>
+#include <QExplicitlySharedDataPointer>
+#include <QImage>
+#include <QList>
+#include <QMap>
+#include <QVariant>
 
 // Local includes
 
 #include "libkface_export.h"
-#include "face.h"
-#include "image.h"
+#include "identity.h"
+#include "dataproviders.h"
 
 namespace KFaceIface
 {
@@ -53,8 +53,11 @@ class KFACE_EXPORT RecognitionDatabase
 public:
 
     /**
-     * A wrapper around Database for face recongition.
-     * Additionally provides the following guarantees:
+     * Performs face recogition.
+     * Persistent data about identities and training data will be stored
+     * under a given or the default configuration path.
+     *
+     * The class guarantees
      * - deferred creation: The backend is created only when used first.
      * - only one instance per configuration path is created
      * - an instance of this class is thread-safe
@@ -79,75 +82,95 @@ public:
 
     bool isNull() const;
 
-    /**
-     * Explicitly save configuration. Automatically done in destructor.
-     */
-    void saveConfig();
+    // ------------ Identity management --------------
 
     /**
-     * Update the training database with a QList of Faces which hold the face images
-     * Faces that have not been given any ID by the caller will automatically be given the next available ID,
-     * and this ID will be updated in the Face objects.
-     * @param faces A QList of Face's, which hold the face image too, for updating the DB.
-     * @return False if no faces were updated, due to an argument of size zero
+     * Returns all identities known to the database
      */
-    bool updateFaces(QList<Face>& faces);
+    QList<Identity> allIdentities();
+    Identity identity(int id);
 
     /**
-     * Function to recognize faces in a QList of Faces which hold the face images.
-     * Recognized faces will have their ID's changed in the Face objects
-     * @param faces A QList of Face's, which hold the face image too, for recongition.
-     * @return A QList of "closeness" of recognized faces, in the same order as the argument;
-     * or an empty list, if an error occurred or no recognition data is available.
+     * Finds the first identity with matching attribute - value.
      */
-    QList<double> recognizeFaces(QList<Face>& faces);
+    Identity findIdentity(const QString& attribute, const QString& value);
 
     /**
-     * Clear the training database for a single name or id.
-     * Use with care, this can deleted carefully accumulated data!
+     * Adds a new identity with the specified attributes.
      */
-    void clearTraining(const QString& name);
-    void clearTraining(int id);
-    void clearAllTraining();
+    Identity addIdentity(const QMap<QString, QString>& attributes = QMap<QString, QString>());
 
     /**
-     * Returns the directory path of the config file
-     *
+     * Adds or sets, resp., the attributes of an identity.
      */
-    QString configPath() const;
+    void addIdentityAttributes(int id, const QMap<QString, QString>& attributes);
+    void addIdentityAttribute(int id, const QString& attribute, const QString& value);
+    void setIdentityAttributes(int id, const QMap<QString, QString>& attributes);
+
+    // ------------ backend parameters --------------
+
+    /// A textual, informative identifier of the backend in use.
+    QString backendIdentifier() const;
 
     /**
-     * Get the number of people in the database
-     * @return Number of unique ID's in the database
+     * Tunes backend parameters.
      */
-    int peopleCount() const;
+    void setParameter(const QString& parameter, const QVariant& value);
+    void setParameters(const QVariantMap& parameters);
+    QVariantMap parameters() const;
+
+    // ------------ Recognition, clustering and training --------------
 
     /**
-     * Returns all ids in the database
-     */
-    QList<int> allIds() const;
-
-    /**
-     * Returns all names in the database
-     */
-    QStringList allNames() const;
-
-    /**
-     * Returns the first name associated with the given id, or
-     * a null string. Note there may be multiple names per id.
-     */
-    QString nameForId(int id) const;
-
-    /**
-     * Returns the id for the given name, or -1 if this name is not know.
-     */
-    int idForName(const QString& name) const;
-
-    /**
-     * Returns the recommended size if you want to scale images for recognition.
+     * Returns the recommended size if you want to scale face images for recognition.
      * Larger images can be passed, but may be downscaled.
      */
-    QSize recommendedImageSize(const QSize& availableSize = QSize()) const;
+    int recommendedImageSize(const QSize& availableSize = QSize()) const;
+
+    /**
+     * Performs recogition.
+     * The face details to be recognized are passed by the provider.
+     * For each entry in the provider, in 1-to-1 mapping,
+     * a recognized identity or the null identity is returned.
+     */
+    QList<Identity> recognizeFaces(ImageListProvider* images);
+    QList<Identity> recognizeFaces(const QList<QImage>& images);
+    Identity recognizeFace(const QImage& image);
+
+    enum TrainingCostHint
+    {
+        /// Training is so cheap that new photos for training can be passed any time
+        TrainingIsCheap,
+        /// Training is significantly optimized if new images are received in batches
+        /// instead training single images multiple times
+        TrainingLikesBatches,
+        /// Training is a computing intensive operation.
+        /// By choice of the application, it may be manually triggered by the user.
+        TrainingIsExpensive
+    };
+
+    /// Gives a hint about the complexity of training for the current backend.
+    TrainingCostHint trainingCostHint() const;
+
+    /**
+     * Performs training.
+     * The identities which have new images to be trained are given.
+     * An empty list means that all identities are checked.
+     *
+     * All needed data will be queried from the provider.
+     *
+     * An identifier for the current training context is given,
+     * which can identify the application or group of collections.
+     * (It is assumed that training from different contexts is based on
+     * non-overlapping collections of images. Keep is always constant for your app.)
+     */
+
+    void train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* data,
+               const QString& trainingContext);
+    void train(const Identity& identityToBeTrained, TrainingDataProvider* data,
+               const QString& trainingContext);
+
+    void clearAllTraining(const QString& trainingContext = QString());
 
 private:
 
@@ -159,6 +182,16 @@ private:
 
     friend class RecognitionDatabaseStaticPriv;
 };
+
+/**
+ * Return a string version of LibOpenCV release in format "major.minor.patch"
+ */
+KFACE_EXPORT QString LibOpenCVVersion();
+
+/**
+ * Return a string version of libkface release
+ */
+KFACE_EXPORT QString version();
 
 } // namespace KFaceIface
 
