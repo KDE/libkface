@@ -86,7 +86,9 @@ DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend* back
     status          = DatabaseCoreBackend::Unavailable;
     isInTransaction = false;
     operationStatus = DatabaseCoreBackend::ExecuteNormal;
+    errorLockOperationStatus = DatabaseCoreBackend::ExecuteNormal;
     errorHandler    = 0;
+    lock            = 0;
 }
 
 void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* l)

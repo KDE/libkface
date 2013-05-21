@@ -41,19 +41,20 @@ class DatabaseOperationGroup::DatabaseOperationGroupPriv
 public:
 
     DatabaseOperationGroupPriv()
+        : access(0),
+          db(0),
+          acquired(false),
+          maxTime(0)
     {
-        access   = 0;
-        acquired = false;
-        maxTime  = 0;
     }
 
 public:
 
     DatabaseAccess*     access;
     DatabaseAccessData* db;
-    bool            acquired;
-    QTime           timeAcquired;
-    int             maxTime;
+    bool                acquired;
+    QTime               timeAcquired;
+    int                 maxTime;
 
 public:
 

@@ -443,8 +443,17 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* images)
     QList<Identity> result;
     for (; images->hasNext(); images->proceed())
     {
-        cv::Mat cvImage = d->openTLD()->prepareForRecognition(images->image());
-        int id = d->openTLD()->recognize(cvImage);
+        int id = -1;
+        try
+        {
+            cv::Mat cvImage = d->openTLD()->prepareForRecognition(images->image());
+            id = d->openTLD()->recognize(cvImage);
+        }
+        catch (cv::Exception& e)
+        {
+            kError() << "cv::Exception:" << e.what();
+        }
+
         if (id == -1)
         {
             result << Identity();
@@ -482,8 +491,15 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
        ImageListProvider* images = data->newImages(identity);
        for (; images->hasNext(); images->proceed())
        {
-           cv::Mat cvImage = d->openTLD()->prepareForRecognition(images->image());
-           d->openTLD()->train(identity.id, cvImage);
+           try
+           {
+               cv::Mat cvImage = d->openTLD()->prepareForRecognition(images->image());
+               d->openTLD()->train(identity.id, cvImage);
+           }
+           catch (cv::Exception& e)
+           {
+               kError() << "cv::Exception:" << e.what();
+           }
        }
    }
 }
