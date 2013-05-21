@@ -1,5 +1,4 @@
 #include "BlobContour.h"
-#include "cxcore.h"
 
 CBlobContour::CBlobContour()
 {
