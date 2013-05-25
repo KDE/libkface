@@ -188,7 +188,7 @@ int main(int argc, char** argv)
 
         for (QMap<int, QStringList>::const_iterator it = trainingImages.begin(); it != trainingImages.end(); ++it)
         {
-            Identity identity = db.addIdentity();
+            Identity identity = db.addIdentity(QMap<QString, QString>());
             idMap[it.key()] = identity;
             qDebug() << "Mapped person" << it.key() << "to identity" << identity.id;
 

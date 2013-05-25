@@ -98,7 +98,7 @@ public:
     /**
      * Adds a new identity with the specified attributes.
      */
-    Identity addIdentity(const QMap<QString, QString>& attributes = QMap<QString, QString>());
+    Identity addIdentity(const QMap<QString, QString>& attributes);
 
     /**
      * Adds or sets, resp., the attributes of an identity.
