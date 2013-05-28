@@ -3,12 +3,7 @@
 
 //! Conversion from freeman code to coordinate increments (counterclockwise)
 
-#ifndef Q_CC_MSVC
-
-static const CvPoint freemanCodeIncrement[8] =
-    { {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1} };
-
-#else
+#ifdef _MSC_VER
 
 static const CvPoint freemanCodeIncrement[8] =
     { CvPoint(1, 0),
@@ -20,6 +15,11 @@ static const CvPoint freemanCodeIncrement[8] =
       CvPoint(0, 1),
       CvPoint(1, 1)
     };
+
+#else
+
+static const CvPoint freemanCodeIncrement[8] =
+    { {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1} };
 
 #endif
 
