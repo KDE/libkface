@@ -65,7 +65,7 @@ void ForegroundDetector::nextIteration(const Mat &img)
 
     blobs.Filter(blobs, B_EXCLUDE, CBlobGetArea(), B_LESS, minBlobSize);
 
-    vector<Rect>* fgList = detectionResult->fgList;
+    std::vector<Rect>* fgList = detectionResult->fgList;
     fgList->clear();
 
     for(int i = 0; i < blobs.GetNumBlobs(); i++)
