@@ -35,10 +35,13 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../OpenTLD/src/libopentld/tld
                     ${CMAKE_CURRENT_SOURCE_DIR}/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opentld
+                    ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                    )
 
 SET(kface_LIB_SRCS facedetector.cpp
                    detection/opencvfacedetector.cpp
+                   recognition-opencv-lbph/lbphfacemodel.cpp
+                   recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                    recognition-opentld/opentldfacerecognizer.cpp
                    recognition-opentld/unitfacemodel.cpp
                    recognitiondatabase.cpp
@@ -53,6 +56,7 @@ SET(kface_database_LIB_SRCS database/databaseaccess.cpp
                             database/databaseoperationgroup.cpp
                             database/trainingdb.cpp
                             database/sqlquery.cpp
+                            database/dbcontainers.cpp
    )
 
 KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${face_LIB_SRCS} ${kface_database_LIB_SRCS})

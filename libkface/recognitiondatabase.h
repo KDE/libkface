@@ -87,13 +87,13 @@ public:
     /**
      * Returns all identities known to the database
      */
-    QList<Identity> allIdentities();
-    Identity identity(int id);
+    QList<Identity> allIdentities() const;
+    Identity identity(int id) const;
 
     /**
      * Finds the first identity with matching attribute - value.
      */
-    Identity findIdentity(const QString& attribute, const QString& value);
+    Identity findIdentity(const QString& attribute, const QString& value) const;
 
     /**
      * Adds a new identity with the specified attributes.
