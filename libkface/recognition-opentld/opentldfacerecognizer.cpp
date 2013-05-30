@@ -204,7 +204,7 @@ void OpenTLDFaceRecognizer::createFaceModel(const cv::Mat& im, UnitFaceModel& mo
     d->tld()->release();
 }
 
-void OpenTLDFaceRecognizer::train(int identity, const cv::Mat& inputImage)
+void OpenTLDFaceRecognizer::train(int identity, const cv::Mat& inputImage, const QString&)
 {
     UnitFaceModel model;
     // create model

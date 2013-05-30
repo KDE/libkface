@@ -40,7 +40,6 @@
 
 // local includes
 
-#include "libkface_export.h"
 #include "unitfacemodel.h"
 
 namespace KFaceIface
@@ -73,7 +72,7 @@ public:
     /**
      * Trains the given image, which represents a face of the given identity.
      */
-    void train(int identity, const cv::Mat& inputImage);
+    void train(int identity, const cv::Mat& inputImage, const QString& context);
 
     //void   setThreshold(float value);
 
