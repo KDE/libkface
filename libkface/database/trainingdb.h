@@ -1,10 +1,10 @@
 /* ============================================================
  *
- * This file is a part of Tumorprofil
+ * This file is a part of digikam/libkface
  *
  * Date        : 02.02.2012
  *
- * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
+ * Copyright (C) 2012-13 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef PATIENTDB_H
-#define PATIENTDB_H
+#ifndef TRAININGDB_H
+#define TRAININGDB_H
 
 // Qt includes
 
@@ -36,6 +36,7 @@ namespace KFaceIface
 {
 
 class DatabaseCoreBackend;
+class LBPHFaceModel;
 
 class TrainingDB
 {
@@ -57,27 +58,11 @@ public:
 
     void addTLDFaceModel(int identity, const UnitFaceModel& model);
     QList<UnitFaceModel> tldFaceModels(int identity);
-/*
-    int addDisease(int patientId, const Disease& d);
-    void updateDisease(const Disease& dis);
-    QList<Disease> findDiseases(int patientId);
 
-    int addPathology(int diseaseId, const Pathology& path);
-    void updatePathology(const Pathology& path);
-    QList<Pathology> findPathologies(int diseaseId);
+    /// OpenCV LBPH
 
-    enum PropertyType
-    {
-        IdentityProperties,
-        PathologyProperties
-    };
-
-    QList<Property> properties(PropertyType e, int id);
-    void addProperty(PropertyType e, int id, const QString& property,
-                     const QString& value, const QString& detail);
-    void removeProperties(PropertyType e, int id,
-                          const QString& property = QString(),
-                          const QString& value = QString());*/
+    void updateLBPHFaceModel(LBPHFaceModel& model);
+    LBPHFaceModel lbphFaceModel();
 
 private:
 

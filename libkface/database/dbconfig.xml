@@ -79,6 +79,29 @@
                   </statement>
               </dbaction>
 
+              <dbaction name="CreateDBOpenCVLBPH" mode="transaction">
+                  <statement mode="plain">
+                      CREATE TABLE OpenCVLBPHRecognizer
+                      (id INTEGER PRIMARY KEY,
+                       version INTEGER,
+                       radius INTEGER,
+                       neighbors INTEGER,
+                       grid_x INTEGER,
+                       grid_y INTEGER)
+                  </statement>
+                  <statement mode="plain">
+                      CREATE TABLE OpenCVLBPHistograms
+                      (id INTEGER PRIMARY KEY,
+                       recognizerid INTEGER,
+                       identity INTEGER,
+                       context TEXT,
+                       type INTEGER,
+                       rows INTEGER,
+                       cols INTEGER,
+                       data BLOB)
+                  </statement>
+              </dbaction>
+
               <!-- Indices -->
               <dbaction name="CreateIndices" mode="transaction">
                   <statement mode="plain">CREATE INDEX attribute_index  ON IdentityAttributes (id);</statement>

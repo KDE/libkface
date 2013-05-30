@@ -212,7 +212,8 @@ bool SchemaUpdater::createDatabase()
 bool SchemaUpdater::createTables()
 {
     return m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateDB"))
-        && m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateDBOpenTLD"));
+        && m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateDBOpenTLD"))
+        && m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateDBOpenCVLBPH"));
 }
 
 bool SchemaUpdater::createIndices()

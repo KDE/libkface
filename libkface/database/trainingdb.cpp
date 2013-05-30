@@ -1,10 +1,10 @@
 /* ============================================================
  *
- * This file is a part of Tumorprofil
+ * This file is a part of digikam/libkface
  *
  * Date        : 02.02.2012
  *
- * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
+ * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,17 +21,17 @@
 
 #include "trainingdb.h"
 
-// Qt includes
+// KDE includes
 
-#include <QDebug>
+#include <kdebug.h>
 
 // Local includes
 
 #include "databasecorebackend.h"
+#include "lbphfacemodel.h"
 
 namespace KFaceIface
 {
-
 
 class TrainingDB::TrainingDBPriv
 {
@@ -186,159 +186,113 @@ QList<UnitFaceModel> TrainingDB::tldFaceModels(int identity)
     return results;
 }
 
-
-/*
-int TrainingDB::addDisease(int patientId, const Disease& dis)
+namespace
 {
-    QVariant id;
-    d->db->execSql("INSERT INTO Diseases (patientId, initialDiagnosis, cTNM, pTNM) "
-                   "VALUES (?, ?, ?, ?)",
-                   patientId, dis.initialDiagnosis.toString(Qt::ISODate),
-                   dis.initialTNM.cTNM(), dis.initialTNM.pTNM(), 0, &id);
-    return id.toInt();
-}
-
-void TrainingDB::updateDisease(const Disease& dis)
-{
-    d->db->execSql("UPDATE Diseases SET initialDiagnosis=?, cTNM=?, pTNM=? WHERE id=?;",
-                   dis.initialDiagnosis.toString(Qt::ISODate),
-                   dis.initialTNM.cTNM(), dis.initialTNM.pTNM(), dis.id);
-}
-
-QList<Disease> TrainingDB::findDiseases(int patientId)
-{
-    QList<QVariant> values;
-
-    d->db->execSql("SELECT id, initialDiagnosis, cTNM, pTNM FROM Diseases WHERE patientId = ?;",
-                   patientId, &values);
-
-    QList<Disease> diseases;
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    enum
     {
-        Disease d;
-
-        d.id        = it->toInt();
-        ++it;
-        d.initialDiagnosis = QDate::fromString(it->toString(), Qt::ISODate);
-        ++it;
-        d.initialTNM.addTNM(it->toString()); // cTNM string
-        ++it;
-        d.initialTNM.addTNM(it->toString()); // pTNM string
-        ++it;
-
-        diseases << d;
-    }
-
-    return diseases;
+        LBPHStorageVersion = 1
+    };
 }
 
-int TrainingDB::addPathology(int diseaseId, const Pathology& path)
+void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 {
-    QVariant id;
-    d->db->execSql("INSERT INTO Pathologies (diseaseId, entity, sampleOrigin, context, date) "
-                   "VALUES (?, ?, ?, ?, ?)",
-                   QVariantList() << diseaseId << path.entity << path.sampleOrigin << path.context
-                   << path.date.toString(Qt::ISODate), 0, &id);
-    return id.toInt();
-}
-
-void TrainingDB::updatePathology(const Pathology& path)
-{
-    d->db->execSql("UPDATE Pathologies SET entity=?, sampleOrigin=?, context=?, date=? WHERE id=?;",
-                   QVariantList() << path.entity << path.sampleOrigin
-                   << path.context << path.date.toString(Qt::ISODate) << path.id );
-}
-
-QList<Pathology> TrainingDB::findPathologies(int diseaseId)
-{
-    QList<QVariant> values;
-
-    d->db->execSql("SELECT id, entity, sampleOrigin, context, date FROM Pathologies WHERE diseaseId = ?;",
-                   diseaseId, &values);
-
-    QList<Pathology> pathologies;
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    QVariantList values;
+    values << LBPHStorageVersion << model.radius() << model.neighbors() << model.gridX() << model.gridY();
+    if (model.databaseId)
     {
-        Pathology p;
-
-        p.id           = it->toInt();
-        ++it;
-        p.entity       = (Pathology::Entity)it->toInt();
-        ++it;
-        p.sampleOrigin = (Pathology::SampleOrigin)it->toInt();
-        ++it;
-        p.context      = it->toString();
-        ++it;
-        p.date         = QDate::fromString(it->toString(), Qt::ISODate);
-        ++it;
-
-        pathologies << p;
-    }
-
-    return pathologies;
-}
-
-QList<Property> TrainingDB::properties(PropertyType e, int id)
-{
-    QList<QVariant> values;
-
-    d->db->execSql( "SELECT property, value, detail FROM " + d->tableName(e) +
-                    " WHERE " + d->idName(e) + "=?;",
-                    id, &values );
-
-    QList<Property> properties;
-
-    if (values.isEmpty())
-    {
-        return properties;
-    }
-
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
-    {
-        Property property;
-
-        property.property = (*it).toString();
-        ++it;
-        property.value    = (*it).toString();
-        ++it;
-        property.detail   = (*it).toString();
-        ++it;
-
-        properties << property;
-    }
-
-    return properties;
-}
-
-void TrainingDB::addProperty(PropertyType e, int id, const QString& property,
-                            const QString& value, const QString& detail)
-{
-    d->db->execSql("INSERT INTO " + d->tableName(e) +
-                   " (" + d->idName(e) + ", property, value, detail) VALUES(?, ?, ?, ?);",
-                   id, property, value, detail);
-}
-
-void TrainingDB::removeProperties(PropertyType e, int id, const QString& property, const QString& value)
-{
-    if (property.isNull())
-    {
-        d->db->execSql("DELETE FROM " + d->tableName(e) + " WHERE " +
-                       d->idName(e) + "=?;",
-                       id);
-    }
-    else if (value.isNull())
-    {
-        d->db->execSql("DELETE FROM " + d->tableName(e) + " WHERE " +
-                       d->idName(e) + "=? AND property=?;",
-                       id, property);
+        values << model.databaseId;
+        d->db->execSql("UPDATE OpenCVLBPHRecognizer SET version=?, radius=?, neighbors=?, grid_x=?, grid_y=? WHERE id=?", values);
     }
     else
     {
-        d->db->execSql("DELETE FROM " + d->tableName(e) + " WHERE " +
-                       d->idName(e) + "=? AND property=? AND value=?;",
-                       id, property, value);
+        QVariant insertedId;
+        d->db->execSql("INSERT INTO OpenCVLBPHRecognizer (version, radius, neighbors, grid_x, grid_y) VALUES (?,?,?,?,?)",
+                       values, 0, &insertedId);
+        model.databaseId = insertedId.toInt();
+    }
+
+    QList<LBPHistogramMetadata> metadataList = model.histogramMetadata();
+    for (int i=0; i<metadataList.size(); i++)
+    {
+        const LBPHistogramMetadata& metadata = metadataList[i];
+        if (metadata.storageStatus == LBPHistogramMetadata::Created)
+        {
+            OpenCVMatData data = model.histogramData(i);
+            QVariantList histogramValues;
+            QVariant insertedId;
+            histogramValues << model.databaseId << metadata.identity << metadata.context
+                            << data.type << data.rows << data.cols << data.data;
+            d->db->execSql("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, context, type, rows, cols, data) "
+                           "VALUES (?,?,?,?,?,?,?)",
+                           histogramValues, 0, &insertedId);
+            model.setWrittenToDatabase(i, insertedId.toInt());
+        }
     }
 }
-*/
+
+LBPHFaceModel TrainingDB::lbphFaceModel()
+{
+    QVariantList values;
+    //kDebug() << "Loading LBPH model";
+    d->db->execSql("SELECT id, version, radius, neighbors, grid_x, grid_y FROM OpenCVLBPHRecognizer", &values);
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        LBPHFaceModel model;
+        model.databaseId = it->toInt();
+        ++it;
+        //kDebug() << "Found model id" << model.databaseId;
+
+        int version = it->toInt();
+        ++it;
+        if (version > LBPHStorageVersion)
+        {
+            kDebug() << "Unsupported LBPH storage version" << version;
+            it += 4;
+            continue;
+        }
+
+        model.setRadius(it->toInt());
+        ++it;
+        model.setNeighbors(it->toInt());
+        ++it;
+        model.setGridX(it->toInt());
+        ++it;
+        model.setGridY(it->toInt());
+        ++it;
+
+        SqlQuery query = d->db->execQuery("SELECT id, identity, context, type, rows, cols, data "
+                                          "FROM OpenCVLBPHistograms WHERE recognizerid=?",
+                                          model.databaseId);
+        QList<OpenCVMatData> histograms;
+        QList<LBPHistogramMetadata> histogramMetadata;
+        while (query.next())
+        {
+            LBPHistogramMetadata metadata;
+            OpenCVMatData data;
+
+            metadata.databaseId    = query.value(0).toInt();
+            metadata.identity      = query.value(1).toInt();
+            metadata.context       = query.value(2).toString();
+            metadata.storageStatus = LBPHistogramMetadata::InDatabase;
+
+            // cv::Mat
+            data.type       = query.value(3).toInt();
+            data.rows       = query.value(4).toInt();
+            data.cols       = query.value(5).toInt();
+            data.data       = query.value(6).toByteArray();
+            //kDebug() << "Adding histogram" << metadata.databaseId << "identity" << metadata.identity << "size" << data.data.size();
+
+            histograms << data;
+            histogramMetadata << metadata;
+        }
+
+        model.setHistograms(histograms, histogramMetadata);
+        return model;
+    }
+
+    return LBPHFaceModel();
+}
+
 
 } // namespace
