@@ -559,7 +559,7 @@ void RecognitionDatabase::Private::train(OpenCVLBPHFaceRecognizer* r, const QLis
 }
 
 void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* data,
-                                const QString& /*trainingContext*/)
+                                const QString& trainingContext)
 {
    if (!d)
         return;
