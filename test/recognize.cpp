@@ -73,6 +73,7 @@ public:
     {
         if (identity == id)
         {
+            toTrain.reset();
             return &toTrain;
         }
         return &empty;
@@ -184,26 +185,36 @@ int main(int argc, char** argv)
         QTime time;
         time.start();
 
-        int correct = 0, notRecognized = 0, falsePositive = 0;
+        int correct = 0, notRecognized = 0, falsePositive = 0, totalTrained = 0, totalRecognized = 0, elapsed;
 
         for (QMap<int, QStringList>::const_iterator it = trainingImages.begin(); it != trainingImages.end(); ++it)
         {
             Identity identity = db.addIdentity(QMap<QString, QString>());
             idMap[it.key()] = identity;
-            qDebug() << "Mapped person" << it.key() << "to identity" << identity.id;
+            qDebug() << "Created identity" << identity.id << "for ORL directory" << it.key();
 
             QList<QImage> images = toImages(it.value());
             SimpleTrainingDataProvider data(identity, images);
+            qDebug() << "Training ORL directory" << it.key();
             db.train(identity, &data, "test application");
+            totalTrained += images.size();
         }
-        int elapsed = time.restart();
-        qDebug() << "Training 5/10 or ORL took" << elapsed << "," << ((float)elapsed/200) << "per image";
+        elapsed = time.restart();
+        qDebug() << "Training 5/10 or ORL took" << elapsed << "ms," << ((float)elapsed/totalTrained) << "ms per image";
 
-        for (QMap<int, QStringList>::const_iterator it = trainingImages.begin(); it != trainingImages.end(); ++it)
+        // reload db
+        db = RecognitionDatabase();
+        db = RecognitionDatabase::addDatabase(QDir::currentPath());
+        elapsed = time.restart();
+        qDebug() << "Reloading database (probably from disk cache) took" << elapsed << "ms";
+
+        for (QMap<int, QStringList>::const_iterator it = recognitionImages.begin(); it != recognitionImages.end(); ++it)
         {
             Identity identity = idMap.value(it.key());
             QList<QImage> images = toImages(it.value());
+
             QList<Identity> results = db.recognizeFaces(images);
+
             qDebug() << "Result for" << it.value().first() << "is identity" << results.first().id;
             foreach (const Identity& foundId, results)
             {
@@ -220,12 +231,14 @@ int main(int argc, char** argv)
                     falsePositive++;
                 }
             }
+            totalRecognized += images.size();
         }
-        qDebug() << "Recognition of 5/10 or ORL took" << elapsed << "," << ((float)elapsed/200) << "per image";
+        elapsed = time.elapsed();
+        qDebug() << "Recognition of 5/10 or ORL took" << elapsed << "ms," << ((float)elapsed/totalRecognized) << "ms per image";
 
-        qDebug() << correct << "of 200 (" << (float(correct)/2) << "%) were correctly recognized";
-        qDebug() << falsePositive << "of 200 (" << (float(falsePositive)/2) << "%) were falsely assigned to an identity";
-        qDebug() << notRecognized << "of 200 (" << (float(notRecognized)/2) << "%) were not recognized";
+        qDebug() << correct << "of 200 (" << (float(correct)/totalRecognized*100) << "%) were correctly recognized";
+        qDebug() << falsePositive << "of 200 (" << (float(falsePositive)/totalRecognized*100) << "%) were falsely assigned to an identity";
+        qDebug() << notRecognized << "of 200 (" << (float(notRecognized)/totalRecognized*100) << "%) were not recognized";
     }
 
     return 0;
