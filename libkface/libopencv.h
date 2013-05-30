@@ -34,15 +34,12 @@
 #define OPENCV_VERSION                         OPENCV_MAKE_VERSION(CV_MAJOR_VERSION,CV_MINOR_VERSION,CV_SUBMINOR_VERSION)
 #define OPENCV_TEST_VERSION(major,minor,patch) ( OPENCV_VERSION >= OPENCV_MAKE_VERSION(major,minor,patch) )
 
-#if OPENCV_TEST_VERSION(2,3,0)
+#include <opencv2/core/core.hpp>
+#include "opencv2/contrib/contrib.hpp"
+
+// for old-style code
 #include <opencv2/opencv.hpp>
 #include <opencv2/legacy/compat.hpp>
 #include <opencv/cvaux.h>
-#else
-#include <opencv/cv.h>
-#include <opencv/cvaux.h>
-#include <opencv/cxcore.h>
-#include <opencv/highgui.h>
-#endif
 
 #endif // LIB_OPEN_CV_H
