@@ -223,7 +223,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (!file.exists())
     {
-        errorMessage = QObject::QObject::tr("Could not open the dbconfig.xml file. "
+        errorMessage = QObject::tr("Could not open the dbconfig.xml file. "
                             "This file is installed with libkface"
                             "and is absolutely required to run recognition. "
                             "Please check your installation.");

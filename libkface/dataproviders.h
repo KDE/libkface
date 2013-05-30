@@ -57,21 +57,30 @@ public:
 };
 
 /// A wrapper implementation for ImageListProvider if you have a QList of QImages
-class KFACE_EXPORT QListImageListProvider : public ImageListProvider, public QList<QImage>
+
+class KFACE_EXPORT QListImageListProvider : public ImageListProvider
 {
 public:
-    QListImageListProvider(const QList<QImage>& list) : QList<QImage>(list), it(begin()) {}
-    QListImageListProvider() : it(begin()) {}
-    virtual int  size() const           { return QList<QImage>::size(); }
-    virtual bool hasNext() const        { return it+1 != end(); }
-    virtual void proceed(int steps = 1) { it += steps; }
+    QListImageListProvider(const QList<QImage>& lst) 
+        : list(lst),
+          it(list.begin())
+    {
+    }
 
-    virtual QImage image()              { return *it; }
+    QListImageListProvider() : it(list.begin()) {}
+    virtual int  size() const                   { return list.size(); }
+    virtual bool hasNext() const                { return it+1 != list.end(); }
+    virtual void proceed(int steps = 1)         { it += steps; }
+
+    virtual QImage image()                      { return *it; }
 
 protected:
 
+    QList<QImage>                 list;
     QList<QImage>::const_iterator it;
 };
+
+// ----------------------------------------------------------------------------------------
 
 class KFACE_EXPORT TrainingDataProvider
 {
