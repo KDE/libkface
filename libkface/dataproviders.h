@@ -50,7 +50,7 @@ public:
     virtual ~ImageListProvider() {}
 
     virtual int  size() const           = 0;
-    virtual bool hasNext() const        = 0;
+    virtual bool atEnd() const          = 0;
     virtual void proceed(int steps = 1) = 0;
 
     virtual QImage image() = 0;
@@ -69,8 +69,10 @@ public:
 
     QListImageListProvider() : it(list.begin()) {}
     virtual int  size() const                   { return list.size(); }
-    virtual bool hasNext() const                { return it+1 != list.end(); }
+    virtual bool atEnd() const                  { return it == list.end(); }
     virtual void proceed(int steps = 1)         { it += steps; }
+
+    void reset()                                { it = list.begin(); }
 
     virtual QImage image()                      { return *it; }
 
