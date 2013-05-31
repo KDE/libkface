@@ -23,8 +23,6 @@
  *
  * ============================================================ */
 
-#include "facedetector.h"
-
 // Qt includes
 
 #include <QSharedData>
@@ -37,6 +35,7 @@
 // Local includes
 
 #include "detection/opencvfacedetector.h"
+#include "facedetector.h"
 
 namespace KFaceIface
 {
