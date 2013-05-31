@@ -585,13 +585,13 @@ CvBox2D CBlob::GetEllipse()
 
 	// elipse calculation
 	delta = sqrt( 4*u11*u11 + (u20-u02)*(u20-u02) );
-	m_ellipse.center.x = u10;
-	m_ellipse.center.y = u01;
+	m_ellipse.center.x = (float)u10;
+	m_ellipse.center.y = (float)u01;
 	
 	temp = u20 + u02 + delta;
 	if( temp > 0 )
 	{
-		m_ellipse.size.width = sqrt( 2*(u20 + u02 + delta ));
+		m_ellipse.size.width = (float)sqrt( 2*(u20 + u02 + delta ));
 	}	
 	else
 	{
@@ -602,7 +602,7 @@ CvBox2D CBlob::GetEllipse()
 	temp = u20 + u02 - delta;
 	if( temp > 0 )
 	{
-		m_ellipse.size.height = sqrt( 2*(u20 + u02 - delta ) );
+		m_ellipse.size.height = (float)sqrt( 2*(u20 + u02 - delta ) );
 	}
 	else
 	{
@@ -623,7 +623,7 @@ CvBox2D CBlob::GetEllipse()
     }
 	if( num != 0 && den  != 00 )
 	{
-		m_ellipse.angle = 180.0 + (180.0 / CV_PI) * atan( num / den );
+		m_ellipse.angle = (float)(180.0 + (180.0 / CV_PI) * atan( num / den ));
 	}
 	else
 	{
