@@ -56,7 +56,7 @@ public:
 
     Private(DatabaseAccessData* db)
         : db(db),
-          threshold(0.8),
+          threshold(0.8F),
           m_tld(0)
     {
     }
