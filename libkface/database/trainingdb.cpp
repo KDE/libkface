@@ -19,6 +19,9 @@
  *
  * ============================================================ */
 
+// OpenCV includes need to show up before Qt includes
+#include "lbphfacemodel.h"
+
 #include "trainingdb.h"
 
 // KDE includes
@@ -28,7 +31,6 @@
 // Local includes
 
 #include "databasecorebackend.h"
-#include "lbphfacemodel.h"
 
 namespace KFaceIface
 {

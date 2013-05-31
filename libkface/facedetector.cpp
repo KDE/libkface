@@ -23,6 +23,11 @@
  *
  * ============================================================ */
 
+// OpenCV includes need to show up before Qt includes
+#include "detection/opencvfacedetector.h"
+
+#include "facedetector.h"
+
 // Qt includes
 
 #include <QSharedData>
@@ -31,11 +36,6 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
-
-// Local includes
-
-#include "detection/opencvfacedetector.h"
-#include "facedetector.h"
 
 namespace KFaceIface
 {

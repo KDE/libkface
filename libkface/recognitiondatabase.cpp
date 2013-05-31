@@ -27,6 +27,10 @@
  *
  * ============================================================ */
 
+// OpenCV includes need to show up before Qt includes
+#include "recognition-opentld/opentldfacerecognizer.h"
+#include "recognition-opencv-lbph/opencvlbphfacerecognizer.h"
+
 #include "recognitiondatabase.h"
 
 // Qt includes
@@ -47,8 +51,6 @@
 #include "databaseaccess.h"
 #include "databaseoperationgroup.h"
 #include "databaseparameters.h"
-#include "recognition-opentld/opentldfacerecognizer.h"
-#include "recognition-opencv-lbph/opencvlbphfacerecognizer.h"
 #include "trainingdb.h"
 #include "version.h"
 
