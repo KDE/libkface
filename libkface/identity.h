@@ -52,6 +52,8 @@ public:
      * "name"       The person's name without further specification, e.g. "Peter" or "Dad"
      * "uuid"        A UUID that is assigned to each new identity at creation.
      *
+     * For fullName and name, multiple values are allowed.
+     *
      * Attributes can be used to map an identity to other fields and services where
      * natural persons play a role.
      */

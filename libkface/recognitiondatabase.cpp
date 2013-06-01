@@ -51,6 +51,7 @@
 #include "databaseaccess.h"
 #include "databaseoperationgroup.h"
 #include "databaseparameters.h"
+#include "dataproviders.h"
 #include "trainingdb.h"
 #include "version.h"
 
@@ -153,6 +154,12 @@ public:
                TrainingDataProvider* data, const QString& trainingContext);
     void train(OpenCVLBPHFaceRecognizer* r, const QList<Identity>& identitiesToBeTrained,
                TrainingDataProvider* data, const QString& trainingContext);
+
+public:
+
+    bool identityContains(const Identity& identity, const QString& attribute, const QString& value) const;
+    Identity findByAttribute(const QString& attribute, const QString& value) const;
+    Identity findByAttributes(const QString& attribute, const QMap<QString, QString>& valueMap) const;
 
 private:
 
@@ -283,18 +290,104 @@ Identity RecognitionDatabase::identity(int id) const
     return d->identityCache.value(id);
 }
 
+// Takes care that there may be multiple values of attribute in identity's attributes
+bool RecognitionDatabase::Private::identityContains(const Identity& identity, const QString& attribute, const QString& value) const
+{
+    QMap<QString, QString>::const_iterator it = identity.attributes.find(attribute);
+    for (; it != identity.attributes.end() && it.key() == attribute; ++it)
+    {
+        if (it.value() == value)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+Identity RecognitionDatabase::Private::findByAttribute(const QString& attribute, const QString& value) const
+{
+    foreach (const Identity& identity, identityCache)
+    {
+        if (identityContains(identity, attribute, value))
+        {
+            return identity;
+        }
+    }
+    return Identity();
+}
+
+// Takes care that there may be multiple values of attribute in valueMap
+Identity RecognitionDatabase::Private::findByAttributes(const QString& attribute, const QMap<QString, QString>& valueMap) const
+{
+    QMap<QString, QString>::const_iterator it = valueMap.find(attribute);
+    for (; it != valueMap.end() && it.key() == attribute; ++it)
+    {
+        foreach (const Identity& identity, identityCache)
+        {
+            if (identityContains(identity, attribute, it.value()))
+            {
+                return identity;
+            }
+        }
+    }
+    return Identity();
+}
+
 Identity RecognitionDatabase::findIdentity(const QString& attribute, const QString& value) const
 {
-    if (!d)
+    if (!d || attribute.isEmpty())
+        return Identity();
+
+    QMutexLocker lock(&d->mutex);
+    return d->findByAttribute(attribute, value);
+}
+
+Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attributes) const
+{
+    if (!d || attributes.isEmpty())
         return Identity();
 
     QMutexLocker lock(&d->mutex);
 
-    foreach (const Identity& identity, d->identityCache)
+    Identity match;
+
+    // First and foremost, UUID
+    QString uuid = attributes.value("uuid");
+    match = d->findByAttribute("uuid", uuid);
+    if (!match.isNull())
     {
-        if (identity.attributes.value(attribute) == value)
+        return match;
+    }
+    // A negative UUID match, with a given UUID, precludes any further search
+    if (!uuid.isNull())
+    {
+        return Identity();
+    }
+
+    // full name
+    match = d->findByAttributes("fullName", attributes);
+    if (!match.isNull())
+    {
+        return match;
+    }
+    // name
+    match = d->findByAttributes("name", attributes);
+    if (!match.isNull())
+    {
+        return match;
+    }
+
+    QMap<QString, QString>::const_iterator it;
+    for (it = attributes.begin(); it != attributes.end(); ++it)
+    {
+        if (it.key() == "uuid" || it.key() == "fullName" || it.key() == "name")
         {
-            return identity;
+            continue;
+        }
+        match = d->findByAttribute(it.key(), it.value());
+        if (!match.isNull())
+        {
+            return match;
         }
     }
     return Identity();
@@ -306,6 +399,18 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
         return Identity();
 
     QMutexLocker lock(&d->mutex);
+
+    if (attributes.contains("uuid"))
+    {
+        Identity matchByUuid = findIdentity("uuid", attributes.value("uuid"));
+        if (!matchByUuid.isNull())
+        {
+            // This situation is not well defined.
+            kDebug() << "Called addIdentity with a given UUID, and there is such a UUID already in the database."
+                     << "The existing identity is returned without adjusting properties!";
+            return matchByUuid;
+        }
+    }
 
     Identity identity;
     {

@@ -84,6 +84,8 @@ public:
 
     // ------------ Identity management --------------
 
+    /// For the documentation of standard attributes, see identity.h
+
     /**
      * Returns all identities known to the database
      */
@@ -92,11 +94,21 @@ public:
 
     /**
      * Finds the first identity with matching attribute - value.
+     * Returns a null identity if no match is found or attribute is empty.
      */
     Identity findIdentity(const QString& attribute, const QString& value) const;
 
     /**
+     * Finds the identity matching the given attributes.
+     * Attributes are first checked with knowledge of their meaning.
+     * Secondly, all unknown attributes are used.
+     * Returns a null Identity if no match is possible or the map is empty.
+     */
+    Identity findIdentity(const QMap<QString, QString>& attributes) const;
+
+    /**
      * Adds a new identity with the specified attributes.
+     * Please note that a UUID is automatically generated.
      */
     Identity addIdentity(const QMap<QString, QString>& attributes);
 
