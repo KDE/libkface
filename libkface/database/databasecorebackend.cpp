@@ -214,7 +214,11 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
 
     bool success = db.open();
 
-    if (success==false)
+    if (success)
+    {
+        db.exec("PRAGMA synchronous=1;");
+    }
+    else
     {
         qDebug() << "Error while opening the database. Error was <" << db.lastError() << ">";
     }

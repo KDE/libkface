@@ -116,6 +116,8 @@ public:
 
     ~Private();
 
+    bool                 dbAvailable;
+
     const QString        configPath;
     QMutex               mutex;
     DatabaseAccessData  *db;
@@ -220,7 +222,9 @@ RecognitionDatabase::Private::Private(const QString& configPath)
 {
     DatabaseParameters params = DatabaseParameters::parametersForSQLite(configPath + "/" + "recognition.db");
     DatabaseAccess::setParameters(db, params);
-    if (DatabaseAccess::checkReadyForUse(db))
+    dbAvailable = DatabaseAccess::checkReadyForUse(db);
+
+    if (dbAvailable)
     {
         foreach (const Identity& identity, DatabaseAccess(db).db()->identities())
         {
@@ -274,7 +278,7 @@ bool RecognitionDatabase::isNull() const
 
 QList<Identity> RecognitionDatabase::allIdentities() const
 {
-    if (!d)
+    if (!d || !d->dbAvailable)
         return QList<Identity>();
 
     QMutexLocker lock(&d->mutex);
@@ -283,7 +287,7 @@ QList<Identity> RecognitionDatabase::allIdentities() const
 
 Identity RecognitionDatabase::identity(int id) const
 {
-    if (!d)
+    if (!d || !d->dbAvailable)
         return Identity();
 
     QMutexLocker lock(&d->mutex);
@@ -335,7 +339,7 @@ Identity RecognitionDatabase::Private::findByAttributes(const QString& attribute
 
 Identity RecognitionDatabase::findIdentity(const QString& attribute, const QString& value) const
 {
-    if (!d || attribute.isEmpty())
+    if (!d || !d->dbAvailable || attribute.isEmpty())
         return Identity();
 
     QMutexLocker lock(&d->mutex);
@@ -344,7 +348,7 @@ Identity RecognitionDatabase::findIdentity(const QString& attribute, const QStri
 
 Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attributes) const
 {
-    if (!d || attributes.isEmpty())
+    if (!d || !d->dbAvailable || attributes.isEmpty())
         return Identity();
 
     QMutexLocker lock(&d->mutex);
@@ -395,7 +399,7 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
 
 Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attributes)
 {
-    if (!d)
+    if (!d || !d->dbAvailable)
         return Identity();
 
     QMutexLocker lock(&d->mutex);
@@ -428,7 +432,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
 
 void RecognitionDatabase::addIdentityAttributes(int id, const QMap<QString, QString>& attributes)
 {
-    if (!d)
+    if (!d || !d->dbAvailable)
         return;
 
     QMutexLocker lock(&d->mutex);
@@ -443,7 +447,7 @@ void RecognitionDatabase::addIdentityAttributes(int id, const QMap<QString, QStr
 
 void RecognitionDatabase::addIdentityAttribute(int id, const QString& attribute, const QString& value)
 {
-    if (!d)
+    if (!d || !d->dbAvailable)
         return;
 
     QMutexLocker lock(&d->mutex);
@@ -458,7 +462,7 @@ void RecognitionDatabase::addIdentityAttribute(int id, const QString& attribute,
 
 void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QString>& attributes)
 {
-   if (!d)
+   if (!d || !d->dbAvailable)
         return;
 
     QMutexLocker lock(&d->mutex);
@@ -492,7 +496,7 @@ void RecognitionDatabase::Private::applyParameters()
 
 void RecognitionDatabase::setParameter(const QString& parameter, const QVariant& value)
 {
-   if (!d)
+   if (!d || !d->dbAvailable)
         return;
 
     QMutexLocker lock(&d->mutex);
@@ -503,7 +507,7 @@ void RecognitionDatabase::setParameter(const QString& parameter, const QVariant&
 
 void RecognitionDatabase::setParameters(const QVariantMap& parameters)
 {
-   if (!d)
+   if (!d || !d->dbAvailable)
         return;
 
     QMutexLocker lock(&d->mutex);
@@ -517,7 +521,7 @@ void RecognitionDatabase::setParameters(const QVariantMap& parameters)
 
 QVariantMap RecognitionDatabase::parameters() const
 {
-   if (!d)
+   if (!d || !d->dbAvailable)
         return QVariantMap();
 
     QMutexLocker lock(&d->mutex);
@@ -546,7 +550,7 @@ QList<Identity> RecognitionDatabase::recognizeFaces(const QList<QImage>& images)
 
 QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* images)
 {
-   if (!d)
+   if (!d || !d->dbAvailable)
         return QList<Identity>();
 
     QMutexLocker lock(&d->mutex);
@@ -668,7 +672,7 @@ void RecognitionDatabase::Private::train(OpenCVLBPHFaceRecognizer* r, const QLis
 void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* data,
                                 const QString& trainingContext)
 {
-   if (!d)
+   if (!d || !d->dbAvailable)
         return;
 
    QMutexLocker lock(&d->mutex);
@@ -678,7 +682,7 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
 
 void RecognitionDatabase::clearAllTraining(const QString& /*trainingContext*/)
 {
-   if (!d)
+   if (!d || !d->dbAvailable)
         return;
 
    QMutexLocker lock(&d->mutex);
