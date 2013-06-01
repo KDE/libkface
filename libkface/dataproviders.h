@@ -76,10 +76,17 @@ public:
 
     virtual QImage image()                      { return *it; }
 
-protected:
-
     QList<QImage>                 list;
     QList<QImage>::const_iterator it;
+};
+
+class KFACE_EXPORT EmptyImageListProvider : public ImageListProvider
+{
+public:
+    virtual int  size() const           { return 0;    }
+    virtual bool atEnd() const          { return true; }
+    virtual void proceed(int steps = 1) { Q_UNUSED(steps)  }
+    virtual QImage image()              { return QImage(); }
 };
 
 // ----------------------------------------------------------------------------------------
