@@ -1,6 +1,7 @@
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../../../../libkface)
 
-ADD_LIBRARY(cvblobs blob.cpp
+ADD_LIBRARY(cvblobs STATIC
+                    blob.cpp
                     BlobContour.cpp
                     BlobOperators.cpp
                     BlobProperties.cpp

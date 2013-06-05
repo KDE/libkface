@@ -4,7 +4,8 @@ INCLUDE_DIRECTORIES(tld
                     )
 
 
-ADD_LIBRARY(opentld tld/Clustering.cpp
+ADD_LIBRARY(opentld STATIC
+                    tld/Clustering.cpp
                     tld/DetectionResult.cpp
                     tld/DetectorCascade.cpp
                     tld/EnsembleClassifier.cpp
