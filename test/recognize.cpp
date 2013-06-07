@@ -160,16 +160,29 @@ int main(int argc, char** argv)
 
         const int OrlIdentities = 40;
         const int OrlSamples    = 10;
+        const QString trainingContext = "test application";
 
         QMap<int, Identity> idMap;
+        QList<Identity> trainingToBeCleared;
         for (int i=1; i<=OrlIdentities; i++)
         {
             QMap<QString, QString> attributes;
             attributes["name"] = QString::number(i);
-            Identity identity = db.addIdentity(attributes);
-            idMap[i] = identity;
-            qDebug() << "Created identity" << identity.id << "for ORL directory" << i;
+            Identity identity = db.findIdentity(attributes);
+            if (identity.isNull())
+            {
+                Identity identity = db.addIdentity(attributes);
+                idMap[i] = identity;
+                qDebug() << "Created identity" << identity.id << "for ORL directory" << i;
+            }
+            else
+            {
+                qDebug() << "Already have identity for ORL directory" << i << ", clearing training data";
+                idMap[i] = identity;
+                trainingToBeCleared << identity;
+            }
         }
+        db.clearTraining(trainingToBeCleared, trainingContext);
 
         QMap<int, QStringList> trainingImages, recognitionImages;
         for (int i=1; i<=OrlIdentities; i++)
@@ -214,7 +227,7 @@ int main(int argc, char** argv)
             QList<QImage> images = toImages(it.value());
             SimpleTrainingDataProvider data(identity, images);
             qDebug() << "Training ORL directory" << it.key();
-            db.train(identity, &data, "test application");
+            db.train(identity, &data, trainingContext);
             totalTrained += images.size();
         }
         elapsed = time.restart();
