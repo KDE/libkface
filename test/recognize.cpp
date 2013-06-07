@@ -158,7 +158,7 @@ int main(int argc, char** argv)
             return 0;
         }
 
-        const int OrlIdentities = 4;
+        const int OrlIdentities = 40;
         const int OrlSamples    = 10;
 
         QMap<int, Identity> idMap;

@@ -126,6 +126,9 @@ public:
 
     /**
      * Tunes backend parameters.
+     * Available parameters:
+     * "accuracy", synonymous: "threshold", range: 0-1, type: float
+     *      Determines recogition threshold, 0->accept very unsecure recogitions, 1-> be very sure about a recognition.
      */
     void setParameter(const QString& parameter, const QVariant& value);
     void setParameters(const QVariantMap& parameters);

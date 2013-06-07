@@ -85,6 +85,7 @@ private:
 OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer(DatabaseAccessData* db)
     : d(new Private(db))
 {
+    setThreshold(0.5);
 }
 
 OpenCVLBPHFaceRecognizer::~OpenCVLBPHFaceRecognizer()
@@ -92,9 +93,17 @@ OpenCVLBPHFaceRecognizer::~OpenCVLBPHFaceRecognizer()
     delete d;
 }
 
-void OpenCVLBPHFaceRecognizer::setThreshold(const float threshold) const
+void OpenCVLBPHFaceRecognizer::setThreshold(float threshold) const
 {
-    d->threshold = (1.0 - qBound(0.f, threshold, 1.f))*100;
+    // threshold for our purposes within 20..150
+    const float min = 30.0;
+    const float max = 150.0;
+    // Applying a mirrored sigmoid curve
+    // map threshold [0,1] to [-4, 4]
+    float t = (8.0 * qBound(0.f, threshold, 1.f)) - 4.0;
+    // 1/(1+e^(t))
+    float factor = 1.0 / (1.0 + exp(t));
+    d->threshold = min + factor*(max-min);
 }
 
 namespace
