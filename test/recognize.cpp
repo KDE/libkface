@@ -158,14 +158,26 @@ int main(int argc, char** argv)
             return 0;
         }
 
-        QMap<int, QStringList> trainingImages, recognitionImages;
+        const int OrlIdentities = 4;
+        const int OrlSamples    = 10;
+
         QMap<int, Identity> idMap;
-        for (int i=1; i<=40; i++)
+        for (int i=1; i<=OrlIdentities; i++)
         {
-            for (int j=1; j<=10; j++)
+            QMap<QString, QString> attributes;
+            attributes["name"] = QString::number(i);
+            Identity identity = db.addIdentity(attributes);
+            idMap[i] = identity;
+            qDebug() << "Created identity" << identity.id << "for ORL directory" << i;
+        }
+
+        QMap<int, QStringList> trainingImages, recognitionImages;
+        for (int i=1; i<=OrlIdentities; i++)
+        {
+            for (int j=1; j<=OrlSamples; j++)
             {
                 QString path = orlDir.path() + QString("/s%1/%2.pgm").arg(i).arg(j);
-                if (j<=5)
+                if (j<=OrlSamples/2)
                 {
                     trainingImages[i] << path;
                 }
@@ -182,6 +194,10 @@ int main(int argc, char** argv)
             return 0;
         }
 
+        // reload db
+        db = RecognitionDatabase();
+        db = RecognitionDatabase::addDatabase(QDir::currentPath());
+
         QTime time;
         time.start();
 
@@ -189,9 +205,11 @@ int main(int argc, char** argv)
 
         for (QMap<int, QStringList>::const_iterator it = trainingImages.begin(); it != trainingImages.end(); ++it)
         {
-            Identity identity = db.addIdentity(QMap<QString, QString>());
-            idMap[it.key()] = identity;
-            qDebug() << "Created identity" << identity.id << "for ORL directory" << it.key();
+            Identity identity = db.findIdentity("name", QString::number(it.key()));
+            if (identity.isNull())
+            {
+                kDebug() << "Identity management failed for ORL person" << it.key();
+            }
 
             QList<QImage> images = toImages(it.value());
             SimpleTrainingDataProvider data(identity, images);
