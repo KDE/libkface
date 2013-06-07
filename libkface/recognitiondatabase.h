@@ -186,6 +186,7 @@ public:
                const QString& trainingContext);
 
     void clearAllTraining(const QString& trainingContext = QString());
+    void clearTraining(const QList<Identity>& identitiesToClean, const QString& trainingContext = QString());
 
 private:
 

@@ -156,6 +156,8 @@ public:
                TrainingDataProvider* data, const QString& trainingContext);
     void train(OpenCVLBPHFaceRecognizer* r, const QList<Identity>& identitiesToBeTrained,
                TrainingDataProvider* data, const QString& trainingContext);
+    void clear(OpenTLDFaceRecognizer*, const QList<int>&, const QString&);
+    void clear(OpenCVLBPHFaceRecognizer*, const QList<int>& idsToClear, const QString& trainingContext);
 
 public:
 
@@ -235,6 +237,9 @@ RecognitionDatabase::Private::Private(const QString& configPath)
 
 RecognitionDatabase::Private::~Private()
 {
+    delete opencvlbph;
+    delete opentld;
+
     static_d->removeDatabase(configPath);
     DatabaseAccess::destroy(db);
 }
@@ -680,13 +685,50 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
    d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
 }
 
-void RecognitionDatabase::clearAllTraining(const QString& /*trainingContext*/)
+// Specializations for available backends
+void RecognitionDatabase::Private::clear(OpenTLDFaceRecognizer*, const QList<int>&, const QString&)
 {
-   if (!d || !d->dbAvailable)
+    // unimplemented
+}
+
+void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer*, const QList<int>& idsToClear, const QString& trainingContext)
+{
+    // force later reload
+    delete opencvlbph;
+    opencvlbph = 0;
+
+    if (idsToClear.isEmpty())
+    {
+        DatabaseAccess(db).db()->clearLBPHTraining(trainingContext);
+    }
+    else
+    {
+        DatabaseAccess(db).db()->clearLBPHTraining(idsToClear, trainingContext);
+    }
+}
+
+void RecognitionDatabase::clearAllTraining(const QString& trainingContext)
+{
+    if (!d || !d->dbAvailable)
         return;
 
-   QMutexLocker lock(&d->mutex);
-   //TODO
+    QMutexLocker lock(&d->mutex);
+    d->clear(d->recognizer(), QList<int>(), trainingContext);
+}
+
+void RecognitionDatabase::clearTraining(const QList<Identity>& identitiesToClean, const QString& trainingContext)
+{
+    if (!d || !d->dbAvailable || identitiesToClean.isEmpty())
+        return;
+
+    QMutexLocker lock(&d->mutex);
+
+    QList<int> ids;
+    foreach (const Identity& id, identitiesToClean)
+    {
+        ids << id.id;
+    }
+    d->clear(d->recognizer(), ids, trainingContext);
 }
 
 // --- Runtime version info static methods (declared in version.h)
