@@ -220,10 +220,11 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
         if (metadata.storageStatus == LBPHistogramMetadata::Created)
         {
             OpenCVMatData data = model.histogramData(i);
+            QByteArray compressed = qCompress(data.data);
             QVariantList histogramValues;
             QVariant insertedId;
             histogramValues << model.databaseId << metadata.identity << metadata.context
-                            << data.type << data.rows << data.cols << data.data;
+                            << data.type << data.rows << data.cols << compressed;
             d->db->execSql("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, context, type, rows, cols, data) "
                            "VALUES (?,?,?,?,?,?,?)",
                            histogramValues, 0, &insertedId);
@@ -282,7 +283,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel()
             data.type       = query.value(3).toInt();
             data.rows       = query.value(4).toInt();
             data.cols       = query.value(5).toInt();
-            data.data       = query.value(6).toByteArray();
+            data.data       = qUncompress(query.value(6).toByteArray());
             //kDebug() << "Adding histogram" << metadata.databaseId << "identity" << metadata.identity << "size" << data.data.size();
 
             histograms << data;
@@ -294,6 +295,34 @@ LBPHFaceModel TrainingDB::lbphFaceModel()
     }
 
     return LBPHFaceModel();
+}
+
+void TrainingDB::clearLBPHTraining(const QString& context)
+{
+    if (context.isNull())
+    {
+        d->db->execSql("DELETE FROM OpenCVLBPHistograms");
+        d->db->execSql("DELETE FROM OpenCVLBPHRecognizer");
+    }
+    else
+    {
+        d->db->execSql("DELETE FROM OpenCVLBPHistograms WHERE context=?", context);
+    }
+}
+
+void TrainingDB::clearLBPHTraining(const QList<int>& identities, const QString& context)
+{
+    foreach (int id, identities)
+    {
+        if (context.isNull())
+        {
+            d->db->execSql("DELETE FROM OpenCVLBPHistograms WHERE identity=?", id);
+        }
+        else
+        {
+            d->db->execSql("DELETE FROM OpenCVLBPHistograms WHERE identity=? AND context=?", id, context);
+        }
+    }
 }
 
 

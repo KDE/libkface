@@ -63,6 +63,8 @@ public:
 
     void updateLBPHFaceModel(LBPHFaceModel& model);
     LBPHFaceModel lbphFaceModel();
+    void clearLBPHTraining(const QString& context = QString());
+    void clearLBPHTraining(const QList<int>& identities, const QString& context = QString());
 
 private:
 
