@@ -181,7 +181,7 @@ int OpenTLDFaceRecognizer::recognize(const cv::Mat& inputImage)
 
     int maxCount = 0;
     int bestId = -1;
-    for (QMap<int,int>::const_iterator it = count.begin(); it != count.end(); ++it)
+    for (QMap<int,int>::const_iterator it = count.constBegin(); it != count.constEnd(); ++it)
     {
         if (it.value() > maxCount)
         {

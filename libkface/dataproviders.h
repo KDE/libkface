@@ -61,18 +61,18 @@ public:
 class KFACE_EXPORT QListImageListProvider : public ImageListProvider
 {
 public:
-    QListImageListProvider(const QList<QImage>& lst) 
+    QListImageListProvider(const QList<QImage>& lst)
         : list(lst),
-          it(list.begin())
+          it(list.constBegin())
     {
     }
 
-    QListImageListProvider() : it(list.begin()) {}
+    QListImageListProvider() : it(list.constBegin()) {}
     virtual int  size() const                   { return list.size(); }
-    virtual bool atEnd() const                  { return it == list.end(); }
+    virtual bool atEnd() const                  { return it == list.constEnd(); }
     virtual void proceed(int steps = 1)         { it += steps; }
 
-    void reset()                                { it = list.begin(); }
+    void reset()                                { it = list.constBegin(); }
 
     virtual QImage image()                      { return *it; }
 

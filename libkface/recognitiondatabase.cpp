@@ -489,7 +489,7 @@ void RecognitionDatabase::Private::applyParameters()
 {
     if (recognizerConst())
     {
-        for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+        for (QVariantMap::const_iterator it = parameters.constBegin(); it != parameters.constEnd(); ++it)
         {
             if (it.key() == "threshold" || it.key() == "accuracy")
             {

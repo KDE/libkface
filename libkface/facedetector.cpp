@@ -77,7 +77,7 @@ public:
         {
             return;
         }
-        for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+        for (QVariantMap::const_iterator it = parameters.constBegin(); it != parameters.constEnd(); ++it)
         {
             if (it.key() == "accuracy")
             {
