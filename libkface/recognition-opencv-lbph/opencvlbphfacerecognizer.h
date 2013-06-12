@@ -55,7 +55,7 @@ public:
     /**
      * @brief FaceRecognizer:Master class to control entire recognition using OpenTLD
      */
-    OpenCVLBPHFaceRecognizer(DatabaseAccessData*);
+    OpenCVLBPHFaceRecognizer(DatabaseAccessData* const);
     ~OpenCVLBPHFaceRecognizer();
 
     void setThreshold(float threshold) const;

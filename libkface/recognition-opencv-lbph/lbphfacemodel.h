@@ -72,7 +72,7 @@ public:
 
     LBPHFaceModel();
 
-    cv::FaceRecognizer* ptr() { return cv::Ptr<cv::FaceRecognizer>::operator cv::FaceRecognizer*(); }
+    cv::FaceRecognizer* ptr()             { return cv::Ptr<cv::FaceRecognizer>::operator cv::FaceRecognizer*();       }
     const cv::FaceRecognizer* ptr() const { return cv::Ptr<cv::FaceRecognizer>::operator const cv::FaceRecognizer*(); }
 
     int radius() const;

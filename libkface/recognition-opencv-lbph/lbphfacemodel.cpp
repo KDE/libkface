@@ -160,6 +160,7 @@ void LBPHFaceModel::update(const std::vector<cv::Mat>& images, const std::vector
     // Update local information
     // We assume new labels are simply appended
     cv::Mat currentLabels = ptr()->get<cv::Mat>("labels");
+
     for (int i=m_histogramMetadata.size(); i<currentLabels.rows; i++)
     {
         LBPHistogramMetadata metadata;
@@ -171,4 +172,3 @@ void LBPHFaceModel::update(const std::vector<cv::Mat>& images, const std::vector
 }
 
 } // namespace KFaceIface
-

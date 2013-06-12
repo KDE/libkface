@@ -51,7 +51,7 @@ class OpenCVLBPHFaceRecognizer::Private
 {
 public:
 
-    Private(DatabaseAccessData* db)
+    Private(DatabaseAccessData* const db)
         : db(db),
           threshold(100),
           loaded(false)
@@ -82,7 +82,7 @@ private:
     bool                loaded;
 };
 
-OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer(DatabaseAccessData* db)
+OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer(DatabaseAccessData* const db)
     : d(new Private(db))
 {
     setThreshold(0.5);
@@ -100,22 +100,24 @@ void OpenCVLBPHFaceRecognizer::setThreshold(float threshold) const
     const float max = 150.0;
     // Applying a mirrored sigmoid curve
     // map threshold [0,1] to [-4, 4]
-    float t = (8.0 * qBound(0.f, threshold, 1.f)) - 4.0;
+    float t         = (8.0 * qBound(0.f, threshold, 1.f)) - 4.0;
     // 1/(1+e^(t))
-    float factor = 1.0 / (1.0 + exp(t));
-    d->threshold = min + factor*(max-min);
+    float factor    = 1.0 / (1.0 + exp(t));
+    d->threshold    = min + factor*(max-min);
 }
 
 namespace
 {
-    enum {
-    TargetInputSize = 256
+    enum
+    {
+        TargetInputSize = 256
     };
 }
 
 cv::Mat OpenCVLBPHFaceRecognizer::prepareForRecognition(const QImage& inputImage)
 {
     QImage image(inputImage);
+
     if (inputImage.width() > TargetInputSize || inputImage.height() > TargetInputSize)
     {
         image = inputImage.scaled(TargetInputSize, TargetInputSize, Qt::IgnoreAspectRatio);
@@ -150,10 +152,12 @@ int OpenCVLBPHFaceRecognizer::recognize(const cv::Mat& inputImage)
     double confidence  = 0;
     d->lbph()->predict(inputImage, predictedLabel, confidence);
     kDebug() << predictedLabel << confidence;
+
     if (confidence > d->threshold)
     {
         return -1;
     }
+
     return predictedLabel;
 }
 
@@ -170,4 +174,3 @@ void OpenCVLBPHFaceRecognizer::train(const std::vector<cv::Mat>& images, const s
 }
 
 } // namespace KFaceIface
-
