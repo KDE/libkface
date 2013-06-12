@@ -37,7 +37,10 @@
 // Qt includes
 
 #include <QtCore/qmath.h>
-#include <QDebug>
+
+// KDE includes
+
+#include <kdebug.h>
 
 using namespace std;
 
@@ -76,7 +79,7 @@ public:
 
         if (!load(file.toStdString()))
         {
-            qDebug() << "failed to load cascade" << file;
+            kDebug() << "failed to load cascade" << file;
             return;
         }
 
@@ -261,10 +264,10 @@ OpenCVFaceDetector::OpenCVFaceDetector(const QString& cascadeDir)
 
     d->cascades[2].setPrimaryCascade();
 
-    d->cascades[5].setROI(0, 0, 0.6, 0.6);
-    d->cascades[6].setROI(0.4, 0, 0.6, 0.6);
+    d->cascades[5].setROI(0,   0,    0.6, 0.6);
+    d->cascades[6].setROI(0.4, 0,    0.6, 0.6);
     d->cascades[7].setROI(0.2, 0.25, 0.6, 0.6);
-    d->cascades[8].setROI(0.1, 0.4, 0.8, 0.6);
+    d->cascades[8].setROI(0.1, 0.4,  0.8, 0.6);
 
     /**
      * Modesto Castrillón, Oscar Déniz, Daniel Hernández, Javier Lorenzo
@@ -354,9 +357,8 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
     d->verifyingParams.flags           = 0;
     // min size is adjusted each time
 
-
-    /*
-        qDebug() << "updateParameters: accuracy " << d->speedVsAccuracy
+/*
+        kDebug() << "updateParameters: accuracy " << d->speedVsAccuracy
                  << " sensitivity " << d->sensitivityVsSpecificity
                  << " - searchIncrement " << d->primaryParams.searchIncrement
                  << " grouping " << d->primaryParams.grouping
@@ -366,12 +368,13 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
 
         for (unsigned int i=0; i<d->cascadeProperties.size(); i++)
             if (d->cascadeProperties[i].primaryCascade)
-                qDebug() << d->cascadeSet->getCascade(i).name << " ";
+                kDebug() << d->cascadeSet->getCascade(i).name << " ";
 
-        qDebug() << " maxDistance " << d->maxDistance << " minDuplicates " << d->minDuplicates;
-    */
+        kDebug() << " maxDistance " << d->maxDistance << " minDuplicates " << d->minDuplicates;
+*/
 
-    /*if (d->speedVsAccuracy < 0.5)
+/*
+    if (d->speedVsAccuracy < 0.5)
     {
         d->primaryCascades[0] = true;
         d->minDuplicates = 0;
@@ -380,9 +383,11 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
     {
         d->primaryCascades[1] = true;
         d->primaryCascades[2] = true;
+
         if (d->sensitivityVsSpecificity > 0.5)
             d->minDuplicates = 1;
-    }*/
+    }
+*/
 }
 
 QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
@@ -392,14 +397,14 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
     // Check whether the cascade has loaded successfully. Else report and error and quit
     if (cascade.empty())
     {
-        qDebug() << "Cascade is not loaded.";
+        kDebug() << "Cascade is not loaded.";
         return QList<QRect>();
     }
 
     // There can be more than one face in an image. So create a growable sequence of faces.
     // Detect the objects and store them in the sequence
 
-    qDebug() << "detectMultiScale: image size " << inputImage.cols << " " << inputImage.rows
+    kDebug() << "detectMultiScale: image size " << inputImage.cols << " " << inputImage.rows
              << " searchIncrement " << params.searchIncrement
              << " grouping " << params.grouping
              << " flags " << params.flags
@@ -414,11 +419,13 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
                             );
 
     QList<QRect> results;
+
     for (std::vector<cv::Rect>::const_iterator it = faces.begin(); it != faces.end(); ++it)
     {
         results << toQRect(*it);
     }
-    qDebug() << "detectMultiScale gave" << results;
+
+    kDebug() << "detectMultiScale gave" << results;
     return results;
 }
 
@@ -426,6 +433,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 {
     // check if we need to verify
     bool hasVerifyingCascade = false;
+
     for (int i=0; i<d->cascades.size(); ++i)
     {
         if (d->cascades[i].verifyingCascade)
@@ -448,8 +456,8 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                                         max(0, faceRect.y - margin),
                                         faceRect.width + 2*margin,
                                         faceRect.height + 2*margin );
-    extendedRect.width    = min(inputImage.cols - extendedRect.x, extendedRect.width);
-    extendedRect.height   = min(inputImage.rows - extendedRect.y, extendedRect.height);
+    extendedRect.width      = min(inputImage.cols - extendedRect.x, extendedRect.width);
+    extendedRect.height     = min(inputImage.rows - extendedRect.y, extendedRect.height);
 
 
     // shallow copy by ROI
@@ -460,7 +468,8 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
     for (int i=0; i<d->cascades.size(); ++i)
     {
-        qDebug() << "Verifying face" << face << "using cascade" << i;
+        kDebug() << "Verifying face" << face << "using cascade" << i;
+
         if (d->cascades[i].verifyingCascade)
         {
             d->verifyingParams.minSize = d->cascades[i].minSizeForFace(faceSize);
@@ -471,7 +480,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
                 cv::Rect roi      = d->cascades[i].faceROI(faceRect);
                 cv::Mat  feature  = inputImage(roi);
-                qDebug() << "feature" << d->cascades[i].roi << toQRect(faceRect) << toQRect(roi);
+                kDebug() << "feature" << d->cascades[i].roi << toQRect(faceRect) << toQRect(roi);
                 foundFaces        = cascadeResult(feature, d->cascades[i], d->verifyingParams);
 
                 if (!foundFaces.isEmpty())
@@ -480,10 +489,11 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                 /*
                  * This is pretty much working code that scales up the face if it's too small
                  * for the  facial feature cascade. It did not bring me benefit with false positives though.
+
                 double factor = cascade.requestedInputScaleFactor(faceSize);
                 IplImage* feature = LibFaceUtils::scaledSection(inputImage, roi, factor);
 
-                // qDebug() << "Facial feature in roi " << cascade.roi << "scaled up to" << feature->width << feature->height;
+                // kDebug() << "Facial feature in roi " << cascade.roi << "scaled up to" << feature->width << feature->height;
                 foundFaces = cascadeResult(feature, cascade.cascade, d->verifyingParams);
 
                 for (vector<Face>::iterator it = foundFaces.begin(); it != foundFaces.end(); ++it)
@@ -504,7 +514,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                         )
                     {
                         facialFeatureVotes++;
-                        qDebug() << "voting" << endl;
+                        kDebug() << "voting" << endl;
                         break;
                     }
                 }
@@ -521,7 +531,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                     frontalFaceVotes++;
             }
 
-            //qDebug() << "Verifying cascade " << cascade.name << " gives " << foundFaces.size();
+            //kDebug() << "Verifying cascade " << cascade.name << " gives " << foundFaces.size();
         }
     }
 
@@ -543,7 +553,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
             verified = false;
     }
 
-    //qDebug() << "Verification finished. Votes: Frontal " << frontalFaceVotes << " Features "
+    //kDebug() << "Verification finished. Votes: Frontal " << frontalFaceVotes << " Features "
       //       << facialFeatureVotes << ". Face verified: " << verified;
 
     return verified;
@@ -584,6 +594,7 @@ QList<QRect> OpenCVFaceDetector::mergeFaces(const cv::Mat& inputImage, const QLi
     int ctr = 0;
 
     QList<QRect>::iterator first, second;
+
     for (first = results.begin(); first != results.end(); )
     {
         int duplicates = 0;
@@ -614,7 +625,7 @@ QList<QRect> OpenCVFaceDetector::mergeFaces(const cv::Mat& inputImage, const QLi
         }
     }
 
-    qDebug() << "Faces parsed:" << ctr << "number of final faces:" << results.size();
+    kDebug() << "Faces parsed:" << ctr << "number of final faces:" << results.size();
 
     return results;
 }
@@ -632,16 +643,16 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage)
     }
 
     QImage image(inputImage);
-    int inputArea  = image.width() * image.height();
-
+    int inputArea                    = image.width() * image.height();
     const int maxAcceptableInputArea = 1024*768;
+
     if (inputArea > maxAcceptableInputArea)
     {
         // Resize to 1024 * 768 (or comparable area for different aspect ratio)
         // Looking for scale factor z where A = w*z * h*z => z = sqrt(A/(w*h))
         qreal z = qSqrt(qreal(maxAcceptableInputArea) / image.width() / image.height());
         QSize scaledSize = image.size() * z;
-        image = image.scaled(scaledSize);
+        image   = image.scaled(scaledSize);
     }
 
     //TODO: move to common utils, opentldrecognition
@@ -666,7 +677,6 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage)
     equalizeHist(cvImage, cvImage);
     return cvImage;
 }
-
 
 QList<QRect> OpenCVFaceDetector::detectFaces(const cv::Mat& inputImage, const cv::Size& originalSize)
 {
@@ -705,4 +715,4 @@ QList<QRect> OpenCVFaceDetector::detectFaces(const cv::Mat& inputImage, const cv
     return results;
 }
 
-} // namespace
+} // namespace KFaceIface

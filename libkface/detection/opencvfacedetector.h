@@ -74,7 +74,7 @@ public:
     void setAccuracy(double speedVsAccuracy);
     void setSpecificity(double sensitivityVsSpecificity);
 
-    double accuracy() const;
+    double accuracy()    const;
     double specificity() const;
 
     /**
@@ -116,6 +116,6 @@ private:
     Private* const d;
 };
 
-}
+} // namespace KFaceIface
 
 #endif /* _FACEDETECT_H_ */
