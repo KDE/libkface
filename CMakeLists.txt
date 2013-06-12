@@ -163,5 +163,5 @@ INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKface.cmake
         DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
 
 ELSE(OpenCV_FOUND)
-    MESSAGE(WARNING "LibKface cannot be compiled.")
+    MESSAGE(FATAL_ERROR "LibKface cannot be compiled.")
 ENDIF(OpenCV_FOUND)
