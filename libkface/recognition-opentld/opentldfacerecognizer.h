@@ -55,7 +55,7 @@ public:
     /**
      * @brief FaceRecognizer:Master class to control entire recognition using OpenTLD
      */
-    OpenTLDFaceRecognizer(DatabaseAccessData*);
+    OpenTLDFaceRecognizer(DatabaseAccessData* const);
     ~OpenTLDFaceRecognizer();
 
     void setThreshold(float threshold) const;
@@ -80,6 +80,8 @@ private:
 
     float recognitionConfidence(const cv::Mat& im, const UnitFaceModel& compareModel);
     void createFaceModel(const cv::Mat& im, UnitFaceModel& model);
+
+private:
 
     class Private;
     Private* const d;

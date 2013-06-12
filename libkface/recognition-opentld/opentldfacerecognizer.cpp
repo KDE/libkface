@@ -54,7 +54,7 @@ class OpenTLDFaceRecognizer::Private
 {
 public:
 
-    Private(DatabaseAccessData* db)
+    Private(DatabaseAccessData* const db)
         : db(db),
           threshold(0.8F),
           m_tld(0)
@@ -77,6 +77,7 @@ public:
 
             // Read database
             QList<int> identityIds = DatabaseAccess(db).db()->identityIds();
+
             foreach (int id, identityIds)
             {
                 modelCache[id] = DatabaseAccess(db).db()->tldFaceModels(id);
@@ -97,7 +98,7 @@ private:
     tld::TLD *m_tld;
 };
 
-OpenTLDFaceRecognizer::OpenTLDFaceRecognizer(DatabaseAccessData* db)
+OpenTLDFaceRecognizer::OpenTLDFaceRecognizer(DatabaseAccessData* const db)
     : d(new Private(db))
 {
 }
@@ -115,14 +116,16 @@ void OpenTLDFaceRecognizer::setThreshold(const float threshold) const
 namespace
 {
 
-    enum {
-    TargetInputSize = 47
+    enum
+    {
+        TargetInputSize = 47
     };
 }
 
 cv::Mat OpenTLDFaceRecognizer::prepareForRecognition(const QImage& inputImage)
 {
     QImage image(inputImage);
+
     if (inputImage.width() > TargetInputSize || inputImage.height() > TargetInputSize)
     {
         image = inputImage.scaled(TargetInputSize, TargetInputSize, Qt::IgnoreAspectRatio);
@@ -141,7 +144,7 @@ cv::Mat OpenTLDFaceRecognizer::prepareForRecognition(const QImage& inputImage)
             cvtColor(cvImageWrapper, cvImage, CV_RGBA2GRAY);
             break;
         default:
-            image = image.convertToFormat(QImage::Format_RGB888);
+            image          = image.convertToFormat(QImage::Format_RGB888);
             cvImageWrapper = cv::Mat(image.height(), image.width(), CV_8UC3, image.scanLine(0), image.bytesPerLine());
             cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
             break;
@@ -153,8 +156,8 @@ cv::Mat OpenTLDFaceRecognizer::prepareForRecognition(const QImage& inputImage)
 
 float OpenTLDFaceRecognizer::recognitionConfidence(const cv::Mat& im, const UnitFaceModel& compareModel)
 {
-    d->tld()->detectorCascade->imgWidth = im.cols;
-    d->tld()->detectorCascade->imgHeight = im.rows;
+    d->tld()->detectorCascade->imgWidth     = im.cols;
+    d->tld()->detectorCascade->imgHeight    = im.rows;
     d->tld()->detectorCascade->imgWidthStep = im.step;
     d->tld()->getObjModel(compareModel);
     d->tld()->processImage(im);
@@ -167,11 +170,13 @@ int OpenTLDFaceRecognizer::recognize(const cv::Mat& inputImage)
 {
     QMap<int, int> count;
     QMap<int, QList<UnitFaceModel> >::const_iterator it;
+
     for (it = d->modelCache.constBegin(); it != d->modelCache.constEnd(); ++it)
     {
         foreach (const UnitFaceModel& compareModel, it.value())
         {
             float confidence = recognitionConfidence(inputImage, compareModel);
+
             if (confidence > d->threshold)
             {
                 count[it.key()]++;
@@ -180,7 +185,8 @@ int OpenTLDFaceRecognizer::recognize(const cv::Mat& inputImage)
     }
 
     int maxCount = 0;
-    int bestId = -1;
+    int bestId   = -1;
+
     for (QMap<int,int>::const_iterator it = count.constBegin(); it != count.constEnd(); ++it)
     {
         if (it.value() > maxCount)
@@ -189,13 +195,14 @@ int OpenTLDFaceRecognizer::recognize(const cv::Mat& inputImage)
             bestId = it.key();
         }
     }
+
     return bestId;
 }
 
 void OpenTLDFaceRecognizer::createFaceModel(const cv::Mat& im, UnitFaceModel& model)
 {
-    d->tld()->detectorCascade->imgWidth = im.cols;
-    d->tld()->detectorCascade->imgHeight = im.rows;
+    d->tld()->detectorCascade->imgWidth     = im.cols;
+    d->tld()->detectorCascade->imgHeight    = im.rows;
     d->tld()->detectorCascade->imgWidthStep = im.step;
 
     cv::Rect bb(5, 5, im.cols-5, im.rows-5);
@@ -216,4 +223,3 @@ void OpenTLDFaceRecognizer::train(int identity, const cv::Mat& inputImage, const
 }
 
 } // namespace KFaceIface
-
