@@ -59,7 +59,7 @@ public:
         if (!m_backend)
         {
             QString cascadeDir = KStandardDirs::installPath("data") + QString("libkface/haarcascades");
-            m_backend = new OpenCVFaceDetector(cascadeDir);
+            m_backend          = new OpenCVFaceDetector(cascadeDir);
             applyParameters();
         }
 
@@ -148,9 +148,9 @@ QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& origin
 
     try
     {
-        cv::Mat cvImage = d->backend()->prepareForDetection(image);
+        cv::Mat cvImage       = d->backend()->prepareForDetection(image);
         QList<QRect> absRects = d->backend()->detectFaces(cvImage, cvOriginalSize);
-        result = toRelativeRects(absRects, QSize(cvImage.cols, cvImage.rows));
+        result                = toRelativeRects(absRects, QSize(cvImage.cols, cvImage.rows));
 
     }
     catch (cv::Exception& e)
@@ -173,6 +173,7 @@ void FaceDetector::setParameters(const QVariantMap& parameters)
     {
         d->parameters.insert(it.key(), it.value());
     }
+
     d->applyParameters();
 }
 
@@ -194,39 +195,42 @@ QRectF FaceDetector::toRelativeRect(const QRect& abs, const QSize& s)
         return QRectF();
     }
 
-    return QRectF(qreal(abs.x())  / qreal(s.width()),
-                  qreal(abs.y())  / qreal(s.height()),
-                  qreal(abs.width())  / qreal(s.width()),
+    return QRectF(qreal(abs.x())       / qreal(s.width()),
+                  qreal(abs.y())       / qreal(s.height()),
+                  qreal(abs.width())   / qreal(s.width()),
                   qreal(abs.height())  / qreal(s.height()));
 }
 
 QRect FaceDetector::toAbsoluteRect(const QRectF& rel, const QSize& s)
 {
-    return QRectF(rel.x() * s.width(),
-                  rel.y() * s.height(),
-                  rel.width() * s.width(),
+    return QRectF(rel.x()      * s.width(),
+                  rel.y()      * s.height(),
+                  rel.width()  * s.width(),
                   rel.height() * s.height()).toRect();
 }
 
 QList<QRectF> FaceDetector::toRelativeRects(const QList<QRect>& absoluteRects, const QSize& size)
 {
     QList<QRectF> result;
+
     foreach (const QRect& r, absoluteRects)
     {
         result << toRelativeRect(r, size);
     }
+
     return result;
 }
 
 QList<QRect> FaceDetector::toAbsoluteRects(const QList<QRectF>& relativeRects, const QSize& size)
 {
     QList<QRect> result;
+
     foreach (const QRectF& r, relativeRects)
     {
         result << toAbsoluteRect(r, size);
     }
+
     return result;
 }
-
 
 } // namespace KFaceIface

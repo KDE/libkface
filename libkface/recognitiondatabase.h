@@ -52,6 +52,20 @@ class KFACE_EXPORT RecognitionDatabase
 
 public:
 
+    enum TrainingCostHint
+    {
+        /// Training is so cheap that new photos for training can be passed any time
+        TrainingIsCheap,
+        /// Training is significantly optimized if new images are received in batches
+        /// instead training single images multiple times
+        TrainingLikesBatches,
+        /// Training is a computing intensive operation.
+        /// By choice of the application, it may be manually triggered by the user.
+        TrainingIsExpensive
+    };
+
+public:
+
     /**
      * Performs face recogition.
      * Persistent data about identities and training data will be stored
@@ -148,21 +162,9 @@ public:
      * For each entry in the provider, in 1-to-1 mapping,
      * a recognized identity or the null identity is returned.
      */
-    QList<Identity> recognizeFaces(ImageListProvider* images);
+    QList<Identity> recognizeFaces(ImageListProvider* const images);
     QList<Identity> recognizeFaces(const QList<QImage>& images);
     Identity recognizeFace(const QImage& image);
-
-    enum TrainingCostHint
-    {
-        /// Training is so cheap that new photos for training can be passed any time
-        TrainingIsCheap,
-        /// Training is significantly optimized if new images are received in batches
-        /// instead training single images multiple times
-        TrainingLikesBatches,
-        /// Training is a computing intensive operation.
-        /// By choice of the application, it may be manually triggered by the user.
-        TrainingIsExpensive
-    };
 
     /// Gives a hint about the complexity of training for the current backend.
     TrainingCostHint trainingCostHint() const;
@@ -180,9 +182,9 @@ public:
      * non-overlapping collections of images. Keep is always constant for your app.)
      */
 
-    void train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* data,
+    void train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* const data,
                const QString& trainingContext);
-    void train(const Identity& identityToBeTrained, TrainingDataProvider* data,
+    void train(const Identity& identityToBeTrained, TrainingDataProvider* const data,
                const QString& trainingContext);
 
     void clearAllTraining(const QString& trainingContext = QString());
