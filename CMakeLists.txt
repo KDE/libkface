@@ -50,9 +50,6 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKFACE_AREA_CODE_GENERAL})
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
-# Force usage of local copy temporarily in this branch
-#FIND_PACKAGE(LibFace)
-
 # BEGIN SPECIAL OPENCV HANDLING
 
 # On some systems, OpenCV can be found using FIND_PACKAGE(OpenCV), for other systems
@@ -71,7 +68,28 @@ ELSE (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
   MESSAGE(STATUS "Great, found OpenCV on the first try.")
 ENDIF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
 
-MESSAGE(STATUS "OpenCV Root directory is ${OpenCV_DIR}")
+MESSAGE(STATUS "OpenCV Root directory is: ${OpenCV_DIR}")
+
+# check OpenCV version
+
+SET(OPENCV_MIN_VERSION "2.4.3")
+
+IF (OpenCV_VERSION)
+
+    MESSAGE(STATUS "OpenCV: Found version ${OpenCV_VERSION} (required: ${OPENCV_MIN_VERSION})")
+    IF (${OpenCV_VERSION} VERSION_LESS ${OPENCV_MIN_VERSION})
+        MESSAGE(WARNING "OpenCV: Version is too old.")
+        SET(OpenCV_FOUND FALSE)
+    ENDIF (${OpenCV_VERSION} VERSION_LESS ${OPENCV_MIN_VERSION})
+
+ELSE (OpenCV_VERSION)
+
+    MESSAGE(WARNING "OpenCV: Version information not found, your version is probably too old.")
+    SET(OpenCV_FOUND FALSE)
+
+ENDIF (OpenCV_VERSION)
+
+
 
 # there are two versions of FindOpenCV.cmake in the wild, one defining
 # OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
@@ -88,6 +106,8 @@ ENDIF (NOT OpenCV_INCLUDE_DIRS)
 # END SPECIAL OPENCV HANDLING
 
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
+
+IF (OpenCV_FOUND)
 
 # =======================================================
 # Information to update before to release this library.
@@ -141,3 +161,7 @@ ENDIF(NOT WIN32)
 
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKface.cmake
         DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
+
+ELSE(OpenCV_FOUND)
+    MESSAGE(WARNING "LibKface cannot be compiled.")
+ENDIF(OpenCV_FOUND)
