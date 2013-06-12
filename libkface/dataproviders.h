@@ -52,8 +52,7 @@ public:
     virtual int  size() const           = 0;
     virtual bool atEnd() const          = 0;
     virtual void proceed(int steps = 1) = 0;
-
-    virtual QImage image() = 0;
+    virtual QImage image()              = 0;
 };
 
 /// A wrapper implementation for ImageListProvider if you have a QList of QImages
@@ -67,7 +66,11 @@ public:
     {
     }
 
-    QListImageListProvider() : it(list.constBegin()) {}
+    QListImageListProvider()
+        : it(list.constBegin())
+    {
+    }
+
     virtual int  size() const                   { return list.size(); }
     virtual bool atEnd() const                  { return it == list.constEnd(); }
     virtual void proceed(int steps = 1)         { it += steps; }
@@ -76,6 +79,8 @@ public:
 
     virtual QImage image()                      { return *it; }
 
+public:
+
     QList<QImage>                 list;
     QList<QImage>::const_iterator it;
 };
@@ -83,6 +88,7 @@ public:
 class KFACE_EXPORT EmptyImageListProvider : public ImageListProvider
 {
 public:
+
     virtual int  size() const           { return 0;    }
     virtual bool atEnd() const          { return true; }
     virtual void proceed(int steps = 1) { Q_UNUSED(steps)  }

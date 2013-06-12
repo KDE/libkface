@@ -62,7 +62,9 @@ public:
     bool isNull() const;
     bool operator==(const Identity& other) const;
 
-    int id;
+public:
+
+    int                    id;
     QMap<QString, QString> attributes;
 };
 
