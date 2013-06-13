@@ -38,20 +38,19 @@
 namespace KFaceIface
 {
 
-
 class DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
-    DatabaseCoreBackendPrivate(DatabaseCoreBackend* backend);
+    DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend);
     virtual ~DatabaseCoreBackendPrivate() {}
-    void init(const QString& connectionName, DatabaseLocking* locking);
+    void init(const QString& connectionName, DatabaseLocking* const locking);
 
-    QString connectionName(QThread* thread);
+    QString connectionName(QThread* const thread);
 
     QSqlDatabase databaseForThread();
     QSqlError    databaseErrorForThread();
-    void         setDatabaseErrorForThread(QSqlError lastError);
+    void         setDatabaseErrorForThread(const QSqlError& lastError);
 
     void closeDatabaseForThread();
     bool open(QSqlDatabase& db);
@@ -73,12 +72,13 @@ public:
     void debugOutputFailedTransaction(const QSqlError& error) const;
 
     bool checkOperationStatus();
-    bool handleWithErrorHandler(const SqlQuery* query);
+    bool handleWithErrorHandler(const SqlQuery* const query);
+    void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
+    void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
+
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();
-    void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
-    void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
 
     virtual void transactionFinished();
 
@@ -120,22 +120,26 @@ public :
     {
     public:
 
-        AbstractUnlocker(DatabaseCoreBackendPrivate* d);
-        void finishAcquire();
+        AbstractUnlocker(DatabaseCoreBackendPrivate* const d);
         ~AbstractUnlocker();
+
+        void finishAcquire();
 
     protected:
 
-        int count;
+        int                               count;
         DatabaseCoreBackendPrivate* const d;
     };
+
     friend class AbstractUnlocker;
+
+    // ------------------------------------------------------------------
 
     class AbstractWaitingUnlocker : public AbstractUnlocker
     {
     public:
 
-        AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* d, QMutex* mutex, QWaitCondition* condVar);
+        AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
         ~AbstractWaitingUnlocker();
 
         bool wait(unsigned long time = ULONG_MAX);
@@ -146,18 +150,23 @@ public :
         QWaitCondition* const condVar;
     };
 
+    // ------------------------------------------------------------------
+
     class ErrorLocker : public AbstractWaitingUnlocker
     {
     public:
 
-        ErrorLocker(DatabaseCoreBackendPrivate* d);
+        ErrorLocker(DatabaseCoreBackendPrivate* const d);
         void wait();
     };
+    
+    // ------------------------------------------------------------------
 
     class BusyWaiter : public AbstractWaitingUnlocker
     {
     public:
-        BusyWaiter(DatabaseCoreBackendPrivate* d);
+
+        BusyWaiter(DatabaseCoreBackendPrivate* const d);
     };
 
 public :
@@ -165,9 +174,6 @@ public :
     DatabaseCoreBackend* const q;
 };
 
-//}  // namespace Digikam
-
-} // namespace
-
+} // namespace KFaceIface
 
 #endif // DATABASECOREBACKEND_P_H

@@ -40,10 +40,8 @@
 #include "databaseparameters.h"
 #include "sqlquery.h"
 
-
 namespace KFaceIface
 {
-
 
 class DatabaseCoreBackendPrivate;
 class SchemaUpdater;
@@ -60,44 +58,13 @@ public:
     int    lockCount;
 };
 
+// -----------------------------------------------------------------
+
 class DatabaseCoreBackend : public QObject
 {
-
     Q_OBJECT
 
 public:
-
-    /** Creates a database backend. The backend name is an arbitrary string that
-     *  shall be unique for this backend object.
-     *  It will be used to create unique connection names per backend and thread.
-     */
-    DatabaseCoreBackend(const QString& backendName, DatabaseLocking* locking);
-    DatabaseCoreBackend(const QString& backendName, DatabaseLocking* locking, DatabaseCoreBackendPrivate& dd);
-    ~DatabaseCoreBackend();
-
-    /**
-     * Checks if the parameters can be used for this database backend.
-     */
-    bool isCompatible(const DatabaseParameters& parameters);
-
-    /**
-     * Open the database connection.
-     * @returns true on success
-     */
-    bool open(const DatabaseParameters& parameters);
-
-    /**
-     * Initialize the database schema to the current version,
-     * carry out upgrades if necessary.
-     * Shall only be called from the thread that called open().
-     */
-    bool initSchema(SchemaUpdater* updater);
-
-    /**
-     * Close the database connection.
-     * Shall only be called from the thread that called open().
-     */
-    void close();
 
     enum QueryStateEnum
     {
@@ -115,27 +82,6 @@ public:
          * An connection error has occurred while executing the query.
          */
         ConnectionError
-    };
-
-    class QueryState
-    {
-    public:
-
-        QueryState() : value(DatabaseCoreBackend::NoErrors) {}
-        QueryState(QueryStateEnum value) : value(value) {}
-
-        operator QueryStateEnum() const
-        {
-            return value;
-        }
-        operator bool() const
-        {
-            return value == DatabaseCoreBackend::NoErrors;
-        }
-
-    private:
-
-        QueryStateEnum value;
     };
 
     enum Status
@@ -160,6 +106,77 @@ public:
         OpenSchemaChecked
     };
 
+    enum QueryOperationStatus
+    {
+        ExecuteNormal,
+        Wait,
+        AbortQueries
+    };
+    
+public:
+
+    /** Creates a database backend. The backend name is an arbitrary string that
+     *  shall be unique for this backend object.
+     *  It will be used to create unique connection names per backend and thread.
+     */
+    DatabaseCoreBackend(const QString& backendName, DatabaseLocking* const locking);
+    DatabaseCoreBackend(const QString& backendName, DatabaseLocking* const locking, DatabaseCoreBackendPrivate& dd);
+    ~DatabaseCoreBackend();
+
+    /**
+     * Checks if the parameters can be used for this database backend.
+     */
+    bool isCompatible(const DatabaseParameters& parameters);
+
+    /**
+     * Open the database connection.
+     * @returns true on success
+     */
+    bool open(const DatabaseParameters& parameters);
+
+    /**
+     * Initialize the database schema to the current version,
+     * carry out upgrades if necessary.
+     * Shall only be called from the thread that called open().
+     */
+    bool initSchema(SchemaUpdater* const updater);
+
+    /**
+     * Close the database connection.
+     * Shall only be called from the thread that called open().
+     */
+    void close();
+
+    // -----------------------------------------------------------
+
+    class QueryState
+    {
+    public:
+
+        QueryState() : value(DatabaseCoreBackend::NoErrors)
+        {
+        }
+
+        QueryState(QueryStateEnum value)
+            : value(value)
+        {
+        }
+
+        operator QueryStateEnum() const
+        {
+            return value;
+        }
+
+        operator bool() const
+        {
+            return value == DatabaseCoreBackend::NoErrors;
+        }
+
+    private:
+
+        QueryStateEnum value;
+    };
+
     /**
      * Returns the current status of the database backend
      */
@@ -169,6 +186,7 @@ public:
     {
         return status() > Unavailable;
     }
+    
     bool isReady() const
     {
         return status() == OpenSchemaChecked;
@@ -178,14 +196,7 @@ public:
      * Add a DatabaseErrorHandler. This object must be created in the main thread.
      * If a database error occurs, this object can handle problem solving and user interaction.
      */
-    void setDatabaseErrorHandler(DatabaseErrorHandler* handler);
-
-    enum QueryOperationStatus
-    {
-        ExecuteNormal,
-        Wait,
-        AbortQueries
-    };
+    void setDatabaseErrorHandler(DatabaseErrorHandler* const handler);
 
     /**
       * Return config read from XML,
@@ -204,9 +215,9 @@ public:
      * Queries by the specified parameters mustn't have named parameters.
      * The result values (if any) are stored within the values list.
      */
-    QueryState execDBAction(const DatabaseAction& action, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execDBAction(const DatabaseAction& action, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
-    QueryState execDBAction(const QString& action, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execDBAction(const QString& action, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     /**
      * Performs the database action on the current database.
@@ -215,10 +226,10 @@ public:
      * The result values (if any) are stored within the values list.
      */
     QueryState execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
-                            QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                            QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     QueryState execDBAction(const QString& action, const QMap<QString, QVariant>& bindingMap,
-                            QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                            QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     /**
      * Performs a special DBAction that is usually needed to "INSERT or UPDATE" entries in a table.
@@ -251,36 +262,39 @@ public:
      * If you want the last inserted id (and your query is suitable), set lastInsertId to the address of a QVariant.
      * Additionally, methods are provided for prepared statements.
      */
-    QueryState execSql(const QString& sql, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execSql(const QString& sql, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(const QString& sql, const QVariant& boundValue1,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        const QVariant& boundValue3, const QVariant& boundValue4,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
-    QueryState execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+    QueryState execSql(const QString& sql,
+                       const QList<QVariant>& boundValues,
+                       QList<QVariant>* const values = 0,
+                       QVariant* const lastInsertId = 0);
 
-    QueryState execSql(SqlQuery& preparedQuery, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execSql(SqlQuery& preparedQuery, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(SqlQuery& preparedQuery, const QVariant& boundValue1,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(SqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(SqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(SqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        const QVariant& boundValue3, const QVariant& boundValue4,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(SqlQuery& preparedQuery, const QList<QVariant>& boundValues,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     /**
      * Checks if there was a connection error. If so DatabaseCoreBackend::ConnectionError is returned.
@@ -288,7 +302,7 @@ public:
      * the last insertion id is taken from the query
      * and DatabaseCoreBackend::NoErrors is returned.
      */
-    QueryState handleQueryResult(SqlQuery& query, QList<QVariant>* values, QVariant* lastInsertId);
+    QueryState handleQueryResult(SqlQuery& query, QList<QVariant>* const values, QVariant* const lastInsertId);
 
     /**
      * Method which accepts a map for named binding.
@@ -301,7 +315,7 @@ public:
      * inserted in the following way: key1=value1, key2=value2,...,keyN=valueN.
      */
     QueryState execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
-                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     /**
      * Calls exec on the query, and handles debug output if something went wrong.
      * The query is not prepared, which can be fail in certain situations
@@ -462,8 +476,7 @@ private:
     Q_DECLARE_PRIVATE(DatabaseCoreBackend)
 };
 
-
-} // namespace
+} // namespace KFaceIface
 
 Q_DECLARE_METATYPE(QSqlError)
 
