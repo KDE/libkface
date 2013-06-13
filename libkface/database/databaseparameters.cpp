@@ -32,15 +32,14 @@
 namespace KFaceIface
 {
 
-
 namespace
 {
-/*static const char* configGroupDatabase = "Database Settings";
-static const char* configDatabaseType = "Database Type";
-static const char* configDatabaseName = "Database Name";
+/*
+static const char* configGroupDatabase = "Database Settings";
+static const char* configDatabaseType  = "Database Type";
+static const char* configDatabaseName  = "Database Name";
 */
 }
-
 
 DatabaseParameters::DatabaseParameters()
 {
@@ -54,8 +53,8 @@ DatabaseParameters::DatabaseParameters(const QString& type,
 
 bool DatabaseParameters::operator==(const DatabaseParameters& other) const
 {
-    return databaseType   == other.databaseType &&
-           databaseName   == other.databaseName;
+    return (databaseType == other.databaseType &&
+            databaseName == other.databaseName);
 }
 
 bool DatabaseParameters::operator!=(const DatabaseParameters& other) const
@@ -152,5 +151,4 @@ DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databa
     return DatabaseParameters("QSQLITE", databaseFile);
 }
 
-} // namespace
-
+} // namespace KFaceIface

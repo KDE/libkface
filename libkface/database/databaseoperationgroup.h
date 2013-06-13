@@ -49,11 +49,11 @@ public:
     /**
      * Retrieve a DatabaseAccess object each time when constructing and destructing.
      */
-    DatabaseOperationGroup(DatabaseAccessData* db);
+    DatabaseOperationGroup(DatabaseAccessData* const db);
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
-    DatabaseOperationGroup(DatabaseAccess* access);
+    DatabaseOperationGroup(DatabaseAccess* const access);
     ~DatabaseOperationGroup();
 
     /**
@@ -74,12 +74,10 @@ public:
 
 private:
 
-    class DatabaseOperationGroupPriv;
-    DatabaseOperationGroupPriv* const d;
+    class Private;
+    Private* const d;
 };
 
-} // namespace
-
-
+} // namespace KFaceIface
 
 #endif // DATABASETRANSACTION_H

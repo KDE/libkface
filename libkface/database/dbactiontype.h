@@ -40,6 +40,7 @@ namespace KFaceIface
 class DBActionType
 {
 public:
+
     DBActionType();
     DBActionType(const DBActionType& actionType);
     ~DBActionType();
@@ -76,9 +77,7 @@ private:
     QVariant m_ActionValue;
 };
 
-
-} // namespace
-
+} // namespace KFaceIface
 
 Q_DECLARE_METATYPE(KFaceIface::DBActionType)
 

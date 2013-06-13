@@ -35,12 +35,11 @@
 namespace KFaceIface
 {
 
-
-class DatabaseOperationGroup::DatabaseOperationGroupPriv
+class DatabaseOperationGroup::Private
 {
 public:
 
-    DatabaseOperationGroupPriv()
+    Private()
         : access(0),
           db(0),
           acquired(false),
@@ -95,18 +94,19 @@ public:
     }
 };
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccessData* db)
-    : d(new DatabaseOperationGroupPriv)
+DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccessData* const db)
+    : d(new Private)
 {
     d->db = db;
+
     if (d->needsTransaction())
     {
         d->acquire();
     }
 }
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* access)
-    : d(new DatabaseOperationGroupPriv)
+DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* const access)
+    : d(new Private)
 {
     d->access = access;
 
@@ -155,6 +155,4 @@ void DatabaseOperationGroup::allowLift()
     }
 }
 
-
-} // namespace
-
+} // namespace KFaceIface

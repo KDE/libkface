@@ -21,15 +21,17 @@
 
 #include "dbcontainers.h"
 
-// Qt includes
+// KDE includes
 
-#include <QDebug>
+#include <kdebug.h>
 
 namespace KFaceIface
 {
 
 OpenCVMatData::OpenCVMatData()
-    : type(-1), rows(0), cols(0)
+    : type(-1), 
+      rows(0),
+      cols(0)
 {
 }
 
@@ -40,11 +42,11 @@ OpenCVMatData::OpenCVMatData(const cv::Mat& mat)
 
 void OpenCVMatData::setMat(const cv::Mat& mat)
 {
-    type = mat.type();
-    rows = mat.rows;
-    cols = mat.cols;
+    type                   = mat.type();
+    rows                   = mat.rows;
+    cols                   = mat.cols;
     const size_t data_size = cols * rows * mat.elemSize();
-    data = QByteArray::fromRawData((const char*)mat.ptr(), data_size);
+    data                   = QByteArray::fromRawData((const char*)mat.ptr(), data_size);
 }
 
 cv::Mat OpenCVMatData::toMat() const
@@ -62,4 +64,4 @@ void OpenCVMatData::clearData()
     data.clear();
 }
 
-} // namespace
+} // namespace KFaceIface

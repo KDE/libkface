@@ -49,12 +49,14 @@ public:
 
     void clearData();
 
-    int type;
-    int rows;
-    int cols;
+public:
+
+    int        type;
+    int        rows;
+    int        cols;
     QByteArray data;
 };
 
-} // namespace
+} // namespace KFaceIface
 
 #endif // DBCONTAINERS_H

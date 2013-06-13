@@ -37,7 +37,6 @@
 namespace KFaceIface
 {
 
-
 class DatabaseParameters
 {
 
@@ -94,7 +93,6 @@ public:
     static DatabaseParameters parametersForSQLite(const QString& databaseFile);
 };
 
-} // namespace
-
+} // namespace KFaceIface
 
 #endif // DATABASEPARAMETERS_H

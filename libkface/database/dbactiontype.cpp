@@ -28,7 +28,6 @@
 namespace KFaceIface
 {
 
-
 DBActionType::DBActionType()
 {
     m_isValue = false;
@@ -36,8 +35,8 @@ DBActionType::DBActionType()
 
 DBActionType::DBActionType(const DBActionType& actionType)
 {
-    m_isValue       = actionType.m_isValue;
-    m_ActionValue   = actionType.m_ActionValue;
+    m_isValue     = actionType.m_isValue;
+    m_ActionValue = actionType.m_ActionValue;
 }
 DBActionType::~DBActionType()
 {
@@ -80,7 +79,4 @@ void DBActionType::setValue(bool isValue)
     m_isValue = isValue;
 }
 
-
-} // namespace
-
-
+} // namespace KFaceIface
