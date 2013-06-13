@@ -25,9 +25,13 @@
 
 // Qt includes
 
-#include <QDebug>
 #include <QMutex>
 #include <QSqlDatabase>
+
+// KDE includes
+
+#include <kdebug.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -38,33 +42,38 @@
 namespace KFaceIface
 {
 
-
 class DatabaseAccessData
 {
 public:
 
     DatabaseAccessData()
-        : backend(0), db(0),
+        : backend(0),
+          db(0),
           initializing(false)
     {
     }
 
-    ~DatabaseAccessData() {};
+    ~DatabaseAccessData()
+    {
+    };
+
+public:
 
     DatabaseCoreBackend* backend;
     TrainingDB*          db;
-    DatabaseParameters  parameters;
-    DatabaseLocking     lock;
-    QString             lastError;
-
-    bool                initializing;
+    DatabaseParameters   parameters;
+    DatabaseLocking      lock;
+    QString              lastError;
+    bool                 initializing;
 };
+
+// ----------------------------------------------------------------
 
 class DatabaseAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    DatabaseAccessMutexLocker(DatabaseAccessData* d)
+    DatabaseAccessMutexLocker(DatabaseAccessData* const d)
         : QMutexLocker(&d->lock.mutex), d(d)
     {
         d->lock.lockCount++;
@@ -78,12 +87,14 @@ public:
     DatabaseAccessData* const d;
 };
 
+// ----------------------------------------------------------------
+
 DatabaseAccessData* DatabaseAccess::create()
 {
     return new DatabaseAccessData;
 }
 
-void DatabaseAccess::destroy(DatabaseAccessData* d)
+void DatabaseAccess::destroy(DatabaseAccessData* const d)
 {
     if (d)
     {
@@ -92,10 +103,12 @@ void DatabaseAccess::destroy(DatabaseAccessData* d)
         delete d->db;
         delete d->backend;
     }
+
     delete d;
 }
 
-DatabaseAccess::DatabaseAccess(DatabaseAccessData* d) : d(d)
+DatabaseAccess::DatabaseAccess(DatabaseAccessData* const d)
+    : d(d)
 {
     d->lock.mutex.lock();
     d->lock.lockCount++;
@@ -117,7 +130,8 @@ DatabaseAccess::~DatabaseAccess()
     d->lock.mutex.unlock();
 }
 
-DatabaseAccess::DatabaseAccess(bool,DatabaseAccessData* d) : d(d)
+DatabaseAccess::DatabaseAccess(bool,DatabaseAccessData* const d)
+    : d(d)
 {
     // private constructor, when mutex is locked and
     // backend should not be checked
@@ -145,13 +159,13 @@ DatabaseParameters DatabaseAccess::parameters()
     return DatabaseParameters();
 }
 
-void DatabaseAccess::initDatabaseErrorHandler(DatabaseAccessData* d, DatabaseErrorHandler* errorhandler)
+void DatabaseAccess::initDatabaseErrorHandler(DatabaseAccessData* const d, DatabaseErrorHandler* const errorhandler)
 {
     //DatabaseErrorHandler *errorhandler = new DatabaseGUIErrorHandler(d->parameters);
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
 
-void DatabaseAccess::setParameters(DatabaseAccessData* d, const DatabaseParameters& parameters)
+void DatabaseAccess::setParameters(DatabaseAccessData* const d, const DatabaseParameters& parameters)
 {
     DatabaseAccessMutexLocker lock(d);
 
@@ -178,19 +192,19 @@ void DatabaseAccess::setParameters(DatabaseAccessData* d, const DatabaseParamete
         delete d->db;
         delete d->backend;
         d->backend = new DatabaseCoreBackend("database-", &d->lock);
-        d->db = new TrainingDB(d->backend);
+        d->db      = new TrainingDB(d->backend);
     }
 }
 
-bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* d, InitializationObserver* observer)
+bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, InitializationObserver* const observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
     if (!drivers.contains("QSQLITE"))
     {
-        qWarning() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
-        d->lastError = QObject::tr("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
-                            "digiKam depends on the drivers provided by the SQL module of Qt4.");
+        kWarning() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
+                            "digiKam depends on the drivers provided by the SQL module of Qt.");
         return false;
     }
 
@@ -199,8 +213,8 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* d, InitializationObser
 
     if (!d->backend)
     {
-        qWarning() << "No database backend available in checkReadyForUse. "
-                   "Did you call setParameters before?";
+        kWarning() << "No database backend available in checkReadyForUse. "
+                      "Did you call setParameters before?";
         return false;
     }
 
@@ -213,7 +227,7 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* d, InitializationObser
     {
         if (!d->backend->open(d->parameters))
         {
-            access.setLastError(QObject::tr("Error opening database backend.\n ")
+            access.setLastError(i18n("Error opening database backend.\n ")
                                 + d->backend->lastError());
             return false;
         }
@@ -247,9 +261,9 @@ void DatabaseAccess::setLastError(const QString& error)
     d->lastError = error;
 }
 
-// --------
+// ---------------------------------------------------------------------------------
 
-DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccessData* d)
+DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccessData* const d)
     : d(d)
 {
     // acquire lock
@@ -269,7 +283,7 @@ DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccessData* d)
     d->lock.mutex.unlock();
 }
 
-DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess* access)
+DatabaseAccessUnlock::DatabaseAccessUnlock(DatabaseAccess* const access)
     : d(access->d)
 {
     // With the passed pointer, we have assured that the mutex is acquired
@@ -299,6 +313,4 @@ DatabaseAccessUnlock::~DatabaseAccessUnlock()
     d->lock.lockCount += count;
 }
 
-
-} // namespace
-
+} // namespace KFaceIface

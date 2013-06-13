@@ -28,16 +28,15 @@
 
 #include "databaseparameters.h"
 #include "databaseerrorhandler.h"
+
 class QMutexLocker;
 
 namespace KFaceIface
 {
 
-
 class DatabaseCoreBackend;
 class InitializationObserver;
 class TrainingDB;
-
 class DatabaseAccessData;
 
 class DatabaseAccess
@@ -45,13 +44,13 @@ class DatabaseAccess
 public:
 
     static DatabaseAccessData* create();
-    static void destroy(DatabaseAccessData*);
+    static void destroy(DatabaseAccessData* const);
 
     /** This class is written in analogy to DatabaseAccess
      *  (some features stripped off).
      *  For documentation, see databaseaccess.h */
 
-    DatabaseAccess(DatabaseAccessData*);
+    DatabaseAccess(DatabaseAccessData* const);
     ~DatabaseAccess();
 
     TrainingDB* db() const;
@@ -61,9 +60,9 @@ public:
     DatabaseParameters parameters();
 
 
-    static void initDatabaseErrorHandler(DatabaseAccessData* d, DatabaseErrorHandler* errorhandler);
-    static void setParameters(DatabaseAccessData* d, const DatabaseParameters& parameters);
-    static bool checkReadyForUse(DatabaseAccessData* d, InitializationObserver* observer = 0);
+    static void initDatabaseErrorHandler(DatabaseAccessData* const d, DatabaseErrorHandler* const errorhandler);
+    static void setParameters(DatabaseAccessData* const d, const DatabaseParameters& parameters);
+    static bool checkReadyForUse(DatabaseAccessData* const d, InitializationObserver* const observer = 0);
 
     /**
       * Set the "last error" message. This method is not for public use.
@@ -72,11 +71,15 @@ public:
 
 private:
 
-    DatabaseAccess(bool, DatabaseAccessData*);
-    friend class DatabaseAccessUnlock;
+    DatabaseAccess(bool, DatabaseAccessData* const);
 
+private:
+
+    friend class DatabaseAccessUnlock;
     DatabaseAccessData* const d;
 };
+
+// ------------------------------------------------------------------------------------------
 
 class DatabaseAccessUnlock
 {
@@ -89,18 +92,16 @@ public:
      *  If you need to access any locked structures during lifetime, acquire a new
      *  DatabaseAccess.
      */
-    DatabaseAccessUnlock(DatabaseAccessData*);
-    DatabaseAccessUnlock(DatabaseAccess* access);
+    DatabaseAccessUnlock(DatabaseAccessData* const);
+    DatabaseAccessUnlock(DatabaseAccess* const access);
     ~DatabaseAccessUnlock();
 
 private:
 
     DatabaseAccessData* d;
-    int count;
+    int                 count;
 };
 
-
-} // namespace
-
+} // namespace KFaceIface
 
 #endif // DATABASEACCESS_H
