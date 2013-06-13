@@ -21,11 +21,8 @@
  *
  * ============================================================ */
 
-#include "databaseconfigelement.h"
-
 // Qt includes
 
-#include <QDebug>
 #include <QDir>
 #include <QDomDocument>
 #include <QDomElement>
@@ -38,8 +35,12 @@
 // KDE includes
 
 #include <kstandarddirs.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 // Local includes
+
+#include "databaseconfigelement.h"
 
 namespace KFaceIface
 {
@@ -50,20 +51,23 @@ namespace
     int dbconfig_xml_version = 1;
 }
 
+// ------------------------------------------------------------------
+
 class DatabaseConfigElementLoader
 {
 public:
 
     DatabaseConfigElementLoader();
 
-    QMap<QString, DatabaseConfigElement> databaseConfigs;
-
-    bool readConfig();
+    bool                  readConfig();
     DatabaseConfigElement readDatabase(QDomElement& databaseElement);
-    void readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
+    void                  readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
 
-    bool isValid;
-    QString errorMessage;
+public:
+
+    bool                                 isValid;
+    QString                              errorMessage;
+    QMap<QString, DatabaseConfigElement> databaseConfigs;
 };
 
 Q_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
@@ -71,101 +75,93 @@ Q_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
 DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 {
     isValid = readConfig();
+    
     if (!isValid)
     {
-        qWarning() << errorMessage;
+        kWarning() << errorMessage;
     }
 }
 
 DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& databaseElement)
 {
     DatabaseConfigElement configElement;
-    configElement.databaseID="Unidentified";
+    configElement.databaseID = "Unidentified";
 
     if (!databaseElement.hasAttribute("name"))
     {
-        qDebug() << "Missing statement attribute <name>.";
+        kDebug() << "Missing statement attribute <name>.";
     }
 
     configElement.databaseID = databaseElement.attribute("name");
-
-    QDomElement element =  databaseElement.namedItem("databaseName").toElement();
+    QDomElement element      = databaseElement.namedItem("databaseName").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <databaseName>.";
+        kDebug() << "Missing element <databaseName>.";
     }
 
     configElement.databaseName = element.text();
-
-    element =  databaseElement.namedItem("userName").toElement();
+    element                    = databaseElement.namedItem("userName").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <userName>.";
+        kDebug() << "Missing element <userName>.";
     }
 
     configElement.userName = element.text();
-
-    element =  databaseElement.namedItem("password").toElement();
+    element                = databaseElement.namedItem("password").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <password>.";
+        kDebug() << "Missing element <password>.";
     }
 
     configElement.password = element.text();
-
-    element =  databaseElement.namedItem("hostName").toElement();
+    element                = databaseElement.namedItem("hostName").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <hostName>.";
+        kDebug() << "Missing element <hostName>.";
     }
 
     configElement.hostName = element.text();
-
-    element =  databaseElement.namedItem("port").toElement();
+    element                = databaseElement.namedItem("port").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <port>.";
+        kDebug() << "Missing element <port>.";
     }
 
     configElement.port = element.text();
-
-    element =  databaseElement.namedItem("connectoptions").toElement();
+    element            = databaseElement.namedItem("connectoptions").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <connectoptions>.";
+        kDebug() << "Missing element <connectoptions>.";
     }
 
     configElement.connectOptions = element.text();
-
-    element =  databaseElement.namedItem("dbservercmd").toElement();
+    element                      = databaseElement.namedItem("dbservercmd").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <dbservercmd>.";
+        kDebug() << "Missing element <dbservercmd>.";
     }
 
     configElement.dbServerCmd = element.text();
-
-    element =  databaseElement.namedItem("dbinitcmd").toElement();
+    element                   = databaseElement.namedItem("dbinitcmd").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <dbinitcmd>.";
+        kDebug() << "Missing element <dbinitcmd>.";
     }
 
     configElement.dbInitCmd = element.text();
-
-    element =  databaseElement.namedItem("dbactions").toElement();
+    element                 = databaseElement.namedItem("dbactions").toElement();
 
     if (element.isNull())
     {
-        qDebug() << "Missing element <dbactions>.";
+        kDebug() << "Missing element <dbactions>.";
     }
 
     readDBActions(element, configElement);
@@ -175,24 +171,23 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
 void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement)
 {
-    QDomElement dbActionElement =  sqlStatementElements.firstChildElement("dbaction");
+    QDomElement dbActionElement = sqlStatementElements.firstChildElement("dbaction");
 
     for ( ; !dbActionElement.isNull();  dbActionElement=dbActionElement.nextSiblingElement("dbaction"))
     {
         if (!dbActionElement.hasAttribute("name"))
         {
-            qDebug() << "Missing statement attribute <name>.";
+            kDebug() << "Missing statement attribute <name>.";
         }
 
         DatabaseAction action;
         action.name = dbActionElement.attribute("name");
-        //qDebug() << "Getting attribute " << dbActionElement.attribute("name");
+        //kDebug() << "Getting attribute " << dbActionElement.attribute("name");
 
         if (dbActionElement.hasAttribute("mode"))
         {
             action.mode = dbActionElement.attribute("mode");
         }
-
 
         QDomElement databaseElement = dbActionElement.firstChildElement("statement");
 
@@ -200,7 +195,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
         {
             if (!databaseElement.hasAttribute("mode"))
             {
-                qDebug() << "Missing statement attribute <mode>.";
+                kDebug() << "Missing statement attribute <mode>.";
             }
 
             DatabaseActionElement actionElement;
@@ -223,7 +218,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (!file.exists())
     {
-        errorMessage = QObject::tr("Could not open the dbconfig.xml file. "
+        errorMessage = i18n("Could not open the dbconfig.xml file. "
                             "This file is installed with libkface"
                             "and is absolutely required to run recognition. "
                             "Please check your installation.");
@@ -232,7 +227,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        errorMessage = QObject::tr("Could not open dbconfig.xml file <filename>%1</filename>").arg(filepath);
+        errorMessage = i18n("Could not open dbconfig.xml file <filename>%1</filename>").arg(filepath);
         return false;
     }
 
@@ -241,8 +236,8 @@ bool DatabaseConfigElementLoader::readConfig()
     if (!doc.setContent(&file))
     {
         file.close();
-        errorMessage = QObject::tr("The XML in the dbconfig.xml file <filename>%1</filename> "
-                                   "is invalid and cannot be read.").arg(filepath);
+        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
+                            "is invalid and cannot be read.").arg(filepath);
         return false;
     }
 
@@ -252,7 +247,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (element.isNull())
     {
-        errorMessage = QObject::tr("The XML in the dbconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
                             "is missing the required element <icode>%2</icode>").arg(filepath).arg(element.tagName());
         return false;
     }
@@ -260,7 +255,8 @@ bool DatabaseConfigElementLoader::readConfig()
     QDomElement versionElement = element.namedItem("version").toElement();
     int version = 0;
 
-    qDebug() << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
+    kDebug() << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
+
     if (!versionElement.isNull())
     {
         version = versionElement.text().toInt();
@@ -268,15 +264,15 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (version < dbconfig_xml_version)
     {
-        errorMessage = QObject::tr("An old version of the dbconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("An old version of the dbconfig.xml file <filename>%1</filename> "
                             "is found. Please ensure that the version released "
                             "with the running version of digiKam is installed. ").arg(filepath);
         return false;
     }
 
-    QDomElement databaseElement =  element.firstChildElement("database");
+    QDomElement databaseElement = element.firstChildElement("database");
 
-    for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("database"))
+    for ( ; !databaseElement.isNull(); databaseElement=databaseElement.nextSiblingElement("database"))
     {
         DatabaseConfigElement l_DBCfgElement = readDatabase(databaseElement);
         databaseConfigs.insert(l_DBCfgElement.databaseID, l_DBCfgElement);
@@ -284,6 +280,8 @@ bool DatabaseConfigElementLoader::readConfig()
 
     return true;
 }
+
+// ------------------------------------------------------------------
 
 DatabaseConfigElement DatabaseConfigElement::element(const QString& databaseType)
 {
@@ -301,6 +299,4 @@ QString DatabaseConfigElement::errorMessage()
     return loader()->errorMessage;
 }
 
-
-} // namespace
-
+} // namespace KFaceIface

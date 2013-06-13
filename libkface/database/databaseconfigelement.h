@@ -30,22 +30,24 @@
 #include <QMap>
 #include <QString>
 
-// Local includes
-
 namespace KFaceIface
 {
-
 
 class DatabaseActionElement
 {
 public:
 
-    DatabaseActionElement() : order(0) {}
+    DatabaseActionElement()
+        : order(0)
+    {
+    }
 
     QString mode;
     int     order;
     QString statement;
 };
+
+// -----------------------------------------------------------------------
 
 class DatabaseAction
 {
@@ -56,6 +58,8 @@ public:
     QList<DatabaseActionElement> dbActionElements;
 };
 
+// -----------------------------------------------------------------------
+
 class DatabaseConfigElement
 {
 public:
@@ -63,6 +67,8 @@ public:
     static bool                   checkReadyForUse();
     static QString                errorMessage();
     static DatabaseConfigElement  element(const QString& databaseType);
+
+public:
 
     QString                       databaseID;
     QString                       hostName;
@@ -76,8 +82,6 @@ public:
     QMap<QString, DatabaseAction> sqlStatements;
 };
 
-
-} // namespace
-
+} // namespace KFaceIface
 
 #endif /* DATABASECONFIGELEMENT_H_ */
