@@ -42,7 +42,7 @@ class TrainingDB
 {
 public:
 
-    TrainingDB(DatabaseCoreBackend* db);
+    TrainingDB(DatabaseCoreBackend* const db);
     ~TrainingDB();
 
     void setSetting(const QString& keyword, const QString& value);
@@ -68,12 +68,10 @@ public:
 
 private:
 
-
-    class TrainingDBPriv;
-    TrainingDBPriv* const d;
+    class Private;
+    Private* const d;
 };
 
-
-} // namespace
+} // namespace KFaceIface
 
 #endif // PATIENTDB_H

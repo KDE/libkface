@@ -35,10 +35,10 @@
 namespace KFaceIface
 {
 
-class TrainingDB::TrainingDBPriv
+class TrainingDB::Private
 {
 public:
-    TrainingDBPriv()
+    Private()
         : db(0)
     {
     }
@@ -46,8 +46,8 @@ public:
     DatabaseCoreBackend* db;
 };
 
-TrainingDB::TrainingDB(DatabaseCoreBackend* db)
-    : d(new TrainingDBPriv)
+TrainingDB::TrainingDB(DatabaseCoreBackend* const db)
+    : d(new Private)
 {
     d->db = db;
 }
@@ -115,6 +115,7 @@ QList<Identity> TrainingDB::identities()
         Identity id;
         id.id = v.toInt();
         d->db->execSql("SELECT attribute, value FROM IdentityAttributes WHERE id=?", id.id, &values);
+
         for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
         {
             QString attribute = it->toString();
@@ -126,6 +127,7 @@ QList<Identity> TrainingDB::identities()
         }
         results << id;
     }
+
     return results;
 }
 
@@ -135,10 +137,12 @@ QList<int> TrainingDB::identityIds()
     d->db->execSql("SELECT id FROM Identities", &ids);
 
     QList<int> results;
+    
     foreach (const QVariant& var, ids)
     {
         results << var.toInt();
     }
+
     return results;
 }
 
@@ -185,6 +189,7 @@ QList<UnitFaceModel> TrainingDB::tldFaceModels(int identity)
 
         results << model;
     }
+
     return results;
 }
 
@@ -200,6 +205,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 {
     QVariantList values;
     values << LBPHStorageVersion << model.radius() << model.neighbors() << model.gridX() << model.gridY();
+
     if (model.databaseId)
     {
         values << model.databaseId;
@@ -214,9 +220,11 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
     }
 
     QList<LBPHistogramMetadata> metadataList = model.histogramMetadata();
+
     for (int i=0; i<metadataList.size(); i++)
     {
         const LBPHistogramMetadata& metadata = metadataList[i];
+
         if (metadata.storageStatus == LBPHistogramMetadata::Created)
         {
             OpenCVMatData data = model.histogramData(i);
@@ -248,6 +256,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel()
 
         int version = it->toInt();
         ++it;
+
         if (version > LBPHStorageVersion)
         {
             kDebug() << "Unsupported LBPH storage version" << version;
@@ -269,6 +278,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel()
                                           model.databaseId);
         QList<OpenCVMatData> histograms;
         QList<LBPHistogramMetadata> histogramMetadata;
+
         while (query.next())
         {
             LBPHistogramMetadata metadata;
@@ -325,5 +335,4 @@ void TrainingDB::clearLBPHTraining(const QList<int>& identities, const QString& 
     }
 }
 
-
-} // namespace
+} // namespace KFaceIface

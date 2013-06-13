@@ -26,13 +26,12 @@
 namespace KFaceIface
 {
 
-
 SqlQuery::SqlQuery(const QSqlQuery& other)
     : QSqlQuery(other)
 {
 }
 
-SqlQuery::SqlQuery(QSqlDatabase db)
+SqlQuery::SqlQuery(const QSqlDatabase& db)
     : QSqlQuery(db)
 {
 }
@@ -60,6 +59,4 @@ QString SqlQuery::lastQuery() const
     return m_query;
 }
 
-
-} // namespace
-
+} // namespace KFaceIface

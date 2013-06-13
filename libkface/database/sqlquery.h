@@ -35,14 +35,13 @@
 namespace KFaceIface
 {
 
-
 class SqlQuery : public QSqlQuery
 {
 
 public:
 
     SqlQuery(const QSqlQuery& other);
-    SqlQuery(QSqlDatabase db);
+    SqlQuery(const QSqlDatabase& db);
     virtual ~SqlQuery();
 
     virtual SqlQuery& operator=(const SqlQuery& other);
@@ -54,7 +53,6 @@ private:
     QString m_query;
 };
 
-
-} // namespace
+} // namespace KFaceIface
 
 #endif /* SQLQUERY_H */
