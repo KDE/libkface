@@ -1,8 +1,10 @@
 /* ============================================================
  *
- * This file is a part of Tumorprofil
+ * This file is a part of digiKam project
+ * http://www.digikam.org
  *
- * Date        : 02.02.2012
+ * Date        : 2012-02-02
+ * Description : Database initialization observer
  *
  * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
  *
@@ -22,11 +24,12 @@
 #ifndef DATABASEINITIALIZATIONOBSERVER_H
 #define DATABASEINITIALIZATIONOBSERVER_H
 
+// Qt includes
+
 #include <QString>
 
 namespace KFaceIface
 {
-
 
 class InitializationObserver
 {
@@ -39,6 +42,8 @@ public:
         UpdateErrorMustAbort
     };
 
+public:
+    
     virtual ~InitializationObserver() {};
 
     virtual bool continueQuery() = 0;
@@ -50,7 +55,6 @@ public:
     virtual void error(const QString& errorMessage) = 0;
 };
 
-} // namespace
-
+} // namespace KFaceIface
 
 #endif // DATABASEINITIALIZATIONOBSERVER_H

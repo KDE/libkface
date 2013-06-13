@@ -34,7 +34,6 @@
 namespace KFaceIface
 {
 
-
 class DatabaseErrorAnswer
 {
 public:
@@ -43,6 +42,8 @@ public:
     virtual void connectionErrorContinueQueries() = 0;
     virtual void connectionErrorAbortQueries() = 0;
 };
+
+// -------------------------------------------------------
 
 class DatabaseErrorHandler : public QObject
 {
@@ -78,7 +79,7 @@ public Q_SLOTS:
     virtual void consultUserForError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query) = 0;
 };
 
-} // namespace
+} // namespace KFaceIface
 
 Q_DECLARE_METATYPE(KFaceIface::DatabaseErrorAnswer*)
 
