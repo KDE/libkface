@@ -158,7 +158,7 @@ bool SchemaUpdater::startUpdates()
     }
     else
     {
-        //qDebug << "No database file available";
+        //kDebug() << "No database file available";
         DatabaseParameters parameters = m_access->parameters();
 
         // No legacy handling: start with a fresh db

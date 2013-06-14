@@ -665,7 +665,7 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
 
         try
         {
-            qDebug() << "Training" << images.size() << "images for identity" << identity.id;
+            kDebug() << "Training" << images.size() << "images for identity" << identity.id;
             r->train(images, labels, trainingContext);
         }
         catch (cv::Exception& e)
