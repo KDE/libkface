@@ -43,20 +43,24 @@ using namespace KFaceIface;
 QStringList toPaths(char** argv, int startIndex, int argc)
 {
     QStringList files;
+
     for (int i=startIndex; i<argc; i++)
     {
         files << QString::fromLocal8Bit(argv[i]);
     }
+
     return files;
 }
 
 QList<QImage> toImages(const QStringList& paths)
 {
     QList<QImage> images;
+
     foreach (const QString& path, paths)
     {
         images << QImage(path);
     }
+
     return images;
 }
 
@@ -76,18 +80,23 @@ public:
             toTrain.reset();
             return &toTrain;
         }
+
         return &empty;
     }
+
     ImageListProvider* images(const Identity&)
     {
         return &empty;
     }
 
-    Identity identity;
+public:
+
+    Identity               identity;
     QListImageListProvider toTrain;
     QListImageListProvider empty;
 };
 
+// --------------------------------------------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
@@ -104,7 +113,7 @@ int main(int argc, char** argv)
 
     if (argv[1] == QLatin1String("identify"))
     {
-        QStringList paths = toPaths(argv, 2, argc);
+        QStringList paths    = toPaths(argv, 2, argc);
         QList<QImage> images = toImages(paths);
 
         QTime time;
@@ -112,27 +121,28 @@ int main(int argc, char** argv)
         QList<Identity> identities = db.recognizeFaces(images);
         int elapsed = time.elapsed();
 
-        qDebug() << "Recognition took" << elapsed << "for" << images.size() << "," << ((float)elapsed/images.size()) << "per image";
+        kDebug() << "Recognition took" << elapsed << "for" << images.size() << "," << ((float)elapsed/images.size()) << "per image";
+
         for (int i = 0; i<paths.size(); i++)
         {
-            qDebug() << "Identified" << identities[i].attributes.value("name") << "in" << paths[i];
+            kDebug() << "Identified" << identities[i].attributes.value("name") << "in" << paths[i];
         }
     }
     else if (argv[1] == QLatin1String("train"))
     {
         QString name = QString::fromLocal8Bit(argv[2]);
-        qDebug()  << "Training" << name;
+        kDebug() << "Training" << name;
 
-        QStringList paths = toPaths(argv, 3, argc);
+        QStringList paths    = toPaths(argv, 3, argc);
         QList<QImage> images = toImages(paths);
+        Identity identity    = db.findIdentity("name", name);
 
-        Identity identity = db.findIdentity("name", name);
         if (identity.isNull())
         {
-            qDebug() << "Adding new identity to database for name" << name;
+            kDebug() << "Adding new identity to database for name" << name;
             QMap<QString, QString> attributes;
             attributes["name"] = name;
-            identity = db.addIdentity(attributes);
+            identity           = db.addIdentity(attributes);
         }
 
         QTime time;
@@ -142,54 +152,61 @@ int main(int argc, char** argv)
         db.train(identity, &data, "test application");
 
         int elapsed = time.elapsed();
-        qDebug() << "Training took" << elapsed << "for" << images.size() << "," << ((float)elapsed/images.size()) << "per image";
+        kDebug() << "Training took" << elapsed << "for" << images.size() << "," << ((float)elapsed/images.size()) << "per image";
     }
     else if (argv[1] == QLatin1String("orl"))
     {
         QString orlPath = QString::fromLocal8Bit(argv[2]);
+
         if (orlPath.isEmpty())
         {
             orlPath = "orl_faces"; // relative to current dir
         }
+
         QDir orlDir(orlPath);
+
         if (!orlDir.exists())
         {
-            qDebug() << "Cannot find orl_faces directory";
+            kDebug() << "Cannot find orl_faces directory";
             return 0;
         }
 
-        const int OrlIdentities = 40;
-        const int OrlSamples    = 10;
+        const int OrlIdentities       = 40;
+        const int OrlSamples          = 10;
         const QString trainingContext = "test application";
 
         QMap<int, Identity> idMap;
         QList<Identity> trainingToBeCleared;
+
         for (int i=1; i<=OrlIdentities; i++)
         {
             QMap<QString, QString> attributes;
             attributes["name"] = QString::number(i);
-            Identity identity = db.findIdentity(attributes);
+            Identity identity  = db.findIdentity(attributes);
+
             if (identity.isNull())
             {
                 Identity identity = db.addIdentity(attributes);
                 idMap[i] = identity;
-                qDebug() << "Created identity" << identity.id << "for ORL directory" << i;
+                kDebug() << "Created identity" << identity.id << "for ORL directory" << i;
             }
             else
             {
-                qDebug() << "Already have identity for ORL directory" << i << ", clearing training data";
+                kDebug() << "Already have identity for ORL directory" << i << ", clearing training data";
                 idMap[i] = identity;
                 trainingToBeCleared << identity;
             }
         }
-        db.clearTraining(trainingToBeCleared, trainingContext);
 
+        db.clearTraining(trainingToBeCleared, trainingContext);
         QMap<int, QStringList> trainingImages, recognitionImages;
+
         for (int i=1; i<=OrlIdentities; i++)
         {
             for (int j=1; j<=OrlSamples; j++)
             {
                 QString path = orlDir.path() + QString("/s%1/%2.pgm").arg(i).arg(j);
+
                 if (j<=OrlSamples/2)
                 {
                     trainingImages[i] << path;
@@ -203,7 +220,7 @@ int main(int argc, char** argv)
 
         if (!QFileInfo(trainingImages.value(1).first()).exists())
         {
-            qDebug() << "Could not find files of ORL database";
+            kDebug() << "Could not find files of ORL database";
             return 0;
         }
 
@@ -214,11 +231,12 @@ int main(int argc, char** argv)
         QTime time;
         time.start();
 
-        int correct = 0, notRecognized = 0, falsePositive = 0, totalTrained = 0, totalRecognized = 0, elapsed;
+        int correct = 0, notRecognized = 0, falsePositive = 0, totalTrained = 0, totalRecognized = 0, elapsed = 0;
 
         for (QMap<int, QStringList>::const_iterator it = trainingImages.begin(); it != trainingImages.end(); ++it)
         {
             Identity identity = db.findIdentity("name", QString::number(it.key()));
+
             if (identity.isNull())
             {
                 kDebug() << "Identity management failed for ORL person" << it.key();
@@ -226,27 +244,28 @@ int main(int argc, char** argv)
 
             QList<QImage> images = toImages(it.value());
             SimpleTrainingDataProvider data(identity, images);
-            qDebug() << "Training ORL directory" << it.key();
+            kDebug() << "Training ORL directory" << it.key();
             db.train(identity, &data, trainingContext);
             totalTrained += images.size();
         }
+        
         elapsed = time.restart();
-        qDebug() << "Training 5/10 or ORL took" << elapsed << "ms," << ((float)elapsed/totalTrained) << "ms per image";
+        kDebug() << "Training 5/10 or ORL took" << elapsed << "ms," << ((float)elapsed/totalTrained) << "ms per image";
 
         // reload db
-        db = RecognitionDatabase();
-        db = RecognitionDatabase::addDatabase(QDir::currentPath());
+        db      = RecognitionDatabase();
+        db      = RecognitionDatabase::addDatabase(QDir::currentPath());
         elapsed = time.restart();
-        qDebug() << "Reloading database (probably from disk cache) took" << elapsed << "ms";
+        kDebug() << "Reloading database (probably from disk cache) took" << elapsed << "ms";
 
         for (QMap<int, QStringList>::const_iterator it = recognitionImages.begin(); it != recognitionImages.end(); ++it)
         {
-            Identity identity = idMap.value(it.key());
-            QList<QImage> images = toImages(it.value());
-
+            Identity identity       = idMap.value(it.key());
+            QList<QImage> images    = toImages(it.value());
             QList<Identity> results = db.recognizeFaces(images);
 
-            qDebug() << "Result for" << it.value().first() << "is identity" << results.first().id;
+            kDebug() << "Result for" << it.value().first() << "is identity" << results.first().id;
+
             foreach (const Identity& foundId, results)
             {
                 if (foundId.isNull())
@@ -262,14 +281,23 @@ int main(int argc, char** argv)
                     falsePositive++;
                 }
             }
+
             totalRecognized += images.size();
         }
-        elapsed = time.elapsed();
-        qDebug() << "Recognition of 5/10 or ORL took" << elapsed << "ms," << ((float)elapsed/totalRecognized) << "ms per image";
 
-        qDebug() << correct << "of 200 (" << (float(correct)/totalRecognized*100) << "%) were correctly recognized";
-        qDebug() << falsePositive << "of 200 (" << (float(falsePositive)/totalRecognized*100) << "%) were falsely assigned to an identity";
-        qDebug() << notRecognized << "of 200 (" << (float(notRecognized)/totalRecognized*100) << "%) were not recognized";
+        elapsed = time.elapsed();
+
+        if (totalRecognized)
+        {
+            kDebug() << "Recognition of 5/10 or ORL took" << elapsed << "ms," << ((float)elapsed/totalRecognized) << "ms per image";
+            kDebug() << correct       << "of 200 (" << (float(correct)       / totalRecognized*100) << "%) were correctly recognized";
+            kDebug() << falsePositive << "of 200 (" << (float(falsePositive) / totalRecognized*100) << "%) were falsely assigned to an identity";
+            kDebug() << notRecognized << "of 200 (" << (float(notRecognized) / totalRecognized*100) << "%) were not recognized";
+        }
+        else
+        {
+            kDebug() << "No face recognized";
+        }
     }
 
     return 0;
