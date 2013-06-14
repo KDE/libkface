@@ -250,7 +250,9 @@ int main(int argc, char** argv)
         }
         
         elapsed = time.restart();
-        kDebug() << "Training 5/10 or ORL took" << elapsed << "ms," << ((float)elapsed/totalTrained) << "ms per image";
+        
+        if (totalTrained)
+            kDebug() << "Training 5/10 or ORL took" << elapsed << "ms," << ((float)elapsed/totalTrained) << "ms per image";
 
         // reload db
         db      = RecognitionDatabase();
