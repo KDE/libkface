@@ -36,6 +36,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../OpenTLD/src/libopentld/tld
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opentld
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
+                    ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
                    )
 
 SET(kface_LIB_SRCS facedetector.cpp
@@ -44,6 +45,7 @@ SET(kface_LIB_SRCS facedetector.cpp
                    recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                    recognition-opentld/opentldfacerecognizer.cpp
                    recognition-opentld/unitfacemodel.cpp
+                   alignment-congealing/funnelreal.cpp
                    recognitiondatabase.cpp
    )
 
