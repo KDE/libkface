@@ -212,7 +212,7 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
     try
     {
         std::ifstream trainingInfo(path.toLocal8Bit());
-        trainingInfo.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        trainingInfo.exceptions(std::ifstream::badbit);
 
         trainingInfo >> numFeatureClusters >> edgeDescDim;
 
@@ -235,7 +235,7 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
             trainingInfo >> randPxls[j].first >> randPxls[j].second;
 
         std::vector<float>                dfCol(numFeatureClusters, 0);
-        std::vector<std::vector<float> > logDistField(numRandPxls, dfCol);
+        std::vector<std::vector<float> >  logDistField(numRandPxls, dfCol);
 
         int iteration;
         while(true)

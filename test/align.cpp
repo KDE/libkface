@@ -72,6 +72,51 @@ QList<cv::Mat> toImages(const QStringList& paths)
     return images;
 }
 
+class OpenCVSideBySideDisplay
+{
+public:
+    OpenCVSideBySideDisplay(int rows, int uiSize = 200)
+        : uiSize(uiSize), currentRow(0)
+    {
+        bigImage = cv::Mat::zeros(uiSize*rows, 2*uiSize, CV_8UC3);
+    }
+
+    void add(const cv::Mat& left, const cv::Mat& right)
+    {
+        // Draw images side-by-side for later display
+        QSize size(left.cols, left.rows);
+        size.scale(uiSize, uiSize, Qt::KeepAspectRatio);
+        cv::Size scaleSize(size.height(), size.width());
+
+        const int top = currentRow*uiSize;
+        cv::Mat scaledLeft, scaledRight;
+        cv::resize(left, scaledLeft, scaleSize);
+        cv::resize(right, scaledRight, scaleSize);
+        if (scaledLeft.channels() == 1)
+        {
+            cv::cvtColor(scaledLeft, scaledLeft, CV_GRAY2BGR);
+        }
+        if (scaledRight.channels() == 1)
+        {
+            cv::cvtColor(scaledRight, scaledRight, CV_GRAY2BGR);
+        }
+
+        scaledLeft.copyTo(bigImage.colRange(0, scaledLeft.cols).rowRange(top, top+scaledLeft.rows));
+        scaledRight.copyTo(bigImage.colRange(uiSize, uiSize+scaledRight.cols).rowRange(top, top+scaledRight.rows));
+
+        currentRow++;
+    }
+
+    void show(const char* title = "images")
+    {
+        cv::namedWindow(title);
+        cv::imshow(title, bigImage);
+    }
+
+    cv::Mat bigImage;
+    const int uiSize;
+    int currentRow;
+};
 
 // --------------------------------------------------------------------------------------------------
 
@@ -93,33 +138,17 @@ int main(int argc, char** argv)
     FunnelReal funnel;
     kDebug() << "Setup of FunnelReal took" << time.restart();
 
-    const int uiSize = 200;
-    cv::Mat bigImage = cv::Mat::zeros(uiSize*images.size(), 2*uiSize, CV_8UC3);
-    qDebug() << bigImage.cols << bigImage.rows;
-    for (int i=0; i<images.size(); ++i)
+    OpenCVSideBySideDisplay display(images.size());
+    foreach (const cv::Mat& image, images)
     {
-        const cv::Mat& image = images[i];
         cv::Mat aligned = funnel.align(image);
-
-        QSize size(image.cols, image.rows);
-        size.scale(uiSize, uiSize, Qt::KeepAspectRatio);
-        qDebug() << size;
-        cv::Size scaleSize(size.height(), size.width());
-
-        const int top = i*uiSize;
-        cv::Mat scaledOriginal, scaledResult;
-        cv::resize(image, scaledOriginal, scaleSize);
-        cv::resize(aligned, scaledResult, scaleSize);
-
-        scaledOriginal.copyTo(bigImage.colRange(0, scaledOriginal.cols).rowRange(top, top+scaledOriginal.rows));
-        scaledResult.copyTo  (bigImage.colRange(uiSize, uiSize+scaledResult.cols).rowRange(top, top+scaledResult.rows));
+        display.add(image, aligned);
     }
 
     int elapsed = time.elapsed();
     kDebug() << "Alignment took" << elapsed << "for" << images.size() << "," << ((float)elapsed/images.size()) << "per image";
 
-    cv::namedWindow("images");
-    cv::imshow("images", bigImage);
+    display.show();
     app.exec();
 
     return 0;

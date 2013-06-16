@@ -46,6 +46,7 @@ SET(kface_LIB_SRCS facedetector.cpp
                    recognition-opentld/opentldfacerecognizer.cpp
                    recognition-opentld/unitfacemodel.cpp
                    alignment-congealing/funnelreal.cpp
+                   preprocessing-tantriggs/tantriggspreprocessor.cpp
                    recognitiondatabase.cpp
    )
 
