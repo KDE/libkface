@@ -66,7 +66,10 @@ public:
           innerDimH(100),
           siftHistDim(4),
           siftBucketsDim(8),
-          siftDescDim((4*windowSize*windowSize*siftBucketsDim)/(siftHistDim*siftHistDim))
+          siftDescDim((4*windowSize*windowSize*siftBucketsDim)/(siftHistDim*siftHistDim)),
+          numRandPxls(0),
+          numFeatureClusters(0),
+          edgeDescDim(0)
     {
         /*if(outerDimW - innerDimW < 2*windowSize)
         {
