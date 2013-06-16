@@ -30,6 +30,7 @@
 // OpenCV includes need to show up before Qt includes
 #include "recognition-opentld/opentldfacerecognizer.h"
 #include "recognition-opencv-lbph/opencvlbphfacerecognizer.h"
+#include "preprocessing-tantriggs/tantriggspreprocessor.h"
 
 #include "recognitiondatabase.h"
 
@@ -52,6 +53,7 @@
 #include "databaseoperationgroup.h"
 #include "databaseparameters.h"
 #include "dataproviders.h"
+#include "funnelreal.h"
 #include "trainingdb.h"
 #include "version.h"
 
@@ -148,6 +150,10 @@ public:
     OpenCVLBPHFaceRecognizer* lbph()            { return getObjectOrCreate(opencvlbph); }
     OpenCVLBPHFaceRecognizer* lbphConst() const { return opencvlbph;                    }
 
+    typedef FunnelReal CurrentAligner;
+    CurrentAligner* aligner();
+    CurrentAligner* alignerConst() { return funnel; }
+
     void applyParameters();
 
 public:
@@ -158,6 +164,8 @@ public:
                TrainingDataProvider* const data, const QString& trainingContext);
     void clear(OpenTLDFaceRecognizer* const, const QList<int>&, const QString&);
     void clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
+
+    cv::Mat preprocessingChain(const QImage& image);
 
 public:
 
@@ -175,7 +183,10 @@ private:
 
     OpenTLDFaceRecognizer*    opentld;
     OpenCVLBPHFaceRecognizer* opencvlbph;
+    FunnelReal*               funnel;
 };
+
+// -------------------------------------------------------------------------------------------------
 
 QExplicitlySharedDataPointer<RecognitionDatabase::Private> RecognitionDatabaseStaticPriv::database(const QString& path)
 {
@@ -220,7 +231,8 @@ RecognitionDatabase::Private::Private(const QString& configPath)
       mutex(QMutex::Recursive),
       db(DatabaseAccess::create()),
       opentld(0),
-      opencvlbph(0)
+      opencvlbph(0),
+      funnel(0)
 {
     DatabaseParameters params = DatabaseParameters::parametersForSQLite(configPath + "/" + "recognition.db");
     DatabaseAccess::setParameters(db, params);
@@ -239,11 +251,24 @@ RecognitionDatabase::Private::~Private()
 {
     delete opencvlbph;
     delete opentld;
+    delete funnel;
 
     static_d->removeDatabase(configPath);
     DatabaseAccess::destroy(db);
 }
 
+RecognitionDatabase::Private::CurrentAligner* RecognitionDatabase::Private::aligner()
+{
+    if (!funnel)
+    {
+        funnel = new FunnelReal;
+    }
+    return funnel;
+}
+
+// other RecognitionDatabase::Private methods are to be found below, in the relevant context of the main class
+
+// -------------------------------------------------------------------------------------------------
 
 RecognitionDatabase::RecognitionDatabase()
 {
@@ -568,6 +593,15 @@ QList<Identity> RecognitionDatabase::recognizeFaces(const QList<QImage>& images)
     return recognizeFaces(&provider);
 }
 
+cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
+{
+    cv::Mat cvImage = recognizer()->prepareForRecognition(image);
+    //cvImage         = aligner()->align(cvImage);
+    //TanTriggsPreprocessor preprocessor;
+    //cvImage         = preprocessor.preprocess(cvImage);
+    return cvImage;
+}
+
 QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const images)
 {
    if (!d || !d->dbAvailable)
@@ -582,8 +616,7 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
         int id = -1;
         try
         {
-            cv::Mat cvImage = d->recognizer()->prepareForRecognition(images->image());
-            id              = d->recognizer()->recognize(cvImage);
+            id = d->recognizer()->recognize(d->preprocessingChain(images->image()));
         }
         catch (cv::Exception& e)
         {
@@ -616,7 +649,8 @@ void RecognitionDatabase::train(const Identity& identityToBeTrained, TrainingDat
 
 /// Training where the train method takes one identity and one image
 template <class Recognizer>
-static void trainSingle(Recognizer* const r, const Identity& identity, TrainingDataProvider* const data, const QString& trainingContext)
+static void trainSingle(Recognizer* const r, const Identity& identity, TrainingDataProvider* const data,
+                        const QString& trainingContext, RecognitionDatabase::Private* d)
 {
     ImageListProvider* const images = data->newImages(identity);
 
@@ -624,8 +658,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
     {
         try
         {
-            cv::Mat cvImage = r->prepareForRecognition(images->image());
-            r->train(identity.id, cvImage, trainingContext);
+            r->train(identity.id, d->preprocessingChain(images->image()), trainingContext);
         }
         catch (cv::Exception& e)
         {
@@ -638,7 +671,8 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 /// and updating per-identity is non-inferior to updating all at once.
 template <class Recognizer>
 static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& identitiesToBeTrained,
-                               TrainingDataProvider* const data, const QString& trainingContext)
+                               TrainingDataProvider* const data, const QString& trainingContext,
+                               RecognitionDatabase::Private* d)
 {
     foreach (const Identity& identity, identitiesToBeTrained)
     {
@@ -652,7 +686,7 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
         {
             try
             {
-                cv::Mat cvImage = r->prepareForRecognition(imageList->image());
+                cv::Mat cvImage = d->preprocessingChain(imageList->image());
 
                 labels.push_back(identity.id);
                 images.push_back(cvImage);
@@ -682,14 +716,14 @@ void RecognitionDatabase::Private::train(OpenTLDFaceRecognizer* const r, const Q
     foreach (const Identity& identity, identitiesToBeTrained)
     {
         //OpenTLD
-        trainSingle(r, identity, data, trainingContext);
+        trainSingle(r, identity, data, trainingContext, this);
     }
 }
 
 void RecognitionDatabase::Private::train(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
                                          TrainingDataProvider* const data, const QString& trainingContext)
 {
-    trainIdentityBatch(r, identitiesToBeTrained, data, trainingContext);
+    trainIdentityBatch(r, identitiesToBeTrained, data, trainingContext, this);
 }
 
 void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* const data,
