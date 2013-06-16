@@ -37,6 +37,10 @@ SET(align_SRCS align.cpp)
 KDE4_ADD_EXECUTABLE(align ${align_SRCS})
 TARGET_LINK_LIBRARIES(align kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES} )
 
+SET(preprocess_SRCS preprocess.cpp)
+KDE4_ADD_EXECUTABLE(preprocess ${preprocess_SRCS})
+TARGET_LINK_LIBRARIES(preprocess kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES} )
+
 # -----------------------------------------------------------------------------
 
 # SET(libfaceGUI_SRCS gui/main.cpp
