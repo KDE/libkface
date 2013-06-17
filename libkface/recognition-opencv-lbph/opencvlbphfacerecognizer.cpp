@@ -163,7 +163,7 @@ int OpenCVLBPHFaceRecognizer::recognize(const cv::Mat& inputImage)
 
 void OpenCVLBPHFaceRecognizer::train(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
 {
-    if (!images.size() || labels.size() != images.size())
+    if (images.empty() || labels.size() != images.size())
     {
         return;
     }
