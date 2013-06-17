@@ -164,7 +164,7 @@ public:
      */
     QList<Identity> recognizeFaces(ImageListProvider* const images);
     QList<Identity> recognizeFaces(const QList<QImage>& images);
-    Identity recognizeFace(const QImage& image);
+    Identity        recognizeFace(const QImage& image);
 
     /// Gives a hint about the complexity of training for the current backend.
     TrainingCostHint trainingCostHint() const;

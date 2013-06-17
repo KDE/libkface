@@ -116,8 +116,6 @@ class RecognitionDatabase::Private : public QSharedData
 {
 public:
 
-    ~Private();
-
     bool                 dbAvailable;
 
     const QString        configPath;
@@ -129,13 +127,16 @@ public:
 
 public:
 
+    ~Private();
+
     template <class T>
-    T* getObjectOrCreate(T* &ptr)
+    T* getObjectOrCreate(T* &ptr) const
     {
         if (!ptr)
         {
             ptr = new T(db);
         }
+
         return ptr;
     }
 
@@ -152,7 +153,7 @@ public:
 
     typedef FunnelReal CurrentAligner;
     CurrentAligner* aligner();
-    CurrentAligner* alignerConst() { return funnel; }
+    CurrentAligner* alignerConst()              { return funnel;                        }
 
     void applyParameters();
 
@@ -236,7 +237,7 @@ RecognitionDatabase::Private::Private(const QString& configPath)
 {
     DatabaseParameters params = DatabaseParameters::parametersForSQLite(configPath + "/" + "recognition.db");
     DatabaseAccess::setParameters(db, params);
-    dbAvailable = DatabaseAccess::checkReadyForUse(db);
+    dbAvailable               = DatabaseAccess::checkReadyForUse(db);
 
     if (dbAvailable)
     {
@@ -391,7 +392,7 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
 
     // First and foremost, UUID
     QString uuid = attributes.value("uuid");
-    match = d->findByAttribute("uuid", uuid);
+    match        = d->findByAttribute("uuid", uuid);
 
     if (!match.isNull())
     {
