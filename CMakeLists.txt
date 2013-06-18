@@ -72,7 +72,7 @@ MESSAGE(STATUS "OpenCV Root directory is: ${OpenCV_DIR}")
 
 # check OpenCV version
 
-SET(OPENCV_MIN_VERSION "2.4.3")
+SET(OPENCV_MIN_VERSION "2.4.4")
 
 IF (OpenCV_VERSION)
 
