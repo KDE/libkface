@@ -190,9 +190,12 @@ public:
     void clearAllTraining(const QString& trainingContext = QString());
     void clearTraining(const QList<Identity>& identitiesToClean, const QString& trainingContext = QString());
 
-private:
+public:
 
+    // Declared as public due to use in private static methods.
     class Private;
+
+private:
 
     explicit RecognitionDatabase(QExplicitlySharedDataPointer<Private> d);
 

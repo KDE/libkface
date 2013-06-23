@@ -651,7 +651,7 @@ void RecognitionDatabase::train(const Identity& identityToBeTrained, TrainingDat
 /// Training where the train method takes one identity and one image
 template <class Recognizer>
 static void trainSingle(Recognizer* const r, const Identity& identity, TrainingDataProvider* const data,
-                        const QString& trainingContext, RecognitionDatabase::Private* d)
+                        const QString& trainingContext, RecognitionDatabase::Private* const d)
 {
     ImageListProvider* const images = data->newImages(identity);
 
@@ -673,7 +673,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 template <class Recognizer>
 static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& identitiesToBeTrained,
                                TrainingDataProvider* const data, const QString& trainingContext,
-                               RecognitionDatabase::Private* d)
+                               RecognitionDatabase::Private* const d)
 {
     foreach (const Identity& identity, identitiesToBeTrained)
     {
