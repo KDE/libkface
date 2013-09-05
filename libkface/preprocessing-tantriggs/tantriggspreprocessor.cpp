@@ -62,8 +62,8 @@ cv::Mat TanTriggsPreprocessor::preprocessRaw(const cv::Mat& inputImage)
     {
         cv::Mat gaussian0, gaussian1;
         // Kernel Size:
-        int kernel_sz0 = (3*sigma0);
-        int kernel_sz1 = (3*sigma1);
+        int kernel_sz0 = (int)(3*sigma0);
+        int kernel_sz1 = (int)(3*sigma1);
         // Make them odd for OpenCV:
         kernel_sz0 += ((kernel_sz0 % 2) == 0) ? 1 : 0;
         kernel_sz1 += ((kernel_sz1 % 2) == 0) ? 1 : 0;

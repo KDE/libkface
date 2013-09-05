@@ -56,7 +56,7 @@ public:
 
     Private()
         : isLoaded(false),
-          pi(3.14159265),
+          pi(3.14159265F),
           numParams(4), // similarity transforms - x translation, y translation, rotation, uniform scaling
           windowSize(4),
           maxProcessAtOnce(600), // set based on memory limitations,
