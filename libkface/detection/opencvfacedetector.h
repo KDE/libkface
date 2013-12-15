@@ -44,7 +44,7 @@
 #include <QImage>
 #include <QList>
 #include <QRect>
-#include <QString>
+#include <QStringList>
 
 namespace KFaceIface
 {
@@ -56,7 +56,7 @@ class OpenCVFaceDetector
 {
 public:
 
-    OpenCVFaceDetector(const QString& cascadeDir);
+    OpenCVFaceDetector(const QStringList& cascadeDirs);
     ~OpenCVFaceDetector();
 
     cv::Mat prepareForDetection(const QImage& inputImage);

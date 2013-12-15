@@ -36,6 +36,7 @@
 
 // Qt includes
 
+#include <QtCore/QFile>
 #include <QtCore/qmath.h>
 
 // KDE includes
@@ -67,15 +68,35 @@ public:
 
 // --------------------------------------------------------------------------------
 
+static QString findFileInDirs(const QStringList& dirs, const QString& fileName)
+{
+    foreach (const QString &dir, dirs)
+    {
+        const QString file = dir + "/" + fileName;
+        if (QFile::exists(file))
+        {
+            return file;
+        }
+    }
+
+    return QString();
+}
+
 class Cascade : public cv::CascadeClassifier
 {
 public:
 
-    Cascade(const QString& dir, const QString& fileName)
+    Cascade(const QStringList& dirs, const QString& fileName)
         : primaryCascade(false),
           verifyingCascade(true)
     {
-        QString file = dir + "/" + fileName;
+        const QString file = findFileInDirs(dirs, fileName);
+
+        if (file.isEmpty())
+        {
+            kDebug() << "failed to locate cascade" << fileName << "in" << dirs;
+            return;
+        }
 
         if (!load(file.toStdString()))
         {
@@ -246,21 +267,21 @@ static cv::Rect fromQRect(const QRect& rect)
     return cv::Rect(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-OpenCVFaceDetector::OpenCVFaceDetector(const QString& cascadeDir)
+OpenCVFaceDetector::OpenCVFaceDetector(const QStringList& cascadeDirs)
     : d(new Private)
 {
 
-    d->cascades << Cascade(cascadeDir, "haarcascade_frontalface_alt.xml");
-    d->cascades << Cascade(cascadeDir, "haarcascade_frontalface_default.xml");
-    d->cascades << Cascade(cascadeDir, "haarcascade_frontalface_alt2.xml");
-    d->cascades << Cascade(cascadeDir, "haarcascade_frontalface_alt_tree.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_default.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt2.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt_tree.xml");
 
-    d->cascades << Cascade(cascadeDir, "haarcascade_profileface.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_profileface.xml");
 
-    d->cascades << Cascade(cascadeDir, "haarcascade_mcs_lefteye.xml");
-    d->cascades << Cascade(cascadeDir, "haarcascade_mcs_righteye.xml");
-    d->cascades << Cascade(cascadeDir, "haarcascade_mcs_nose.xml");
-    d->cascades << Cascade(cascadeDir, "haarcascade_mcs_mouth.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_mcs_lefteye.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_mcs_righteye.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_mcs_nose.xml");
+    d->cascades << Cascade(cascadeDirs, "haarcascade_mcs_mouth.xml");
 
     d->cascades[2].setPrimaryCascade();
 
