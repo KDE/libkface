@@ -41,6 +41,7 @@
 // local includes
 
 #include "dbcontainers.h"
+#include "facerec_borrowed.h"
 
 namespace KFaceIface
 {
@@ -66,14 +67,18 @@ public:
     StorageStatus storageStatus;
 };
 
-class LBPHFaceModel : public cv::Ptr<cv::FaceRecognizer>
+class LBPHFaceModel : public cv::Ptr<LBPHFaceRecognizer>
+//class LBPHFaceModel : public cv::Ptr<cv::FaceRecognizer>
 {
 public:
 
     LBPHFaceModel();
 
-    cv::FaceRecognizer* ptr()             { return cv::Ptr<cv::FaceRecognizer>::operator cv::FaceRecognizer*();       }
-    const cv::FaceRecognizer* ptr() const { return cv::Ptr<cv::FaceRecognizer>::operator const cv::FaceRecognizer*(); }
+    LBPHFaceRecognizer* ptr()             { return cv::Ptr<LBPHFaceRecognizer>::operator KFaceIface::LBPHFaceRecognizer*();       }
+    const LBPHFaceRecognizer* ptr() const { return cv::Ptr<LBPHFaceRecognizer>::operator const KFaceIface::LBPHFaceRecognizer*(); }
+
+    //cv::FaceRecognizer* ptr()             { return cv::Ptr<cv::FaceRecognizer>::operator cv::FaceRecognizer*();       }
+    //const cv::FaceRecognizer* ptr() const { return cv::Ptr<cv::FaceRecognizer>::operator const cv::FaceRecognizer*(); }
 
     int radius() const;
     void setRadius(int radius);

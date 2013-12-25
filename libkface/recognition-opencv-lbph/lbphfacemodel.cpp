@@ -51,9 +51,12 @@ LBPHistogramMetadata::LBPHistogramMetadata()
 }
 
 LBPHFaceModel::LBPHFaceModel()
-    : cv::Ptr<cv::FaceRecognizer>(cv::createLBPHFaceRecognizer()),
+    //: cv::Ptr<cv::FaceRecognizer>(cv::createLBPHFaceRecognizer()),
+      : cv::Ptr<LBPHFaceRecognizer>(LBPHFaceRecognizer::create()),
       databaseId(0)
 {
+    //ptr()->set("statistic", LBPHFaceRecognizer::MostNearestNeighbors);
+    ptr()->set("threshold", 100);
 }
 
 int LBPHFaceModel::radius() const
@@ -115,17 +118,31 @@ void LBPHFaceModel::setWrittenToDatabase(int index, int id)
 void LBPHFaceModel::setHistograms(const QList<OpenCVMatData>& histograms, const QList<LBPHistogramMetadata>& histogramMetadata)
 {
     /*
-     * Oh, that would be so easy. Does not work, as these two params are declared read-only in OpenCV.
-    std::vector<cv::Mat> currentHistograms = ptr()->get<std::vector<cv::Mat> >("histograms");
-    cv::Mat currentLabels = ptr()->get<cv::Mat>("labels");
+     * Does not work with standard OpenCV, as these two params are declared read-only in OpenCV.
+     * One reason why we copied the code.
+     */
+    std::vector<cv::Mat> newHistograms;
+    cv::Mat newLabels;
+    newHistograms.reserve(histograms.size());
+    newLabels.reserve(histogramMetadata.size());
     foreach (const OpenCVMatData& histogram, histograms)
     {
-        currentHistograms.push_back(histogram.toMat());
-        currentLabels.push_back(histogram.identity);
+        newHistograms.push_back(histogram.toMat());
     }
+    foreach (const LBPHistogramMetadata& metadata, histogramMetadata)
+    {
+        newLabels.push_back(metadata.identity);
+    }
+
+    std::vector<cv::Mat> currentHistograms = ptr()->get<std::vector<cv::Mat> >("histograms");
+    cv::Mat currentLabels = ptr()->get<cv::Mat>("labels");
+    currentHistograms.insert(currentHistograms.end(), newHistograms.begin(), newHistograms.end());
+    currentLabels.push_back(newLabels);
     ptr()->set("histograms", currentHistograms);
     ptr()->set("labels", currentLabels);
-    */
+
+    /*
+     * Most cumbersome and inefficient way through a file storage which we were forced to use if we used standard OpenCV
     cv::FileStorage store(".yml", cv::FileStorage::WRITE + cv::FileStorage::MEMORY);
     // store current parameters to preserve them
     store << "radius"     << radius();
@@ -151,6 +168,7 @@ void LBPHFaceModel::setHistograms(const QList<OpenCVMatData>& histograms, const 
 
     cv::FileStorage read(yaml, cv::FileStorage::READ + cv::FileStorage::MEMORY);
     ptr()->load(read);
+    */
 }
 
 void LBPHFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
