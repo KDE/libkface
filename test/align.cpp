@@ -41,9 +41,13 @@
 // libkface includes
 
 #include "libkface/alignment-congealing/funnelreal.h"
+#include "libkface/alignment-flandmark/flandmarkaligner.h"
 
 // it's not exported...
-#include "libkface/alignment-congealing/funnelreal.cpp"
+//#include "libkface/alignment-congealing/funnelreal.cpp"
+#include "libkface/alignment-flandmark/flandmark_detector.cpp"
+#include "libkface/alignment-flandmark/liblbp.cpp"
+#include "libkface/alignment-flandmark/flandmarkaligner.cpp"
 
 using namespace KFaceIface;
 
@@ -135,21 +139,23 @@ int main(int argc, char** argv)
 
     QTime time;
     time.start();
-    FunnelReal funnel;
-    kDebug() << "Setup of FunnelReal took" << time.restart();
+    //FunnelReal funnel;
+    FlandmarkAligner fa;
+    kDebug() << "Setup of Aligner took" << time.restart();
 
     OpenCVSideBySideDisplay display(images.size());
     foreach (const cv::Mat& image, images)
     {
-        cv::Mat aligned = funnel.align(image);
-        display.add(image, aligned);
+        //cv::Mat aligned = funnel.align(image);
+        cv::Mat aligned = fa.align(image);
+        //display.add(image, aligned);
     }
 
     int elapsed = time.elapsed();
     kDebug() << "Alignment took" << elapsed << "for" << images.size() << "," << ((float)elapsed/images.size()) << "per image";
 
-    display.show();
-    app.exec();
+    //display.show();
+    //app.exec();
 
     return 0;
 }

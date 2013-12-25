@@ -31,3 +31,9 @@ ADD_CUSTOM_COMMAND(OUTPUT face-funnel.data
 ADD_CUSTOM_TARGET(extract_funnel_data ALL DEPENDS face-funnel.data)
 INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/face-funnel.data
          DESTINATION ${DATA_INSTALL_DIR}/libkface/alignment-congealing)
+
+#ADD_CUSTOM_COMMAND(OUTPUT flandmark_model.dat
+ #                  COMMAND ${CMAKE_COMMAND} -E tar xz ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_model.dat.tgz)
+#ADD_CUSTOM_TARGET(extract_flandmark_data ALL DEPENDS flandmark_model.dat)
+#INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/flandmark_model.dat
+ #        DESTINATION ${DATA_INSTALL_DIR}/libkface/alignment-flandmark)

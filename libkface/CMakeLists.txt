@@ -43,9 +43,12 @@ SET(kface_LIB_SRCS facedetector.cpp
                    detection/opencvfacedetector.cpp
                    recognition-opencv-lbph/lbphfacemodel.cpp
                    recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
+                   recognition-opencv-lbph/facerec_borrowed.cpp
                    recognition-opentld/opentldfacerecognizer.cpp
                    recognition-opentld/unitfacemodel.cpp
                    alignment-congealing/funnelreal.cpp
+                   #alignment-flandmark/liblbp.cpp
+                   #alignment-flandmark/flandmark_detector.cpp
                    preprocessing-tantriggs/tantriggspreprocessor.cpp
                    recognitiondatabase.cpp
    )
