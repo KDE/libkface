@@ -233,7 +233,7 @@ int main(int argc, char** argv)
 
         int correct = 0, notRecognized = 0, falsePositive = 0, totalTrained = 0, totalRecognized = 0, elapsed = 0;
 
-        for (QMap<int, QStringList>::const_iterator it = trainingImages.begin(); it != trainingImages.end(); ++it)
+        for (QMap<int, QStringList>::const_iterator it = trainingImages.constBegin(); it != trainingImages.constEnd(); ++it)
         {
             Identity identity = db.findIdentity("name", QString::number(it.key()));
 
@@ -260,7 +260,7 @@ int main(int argc, char** argv)
         elapsed = time.restart();
         kDebug() << "Reloading database (probably from disk cache) took" << elapsed << "ms";
 
-        for (QMap<int, QStringList>::const_iterator it = recognitionImages.begin(); it != recognitionImages.end(); ++it)
+        for (QMap<int, QStringList>::const_iterator it = recognitionImages.constBegin(); it != recognitionImages.constEnd(); ++it)
         {
             Identity identity       = idMap.value(it.key());
             QList<QImage> images    = toImages(it.value());
