@@ -31,14 +31,10 @@
 
 #include "flandmarkaligner.h"
 
-// OpenCV includes
-
-
-// Qt include
-
 // KDE includes
 
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // local includes
 
@@ -102,7 +98,7 @@ cv::Mat FlandmarkAligner::align(const cv::Mat& inputImage)
         image = inputImage;
     }
 
-    qDebug() << "Detecting" << d->model->data.options.M << "landmarks";
+    kDebug() << "Detecting" << d->model->data.options.M << "landmarks";
     QVector<double> landmarks(2*d->model->data.options.M);
     // bbox with detected face (format: top_left_col top_left_row bottom_right_col bottom_right_row)
     int bbox[] = {30,30,120,120};//{ 0, 0, image.cols, image.rows };
@@ -111,7 +107,7 @@ cv::Mat FlandmarkAligner::align(const cv::Mat& inputImage)
 
     for (int i=0; i<d->model->data.options.M; i++)
     {
-        qDebug() << "Landmark" << i << landmarks.at(2*i) << ", " << landmarks.at(2*i+1);
+        kDebug() << "Landmark" << i << landmarks.at(2*i) << ", " << landmarks.at(2*i+1);
     }
 
     return inputImage;
