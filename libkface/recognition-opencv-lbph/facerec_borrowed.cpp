@@ -20,10 +20,37 @@
 #include <set>
 #include <limits>
 
-// for CV_INIT_ALGORITHM
-#include <opencv2/core/internal.hpp>
+#include <kdebug.h>
 
-#include <QDebug>
+// Define the CV_INIT_ALGORITHM macro for OpenCV 2.4.0:
+#ifndef CV_INIT_ALGORITHM
+#define CV_INIT_ALGORITHM(classname, algname, memberinit) \
+    static Algorithm* create##classname() \
+    { \
+        return new classname; \
+    } \
+    \
+    static AlgorithmInfo& classname##_info() \
+    { \
+        static AlgorithmInfo classname##_info_var(algname, create##classname); \
+        return classname##_info_var; \
+    } \
+    \
+    static AlgorithmInfo& classname##_info_auto = classname##_info(); \
+    \
+    AlgorithmInfo* classname::info() const \
+    { \
+        static volatile bool initialized = false; \
+        \
+        if( !initialized ) \
+        { \
+            initialized = true; \
+            classname obj; \
+            memberinit; \
+        } \
+        return &classname##_info(); \
+    }
+#endif
 
 using namespace cv;
 
@@ -352,7 +379,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
                 minClass = it->first;
             }
         }
-        qDebug() << s;
+        kDebug() << s;
     }
     else if (_statisticsMode == MostNearestNeighbors)
     {
@@ -388,7 +415,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
                 minClass = it->first;
             }
         }
-        qDebug() << s;
+        kDebug() << s;
         
     }
 }
