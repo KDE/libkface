@@ -23,16 +23,16 @@
  *
  * ============================================================ */
 
+// OpenCV includes
+
+#include "libopencv.h"
+
 // Qt includes
 
 #include <QApplication>
 #include <QDir>
 #include <QImage>
 #include <QTime>
-
-// OpenCV includes
-
-#include "libopencv.h"
 
 // KDE includes
 
