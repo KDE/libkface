@@ -76,10 +76,10 @@ void Clustering::calcMeanRect(std::vector<int> * indices)
 
     Rect *rect = new Rect();
     detectionResult->detectorBB = rect;
-    rect->x = floor(x + 0.5);
-    rect->y = floor(y + 0.5);
-    rect->width = floor(w + 0.5);
-    rect->height = floor(h + 0.5);
+    rect->x = (int)floor(x + 0.5);
+    rect->y = (int)floor(y + 0.5);
+    rect->width = (int)floor(w + 0.5);
+    rect->height = (int)floor(h + 0.5);
 
 }
 
