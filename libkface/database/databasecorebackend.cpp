@@ -27,7 +27,7 @@
 #endif
 */
 
-#include "databasecorebackend.h"
+#include "databasecorebackend.moc"
 #include "databasecorebackend_p.h"
 
 // Qt includes
