@@ -69,7 +69,7 @@ EnsembleClassifier::~EnsembleClassifier()
 
 void EnsembleClassifier::init()
 {
-    numIndices = pow(2.0f, numFeatures);
+    numIndices = (int)pow(2.0f, numFeatures);
 
     initFeatureLocations();
     initFeatureOffsets();
@@ -225,7 +225,7 @@ void EnsembleClassifier::updatePosterior(int treeIdx, int idx, int positive, int
 {
     int arrayIndex = treeIdx * numIndices + idx;
     (positive) ? positives[arrayIndex] += amount : negatives[arrayIndex] += amount;
-    posteriors[arrayIndex] = ((float) positives[arrayIndex]) / (positives[arrayIndex] + negatives[arrayIndex]) / 10.0;
+    posteriors[arrayIndex] = ((float) positives[arrayIndex]) / (positives[arrayIndex] + negatives[arrayIndex]) / 10.0F;
 }
 void EnsembleClassifier::callupdatePosterior(int argone,int arrarg[3])
 {
