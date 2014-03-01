@@ -40,8 +40,8 @@ NNClassifier::NNClassifier()
     windows         = NULL;
     enabled         = false;
 
-    thetaFP         = .5;
-    thetaTP         = .65;
+    thetaFP         = .5F;
+    thetaTP         = .65F;
 
     truePositives   = new vector<NormalizedPatch>();
     falsePositives  = new vector<NormalizedPatch>();
@@ -79,7 +79,7 @@ float NNClassifier::ncc(float *f1, float *f2)
 
     // normalization to <0,1>
 
-    return (corr / sqrt(norm1 * norm2) + 1) / 2.0;
+    return (float)((corr / sqrt(norm1 * norm2) + 1) / 2.0);
 }
 
 float NNClassifier::classifyPatch(NormalizedPatch *patch)
