@@ -48,7 +48,7 @@ DetectorCascade::DetectorCascade():
     imgHeight = -1;
     imgWidth = -1;
 
-    shift = 0.1;
+    shift = 0.1F;
     minScale = -10;
     maxScale = 10;
     minSize = 25;
@@ -184,15 +184,15 @@ void DetectorCascade::initWindowsAndScales()
 
     for(int i = minScale; i <= maxScale; i++)
     {
-        float scale = pow(1.2, i);
-        int w = (int)objWidth * scale;
-        int h = (int)objHeight * scale;
+        float scale = pow(1.2F, i);
+        int w = (int)(objWidth * scale);
+        int h = (int)(objHeight * scale);
         int ssw, ssh;
 
         if(useShift)
         {
-            ssw = max<float>(1, w * shift);
-            ssh = max<float>(1, h * shift);
+            ssw = (int)max<float>(1, w * shift);
+            ssh = (int)max<float>(1, h * shift);
         }
         else
         {
@@ -207,7 +207,7 @@ void DetectorCascade::initWindowsAndScales()
 
         scaleIndex++;
 
-        numWindows += floor((float)(scanAreaW - w + ssw) / ssw) * floor((float)(scanAreaH - h + ssh) / ssh);
+        numWindows += (int)(floor((float)(scanAreaW - w + ssw) / ssw) * floor((float)(scanAreaH - h + ssh) / ssh));
     }
 
     numScales = scaleIndex;
@@ -223,8 +223,8 @@ void DetectorCascade::initWindowsAndScales()
 
         if(useShift)
         {
-            ssw = max<float>(1, w * shift);
-            ssh = max<float>(1, h * shift);
+            ssw = (int)max<float>(1, w * shift);
+            ssh = (int)max<float>(1, h * shift);
         }
         else
         {
