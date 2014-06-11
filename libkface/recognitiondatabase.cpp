@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2013 by Gilles Caulier
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -59,7 +59,6 @@
 
 namespace KFaceIface
 {
-
 
 Identity::Identity()
     : id(-1)
@@ -623,6 +622,10 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
         {
             kError() << "cv::Exception:" << e.what();
         }
+        catch(...)
+        {
+            kError() << "Default exception from OpenCV";
+        }
 
         if (id == -1)
         {
@@ -665,6 +668,10 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
         {
             kError() << "cv::Exception:" << e.what();
         }
+        catch(...)
+        {
+            kError() << "Default exception from OpenCV";
+        }
     }
 }
 
@@ -696,6 +703,10 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
             {
                 kError() << "cv::Exception preparing image for LBPH:" << e.what();
             }
+            catch(...)
+            {
+                kError() << "Default exception from OpenCV";
+            }
         }
 
         try
@@ -706,6 +717,10 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
         catch (cv::Exception& e)
         {
             kError() << "cv::Exception training LBPH:" << e.what();
+        }
+        catch(...)
+        {
+            kError() << "Default exception from OpenCV";
         }
     }
 }

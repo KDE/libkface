@@ -159,6 +159,10 @@ QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& origin
     {
         kError() << "cv::Exception:" << e.what();
     }
+    catch(...)
+    {
+        kError() << "Default exception from OpenCV";
+    }
 
     return result;
 }
