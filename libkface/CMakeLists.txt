@@ -4,7 +4,7 @@
 # <a href="http://www.digikam.org">http://www.digikam.org</a>
 #
 # @date   2010-06-16
-# @brief  LibFace library interface for KDE
+# @brief  LibKFace library interface for KDE
 #
 # @author Copyright (C) 2010-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -25,21 +25,18 @@
 # To handle OpenCV C++ exceptions.
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
-ADD_DEFINITIONS(${LIBFACE_DEFINITIONS})
-
 REMOVE_DEFINITIONS(-DQT_NO_STL)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../OpenTLD/src/libopentld/tld
-                    ${CMAKE_CURRENT_SOURCE_DIR}/database
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
-                    ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opentld
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
                    )
 
 SET(kface_LIB_SRCS facedetector.cpp
+                   recognitiondatabase.cpp
                    detection/opencvfacedetector.cpp
                    recognition-opencv-lbph/lbphfacemodel.cpp
                    recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
@@ -48,7 +45,6 @@ SET(kface_LIB_SRCS facedetector.cpp
                    #alignment-flandmark/liblbp.cpp
                    #alignment-flandmark/flandmark_detector.cpp
                    preprocessing-tantriggs/tantriggspreprocessor.cpp
-                   recognitiondatabase.cpp
    )
 
 SET(kface_database_LIB_SRCS database/databaseaccess.cpp
@@ -63,7 +59,7 @@ SET(kface_database_LIB_SRCS database/databaseaccess.cpp
                             database/dbcontainers.cpp
    )
 
-KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${face_LIB_SRCS} ${kface_database_LIB_SRCS})
+KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${kface_database_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${KDE4_KDEUI_LIBS}
@@ -73,8 +69,6 @@ TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${QT_QTSQL_LIBRARY}
 
                             ${OpenCV_LIBRARIES}
-
-                            ${LIBFACE_LIBRARIES}
                       )
 
 SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}

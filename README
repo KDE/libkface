@@ -1,4 +1,4 @@
-LibFace Library interface for KDE
+LibKFace Library interface for KDE
 
 This library is a part of digiKam project (http://www.digikam.org)
 
@@ -8,7 +8,7 @@ See AUTHORS file for details.
 
 -- ABOUT --------------------------------------------------------------
 
-Libkface is a Qt/C++ wrapper around LibFace library to perform face recognition and detection over pictures 
+Libkface is a Qt/C++ library to perform face recognition and detection over pictures 
 
 This library is used by kipi-plugins, digiKam and others kipi host programs.
 

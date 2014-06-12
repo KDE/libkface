@@ -4,7 +4,7 @@
 # <a href="http://www.digikam.org">http://www.digikam.org</a>
 #
 # @date   2010-06-16
-# @brief  LibFace library interface for KDE
+# @brief  LibKFace library interface for KDE
 #
 # @author Copyright (C) 2010-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -31,7 +31,6 @@ FIND_PACKAGE(Qt4 4.6.0 REQUIRED)
 FIND_PACKAGE(KDE4 REQUIRED)
 
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
-ADD_DEFINITIONS(${LIBFACE_DEFINITIONS})
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 INCLUDE(KDE4Defaults)
