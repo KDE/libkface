@@ -58,7 +58,6 @@ public:
      * object is cheap, the expensive creation of the detection backend
      * is performed when detectFaces is called for the first time.
      */
-
     FaceDetector();
     FaceDetector(const FaceDetector& other);
     ~FaceDetector();

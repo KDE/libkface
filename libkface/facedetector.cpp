@@ -61,7 +61,7 @@ public:
             QStringList cascadeDirs;
             cascadeDirs << KGlobal::dirs()->findDirs("data", "libkface/haarcascades");
             cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../opencv/haarcascades");
-            m_backend          = new OpenCVFaceDetector(cascadeDirs);
+            m_backend = new OpenCVFaceDetector(cascadeDirs);
             applyParameters();
         }
 
@@ -131,7 +131,7 @@ FaceDetector::~FaceDetector()
 
 QString FaceDetector::backendIdentifier() const
 {
-    return "OpenCV Cascades";
+    return QString("OpenCV Cascades");
 }
 
 QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& originalSize)
@@ -194,6 +194,8 @@ int FaceDetector::recommendedImageSize(const QSize& availableSize) const
     Q_UNUSED(availableSize);
     return OpenCVFaceDetector::recommendedImageSizeForDetection();
 }
+
+// -- Static methods -------------------------------------------------------------
 
 QRectF FaceDetector::toRelativeRect(const QRect& abs, const QSize& s)
 {
