@@ -79,8 +79,10 @@ public:
     /**
      * Tunes backend parameters.
      * Available parameters:
-     * "speed" vs. "accuracy", 0..1, float
+     *
+     * "speed"       vs. "accuracy",    0..1, float
      * "sensitivity" vs. "specificity", 0..1, float.
+     *
      * For both pairs: a = 1-b, you can set either.
      * The first pair changes the ROC curve in a trade for computing time.
      * The second pair moves on a given ROC curve towards more false positives, or more missed faces.
