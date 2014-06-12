@@ -29,6 +29,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
+                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
                    )
 
@@ -39,9 +40,8 @@ SET(kface_LIB_SRCS facedetector.cpp
                    recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                    recognition-opencv-lbph/facerec_borrowed.cpp
                    alignment-congealing/funnelreal.cpp
-                   preprocessing-tantriggs/tantriggspreprocessor.cpp
-                   #alignment-flandmark/liblbp.cpp
-                   #alignment-flandmark/flandmark_detector.cpp
+#                   alignment-flandmark/flandmarkaligner.cpp
+#                   preprocessing-tantriggs/tantriggspreprocessor.cpp
    )
 
 SET(kface_database_LIB_SRCS database/databaseaccess.cpp

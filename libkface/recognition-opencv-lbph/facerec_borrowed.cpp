@@ -90,12 +90,16 @@ void olbp_(InputArray _src, OutputArray _dst)
 {
     // get matrices
     Mat src = _src.getMat();
+
     // allocate memory for result
     _dst.create(src.rows-2, src.cols-2, CV_8UC1);
     Mat dst = _dst.getMat();
+
     // zero the result matrix
     dst.setTo(0);
+
     // calculate patterns
+
     for(int i=1;i<src.rows-1;i++)
     {
         for(int j=1;j<src.cols-1;j++)
@@ -134,14 +138,17 @@ inline void elbp_(InputArray _src, OutputArray _dst, int radius, int neighbors)
         // sample points
         float x = static_cast<float>(radius * cos(2.0*CV_PI*n/static_cast<float>(neighbors)));
         float y = static_cast<float>(-radius * sin(2.0*CV_PI*n/static_cast<float>(neighbors)));
+
         // relative indices
         int fx = static_cast<int>(floor(x));
         int fy = static_cast<int>(floor(y));
         int cx = static_cast<int>(ceil(x));
         int cy = static_cast<int>(ceil(y));
+
         // fractional part
         float ty = y - fy;
         float tx = x - fx;
+
         // set interpolation weights
         float w1 = (1 - tx) * (1 - ty);
         float w2 =      tx  * (1 - ty);
@@ -263,15 +270,18 @@ static Mat spatial_histogram(InputArray _src, int numPatterns,
     int resultRowIdx = 0;
 
     // iterate through grid
+
     for(int i = 0; i < grid_y; i++)
     {
         for(int j = 0; j < grid_x; j++)
         {
             Mat src_cell   = Mat(src, Range(i*height,(i+1)*height), Range(j*width,(j+1)*width));
             Mat cell_hist  = histc(src_cell, 0, (numPatterns-1), true);
+
             // copy to the result matrix
             Mat result_row = result.row(resultRowIdx);
             cell_hist.reshape(1,1).convertTo(result_row, CV_32FC1);
+
             // increase row count in result matrix
             resultRowIdx++;
         }
@@ -405,18 +415,20 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
     }
 
     Mat src = _src.getMat();
+
     // get the spatial histogram from input image
     Mat lbp_image = elbp(src, _radius, _neighbors);
-    Mat query = spatial_histogram(
+    Mat query     = spatial_histogram(
             lbp_image, /* lbp_image */
             static_cast<int>(std::pow(2.0, static_cast<double>(_neighbors))), /* number of possible patterns */
             _grid_x, /* grid size x */
             _grid_y, /* grid size y */
             true /* normed histograms */);
-    minDist = DBL_MAX;
-    minClass = -1;
+    minDist      = DBL_MAX;
+    minClass     = -1;
 
     // This is the standard method
+
     if (_statisticsMode == NearestNeighbor)
     {
         // find 1-nearest neighbor
@@ -475,6 +487,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
     {
         // Create map "distance -> label"
         std::multimap<double, int> distancesMap;
+
         // map "label -> number of histograms"
         std::map<int, int> countMap;
 
@@ -533,9 +546,8 @@ CV_INIT_ALGORITHM(LBPHFaceRecognizer, "FaceRecognizer.LBPH-KFaceIface",
                   obj.info()->addParam(obj, "grid_x", obj._grid_x);
                   obj.info()->addParam(obj, "grid_y", obj._grid_y);
                   obj.info()->addParam(obj, "threshold", obj._threshold);
-                  obj.info()->addParam(obj, "histograms", obj._histograms); // modification: Make Read/Write
-                  obj.info()->addParam(obj, "labels", obj._labels); // modification: Make Read/Write
+                  obj.info()->addParam(obj, "histograms", obj._histograms);     // modification: Make Read/Write
+                  obj.info()->addParam(obj, "labels", obj._labels);             // modification: Make Read/Write
                   obj.info()->addParam(obj, "statistic", obj._statisticsMode)); // modification: Add parameter
-
 
 } // namespace KFaceIface

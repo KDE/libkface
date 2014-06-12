@@ -51,11 +51,9 @@ LBPHistogramMetadata::LBPHistogramMetadata()
 }
 
 LBPHFaceModel::LBPHFaceModel()
-    //: cv::Ptr<cv::FaceRecognizer>(cv::createLBPHFaceRecognizer()),
       : cv::Ptr<LBPHFaceRecognizer>(LBPHFaceRecognizer::create()),
       databaseId(0)
 {
-    //ptr()->set("statistic", LBPHFaceRecognizer::MostNearestNeighbors);
     ptr()->set("threshold", 100);
 }
 
