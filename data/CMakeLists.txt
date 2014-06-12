@@ -4,7 +4,7 @@
 # <a href="http://www.digikam.org">http://www.digikam.org</a>
 #
 # @date   2010-06-16
-# @brief  LibFace library interface for KDE
+# @brief  LibKFace library interface for KDE
 #
 # @author Copyright (C) 2010-2012 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
