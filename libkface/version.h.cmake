@@ -5,9 +5,9 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-06-16
- * @brief  LibFace library interface for KDE
+ * @brief  LibKFace library interface for KDE
  *
- * @author Copyright (C) 2010 by Gilles Caulier
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -31,8 +31,6 @@
 static const char kface_version[] = "${KFACE_LIB_VERSION_STRING}";
 
 #define KFACE_VERSION ${KFACE_LIB_VERSION_ID}
-
-
 
 #endif // KFACE_VERSION_H
 

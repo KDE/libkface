@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date  2013-05-18
- * @brief Wrapper class for face recongition
+ * @brief Wrapper class for face recognition
  *
  * @author Copyright (C) 2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -71,13 +71,13 @@ public:
     {
     }
 
-    virtual int  size() const                   { return list.size(); }
+    virtual int  size() const                   { return list.size();           }
     virtual bool atEnd() const                  { return it == list.constEnd(); }
-    virtual void proceed(int steps = 1)         { it += steps; }
+    virtual void proceed(int steps = 1)         { it += steps;                  }
 
-    void reset()                                { it = list.constBegin(); }
+    void reset()                                { it = list.constBegin();       }
 
-    virtual QImage image()                      { return *it; }
+    virtual QImage image()                      { return *it;                   }
 
 public:
 
@@ -89,8 +89,8 @@ class KFACE_EXPORT EmptyImageListProvider : public ImageListProvider
 {
 public:
 
-    virtual int  size() const           { return 0;    }
-    virtual bool atEnd() const          { return true; }
+    virtual int  size() const           { return 0;        }
+    virtual bool atEnd() const          { return true;     }
     virtual void proceed(int steps = 1) { Q_UNUSED(steps)  }
     virtual QImage image()              { return QImage(); }
 };

@@ -22,9 +22,6 @@
 #
 # ============================================================
 
-# To handle OpenCV C++ exceptions.
-ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
-
 REMOVE_DEFINITIONS(-DQT_NO_STL)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
@@ -42,9 +39,9 @@ SET(kface_LIB_SRCS facedetector.cpp
                    recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                    recognition-opencv-lbph/facerec_borrowed.cpp
                    alignment-congealing/funnelreal.cpp
+                   preprocessing-tantriggs/tantriggspreprocessor.cpp
                    #alignment-flandmark/liblbp.cpp
                    #alignment-flandmark/flandmark_detector.cpp
-                   preprocessing-tantriggs/tantriggspreprocessor.cpp
    )
 
 SET(kface_database_LIB_SRCS database/databaseaccess.cpp
