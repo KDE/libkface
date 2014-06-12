@@ -56,8 +56,8 @@ public:
     TrainingDB* db() const;
 
     DatabaseCoreBackend* backend() const;
-    QString lastError();
-    DatabaseParameters parameters();
+    QString lastError() const;
+    DatabaseParameters parameters() const;
 
 
     static void initDatabaseErrorHandler(DatabaseAccessData* const d, DatabaseErrorHandler* const errorhandler);

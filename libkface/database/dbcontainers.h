@@ -22,13 +22,13 @@
 #ifndef DBCONTAINERS_H
 #define DBCONTAINERS_H
 
-// Qt includes
-
-#include <QByteArray>
-
 // OpenCV includes
 
 #include "libopencv.h"
+
+// Qt includes
+
+#include <QByteArray>
 
 namespace KFaceIface
 {

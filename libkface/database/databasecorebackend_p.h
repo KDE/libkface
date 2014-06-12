@@ -44,6 +44,7 @@ public:
 
     DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend);
     virtual ~DatabaseCoreBackendPrivate() {}
+
     void init(const QString& connectionName, DatabaseLocking* const locking);
 
     QString connectionName(QThread* const thread);
@@ -159,7 +160,7 @@ public :
         ErrorLocker(DatabaseCoreBackendPrivate* const d);
         void wait();
     };
-    
+
     // ------------------------------------------------------------------
 
     class BusyWaiter : public AbstractWaitingUnlocker

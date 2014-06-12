@@ -41,11 +41,11 @@
 // Local includes
 
 #include "databaseconfigelement.h"
+//#include "dbconfigversion.h"
 
 namespace KFaceIface
 {
 
-//#include "dbconfigversion.h"
 namespace
 {
     int dbconfig_xml_version = 1;
@@ -75,7 +75,7 @@ Q_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
 DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 {
     isValid = readConfig();
-    
+
     if (!isValid)
     {
         kWarning() << errorMessage;

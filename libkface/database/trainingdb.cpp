@@ -91,6 +91,7 @@ void TrainingDB::updateIdentity(const Identity& p)
 {
     d->db->execSql("DELETE FROM IdentityAttributes WHERE id=?", p.id);
     QMap<QString, QString>::const_iterator it;
+
     for (it=p.attributes.begin(); it != p.attributes.end(); ++it)
     {
         d->db->execSql("INSERT INTO IdentityAttributes (id, attribute, value) VALUES (?, ?,?)", p.id, it.key(), it.value());
@@ -125,6 +126,7 @@ QList<Identity> TrainingDB::identities()
 
             id.attributes[attribute] = value;
         }
+
         results << id;
     }
 

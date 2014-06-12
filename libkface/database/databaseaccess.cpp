@@ -130,7 +130,7 @@ DatabaseAccess::~DatabaseAccess()
     d->lock.mutex.unlock();
 }
 
-DatabaseAccess::DatabaseAccess(bool,DatabaseAccessData* const d)
+DatabaseAccess::DatabaseAccess(bool, DatabaseAccessData* const d)
     : d(d)
 {
     // private constructor, when mutex is locked and
@@ -149,7 +149,7 @@ DatabaseCoreBackend* DatabaseAccess::backend() const
     return d->backend;
 }
 
-DatabaseParameters DatabaseAccess::parameters()
+DatabaseParameters DatabaseAccess::parameters() const
 {
     if (d)
     {
@@ -251,7 +251,7 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, Initializatio
     return d->backend->isReady();
 }
 
-QString DatabaseAccess::lastError()
+QString DatabaseAccess::lastError() const
 {
     return d->lastError;
 }

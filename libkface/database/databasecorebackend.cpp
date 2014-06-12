@@ -72,10 +72,12 @@ public:
     {
         QThread::sleep(secs);
     }
+
     static void msleep(unsigned long msecs)
     {
         QThread::msleep(msecs);
     }
+
     static void usleep(unsigned long usecs)
     {
         QThread::usleep(usecs);
@@ -662,12 +664,12 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
             kDebug() << "Error while executing DBAction ["<<  action.name  <<"] Statement ["<<actionElement.statement<<"]";
             returnResult = result;
 
-            /*
+/*
             if (wrapInTransaction && !db.rollback())
             {
                 kDebug() << "Error while rollback changes of previous DBAction.";
             }
-            */
+*/
 
             break;
         }
@@ -678,12 +680,12 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         commitTransaction();
     }
 
-    /*
+/*
     if (returnResult==DatabaseCoreBackend::NoErrors && wrapInTransaction && !db.commit())
     {
         kDebug() << "Error while committing changes of previous DBAction.";
     }
-    */
+*/
 
     return returnResult;
 }
@@ -1387,7 +1389,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDirectSql(const QString
             }
         }
     }
-    
+
     return DatabaseCoreBackend::NoErrors;
 }
 
@@ -1465,7 +1467,7 @@ bool DatabaseCoreBackend::execBatch(SqlQuery& query)
 SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 {
     int retries = 0;
-    
+
     forever
     {
         SqlQuery query = getQuery();

@@ -112,7 +112,7 @@ public:
         Wait,
         AbortQueries
     };
-    
+
 public:
 
     /** Creates a database backend. The backend name is an arbitrary string that
@@ -186,7 +186,7 @@ public:
     {
         return status() > Unavailable;
     }
-    
+
     bool isReady() const
     {
         return status() == OpenSchemaChecked;

@@ -43,7 +43,7 @@ public:
     };
 
 public:
-    
+
     virtual ~InitializationObserver() {};
 
     virtual bool continueQuery() = 0;

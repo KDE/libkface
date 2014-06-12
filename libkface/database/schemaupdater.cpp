@@ -104,7 +104,7 @@ bool SchemaUpdater::startUpdates()
         {
             // Something is damaged. Give up.
             kWarning() << "DBVersion not available! Giving up schema upgrading.";
-            
+
             QString errorMsg = i18n("The database is not valid: "
                                     "the \"DBVersion\" setting does not exist. "
                                     "The current database schema version cannot be verified. "
