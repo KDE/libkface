@@ -74,6 +74,8 @@ bool Identity::operator==(const Identity& other) const
     return id == other.id;
 }
 
+// -------------------------------------------------------------------------------------------------
+
 /**
  * The RecognitionDatabaseStaticPriv holds a hash to all exising RecognitionDatabase data,
  * mutex protected.
@@ -283,7 +285,7 @@ RecognitionDatabase& RecognitionDatabase::operator=(const KFaceIface::Recognitio
 
 RecognitionDatabase::~RecognitionDatabase()
 {
-    // saveConfig() called from KFace::Database Priv destructor
+    // saveConfig() called from Private destructor
 }
 
 RecognitionDatabase RecognitionDatabase::addDatabase(const QString& configurationPath)
