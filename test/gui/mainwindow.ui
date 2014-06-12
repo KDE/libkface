@@ -18,10 +18,10 @@
     <item row="0" column="0">
      <widget class="QSlider" name="horizontalSlider">
       <property name="minimum">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="maximum">
-       <number>5</number>
+       <number>100</number>
       </property>
       <property name="singleStep">
        <number>1</number>

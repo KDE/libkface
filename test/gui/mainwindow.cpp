@@ -11,7 +11,7 @@
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  *         Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- *         Copyright (C) 2010-2013 by Gilles Caulier
+ *         Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -32,7 +32,6 @@
 
 // Qt includes
 
-#include <QDebug>
 #include <QLayout>
 #include <QFormLayout>
 
@@ -85,10 +84,11 @@ MainWindow::MainWindow(QWidget* const parent)
 
     myView->show();
 
-    database = new Database(Database::InitAll, ".");
+    detector = new FaceDetector();
+    database = RecognitionDatabase::addDatabase(QDir::currentPath());
 
     ui->configLocation->setText(QDir::currentPath());
-    ui->horizontalSlider->setValue(database->detectionAccuracy());
+    ui->horizontalSlider->setValue(80);
 
     lastFileOpenPath = QDir::currentPath();
 }
@@ -96,11 +96,13 @@ MainWindow::MainWindow(QWidget* const parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete detector;
 }
 
 void MainWindow::changeEvent(QEvent* e)
 {
     QMainWindow::changeEvent(e);
+
     switch (e->type())
     {
         case QEvent::LanguageChange:
@@ -117,8 +119,7 @@ void MainWindow::openImage()
             lastFileOpenPath,
             "Image Files (*.png *.jpg *.bmp *.pgm)",
             this,
-            "Open Image"
-        );
+            "Open Image");
 
     if (file.isEmpty())
         return;
@@ -133,13 +134,13 @@ void MainWindow::openImage()
     lastPhotoItem        = new QGraphicsPixmapItem(*photo);
     currentPhoto         = photo->toImage();
 
-    if(1.0*ui->widget->width()/photo->width() < 1.*ui->widget->height()/photo->height())
+    if (1.0 * ui->widget->width() / photo->width() < 1.0 * ui->widget->height() / photo->height())
     {
-        scale = 1.0*ui->widget->width()/photo->width();
+        scale = 1.0 * ui->widget->width() / photo->width();
     }
     else
     {
-        scale = 1.0*ui->widget->height()/photo->height();
+        scale = 1.0 * ui->widget->height() / photo->height();
     }
 
     lastPhotoItem->setScale(scale);
@@ -147,51 +148,75 @@ void MainWindow::openImage()
     myScene->addItem(lastPhotoItem);
 }
 
-void MainWindow::openConfig()
-{
-    QString directory = KFileDialog::getExistingDirectory(
-            QDir::currentPath(),
-            this,
-            "Select Config Directory"
-        );
-
-    ui->configLocation->setText(directory);
-
-    database = new Database(Database::InitAll, directory);
-}
-
 void MainWindow::detectFaces()
 {
     currentFaces.clear();
-    currentFaces = database->detectFaces(currentPhoto);
-    Face face;
+    currentFaces = detector->detectFaces(currentPhoto);
+
     kDebug() << "libkface detected : " << currentFaces.size() << " faces.";
+    kDebug() << "Coordinates of detected faces : ";
 
-    FaceItem* item=0;
+    foreach(const QRectF& r, currentFaces)
+    {
+        kDebug() << r;
+    }
 
-    foreach(item, faceitems)
+    foreach(FaceItem* const item, faceitems)
         item->setVisible(false);
 
     faceitems.clear();
+    QRect face;
 
     for(int i = 0; i < currentFaces.size(); ++i)
     {
-        face = currentFaces[i];
-        faceitems.append(new FaceItem(0, myScene, face.toRect(), scale));
-        kDebug() << face.toRect()<<endl;
+        face = detector->toAbsoluteRect(currentFaces[i], currentPhoto.size());
+        faceitems.append(new FaceItem(0, myScene, face, scale));
+        kDebug() << face;
     }
+}
+
+void MainWindow::updateAccuracy()
+{
+    int value = ui->horizontalSlider->value();
+    ui->lcdNumber->display(value);
+    detector->setParameter("accuracy", value/100.0);
+}
+
+void MainWindow::clearScene()
+{
+    QList<QGraphicsItem*> list = myScene->items();
+
+    for(int i=0; i<list.size(); i++)
+    {
+        myScene->removeItem(list.at(i));
+    }
+}
+
+void MainWindow::openConfig()
+{
+/*
+    QString directory = KFileDialog::getExistingDirectory(
+            QDir::currentPath(),
+            this,
+            "Select Config Directory");
+
+    ui->configLocation->setText(directory);
+
+    database = new Database(directory);
+*/
 }
 
 void MainWindow::updateConfig()
 {
+/*
     kDebug() << "Path of config directory = " << database->configPath();
 
     // Assign the text of the faceitems to the name of each face. When there is no text, drop that face from currentfaces.
-    QList<Face> updateList;
+    QList<QRectF> updateList;
 
     for(int i = 0 ; i <currentFaces.size(); ++i)
     {
-        if(faceitems[i]->text() != "?")
+        if (faceitems[i]->text() != "?")
         {
             currentFaces[i].setName(faceitems[i]->text());
             updateList.append(currentFaces.at(i));
@@ -207,30 +232,15 @@ void MainWindow::updateConfig()
     {
         kDebug() << "No faces to train.";
     }
-}
-
-void MainWindow::updateAccuracy()
-{
-    int value = ui->horizontalSlider->value();
-    ui->lcdNumber->display(value);
-    database->setDetectionAccuracy(value);
-}
-
-void MainWindow::clearScene()
-{
-    QList<QGraphicsItem*> list = myScene->items();
-
-    for(int i=0; i<list.size(); i++)
-    {
-        myScene->removeItem(list.at(i));
-    }
+*/
 }
 
 void MainWindow::recognise()
 {
+/*
     QList<double> closeness = database->recognizeFaces(currentFaces);
 
-    if(closeness.isEmpty())
+    if (closeness.isEmpty())
         return;
 
     for(int i = 0; i < currentFaces.size(); ++i)
@@ -240,4 +250,5 @@ void MainWindow::recognise()
                  << " and name "<< currentFaces[i].name()
                  << " with a distance of "<< closeness[i];
     }
+*/
 }

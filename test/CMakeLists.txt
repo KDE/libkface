@@ -6,7 +6,7 @@
 # @date   2010-06-16
 # @brief  LibKFace library interface for KDE
 #
-# @author Copyright (C) 2010-2012 by Gilles Caulier
+# @author Copyright (C) 2010-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -43,20 +43,20 @@ TARGET_LINK_LIBRARIES(preprocess kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY}
 
 # -----------------------------------------------------------------------------
 
-# SET(libfaceGUI_SRCS gui/main.cpp
-#                     gui/mainwindow.cpp
-#                     gui/faceitem.cpp
-#                     gui/button.cpp
-#                     gui/marquee.cpp
-#                     gui/fancyrect.cpp
-#    )
-#
-# KDE4_ADD_UI_FILES(libfaceGUI_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
-# KDE4_ADD_EXECUTABLE(libfaceGUI ${libfaceGUI_SRCS})
-#
-# TARGET_LINK_LIBRARIES(libfaceGUI kface ${KDE4_KDECORE_LIBS}
-#                                        ${KDE4_KDEUI_LIBS}
-#                                        ${KDE4_KIO_LIBS}
-#                                        ${QT_QTCORE_LIBRARY}
-#                                        ${QT_QTGUI_LIBRARY}
-#                      )
+SET(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/faceitem.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/button.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/marquee.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/fancyrect.cpp
+   )
+
+KDE4_ADD_UI_FILES(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
+KDE4_ADD_EXECUTABLE(kfacegui ${kfacegui_SRCS})
+
+TARGET_LINK_LIBRARIES(kfacegui kface ${KDE4_KDECORE_LIBS}
+                                     ${KDE4_KDEUI_LIBS}
+                                     ${KDE4_KIO_LIBS}
+                                     ${QT_QTCORE_LIBRARY}
+                                     ${QT_QTGUI_LIBRARY}
+                     )

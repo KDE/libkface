@@ -8,7 +8,7 @@
  * @brief  Pressable Button class using QGraphicsItem
  *
  * @author Copyright (C) 2010 by Frederico Duarte
- * @author Copyright (C) 2010-2012 by Gilles Caulier
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -29,11 +29,11 @@
 namespace KFaceIface
 {
 
-class Button::ButtonPriv
+class Button::Private
 {
 public:
 
-    ButtonPriv()
+    Private()
     {
         isPressed = false;
     }
@@ -44,18 +44,18 @@ public:
 };
 
 Button::Button(QGraphicsItem* const parent)
-      : QGraphicsItem(parent), d(new ButtonPriv)
+      : QGraphicsItem(parent), d(new Private)
 {
 }
 
 Button::Button(const QString& normal, const QString& pressed, QGraphicsItem* const parent)
-      : QGraphicsItem(parent), d(new ButtonPriv)
+      : QGraphicsItem(parent), d(new Private)
 {
     setPixmap(normal, pressed);
 }
 
 Button::Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* const parent)
-      : QGraphicsItem(parent), d(new ButtonPriv)
+      : QGraphicsItem(parent), d(new Private)
 {
     setPixmap(normal, pressed);
 }
