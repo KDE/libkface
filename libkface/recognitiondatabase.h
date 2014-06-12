@@ -11,7 +11,7 @@
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2013 by Gilles Caulier
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -67,7 +67,7 @@ public:
 public:
 
     /**
-     * Performs face recogition.
+     * Performs face recognition.
      * Persistent data about identities and training data will be stored
      * under a given or the default configuration path.
      *
@@ -142,7 +142,7 @@ public:
      * Tunes backend parameters.
      * Available parameters:
      * "accuracy", synonymous: "threshold", range: 0-1, type: float
-     *      Determines recogition threshold, 0->accept very unsecure recogitions, 1-> be very sure about a recognition.
+     *      Determines recognition threshold, 0->accept very unsecure recognitions, 1-> be very sure about a recognition.
      */
     void setParameter(const QString& parameter, const QVariant& value);
     void setParameters(const QVariantMap& parameters);
@@ -157,7 +157,7 @@ public:
     int recommendedImageSize(const QSize& availableSize = QSize()) const;
 
     /**
-     * Performs recogition.
+     * Performs recognition.
      * The face details to be recognized are passed by the provider.
      * For each entry in the provider, in 1-to-1 mapping,
      * a recognized identity or the null identity is returned.
