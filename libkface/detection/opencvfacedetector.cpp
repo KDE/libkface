@@ -12,7 +12,7 @@
  *         <a href="alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="adityabhatt at gmail dot com">adityabhatt at gmail dot com</a>
- * @author Copyright (C) 2010-2013 by Gilles Caulier
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2010-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -60,6 +60,8 @@ public:
         minSize         = cv::Size(0,0);
     }
 
+public:
+
     double   searchIncrement;
     int      grouping;
     int      flags;
@@ -104,7 +106,6 @@ public:
             kDebug() << "failed to load cascade" << file;
             return;
         }
-
     }
 
     cv::Size getOriginalWindowSize() const
@@ -240,6 +241,8 @@ public:
         sensitivityVsSpecificity = 0.8;
     }
 
+public:
+
     QList<Cascade>                 cascades;
 
     int                            maxDistance;    // Maximum distance between two faces to call them unique
@@ -358,13 +361,17 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
         d->primaryParams.flags = 0;
 
     /* greater min size will filter small images, lowering sensitivity, enhancing specificity,
-     * with false positives often small */
+     * with false positives often small
+     */
     double minSize = 32 * d->sensitivityVsSpecificity;
-    /* Original small images deserve a smaller minimum size. */
+
+    /* Original small images deserve a smaller minimum size
+     */
     minSize -= 10 * (1.0 - min(1.0, origSize));
 
     /* A small min size means small starting size, together with search increment, determining
-     * the number of operations and thus speed */
+     * the number of operations and thus speed
+     */
     if (d->speedVsAccuracy < 0.75)
         minSize += 100 * (0.75 - d->speedVsAccuracy);
 
@@ -381,19 +388,19 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
     // min size is adjusted each time
 
 /*
-        kDebug() << "updateParameters: accuracy " << d->speedVsAccuracy
-                 << " sensitivity " << d->sensitivityVsSpecificity
-                 << " - searchIncrement " << d->primaryParams.searchIncrement
-                 << " grouping " << d->primaryParams.grouping
-                 << " flags " << d->primaryParams.flags
-                 << " min size " << d->primaryParams.minSize.width << endl
-                 << " primary cascades: ";
+    kDebug() << "updateParameters: accuracy " << d->speedVsAccuracy
+             << " sensitivity " << d->sensitivityVsSpecificity
+             << " - searchIncrement " << d->primaryParams.searchIncrement
+             << " grouping " << d->primaryParams.grouping
+             << " flags " << d->primaryParams.flags
+             << " min size " << d->primaryParams.minSize.width << endl
+             << " primary cascades: ";
 
-        for (unsigned int i=0; i<d->cascadeProperties.size(); i++)
-            if (d->cascadeProperties[i].primaryCascade)
-                kDebug() << d->cascadeSet->getCascade(i).name << " ";
+    for (unsigned int i=0; i<d->cascadeProperties.size(); i++)
+        if (d->cascadeProperties[i].primaryCascade)
+            kDebug() << d->cascadeSet->getCascade(i).name << " ";
 
-        kDebug() << " maxDistance " << d->maxDistance << " minDuplicates " << d->minDuplicates;
+    kDebug() << " maxDistance " << d->maxDistance << " minDuplicates " << d->minDuplicates;
 */
 
 /*
@@ -509,7 +516,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                 if (!foundFaces.isEmpty())
                     facialFeatureVotes++;
 
-                /*
+/*
                  * This is pretty much working code that scales up the face if it's too small
                  * for the  facial feature cascade. It did not bring me benefit with false positives though.
 
@@ -541,7 +548,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                         break;
                     }
                 }
-                */
+*/
             }
             else
             {
@@ -559,6 +566,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
     }
 
     bool verified;
+
     // Heuristic: Discard a sufficiently large face that shows no facial features
     if (faceSize.width <= 50 && facialFeatureVotes == 0)
     {

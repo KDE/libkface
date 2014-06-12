@@ -60,9 +60,9 @@ public:
         InDatabase
     };
 
-    int     databaseId;
-    int     identity;
-    QString context;
+    int           databaseId;
+    int           identity;
+    QString       context;
 
     StorageStatus storageStatus;
 };

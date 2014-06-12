@@ -136,7 +136,7 @@ cv::Mat OpenCVLBPHFaceRecognizer::prepareForRecognition(const QImage& inputImage
             cvtColor(cvImageWrapper, cvImage, CV_RGBA2GRAY);
             break;
         default:
-            image = image.convertToFormat(QImage::Format_RGB888);
+            image          = image.convertToFormat(QImage::Format_RGB888);
             cvImageWrapper = cv::Mat(image.height(), image.width(), CV_8UC3, image.scanLine(0), image.bytesPerLine());
             cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
             break;

@@ -73,11 +73,13 @@ public:
           numFeatureClusters(0),
           edgeDescDim(0)
     {
-        /*if(outerDimW - innerDimW < 2*windowSize)
+/*
+        if(outerDimW - innerDimW < 2*windowSize)
         {
             cout << "difference between outerDimW and innerDimW is not greater than window size for SIFT descriptor)" << endl;
             return -1;
         }
+
         if( (outerDimW - innerDimW) % 2 != 0)
         {
             cout << "shrinking innerDimW by 1 so outerDimW - innerDimW is divisible by 2" << endl;
@@ -89,11 +91,13 @@ public:
             cout << "difference between outerDimH and innerDimH is not greater than window size for SIFT descriptor)" << endl;
             return -1;
         }
+
         if( (outerDimH - innerDimH) % 2 != 0)
         {
             cout << "shrinking innerDimH by 1 so outerDimH - innerDimH is divisible by 2" << endl;
             --innerDimH;
-        }*/
+        }
+*/
         paddingW = ((outerDimW - innerDimW) - 2*windowSize) / 2;
         paddingH = ((outerDimH - innerDimH) - 2*windowSize) / 2;
     }

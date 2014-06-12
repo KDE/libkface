@@ -125,10 +125,12 @@ void LBPHFaceModel::setHistograms(const QList<OpenCVMatData>& histograms, const 
     cv::Mat newLabels;
     newHistograms.reserve(histograms.size());
     newLabels.reserve(histogramMetadata.size());
+
     foreach (const OpenCVMatData& histogram, histograms)
     {
         newHistograms.push_back(histogram.toMat());
     }
+
     foreach (const LBPHistogramMetadata& metadata, histogramMetadata)
     {
         newLabels.push_back(metadata.identity);
@@ -141,8 +143,8 @@ void LBPHFaceModel::setHistograms(const QList<OpenCVMatData>& histograms, const 
     ptr()->set("histograms", currentHistograms);
     ptr()->set("labels", currentLabels);
 
-    /*
-     * Most cumbersome and inefficient way through a file storage which we were forced to use if we used standard OpenCV
+/*
+    //Most cumbersome and inefficient way through a file storage which we were forced to use if we used standard OpenCV
     cv::FileStorage store(".yml", cv::FileStorage::WRITE + cv::FileStorage::MEMORY);
     // store current parameters to preserve them
     store << "radius"     << radius();
@@ -151,24 +153,28 @@ void LBPHFaceModel::setHistograms(const QList<OpenCVMatData>& histograms, const 
     store << "grid_y"     << gridY();
     // Write histogram data
     store << "histograms" << "[";
+
     foreach (const OpenCVMatData& histogram, histograms)
     {
         store << histogram.toMat();
     }
+
     store << "]";
     // write matching labels
     cv::Mat labels;
+
     foreach (const LBPHistogramMetadata& metadata, histogramMetadata)
     {
         labels.push_back(metadata.identity);
     }
+
     store << "labels" << labels;
     // harvest
     cv::String yaml = store.releaseAndGetString();
 
     cv::FileStorage read(yaml, cv::FileStorage::READ + cv::FileStorage::MEMORY);
     ptr()->load(read);
-    */
+*/
 }
 
 void LBPHFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)

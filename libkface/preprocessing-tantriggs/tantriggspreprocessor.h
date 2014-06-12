@@ -1,5 +1,24 @@
-/*
- * Copyright (c) 2012. Philipp Wagner <bytefish[at]gmx[dot]de>.
+/** ===========================================================
+ * @file
+ *
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ *
+ * @date    2012-01-03
+ * @brief   Calculates the TanTriggs Preprocessing as described in:
+ *          Tan, X., and Triggs, B. "Enhanced local texture feature sets for face
+ *          recognition under difficult lighting conditions.". IEEE Transactions
+ *          on Image Processing 19 (2010), 1635–650.
+ *          Default parameters are taken from the paper.
+ * @section DESCRIPTION
+ *
+ * @author Copyright (C) 2012-2013 by Marcel Wiesweg
+ *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (c) 2012 Philipp Wagner
+ *         <a href="mailto:bytefish at gmx dot de">bytefish at gmx dot de</a>
+ *
+ * @section LICENSE
+ *
  * Released to public domain under terms of the BSD Simplified license.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -14,18 +33,8 @@
  *     without specific prior written permission.
  *
  *   See <http://www.opensource.org/licenses/bsd-license>
- */
- 
-
-//
-// Calculates the TanTriggs Preprocessing as described in:
-//
-//      Tan, X., and Triggs, B. "Enhanced local texture feature sets for face
-//      recognition under difficult lighting conditions.". IEEE Transactions
-//      on Image Processing 19 (2010), 1635–650.
-//
-// Default parameters are taken from the paper.
-//
+ *
+ * ============================================================ */
 
 #ifndef TANTRIGGSPREPROCESSOR_H
 #define TANTRIGGSPREPROCESSOR_H
