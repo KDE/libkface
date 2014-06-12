@@ -192,6 +192,8 @@ void MainWindow::clearScene()
     }
 }
 
+// TODO: port these method to FaceRecognitionDatabase API
+
 void MainWindow::openConfig()
 {
 /*
