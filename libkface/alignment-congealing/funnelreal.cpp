@@ -1,32 +1,35 @@
-// funnelReal.cpp : funneling for complex, realistic images
-//                  using sequence of distribution fields learned from congealReal
-
-/*
- * Copyright (c) 2007, Gary B. Huang, UMass-Amherst
- * All rights reserved.
+/** ===========================================================
+ * @file
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the author nor the organization may be used to
- *       endorse or promote products derived from this software without specific
- *       prior written permission.
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * THIS SOFTWARE IS PROVIDED BY Gary B. Huang ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL <copyright holder> BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+ * @date    2013-06-14
+ * @brief   Alignment by Image Congealing.
+ *          Funneling for complex, realistic images
+ *          using sequence of distribution fields learned from congealReal
+ *          Gary B. Huang, Vidit Jain, and Erik Learned-Miller.
+ *          Unsupervised joint alignment of complex images.
+ *          International Conference on Computer Vision (ICCV), 2007.
+ *
+ * @author Copyright (C) 2013 by Marcel Wiesweg
+ *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2007 by Gary B. Huang, UMass-Amherst
+ *
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #include "funnelreal.h"
 
@@ -56,7 +59,6 @@ public:
 
     Private()
         : isLoaded(false),
-          pi(3.14159265F),
           numParams(4), // similarity transforms - x translation, y translation, rotation, uniform scaling
           windowSize(4),
           maxProcessAtOnce(600), // set based on memory limitations,
@@ -120,49 +122,51 @@ public:
     float computeLogLikelihood  (const std::vector<std::vector<float> > &logDistField,
                                  const std::vector<std::vector<float> > &fids, int numFeatureClusters) const;
     void  getNewFeatsInvT       (std::vector<std::vector<float> > &newFIDs,
-                                  const std::vector<std::vector<std::vector<float> > > &originalFeats,
-                                  const std::vector<float> &vparams,
-                                  float centerX, float centerY) const;
+                                 const std::vector<std::vector<std::vector<float> > > &originalFeats,
+                                 const std::vector<float> &vparams,
+                                 float centerX, float centerY) const;
 
-    bool isLoaded;
+public:
 
-    const float pi;
+    bool                                            isLoaded;
 
-    const int numParams;
-    const int windowSize;
-    const int maxProcessAtOnce;
+    const int                                       numParams;
+    const int                                       windowSize;
+    const int                                       maxProcessAtOnce;
 
-    int outerDimW;
-    int outerDimH;
-    int innerDimW;
-    int innerDimH;
-    int paddingW;
-    int paddingH;
+    int                                             outerDimW;
+    int                                             outerDimH;
+    int                                             innerDimW;
+    int                                             innerDimH;
+    int                                             paddingW;
+    int                                             paddingH;
 
-    const int siftHistDim;
-    const int siftBucketsDim;
-    const int siftDescDim;
+    const int                                       siftHistDim;
+    const int                                       siftBucketsDim;
+    const int                                       siftDescDim;
 
     /// Training data
-    int numRandPxls;
-    int numFeatureClusters;
-    int edgeDescDim;
-    std::vector<std::vector<float> >               centroids;
-    std::vector<float>                             sigmaSq;
-    std::vector<std::pair<int, int> >              randPxls;
-    std::vector<std::vector<std::vector<float> > > logDFSeq;
-    std::vector<std::vector<float> >               Gaussian;
+    int                                             numRandPxls;
+    int                                             numFeatureClusters;
+    int                                             edgeDescDim;
+    std::vector<std::vector<float> >                centroids;
+    std::vector<float>                              sigmaSq;
+    std::vector<std::pair<int, int> >               randPxls;
+    std::vector<std::vector<std::vector<float> > >  logDFSeq;
+    std::vector<std::vector<float> >                Gaussian;
 };
 
 FunnelReal::FunnelReal()
     : d(new Private)
 {
     QString trainingFile = KStandardDirs::installPath("data") + QString("libkface/alignment-congealing/face-funnel.data");
+
     if (!QFileInfo(trainingFile).exists())
     {
         kError() << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
         return;
     }
+
     d->loadTrainingData(trainingFile);
 }
 
@@ -191,6 +195,7 @@ cv::Mat FunnelReal::align(const cv::Mat& inputImage)
     {
         grey = scaled;
     }
+
     // convert to float
     grey.convertTo(image, CV_32F);
 
@@ -205,7 +210,6 @@ cv::Mat FunnelReal::align(const cv::Mat& inputImage)
 
     return d->applyTransform(inputImage, v, d->outerDimH, d->outerDimW);
 }
-
 
 void FunnelReal::Private::loadTrainingData(const QString& path)
 {
@@ -231,6 +235,7 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
 
         trainingInfo >> numRandPxls;
         randPxls = std::vector<std::pair<int, int> >(numRandPxls);
+
         for(int j=0; j<numRandPxls; j++)
             trainingInfo >> randPxls[j].first >> randPxls[j].second;
 
@@ -238,9 +243,11 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
         std::vector<std::vector<float> >  logDistField(numRandPxls, dfCol);
 
         int iteration;
+
         while(true)
         {
             trainingInfo >> iteration;
+
             if(trainingInfo.eof())
                 break;
 
@@ -249,6 +256,7 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
                 for(int i=0; i<numFeatureClusters; i++)
                     trainingInfo >> logDistField[j][i];
             }
+
             logDFSeq.push_back(logDistField);
         }
     }
@@ -256,6 +264,11 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
     {
         kError() << "Error loading Congealing/Funnel training data:" << e.what();
     }
+    catch(...)
+    {
+        kError() << "Default exception";
+    }
+
     computeGaussian(Gaussian, windowSize);
 
     isLoaded = true;
@@ -266,11 +279,13 @@ void FunnelReal::Private::computeGaussian(std::vector<std::vector<float> > &Gaus
     for(int i=0; i<2*windowSize; i++)
     {
         std::vector<float> grow(2*windowSize);
+
         for(int j=0; j<2*windowSize; j++)
         {
             float ii = i-(windowSize-0.5f), jj = j-(windowSize-0.5f);
-            grow[j] = exp(-(ii*ii+jj*jj)/(2*windowSize*windowSize));
+            grow[j]  = exp(-(ii*ii+jj*jj)/(2*windowSize*windowSize));
         }
+
         Gaussian.push_back(grow);
     }
 }
@@ -278,8 +293,10 @@ void FunnelReal::Private::computeGaussian(std::vector<std::vector<float> > &Gaus
 static float dist(const std::vector<float> &a, const std::vector<float> &b)
 {
     float r=0;
+
     for(int i=0; i<(signed)a.size(); i++)
         r+=(a[i]-b[i])*(a[i]-b[i]);
+
     return r;
 }
 
@@ -304,6 +321,7 @@ void FunnelReal::Private::computeOriginalFeatures(std::vector<std::vector<std::v
     {
         const float *greaterRow, *lesserRow, *row;
         row = image.ptr<float>(j);
+
         if (j == 0)
         {
             greaterRow = image.ptr<float>(j+1);
@@ -337,8 +355,9 @@ void FunnelReal::Private::computeOriginalFeatures(std::vector<std::vector<std::v
                 dx = row[k+1] - row[k-1];
             }
 
-            m[j][k] = (float)sqrt(dx*dx+dy*dy);
-            theta[j][k] = (float)atan2(dy,dx) * 180.0f/pi;
+            m[j][k]     = (float)sqrt(dx*dx+dy*dy);
+            theta[j][k] = (float)atan2(dy,dx) * 180.0f/M_PI;
+
             if(theta[j][k] < 0)
             {
                 theta[j][k] += 360.0f;
@@ -362,15 +381,18 @@ void FunnelReal::Private::computeOriginalFeatures(std::vector<std::vector<std::v
         {
             std::vector<float> distances(numFeatureClusters);
             float sum = 0;
+
             for(int ii=0; ii<numFeatureClusters; ii++)
             {
                 distances[ii] = exp(-dist(originalFeatures[j][k], centroids[ii])/(2*sigmaSq[ii]))/sqrt(sigmaSq[ii]);
                 sum += distances[ii];
             }
+
             for(int ii=0; ii<numFeatureClusters; ii++)
             {
                 distances[ii] /= sum;
             }
+
             originalFeatures[j][k] = distances;
         }
     }
@@ -387,15 +409,17 @@ std::vector<float> FunnelReal::Private::computeTransform(const std::vector<std::
 
     std::vector<float>               nfEntry(numFeatureClusters, 0);
     std::vector<std::vector<float> > newFIDs(numRandPxls, nfEntry);
-    float centerX = width/2.0f, centerY = height/2.0f;
+    float centerX = width/2.0f;
+    float centerY = height/2.0f;
 
-    float d[] = {1.0f, 1.0f, pi/180.0f, 0.02f};
+    float d[] = {1.0f, 1.0f, M_PI/180.0f, 0.02f};
 
     getNewFeatsInvT(featureIDs, originalFeatures, v, centerX, centerY);
 
     for(uint iter=0; iter<logDFSeq.size(); iter++)
     {
         float oldL = computeLogLikelihood(logDFSeq[iter], featureIDs, numFeatureClusters);
+
         for(int k=0; k<numParams; k++)
         {
             float dn = ((rand()%160)-80)/100.0f;
@@ -411,7 +435,7 @@ std::vector<float> FunnelReal::Private::computeTransform(const std::vector<std::
             if(newL > oldL)
             {
                 featureIDs = newFIDs;
-                oldL = newL;
+                oldL       = newL;
             }
             else
             {
@@ -421,7 +445,7 @@ std::vector<float> FunnelReal::Private::computeTransform(const std::vector<std::
 
                 if(newL > oldL)
                 {
-                    oldL = newL;
+                    oldL       = newL;
                     featureIDs = newFIDs;
                 }
                 else
@@ -444,12 +468,12 @@ cv::Mat FunnelReal::Private::applyTransform(const cv::Mat& image,
     float cropS2inv[3][3] = {{w/(float)image.cols,0,0}, {0,h/(float)image.rows,0}, {0,0,1}};
     float cropT2inv[3][3] = {{1,0,-image.cols/2.0f}, {0,1,-image.rows/2.0f}, {0,0,1}};
 
-    float postM[3][3] = {{1,0,w/2.0f}, {0,1,h/2.0f}, {0,0,1}};
-    float preM[3][3] = {{1,0,-w/2.0f}, {0,1,-h/2.0f}, {0,0,1}};
+    float postM[3][3]     = {{1,0,w/2.0f}, {0,1,h/2.0f}, {0,0,1}};
+    float preM[3][3]      = {{1,0,-w/2.0f}, {0,1,-h/2.0f}, {0,0,1}};
 
-    float tM[3][3]  = {{1, 0, v[0]}, {0, 1, v[1]}, {0,0,1}};
-    float rM[3][3]  = {{cosf(v[2]), -sinf(v[2]), 0}, {sinf(v[2]), cosf(v[2]), 0}, {0, 0, 1}};
-    float sM[3][3]  = {{expf(v[3]), 0, 0}, {0, expf(v[3]), 0}, {0, 0, 1}};
+    float tM[3][3]        = {{1, 0, v[0]}, {0, 1, v[1]}, {0,0,1}};
+    float rM[3][3]        = {{cosf(v[2]), -sinf(v[2]), 0}, {sinf(v[2]), cosf(v[2]), 0}, {0, 0, 1}};
+    float sM[3][3]        = {{expf(v[3]), 0, 0}, {0, expf(v[3]), 0}, {0, 0, 1}};
 
     cv::Mat tCVM(3, 3, CV_32FC1, tM);
     cv::Mat rCVM(3, 3, CV_32FC1, rM);
@@ -493,11 +517,13 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
     // weight magnitudes by Gaussian with sigma equal to half window
     std::vector<float> mtimesGRow(2*windowSize);
     std::vector<std::vector<float> > mtimesG(2*windowSize, mtimesGRow);
+
     for(int i=0; i<2*windowSize; i++)
     {
         for(int j=0; j<2*windowSize; j++)
         {
-            int xx = x+i-(windowSize-1), yy = y+j-(windowSize-1);
+            int xx        = x+i-(windowSize-1);
+            int yy        = y+j-(windowSize-1);
             mtimesG[i][j] = m[xx][yy] * Gaussian[i][j];
         }
     }
@@ -506,17 +532,18 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
     // using trilinear interpolation
     int histBin[2], histX[2], histY[2];
     float dX[2], dY[2], dBin[2];
+
     for(int i=0; i<2*windowSize; i++)
     {
         for(int j=0; j<2*windowSize; j++)
         {
             histX[0] = i/histDim; histX[1] = i/histDim;
             histY[0] = j/histDim; histY[1] = j/histDim;
-            dX[1] = 0;
-            dY[1] = 0;
+            dX[1]    = 0;
+            dY[1]    = 0;
 
-            int iModHD = i % histDim;
-            int jModHD = j % histDim;
+            int iModHD    = i % histDim;
+            int jModHD    = j % histDim;
             int histDimD2 = histDim/2;
 
             if( iModHD >= histDimD2 && i < 2*windowSize - histDimD2 )
@@ -524,16 +551,19 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
                 histX[1] = histX[0] + 1;
                 dX[1] = (iModHD + 0.5f - histDimD2) / histDim;
             }
+
             if( iModHD < histDimD2 && i >= histDimD2 )
             {
                 histX[1] = histX[0] - 1;
                 dX[1] = (histDimD2 + 0.5f - iModHD) / histDim;
             }
+
             if( jModHD >= histDimD2 && j < 2*windowSize - histDimD2 )
             {
                 histY[1] = histY[0] + 1;
                 dY[1] = (jModHD + 0.5f - histDimD2) / histDim;
             }
+
             if( jModHD < histDimD2 && j >= histDimD2)
             {
                 histY[1] = histY[0] - 1;
@@ -547,8 +577,8 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
 
             histBin[0] = (int)(histAngle / degPerBin);
             histBin[1] = (histBin[0]+1) % bucketsDim;
-            dBin[1] = (histAngle - histBin[0]*degPerBin) / degPerBin;
-            dBin[0] = 1.0f-dBin[1];
+            dBin[1]    = (histAngle - histBin[0]*degPerBin) / degPerBin;
+            dBin[0]    = 1.0f-dBin[1];
 
             for(int histBinIndex=0; histBinIndex<2; histBinIndex++)
             {
@@ -568,6 +598,7 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
     // normalize
     // threshold values at .2, renormalize
     float sum = 0;
+
     for(int i=0; i<(signed)descripter.size(); i++)
         sum += descripter[i];
 
@@ -576,18 +607,23 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
         //float dn = 1.0f / (signed)descripter.size(); // is unused, dont know
         for(int i=0; i<(signed)descripter.size(); i++)
             descripter[i] = 0;
+
         return;
     }
 
     for(int i=0; i<(signed)descripter.size(); i++)
     {
         descripter[i] /= sum;
+
         if(descripter[i] > .2f)
             descripter[i] = .2f;
     }
+
     sum = 0;
+
     for(int i=0; i<(signed)descripter.size(); i++)
         sum += descripter[i];
+
     for(int i=0; i<(signed)descripter.size(); i++)
         descripter[i] /= sum;
 }
@@ -601,11 +637,11 @@ void FunnelReal::Private::getNewFeatsInvT(std::vector<std::vector<float> > &newF
     std::vector<float> uniformDist(numFeats, 1.0f/numFeats);
 
     float postM[2][3] = {{1,0,centerX}, {0,1,centerY}};
-    float preM[3][3] = {{1,0,-centerX}, {0,1,-centerY}, {0,0,1}};
+    float preM[3][3]  = {{1,0,-centerX}, {0,1,-centerY}, {0,0,1}};
 
-    float tM[3][3]  = {{1, 0, vparams[0]}, {0, 1, vparams[1]}, {0,0,1}};
-    float rM[3][3]  = {{cosf(vparams[2]), -sinf(vparams[2]), 0}, {sinf(vparams[2]), cosf(vparams[2]), 0}, {0, 0, 1}};
-    float sM[3][3]  = {{expf(vparams[3]), 0, 0}, {0, expf(vparams[3]), 0}, {0, 0, 1}};
+    float tM[3][3]    = {{1, 0, vparams[0]}, {0, 1, vparams[1]}, {0,0,1}};
+    float rM[3][3]    = {{cosf(vparams[2]), -sinf(vparams[2]), 0}, {sinf(vparams[2]), cosf(vparams[2]), 0}, {0, 0, 1}};
+    float sM[3][3]    = {{expf(vparams[3]), 0, 0}, {0, expf(vparams[3]), 0}, {0, 0, 1}};
 
     cv::Mat tCVM(3, 3, CV_32FC1, tM);
     cv::Mat rCVM(3, 3, CV_32FC1, rM);
@@ -625,10 +661,11 @@ void FunnelReal::Private::getNewFeatsInvT(std::vector<std::vector<float> > &newF
 
     for(int i=0; i<(signed)newFIDs.size(); i++)
     {
-        int j = randPxls[i].first;
-        int k = randPxls[i].second;
+        int j  = randPxls[i].first;
+        int k  = randPxls[i].second;
         int nx = (int)(xform.at<float>(0)*k + xform.at<float>(1)*j + xform.at<float>(2) + 0.5f);
         int ny = (int)(xform.at<float>(3)*k + xform.at<float>(4)*j + xform.at<float>(5) + 0.5f);
+
         if(!(ny >= 0 && ny < height && nx >= 0 && nx < width))
             newFIDs[i] = uniformDist;
         else
@@ -641,12 +678,14 @@ float FunnelReal::Private::computeLogLikelihood(const std::vector<std::vector<fl
                                                 int numFeatureClusters) const
 {
     float l = 0;
+
     for(int j=0; j<(signed)fids.size(); j++)
     {
         for(int i=0; i<numFeatureClusters; i++)
             l += fids[j][i] * logDistField[j][i];
     }
+
     return l;
 }
 
-} // namespace
+} // namespace KFaceIface

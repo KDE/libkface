@@ -18,8 +18,6 @@
 
 #include "tantriggspreprocessor.h"
  
-// C++ includes
-
 // OpenCV includes
 
 #include <opencv2/core/core.hpp>
@@ -74,22 +72,26 @@ cv::Mat TanTriggsPreprocessor::preprocessRaw(const cv::Mat& inputImage)
 
     {
         double meanI = 0.0;
+
         {
             cv::Mat tmp;
             cv::pow(cv::abs(I), alpha, tmp);
             meanI = cv::mean(tmp).val[0];
 
         }
+
         I = I / cv::pow(meanI, 1.0/alpha);
     }
 
     {
         double meanI = 0.0;
+
         {
             cv::Mat tmp;
             cv::pow(min(abs(I), tau), alpha, tmp);
             meanI = cv::mean(tmp).val[0];
         }
+
         I = I / cv::pow(meanI, 1.0/alpha);
     }
 
@@ -102,6 +104,7 @@ cv::Mat TanTriggsPreprocessor::preprocessRaw(const cv::Mat& inputImage)
                 I.at<float>(r,c) = tanh(I.at<float>(r,c) / tau);
             }
         }
+
         I = tau * I;
     }
 
@@ -113,20 +116,21 @@ cv::Mat TanTriggsPreprocessor::normalize(const cv::Mat& src)
 {
     // Create and return normalized image:
     cv::Mat dst;
-    switch(src.channels()) {
-    case 1:
-        cv::normalize(src, dst, 0, 255, cv::NORM_MINMAX, CV_8UC1);
-        break;
-    case 3:
-        cv::normalize(src, dst, 0, 255, cv::NORM_MINMAX, CV_8UC3);
-        break;
-    default:
-        src.copyTo(dst);
-        break;
+
+    switch(src.channels())
+    {
+        case 1:
+            cv::normalize(src, dst, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+            break;
+        case 3:
+            cv::normalize(src, dst, 0, 255, cv::NORM_MINMAX, CV_8UC3);
+            break;
+        default:
+            src.copyTo(dst);
+            break;
     }
+
     return dst;
 }
 
-}
-
-
+} // namespace KFaceIface

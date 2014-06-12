@@ -137,19 +137,20 @@ QString FaceDetector::backendIdentifier() const
 QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& originalSize)
 {
     QList<QRectF> result;
-    cv::Size cvOriginalSize;
-
-    if (originalSize.isValid())
-    {
-        cvOriginalSize = cv::Size(originalSize.width(), originalSize.height());
-    }
-    else
-    {
-        cvOriginalSize = cv::Size(image.width(), image.height());
-    }
 
     try
     {
+        cv::Size cvOriginalSize;
+
+        if (originalSize.isValid())
+        {
+            cvOriginalSize = cv::Size(originalSize.width(), originalSize.height());
+        }
+        else
+        {
+            cvOriginalSize = cv::Size(image.width(), image.height());
+        }
+
         cv::Mat cvImage       = d->backend()->prepareForDetection(image);
         QList<QRect> absRects = d->backend()->detectFaces(cvImage, cvOriginalSize);
         result                = toRelativeRects(absRects, QSize(cvImage.cols, cvImage.rows));

@@ -137,57 +137,10 @@ QList<int> TrainingDB::identityIds()
     d->db->execSql("SELECT id FROM Identities", &ids);
 
     QList<int> results;
-    
+
     foreach (const QVariant& var, ids)
     {
         results << var.toInt();
-    }
-
-    return results;
-}
-
-void TrainingDB::addTLDFaceModel(int identity, const UnitFaceModel& model)
-{
-    QVariantList boundValues;
-    boundValues << identity
-                << model.objWidth << model.objHeight << model.minVar
-                << model.serialisedPositivePatches
-                << model.serialisedNegativePatches
-                << model.serialisedFeatures
-                << model.serialisedLeaves;
-    d->db->execSql("INSERT INTO OpenTLDData "
-                   "(identity, width, height, minVar, positivePatches, negativePatches, allFeatures, allLeaves) "
-                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", boundValues);
-}
-
-QList<UnitFaceModel> TrainingDB::tldFaceModels(int identity)
-{
-    QList<UnitFaceModel> results;
-    QList<QVariant> values;
-
-    d->db->execSql("SELECT width, height, minVar, positivePatches, negativePatches, allFeatures, allLeaves "
-                  " FROM OpenTLDData WHERE identity=?", identity, &values);
-
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
-    {
-        UnitFaceModel model;
-        model.objWidth = it->toInt();
-        ++it;
-        model.objHeight = it->toInt();
-        ++it;
-        model.minVar = it->toDouble();
-        ++it;
-
-        model.serialisedPositivePatches = it->toByteArray();
-        ++it;
-        model.serialisedNegativePatches = it->toByteArray();
-        ++it;
-        model.serialisedFeatures        = it->toByteArray();
-        ++it;
-        model.serialisedLeaves          = it->toByteArray();
-        ++it;
-
-        results << model;
     }
 
     return results;

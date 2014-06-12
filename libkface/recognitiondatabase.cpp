@@ -28,7 +28,7 @@
  * ============================================================ */
 
 // OpenCV includes need to show up before Qt includes
-#include "recognition-opentld/opentldfacerecognizer.h"
+//#include "recognition-opentld/opentldfacerecognizer.h"
 #include "recognition-opencv-lbph/opencvlbphfacerecognizer.h"
 #include "preprocessing-tantriggs/tantriggspreprocessor.h"
 
@@ -144,9 +144,9 @@ public:
     CurrentRecognizer* recognizer()             { return getObjectOrCreate(opencvlbph); }
     CurrentRecognizer* recognizerConst() const  { return opencvlbph;                    }
 
-    OpenTLDFaceRecognizer* openTLD()            { return getObjectOrCreate(opentld);    }
+/*    OpenTLDFaceRecognizer* openTLD()            { return getObjectOrCreate(opentld);    }
     OpenTLDFaceRecognizer* openTLDConst() const { return opentld;                       }
-
+*/
     OpenCVLBPHFaceRecognizer* lbph()            { return getObjectOrCreate(opencvlbph); }
     OpenCVLBPHFaceRecognizer* lbphConst() const { return opencvlbph;                    }
 
@@ -158,11 +158,11 @@ public:
 
 public:
 
-    void train(OpenTLDFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
-               TrainingDataProvider* const data, const QString& trainingContext);
+/*    void train(OpenTLDFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
+               TrainingDataProvider* const data, const QString& trainingContext);*/
     void train(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
                TrainingDataProvider* const data, const QString& trainingContext);
-    void clear(OpenTLDFaceRecognizer* const, const QList<int>&, const QString&);
+/*    void clear(OpenTLDFaceRecognizer* const, const QList<int>&, const QString&);*/
     void clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
 
     cv::Mat preprocessingChain(const QImage& image);
@@ -181,7 +181,7 @@ private:
 
 private:
 
-    OpenTLDFaceRecognizer*    opentld;
+    //OpenTLDFaceRecognizer*    opentld;
     OpenCVLBPHFaceRecognizer* opencvlbph;
     FunnelReal*               funnel;
 };
@@ -230,7 +230,7 @@ RecognitionDatabase::Private::Private(const QString& configPath)
     : configPath(configPath),
       mutex(QMutex::Recursive),
       db(DatabaseAccess::create()),
-      opentld(0),
+//      opentld(0),
       opencvlbph(0),
       funnel(0)
 {
@@ -250,7 +250,7 @@ RecognitionDatabase::Private::Private(const QString& configPath)
 RecognitionDatabase::Private::~Private()
 {
     delete opencvlbph;
-    delete opentld;
+//    delete opentld;
     delete funnel;
 
     static_d->removeDatabase(configPath);
@@ -263,6 +263,7 @@ RecognitionDatabase::Private::CurrentAligner* RecognitionDatabase::Private::alig
     {
         funnel = new FunnelReal;
     }
+
     return funnel;
 }
 
@@ -368,6 +369,7 @@ Identity RecognitionDatabase::Private::findByAttributes(const QString& attribute
             }
         }
     }
+
     return Identity();
 }
 
@@ -595,11 +597,24 @@ QList<Identity> RecognitionDatabase::recognizeFaces(const QList<QImage>& images)
 
 cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
 {
-    cv::Mat cvImage = recognizer()->prepareForRecognition(image);
-    //cvImage         = aligner()->align(cvImage);
-    //TanTriggsPreprocessor preprocessor;
-    //cvImage         = preprocessor.preprocess(cvImage);
-    return cvImage;
+    try
+    {
+        cv::Mat cvImage = recognizer()->prepareForRecognition(image);
+        //cvImage         = aligner()->align(cvImage);
+        //TanTriggsPreprocessor preprocessor;
+        //cvImage         = preprocessor.preprocess(cvImage);
+        return cvImage;
+    }
+    catch (cv::Exception& e)
+    {
+        kError() << "cv::Exception:" << e.what();
+        return cv::Mat();
+    }
+    catch(...)
+    {
+        kError() << "Default exception from OpenCV";
+        return cv::Mat();
+    }
 }
 
 QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const images)
@@ -614,6 +629,7 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
     for (; !images->atEnd(); images->proceed())
     {
         int id = -1;
+
         try
         {
             id = d->recognizer()->recognize(d->preprocessingChain(images->image()));
@@ -726,16 +742,16 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
 }
 
 // Specializations for available backends
-void RecognitionDatabase::Private::train(OpenTLDFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
+/*void RecognitionDatabase::Private::train(OpenTLDFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
                                          TrainingDataProvider* const data, const QString& trainingContext)
 {
     foreach (const Identity& identity, identitiesToBeTrained)
     {
         //OpenTLD
-        trainSingle(r, identity, data, trainingContext, this);
+        (r, identity, data, trainingContext, this);
     }
 }
-
+*/
 void RecognitionDatabase::Private::train(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
                                          TrainingDataProvider* const data, const QString& trainingContext)
 {
@@ -752,13 +768,13 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
 
    d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
 }
-
+/*
 // Specializations for available backends
 void RecognitionDatabase::Private::clear(OpenTLDFaceRecognizer* const, const QList<int>&, const QString&)
 {
     // unimplemented
 }
-
+*/
 void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext)
 {
     // force later reload

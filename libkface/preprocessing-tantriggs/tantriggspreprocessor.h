@@ -59,6 +59,8 @@ public:
     /// Converts CV_32F1 -> CV_8UC1
     cv::Mat normalize(const cv::Mat& preprocessedImage);
 
+public:
+
     /// Parameters, initialized with the default values from the paper.
     float alpha;
     float tau;
@@ -67,6 +69,6 @@ public:
     float sigma1;
 };
 
-} // namespace
+} // namespace KFaceIface
 
-#endif
+#endif // TANTRIGGSPREPROCESSOR_H

@@ -4,7 +4,7 @@
  *
  * Date        : 02.02.2012
  *
- * Copyright (C) 2012-13 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
+ * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,6 @@
 // Local includes
 
 #include "identity.h"
-#include "unitfacemodel.h"
 
 namespace KFaceIface
 {
@@ -53,11 +52,6 @@ public:
     void deleteIdentity(int id);
     QList<Identity> identities();
     QList<int> identityIds();
-
-    /// OpenTLD
-
-    void addTLDFaceModel(int identity, const UnitFaceModel& model);
-    QList<UnitFaceModel> tldFaceModels(int identity);
 
     /// OpenCV LBPH
 

@@ -40,7 +40,6 @@
 
 #include "flandmark_detector.h"
 
-
 namespace KFaceIface
 {
 
@@ -67,11 +66,13 @@ FlandmarkAligner::FlandmarkAligner()
     : d(new Private)
 {
     QString modelData = KStandardDirs::installPath("data") + QString("libkface/alignment-flandmark/flandmark_model.dat");
+
     if (!QFileInfo(modelData).exists())
     {
         kError() << "Model data for Congealing/Funnel not found. Should be at" << modelData;
         return;
     }
+
     d->loadTrainingData(modelData);
 }
 
@@ -88,6 +89,7 @@ cv::Mat FlandmarkAligner::align(const cv::Mat& inputImage)
     }
 
     cv::Mat image;
+
     // ensure it's grayscale
     if (inputImage.channels() > 1)
     {

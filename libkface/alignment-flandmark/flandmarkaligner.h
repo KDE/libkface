@@ -40,9 +40,6 @@
 
 #include <QImage>
 
-// local includes
-
-
 namespace KFaceIface
 {
 

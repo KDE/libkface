@@ -6,7 +6,7 @@
 # @date   2010-06-16
 # @brief  LibFace library interface for KDE
 #
-# @author Copyright (C) 2010-2013 by Gilles Caulier
+# @author Copyright (C) 2010-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -34,15 +34,13 @@ ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 ADD_DEFINITIONS(${LIBFACE_DEFINITIONS})
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
-SUBDIRS(OpenTLD)
-
 INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
 INCLUDE(MacroOptionalAddSubdirectory)
 INCLUDE(MacroOptionalFindPackage)
 INCLUDE(FindPackageHandleStandardArgs)
 
-ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS} -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS )
+ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS} -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${KDE4_INCLUDES})
 
 SET(LIBKFACE_AREA_CODE_GENERAL 51005)
@@ -89,8 +87,6 @@ ELSE (OpenCV_VERSION)
     SET(OpenCV_FOUND FALSE)
 
 ENDIF (OpenCV_VERSION)
-
-
 
 # there are two versions of FindOpenCV.cmake in the wild, one defining
 # OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle

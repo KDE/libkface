@@ -5,14 +5,16 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date    2013-06-14
- * @brief   Alignment by Image Congealing
- *
- * Gary B. Huang, Vidit Jain, and Erik Learned-Miller.
- * Unsupervised joint alignment of complex images.
- * International Conference on Computer Vision (ICCV), 2007.
+ * @brief   Alignment by Image Congealing.
+ *          Funneling for complex, realistic images
+ *          using sequence of distribution fields learned from congealReal
+ *          Gary B. Huang, Vidit Jain, and Erik Learned-Miller.
+ *          Unsupervised joint alignment of complex images.
+ *          International Conference on Computer Vision (ICCV), 2007.
  *
  * @author Copyright (C) 2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2007 by Gary B. Huang, UMass-Amherst
  *
  * @section LICENSE
  *
@@ -39,9 +41,6 @@
 // Qt include
 
 #include <QImage>
-
-// local includes
-
 
 namespace KFaceIface
 {

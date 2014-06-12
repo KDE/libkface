@@ -1,8 +1,8 @@
 /** ===========================================================
  * @file
  *
- * This file was developed as part of the libface project
- * <a href="http://libface.sourceforge.net">http://libface.sourceforge.net</a>
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date    2010-01-03
  * @brief   Class to perform faces detection.
@@ -60,9 +60,9 @@ public:
         minSize         = cv::Size(0,0);
     }
 
-    double searchIncrement;
-    int    grouping;
-    int    flags;
+    double   searchIncrement;
+    int      grouping;
+    int      flags;
     cv::Size minSize;
 };
 
@@ -73,6 +73,7 @@ static QString findFileInDirs(const QStringList& dirs, const QString& fileName)
     foreach (const QString &dir, dirs)
     {
         const QString file = dir + (dir.endsWith("/") ? "" : "/") + fileName;
+
         if (QFile::exists(file))
         {
             return file;
@@ -114,6 +115,7 @@ public:
         {
             return oldCascade->orig_window_size;
         }
+
         return cv::Size(0,0);
     }
 
@@ -689,7 +691,7 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage)
             cvtColor(cvImageWrapper, cvImage, CV_RGBA2GRAY);
             break;
         default:
-            image = image.convertToFormat(QImage::Format_RGB888);
+            image          = image.convertToFormat(QImage::Format_RGB888);
             cvImageWrapper = cv::Mat(image.height(), image.width(), CV_8UC3, image.scanLine(0), image.bytesPerLine());
             cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
             break;

@@ -6,7 +6,7 @@
 # @date   2010-06-16
 # @brief  LibFace library interface for KDE
 #
-# @author Copyright (C) 2010-2012 by Gilles Caulier
+# @author Copyright (C) 2010-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -26,7 +26,7 @@
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 ADD_DEFINITIONS(${LIBFACE_DEFINITIONS})
-ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
 REMOVE_DEFINITIONS(-DQT_NO_STL)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
@@ -44,8 +44,6 @@ SET(kface_LIB_SRCS facedetector.cpp
                    recognition-opencv-lbph/lbphfacemodel.cpp
                    recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                    recognition-opencv-lbph/facerec_borrowed.cpp
-                   recognition-opentld/opentldfacerecognizer.cpp
-                   recognition-opentld/unitfacemodel.cpp
                    alignment-congealing/funnelreal.cpp
                    #alignment-flandmark/liblbp.cpp
                    #alignment-flandmark/flandmark_detector.cpp
@@ -69,14 +67,14 @@ KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${face_LIB_SRCS} ${kface_databas
 
 TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${KDE4_KDEUI_LIBS}
+
                             ${QT_QTGUI_LIBRARY}
                             ${QT_QTXML_LIBRARY}
-                            ${LIBFACE_LIBRARIES}
+                            ${QT_QTSQL_LIBRARY}
+
                             ${OpenCV_LIBRARIES}
 
-                            ${QT_QTSQL_LIBRARY}
-                            opentld
-                            cvblobs
+                            ${LIBFACE_LIBRARIES}
                       )
 
 SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
