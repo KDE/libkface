@@ -65,15 +65,7 @@ public:
     LBPHFaceRecognizer(int radius_=1, int neighbors_=8,
                        int gridx=8, int gridy=8,
                        double threshold = DBL_MAX,
-                       PredictionStatistics statistics = NearestNeighbor) :
-        _grid_x(gridx),
-        _grid_y(gridy),
-        _radius(radius_),
-        _neighbors(neighbors_),
-        _threshold(threshold),
-        _statisticsMode(statistics)
-    {
-    }
+                       PredictionStatistics statistics = NearestNeighbor);
 
     // Initializes and computes this LBPH Model. The current implementation is
     // rather fixed as it uses the Extended Local Binary Patterns per default.
@@ -85,18 +77,9 @@ public:
                        int radius_=1, int neighbors_=8,
                        int gridx=8, int gridy=8,
                        double threshold = DBL_MAX,
-                       PredictionStatistics statistics = NearestNeighbor) :
-        _grid_x(gridx),
-        _grid_y(gridy),
-        _radius(radius_),
-        _neighbors(neighbors_),
-        _threshold(threshold),
-        _statisticsMode(statistics)
-    {
-        train(src, labels);
-    }
+                       PredictionStatistics statistics = NearestNeighbor);
 
-    ~LBPHFaceRecognizer() {}
+    ~LBPHFaceRecognizer();
 
     using cv::FaceRecognizer::save;
     using cv::FaceRecognizer::load;
@@ -124,10 +107,10 @@ public:
     void save(cv::FileStorage&) const {}
 
     // Getter functions.
-    int neighbors() const { return _neighbors; }
-    int radius() const    { return _radius;    }
-    int grid_x() const    { return _grid_x;    }
-    int grid_y() const    { return _grid_y;    }
+    int neighbors() const;
+    int radius()    const;
+    int grid_x()    const;
+    int grid_y()    const;
 
     cv::AlgorithmInfo* info() const;
 
@@ -141,15 +124,8 @@ private:
 
 private:
 
-    int                  _grid_x;
-    int                  _grid_y;
-    int                  _radius;
-    int                  _neighbors;
-    double               _threshold;
-    int                  _statisticsMode;
-
-    std::vector<cv::Mat> _histograms;
-    cv::Mat              _labels;
+    class Private;
+    Private* const d;
 };
 
 } // namespace KFaceIface
