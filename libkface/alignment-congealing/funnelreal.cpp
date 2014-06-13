@@ -416,7 +416,7 @@ std::vector<float> FunnelReal::Private::computeTransform(const std::vector<std::
     float centerX = width/2.0f;
     float centerY = height/2.0f;
 
-    float d[] = {1.0f, 1.0f, M_PI/180.0f, 0.02f};
+    float d[] = {1.0f, 1.0f, (float)M_PI/180.0f, 0.02f};
 
     getNewFeatsInvT(featureIDs, originalFeatures, v, centerX, centerY);
 
