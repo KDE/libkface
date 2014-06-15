@@ -46,36 +46,6 @@
 
 #include <kdebug.h>
 
-// Define the CV_INIT_ALGORITHM macro for OpenCV 2.4.0:
-#ifndef CV_INIT_ALGORITHM
-#define CV_INIT_ALGORITHM(classname, algname, memberinit) \
-    static Algorithm* create##classname() \
-    { \
-        return new classname; \
-    } \
-    \
-    static AlgorithmInfo& classname##_info() \
-    { \
-        static AlgorithmInfo classname##_info_var(algname, create##classname); \
-        return classname##_info_var; \
-    } \
-    \
-    static AlgorithmInfo& classname##_info_auto = classname##_info(); \
-    \
-    AlgorithmInfo* classname::info() const \
-    { \
-        static volatile bool initialized = false; \
-        \
-        if( !initialized ) \
-        { \
-            initialized = true; \
-            classname obj; \
-            memberinit; \
-        } \
-        return &classname##_info(); \
-    }
-#endif
-
 using namespace cv;
 
 namespace KFaceIface
@@ -104,16 +74,16 @@ void olbp_(InputArray _src, OutputArray _dst)
     {
         for(int j=1;j<src.cols-1;j++)
         {
-            _Tp center = src.at<_Tp>(i,j);
+            _Tp center         = src.at<_Tp>(i,j);
             unsigned char code = 0;
             code |= (src.at<_Tp>(i-1,j-1) >= center) << 7;
-            code |= (src.at<_Tp>(i-1,j) >= center) << 6;
+            code |= (src.at<_Tp>(i-1,j)   >= center) << 6;
             code |= (src.at<_Tp>(i-1,j+1) >= center) << 5;
-            code |= (src.at<_Tp>(i,j+1) >= center) << 4;
+            code |= (src.at<_Tp>(i,j+1)   >= center) << 4;
             code |= (src.at<_Tp>(i+1,j+1) >= center) << 3;
-            code |= (src.at<_Tp>(i+1,j) >= center) << 2;
+            code |= (src.at<_Tp>(i+1,j)   >= center) << 2;
             code |= (src.at<_Tp>(i+1,j-1) >= center) << 1;
-            code |= (src.at<_Tp>(i,j-1) >= center) << 0;
+            code |= (src.at<_Tp>(i,j-1)   >= center) << 0;
             dst.at<unsigned char>(i-1,j-1) = code;
         }
     }
@@ -628,6 +598,8 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 {
     return Ptr<LBPHFaceRecognizer>(new LBPHFaceRecognizer(radius, neighbors, grid_x, grid_y, threshold, statistics));
 }
+
+// NOTE: CV_INIT_ALGORITHM is declared in opencv2/core/internal.hpp
 
 CV_INIT_ALGORITHM(LBPHFaceRecognizer, "FaceRecognizer.LBPH-KFaceIface",
                   obj.info()->addParam(obj, "radius", obj.d->radius);
