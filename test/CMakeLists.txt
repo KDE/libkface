@@ -43,15 +43,15 @@ TARGET_LINK_LIBRARIES(preprocess kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY}
 
 # -----------------------------------------------------------------------------
 
-SET(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/faceitem.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/button.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/marquee.cpp
-                  ${CMAKE_CURRENT_SOURCE_DIR}/gui/fancyrect.cpp
+SET(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/kfacegui/main.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/kfacegui/mainwindow.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/kfacegui/faceitem.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/kfacegui/button.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/kfacegui/marquee.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/kfacegui/fancyrect.cpp
    )
 
-KDE4_ADD_UI_FILES(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
+KDE4_ADD_UI_FILES(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/kfacegui/mainwindow.ui)
 KDE4_ADD_EXECUTABLE(kfacegui ${kfacegui_SRCS})
 
 TARGET_LINK_LIBRARIES(kfacegui kface ${KDE4_KDECORE_LIBS}
