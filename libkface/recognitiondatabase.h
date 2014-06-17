@@ -103,8 +103,8 @@ public:
     /**
      * Returns all identities known to the database
      */
-    QList<Identity> allIdentities() const;
-    Identity identity(int id) const;
+    QList<Identity> allIdentities()  const;
+    Identity        identity(int id) const;
 
     /**
      * Finds the first identity with matching attribute - value.
@@ -144,8 +144,8 @@ public:
      * "accuracy", synonymous: "threshold", range: 0-1, type: float
      *      Determines recognition threshold, 0->accept very unsecure recognitions, 1-> be very sure about a recognition.
      */
-    void setParameter(const QString& parameter, const QVariant& value);
-    void setParameters(const QVariantMap& parameters);
+    void        setParameter(const QString& parameter, const QVariant& value);
+    void        setParameters(const QVariantMap& parameters);
     QVariantMap parameters() const;
 
     // ------------ Recognition, clustering and training --------------

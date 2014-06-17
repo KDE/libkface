@@ -40,6 +40,7 @@ namespace KFaceIface
 
 class KFACE_EXPORT Identity
 {
+
 public:
 
     /**
@@ -57,7 +58,6 @@ public:
      * Attributes can be used to map an identity to other fields and services where
      * natural persons play a role.
      */
-
     Identity();
     bool isNull() const;
     bool operator==(const Identity& other) const;

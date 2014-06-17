@@ -4,7 +4,7 @@ libdir=${LIB_INSTALL_DIR}
 includedir=${INCLUDE_INSTALL_DIR}
 
 Name: libkface
-Description: A C++ library to perform face recognition over pictures. This library is used by digiKam and kipi-plugins.
+Description: A C++ library to perform face detection and recognition over pictures. This library is used by digiKam and kipi-plugins.
 URL: http://www.digikam.org
 Requires:
 Version: ${KFACE_LIB_VERSION_STRING}

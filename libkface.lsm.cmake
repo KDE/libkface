@@ -2,7 +2,7 @@ Begin4
 Title:          libkface
 Version:        ${KFACE_LIB_VERSION_STRING}
 Entered-date:   2010-16-06
-Description:    A C++ library to perform face recognition over pictures.
+Description:    A C++ library to perform face detection and recognition over pictures.
 Keywords:       kde image face detection recognition digikam kipi-plugins
 Author:         caulier dot gilles at gmail dot com (Gilles Caulier)
                 marcel dot wiesweg at gmx dot de (Marcel Wiesweg)

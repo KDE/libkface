@@ -8,7 +8,7 @@ See AUTHORS file for details.
 
 -- ABOUT --------------------------------------------------------------
 
-Libkface is a Qt/C++ library to perform face recognition and detection over pictures 
+Libkface is a Qt/C++ library to perform face detection and recognition over pictures 
 
 This library is used by kipi-plugins, digiKam and others kipi host programs.
 

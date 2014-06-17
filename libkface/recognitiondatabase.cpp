@@ -143,14 +143,14 @@ public:
     // Change these three lines to change CurrentRecognizer
     typedef OpenCVLBPHFaceRecognizer CurrentRecognizer;
     CurrentRecognizer* recognizer()             { return getObjectOrCreate(opencvlbph); }
-    CurrentRecognizer* recognizerConst() const  { return opencvlbph;                    }
+    CurrentRecognizer* recognizerConst()  const { return opencvlbph;                    }
 
     OpenCVLBPHFaceRecognizer* lbph()            { return getObjectOrCreate(opencvlbph); }
     OpenCVLBPHFaceRecognizer* lbphConst() const { return opencvlbph;                    }
 
     typedef FunnelReal CurrentAligner;
-    CurrentAligner* aligner();
-    CurrentAligner* alignerConst()              { return funnel;                        }
+    CurrentAligner*    aligner();
+    CurrentAligner*    alignerConst()     const { return funnel;                        }
 
     void applyParameters();
 

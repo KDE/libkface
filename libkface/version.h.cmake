@@ -33,4 +33,3 @@ static const char kface_version[] = "${KFACE_LIB_VERSION_STRING}";
 #define KFACE_VERSION ${KFACE_LIB_VERSION_ID}
 
 #endif // KFACE_VERSION_H
-

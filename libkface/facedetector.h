@@ -87,8 +87,8 @@ public:
      * The first pair changes the ROC curve in a trade for computing time.
      * The second pair moves on a given ROC curve towards more false positives, or more missed faces.
      */
-    void setParameter(const QString& parameter, const QVariant& value);
-    void setParameters(const QVariantMap& parameters);
+    void        setParameter(const QString& parameter, const QVariant& value);
+    void        setParameters(const QVariantMap& parameters);
     QVariantMap parameters() const;
 
     /**
@@ -97,10 +97,10 @@ public:
      */
     int recommendedImageSize(const QSize& availableSize = QSize()) const;
 
-    static QRectF toRelativeRect(const QRect& absoluteRect, const QSize& size);
-    static QRect toAbsoluteRect(const QRectF& relativeRect, const QSize& size);
+    static QRectF        toRelativeRect(const QRect& absoluteRect, const QSize& size);
+    static QRect         toAbsoluteRect(const QRectF& relativeRect, const QSize& size);
     static QList<QRectF> toRelativeRects(const QList<QRect>& absoluteRects, const QSize& size);
-    static QList<QRect> toAbsoluteRects(const QList<QRectF>& relativeRects, const QSize& size);
+    static QList<QRect>  toAbsoluteRects(const QList<QRectF>& relativeRects, const QSize& size);
 
 private:
 

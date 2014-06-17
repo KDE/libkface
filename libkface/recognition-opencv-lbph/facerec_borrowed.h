@@ -35,6 +35,8 @@
  *
  * ============================================================ */
 
+// OpenCV library
+
 #include "libopencv.h"
 
 // C++ includes
@@ -64,8 +66,8 @@ public:
     // grid_x, grid_y control the grid size of the spatial histograms.
     LBPHFaceRecognizer(int radius_=1, int neighbors_=8,
                        int gridx=8, int gridy=8,
-                       double threshold = DBL_MAX,
-                       PredictionStatistics statistics = NearestNeighbor);
+                       double threshold=DBL_MAX,
+                       PredictionStatistics statistics=NearestNeighbor);
 
     // Initializes and computes this LBPH Model. The current implementation is
     // rather fixed as it uses the Extended Local Binary Patterns per default.
@@ -76,15 +78,18 @@ public:
                        cv::InputArray labels,
                        int radius_=1, int neighbors_=8,
                        int gridx=8, int gridy=8,
-                       double threshold = DBL_MAX,
-                       PredictionStatistics statistics = NearestNeighbor);
+                       double threshold=DBL_MAX,
+                       PredictionStatistics statistics=NearestNeighbor);
 
     ~LBPHFaceRecognizer();
 
     using cv::FaceRecognizer::save;
     using cv::FaceRecognizer::load;
 
-    static cv::Ptr<LBPHFaceRecognizer> create(int radius=1, int neighbors=8, int grid_x=8, int grid_y=8, double threshold = DBL_MAX, PredictionStatistics statistics = NearestNeighbor);
+    static cv::Ptr<LBPHFaceRecognizer> create(int radius=1, int neighbors=8,
+                                              int grid_x=8, int grid_y=8,
+                                              double threshold=DBL_MAX,
+                                              PredictionStatistics statistics=NearestNeighbor);
 
     // Computes a LBPH model with images in src and
     // corresponding labels in labels.

@@ -30,7 +30,7 @@
 #ifndef KFACE_OPENCV_LBPH_FACERECOGNIZER_H
 #define KFACE_OPENCV_LBPH_FACERECOGNIZER_H
 
-// OpenCV includes
+// OpenCV library
 
 #include "libopencv.h"
 
@@ -53,15 +53,18 @@ class OpenCVLBPHFaceRecognizer
 public:
 
     /**
-     * @brief FaceRecognizer:Master class to control entire recognition using OpenTLD
+     *  @brief FaceRecognizer:Master class to control entire recognition using OpenTLD
      */
     OpenCVLBPHFaceRecognizer(DatabaseAccessData* const);
     ~OpenCVLBPHFaceRecognizer();
 
     void setThreshold(float threshold) const;
 
-    /** Returns a cvMat created from the inputImage, optimized for recognition */
+    /**
+     *  Returns a cvMat created from the inputImage, optimized for recognition
+     */
     cv::Mat prepareForRecognition(const QImage& inputImage);
+
     /**
      *  Try to recognize the given image.
      *  Returns the identity id.
@@ -70,7 +73,7 @@ public:
     int recognize(const cv::Mat& inputImage);
 
     /**
-     * Trains the given images, representing faces of the given matched identities.
+     *  Trains the given images, representing faces of the given matched identities.
      */
     void train(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context);
 

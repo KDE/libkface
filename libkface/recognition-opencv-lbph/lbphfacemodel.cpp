@@ -40,7 +40,6 @@
 // local includes
 
 #include "databaseaccess.h"
-#include "libopencv.h"
 
 namespace KFaceIface
 {

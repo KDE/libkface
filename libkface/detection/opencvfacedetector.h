@@ -35,7 +35,7 @@
 #ifndef LIBKFACE_OPENCVFACEDETECTOR_H
 #define LIBKFACE_OPENCVFACEDETECTOR_H
 
-// OpenCV
+// OpenCV library
 
 #include "libopencv.h"
 

@@ -236,7 +236,6 @@ public:
     {
         maxDistance              = 0;
         minDuplicates            = 0;
-
         speedVsAccuracy          = 0.8;
         sensitivityVsSpecificity = 0.8;
     }

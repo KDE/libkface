@@ -30,7 +30,7 @@
 #ifndef KFACE_LBPHFACEMODEL_H
 #define KFACE_LBPHFACEMODEL_H
 
-// OpenCV includes
+// OpenCV library
 
 #include "libopencv.h"
 

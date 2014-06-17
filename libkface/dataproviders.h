@@ -71,7 +71,7 @@ public:
     {
     }
 
-    virtual int  size() const                   { return list.size();           }
+    virtual int  size()  const                  { return list.size();           }
     virtual bool atEnd() const                  { return it == list.constEnd(); }
     virtual void proceed(int steps = 1)         { it += steps;                  }
 
@@ -89,7 +89,7 @@ class KFACE_EXPORT EmptyImageListProvider : public ImageListProvider
 {
 public:
 
-    virtual int  size() const           { return 0;        }
+    virtual int  size()  const          { return 0;        }
     virtual bool atEnd() const          { return true;     }
     virtual void proceed(int steps = 1) { Q_UNUSED(steps)  }
     virtual QImage image()              { return QImage(); }
