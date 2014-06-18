@@ -19,7 +19,7 @@ The library documentation is available on header files.
 CMake      >= 2.8.x                    http://www.cmake.org
 libqt      >= 4.6.x                    http://www.qtsoftware.com
 libkde     >= 4.4.x                    http://www.kde.org
-libopencv  >= 2.4.4                    http://opencv.willowgarage.com/wiki    (with opencv 'haarcascades' data files)
+libopencv  >= 2.4.9                    http://opencv.willowgarage.com/wiki    (with opencv 'haarcascades' data files)
 
 -- INSTALL ------------------------------------------------------------
 
