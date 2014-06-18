@@ -605,7 +605,7 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 
     if (!fr)
     {
-        kDebug() << "Cannot create LBPHFaceRecognizer instance";
+        kWarning() << "Cannot create LBPHFaceRecognizer instance";
         return ptr;
     }
 
@@ -613,7 +613,7 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 
     if (ptr.empty())
     {
-        kDebug() << "LBPHFaceRecognizer instance is empty";
+        kWarning() << "LBPHFaceRecognizer instance is empty";
     }
 
     return ptr;

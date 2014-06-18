@@ -61,7 +61,7 @@ LBPHFaceRecognizer* LBPHFaceModel::ptr()
     LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator KFaceIface::LBPHFaceRecognizer*();
 
     if (!ptr) 
-        kDebug() << "LBPHFaceRecognizer pointer is null";
+        kWarning() << "LBPHFaceRecognizer pointer is null";
 
     return ptr;
 }
@@ -71,7 +71,7 @@ const LBPHFaceRecognizer* LBPHFaceModel::ptr() const
     const LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator const KFaceIface::LBPHFaceRecognizer*();
 
     if (!ptr) 
-        kDebug() << "LBPHFaceRecognizer pointer is null";
+        kWarning() << "LBPHFaceRecognizer pointer is null";
 
     return ptr;
 }
