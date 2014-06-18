@@ -112,6 +112,7 @@ public:
     int grid_x()    const;
     int grid_y()    const;
 
+    // NOTE: Implementation done through CV_INIT_ALGORITHM macro.
     cv::AlgorithmInfo* info() const;
 
 public:
@@ -124,8 +125,8 @@ public:
 private:
 
     /** Computes a LBPH model with images in src and
-     * corresponding labels in labels, possibly preserving
-     * old model data.
+     *  corresponding labels in labels, possibly preserving
+     *  old model data.
      */
     void train(cv::InputArrayOfArrays src, cv::InputArray labels, bool preserveData);
 
