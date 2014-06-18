@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-06-16
- * @brief  The Database class wraps the libface database
+ * @brief  Face alignment CLI tool
  *
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
@@ -43,7 +43,8 @@
 #include "libkface/alignment-congealing/funnelreal.h"
 //#include "libkface/alignment-flandmark/flandmarkaligner.h"
 
-// it's not exported...
+// Implementation not exported
+
 #include "libkface/alignment-congealing/funnelreal.cpp"
 //#include "libkface/alignment-flandmark/flandmark_detector.cpp"
 //#include "libkface/alignment-flandmark/liblbp.cpp"
@@ -76,9 +77,13 @@ QList<cv::Mat> toImages(const QStringList& paths)
     return images;
 }
 
+// --------------------------------------------------------------------------------------------------
+
 class OpenCVSideBySideDisplay
 {
+
 public:
+
     OpenCVSideBySideDisplay(int rows, int uiSize = 200)
         : uiSize(uiSize), currentRow(0)
     {
@@ -96,10 +101,12 @@ public:
         cv::Mat scaledLeft, scaledRight;
         cv::resize(left, scaledLeft, scaleSize);
         cv::resize(right, scaledRight, scaleSize);
+
         if (scaledLeft.channels() == 1)
         {
             cv::cvtColor(scaledLeft, scaledLeft, CV_GRAY2BGR);
         }
+
         if (scaledRight.channels() == 1)
         {
             cv::cvtColor(scaledRight, scaledRight, CV_GRAY2BGR);
@@ -117,9 +124,9 @@ public:
         cv::imshow(title, bigImage);
     }
 
-    cv::Mat bigImage;
+    cv::Mat   bigImage;
     const int uiSize;
-    int currentRow;
+    int       currentRow;
 };
 
 // --------------------------------------------------------------------------------------------------
@@ -128,7 +135,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        kDebug() << "Bad Args!!!\nUsage: " << argv[0] << " align <image1> <image2> ... ";
+        kDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " align <image1> <image2> ... ";
         return 0;
     }
 
@@ -144,6 +151,7 @@ int main(int argc, char** argv)
     kDebug() << "Setup of Aligner took" << time.restart();
 
     OpenCVSideBySideDisplay display(images.size());
+
     foreach (const cv::Mat& image, images)
     {
         Q_UNUSED(image);

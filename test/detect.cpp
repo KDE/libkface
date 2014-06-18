@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2010-06-16
- * @brief  The Database class wraps the libface database
+ * @brief  Face Detection CLI tool
  *
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
@@ -58,24 +58,25 @@ void detectFaces(const QString& file)
     }
 
     kDebug() << "Coordinates of detected faces : ";
+
     foreach(const QRectF& r, faces)
     {
         kDebug() << r;
     }
 
-    QWidget* mainWidget = new QWidget;
+    QWidget* const mainWidget = new QWidget;
     mainWidget->setWindowTitle(file);
-    QHBoxLayout* layout = new QHBoxLayout(mainWidget);
-    QLabel* fullImage   = new QLabel;
+    QHBoxLayout* const layout = new QHBoxLayout(mainWidget);
+    QLabel* const fullImage   = new QLabel;
     fullImage->setPixmap(QPixmap::fromImage(img.scaled(250, 250, Qt::KeepAspectRatio)));
     layout->addWidget(fullImage);
 
     foreach(const QRectF& rr, faces)
     {
-        QLabel* label = new QLabel;
+        QLabel* const label = new QLabel;
         label->setScaledContents(false);
-        QRect r = FaceDetector::toAbsoluteRect(rr, img.size());
-        QImage part   = img.copy(r);
+        QRect r             = FaceDetector::toAbsoluteRect(rr, img.size());
+        QImage part         = img.copy(r);
         label->setPixmap(QPixmap::fromImage(part.scaled(200, 200, Qt::KeepAspectRatio)));
         layout->addWidget(label);
     }
@@ -88,15 +89,17 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        kDebug() << "Bad Args!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
+        kDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
         return 0;
     }
 
     QApplication app(argc, argv);
-    for (int i=1; i<argc; i++)
+
+    for (int i = 1 ; i < argc ; i++)
     {
         detectFaces(QString::fromLocal8Bit(argv[i]));
     }
+
     app.exec();
 
     return 0;

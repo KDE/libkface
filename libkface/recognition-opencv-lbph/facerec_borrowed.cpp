@@ -604,13 +604,13 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 // NOTE: CV_INIT_ALGORITHM is declared in opencv2/core/internal.hpp
 
 CV_INIT_ALGORITHM(LBPHFaceRecognizer, "FaceRecognizer.LBPH-KFaceIface",
-                  obj.info()->addParam(obj, "radius", obj.d->radius);
-                  obj.info()->addParam(obj, "neighbors", obj.d->neighbors);
-                  obj.info()->addParam(obj, "grid_x", obj.d->grid_x);
-                  obj.info()->addParam(obj, "grid_y", obj.d->grid_y);
-                  obj.info()->addParam(obj, "threshold", obj.d->threshold);
-                  obj.info()->addParam(obj, "histograms", obj.d->histograms);     // modification: Make Read/Write
-                  obj.info()->addParam(obj, "labels", obj.d->labels);             // modification: Make Read/Write
-                  obj.info()->addParam(obj, "statistic", obj.d->statisticsMode)); // modification: Add parameter
+                  obj.info()->addParam(obj, "radius",     obj.d->radius);
+                  obj.info()->addParam(obj, "neighbors",  obj.d->neighbors);
+                  obj.info()->addParam(obj, "grid_x",     obj.d->grid_x);
+                  obj.info()->addParam(obj, "grid_y",     obj.d->grid_y);
+                  obj.info()->addParam(obj, "threshold",  obj.d->threshold);
+                  obj.info()->addParam(obj, "histograms", obj.d->histograms);         // modification: Make Read/Write
+                  obj.info()->addParam(obj, "labels",     obj.d->labels);             // modification: Make Read/Write
+                  obj.info()->addParam(obj, "statistic",  obj.d->statisticsMode));    // modification: Add parameter
 
 } // namespace KFaceIface
