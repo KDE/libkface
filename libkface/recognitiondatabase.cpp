@@ -178,12 +178,14 @@ QExplicitlySharedDataPointer<RecognitionDatabase::Private> RecognitionDatabaseSt
          * So we only can use this cached data if its reference count is non-zero.
          * Atomically to testing, we increase the reference count to reserve it for our usage.
          */
+
         if (it.value()->ref.fetchAndAddOrdered(1) != 0)
         {
             QExplicitlySharedDataPointer<RecognitionDatabase::Private> p(it.value());
             it.value()->ref.deref(); // We incremented above
             return p;
         }
+
         /* if the original value is 0, it is currently being deleted, but it must be
          * safe to access it, because the destructor has not yet completed - otherwise it'd not be in the hash.
          */
@@ -295,7 +297,9 @@ QList<Identity> RecognitionDatabase::allIdentities() const
 Identity RecognitionDatabase::identity(int id) const
 {
     if (!d || !d->dbAvailable)
+    {
         return Identity();
+    }
 
     QMutexLocker lock(&d->mutex);
 
@@ -436,11 +440,14 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
     if (attributes.contains("uuid"))
     {
         Identity matchByUuid = findIdentity("uuid", attributes.value("uuid"));
+
         if (!matchByUuid.isNull())
         {
             // This situation is not well defined.
+
             kDebug() << "Called addIdentity with a given UUID, and there is such a UUID already in the database."
                      << "The existing identity is returned without adjusting properties!";
+
             return matchByUuid;
         }
     }
@@ -514,7 +521,7 @@ void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QStr
 
 QString RecognitionDatabase::backendIdentifier() const
 {
-    return "opentld";
+    return QString("opentld");
 }
 
 void RecognitionDatabase::Private::applyParameters()
@@ -676,6 +683,8 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 {
     ImageListProvider* const images = data->newImages(identity);
 
+    kDebug() << "Training" << images->size() << "images for identity" << identity.id;
+
     for (; !images->atEnd(); images->proceed())
     {
         try
@@ -702,7 +711,7 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
 {
     foreach (const Identity& identity, identitiesToBeTrained)
     {
-        std::vector<int> labels;
+        std::vector<int>     labels;
         std::vector<cv::Mat> images;
 
         ImageListProvider* const imageList = data->newImages(identity);
@@ -727,9 +736,10 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
             }
         }
 
+        kDebug() << "Training" << images.size() << "images for identity" << identity.id;
+
         try
         {
-            kDebug() << "Training" << images.size() << "images for identity" << identity.id;
             r->train(images, labels, trainingContext);
         }
         catch (cv::Exception& e)

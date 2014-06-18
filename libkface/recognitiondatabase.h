@@ -47,6 +47,17 @@
 namespace KFaceIface
 {
 
+/**
+ * Performs face recognition.
+ * Persistent data about identities and training data will be stored
+ * under a given or the default configuration path.
+ *
+ * The class guarantees
+ * - deferred creation: The backend is created only when used first.
+ * - only one instance per configuration path is created
+ * - an instance of this class is thread-safe
+ *   (this class is also reentrant, for different objects and paths)
+ */
 class KFACE_EXPORT RecognitionDatabase
 {
 
@@ -65,18 +76,6 @@ public:
     };
 
 public:
-
-    /**
-     * Performs face recognition.
-     * Persistent data about identities and training data will be stored
-     * under a given or the default configuration path.
-     *
-     * The class guarantees
-     * - deferred creation: The backend is created only when used first.
-     * - only one instance per configuration path is created
-     * - an instance of this class is thread-safe
-     *   (this class is also reentrant, for different objects and paths)
-     */
 
     /**
      * Returns an instance of RecognitionDatabase for the given configuration path.
@@ -181,7 +180,6 @@ public:
      * (It is assumed that training from different contexts is based on
      * non-overlapping collections of images. Keep is always constant for your app.)
      */
-
     void train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* const data,
                const QString& trainingContext);
     void train(const Identity& identityToBeTrained, TrainingDataProvider* const data,
