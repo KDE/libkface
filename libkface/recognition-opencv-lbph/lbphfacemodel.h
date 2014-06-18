@@ -75,23 +75,23 @@ public:
 
     LBPHFaceModel();
 
-    LBPHFaceRecognizer* ptr()             { return cv::Ptr<LBPHFaceRecognizer>::operator KFaceIface::LBPHFaceRecognizer*();       }
-    const LBPHFaceRecognizer* ptr() const { return cv::Ptr<LBPHFaceRecognizer>::operator const KFaceIface::LBPHFaceRecognizer*(); }
+    LBPHFaceRecognizer*       ptr();
+    const LBPHFaceRecognizer* ptr() const;
 
-    int radius() const;
+    int  radius() const;
     void setRadius(int radius);
 
-    int neighbors() const;
+    int  neighbors() const;
     void setNeighbors(int neighbors);
 
-    int gridX() const;
+    int  gridX() const;
     void setGridX(int grid_x);
 
-    int gridY() const;
+    int  gridY() const;
     void setGridY(int grid_y);
 
     QList<LBPHistogramMetadata> histogramMetadata() const;
-    OpenCVMatData histogramData(int index) const;
+    OpenCVMatData               histogramData(int index) const;
 
     void setWrittenToDatabase(int index, int databaseId);
 
