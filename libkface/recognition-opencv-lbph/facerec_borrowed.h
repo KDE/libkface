@@ -86,11 +86,6 @@ public:
     using cv::FaceRecognizer::save;
     using cv::FaceRecognizer::load;
 
-    static cv::Ptr<LBPHFaceRecognizer> create(int radius=1, int neighbors=8,
-                                              int grid_x=8, int grid_y=8,
-                                              double threshold=DBL_MAX,
-                                              PredictionStatistics statistics=NearestNeighbor);
-
     // Computes a LBPH model with images in src and
     // corresponding labels in labels.
     void train(cv::InputArrayOfArrays src, cv::InputArray labels);
@@ -118,6 +113,13 @@ public:
     int grid_y()    const;
 
     cv::AlgorithmInfo* info() const;
+
+public:
+
+    static cv::Ptr<LBPHFaceRecognizer> create(int radius=1, int neighbors=8,
+                                              int grid_x=8, int grid_y=8,
+                                              double threshold=DBL_MAX,
+                                              PredictionStatistics statistics=NearestNeighbor);
 
 private:
 

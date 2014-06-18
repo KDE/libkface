@@ -453,12 +453,11 @@ void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _in_labels
         Mat lbp_image = elbp(src[sampleIdx], d->radius, d->neighbors);
 
         // get spatial histogram from this lbp image
-        Mat p = spatial_histogram(
-                lbp_image, /* lbp_image */
-                static_cast<int>(std::pow(2.0, static_cast<double>(d->neighbors))), /* number of possible patterns */
-                d->grid_x, /* grid size x */
-                d->grid_y, /* grid size y */
-                true);
+        Mat p         = spatial_histogram(lbp_image,                                                          // lbp_image
+                                          static_cast<int>(std::pow(2.0, static_cast<double>(d->neighbors))), // number of possible patterns
+                                          d->grid_x,                                                          // grid size x
+                                          d->grid_y,                                                          // grid size y
+                                          true);
 
         // add to templates
         d->histograms.push_back(p);
@@ -590,15 +589,34 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
 
 int LBPHFaceRecognizer::predict(InputArray _src) const
 {
-    int label;
+    int    label;
     double dummy;
     predict(_src, label, dummy);
     return label;
 }
 
+// Static method
+
 Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, int grid_x, int grid_y, double threshold, PredictionStatistics statistics)
 {
-    return Ptr<LBPHFaceRecognizer>(new LBPHFaceRecognizer(radius, neighbors, grid_x, grid_y, threshold, statistics));
+    Ptr<LBPHFaceRecognizer> ptr;
+
+    LBPHFaceRecognizer* const fr = new LBPHFaceRecognizer(radius, neighbors, grid_x, grid_y, threshold, statistics);
+
+    if (!fr)
+    {
+        kDebug() << "Cannot create LBPHFaceRecognizer instance";
+        return ptr;
+    }
+
+    ptr = Ptr<LBPHFaceRecognizer>(fr);
+
+    if (ptr.empty())
+    {
+        kDebug() << "LBPHFaceRecognizer instance is empty";
+    }
+
+    return ptr;
 }
 
 // NOTE: CV_INIT_ALGORITHM is declared in opencv2/core/internal.hpp
