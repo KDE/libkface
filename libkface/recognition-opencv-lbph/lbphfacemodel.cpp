@@ -53,7 +53,7 @@ LBPHFaceModel::LBPHFaceModel()
       : cv::Ptr<LBPHFaceRecognizer>(LBPHFaceRecognizer::create()),
       databaseId(0)
 {
-    ptr()->set("threshold", 100);
+    ptr()->set("threshold", 100.0);
 }
 
 LBPHFaceRecognizer* LBPHFaceModel::ptr()
@@ -154,7 +154,7 @@ void LBPHFaceModel::setHistograms(const QList<OpenCVMatData>& histograms, const 
     }
 
     std::vector<cv::Mat> currentHistograms = ptr()->get<std::vector<cv::Mat> >("histograms");
-    cv::Mat currentLabels = ptr()->get<cv::Mat>("labels");
+    cv::Mat currentLabels                  = ptr()->get<cv::Mat>("labels");
     currentHistograms.insert(currentHistograms.end(), newHistograms.begin(), newHistograms.end());
     currentLabels.push_back(newLabels);
     ptr()->set("histograms", currentHistograms);
@@ -202,7 +202,7 @@ void LBPHFaceModel::update(const std::vector<cv::Mat>& images, const std::vector
     // We assume new labels are simply appended
     cv::Mat currentLabels = ptr()->get<cv::Mat>("labels");
 
-    for (int i=m_histogramMetadata.size(); i<currentLabels.rows; i++)
+    for (int i = m_histogramMetadata.size() ; i < currentLabels.rows ; i++)
     {
         LBPHistogramMetadata metadata;
         metadata.storageStatus = LBPHistogramMetadata::Created;
