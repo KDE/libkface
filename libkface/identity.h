@@ -59,6 +59,8 @@ public:
      * natural persons play a role.
      */
     Identity();
+    ~Identity();
+
     bool isNull() const;
     bool operator==(const Identity& other) const;
 

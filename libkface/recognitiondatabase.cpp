@@ -59,23 +59,6 @@
 namespace KFaceIface
 {
 
-Identity::Identity()
-    : id(-1)
-{
-}
-
-bool Identity::isNull() const
-{
-    return id == -1;
-}
-
-bool Identity::operator==(const Identity& other) const
-{
-    return id == other.id;
-}
-
-// -------------------------------------------------------------------------------------------------
-
 /**
  * The RecognitionDatabaseStaticPriv holds a hash to all exising RecognitionDatabase data,
  * mutex protected.
@@ -781,7 +764,7 @@ void RecognitionDatabase::clearTraining(const QList<Identity>& identitiesToClean
         return;
 
     QMutexLocker lock(&d->mutex);
-    QList<int> ids;
+    QList<int>   ids;
 
     foreach (const Identity& id, identitiesToClean)
     {
