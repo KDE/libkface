@@ -129,18 +129,20 @@ public:
     int grid_x() const    { return _grid_x;    }
     int grid_y() const    { return _grid_y;    }
 
+    // NOTE: Implementation done through CV_INIT_ALGORITHM macro.
     cv::AlgorithmInfo* info() const;
 
 private:
 
     /** Computes a LBPH model with images in src and
-     * corresponding labels in labels, possibly preserving
-     * old model data.
+     *  corresponding labels in labels, possibly preserving
+     *  old model data.
      */
     void train(cv::InputArrayOfArrays src, cv::InputArray labels, bool preserveData);
 
 private:
 
+    // NOTE: Do not use a d private internal container, this will crash OpenCV in cv::Algorithm::set()
     int                  _grid_x;
     int                  _grid_y;
     int                  _radius;
