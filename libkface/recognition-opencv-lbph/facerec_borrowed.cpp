@@ -46,6 +46,36 @@
 
 #include <kdebug.h>
 
+// Define the CV_INIT_ALGORITHM macro for OpenCV 2.4.0:
+#ifndef CV_INIT_ALGORITHM
+#define CV_INIT_ALGORITHM(classname, algname, memberinit) \
+    static Algorithm* create##classname() \
+    { \
+        return new classname; \
+    } \
+    \
+    static AlgorithmInfo& classname##_info() \
+    { \
+        static AlgorithmInfo classname##_info_var(algname, create##classname); \
+        return classname##_info_var; \
+    } \
+    \
+    static AlgorithmInfo& classname##_info_auto = classname##_info(); \
+    \
+    AlgorithmInfo* classname::info() const \
+    { \
+        static volatile bool initialized = false; \
+        \
+        if( !initialized ) \
+        { \
+            initialized = true; \
+            classname obj; \
+            memberinit; \
+        } \
+        return &classname##_info(); \
+    }
+#endif
+
 using namespace cv;
 
 namespace KFaceIface
@@ -70,20 +100,20 @@ void olbp_(InputArray _src, OutputArray _dst)
 
     // calculate patterns
 
-    for(int i=1 ; i < src.rows-1 ; i++)
+    for(int i=1;i<src.rows-1;i++)
     {
-        for(int j=1 ; j < src.cols-1 ; j++)
+        for(int j=1;j<src.cols-1;j++)
         {
-            _Tp center         = src.at<_Tp>(i,j);
+            _Tp center = src.at<_Tp>(i,j);
             unsigned char code = 0;
             code |= (src.at<_Tp>(i-1,j-1) >= center) << 7;
-            code |= (src.at<_Tp>(i-1,j)   >= center) << 6;
+            code |= (src.at<_Tp>(i-1,j) >= center) << 6;
             code |= (src.at<_Tp>(i-1,j+1) >= center) << 5;
-            code |= (src.at<_Tp>(i,j+1)   >= center) << 4;
+            code |= (src.at<_Tp>(i,j+1) >= center) << 4;
             code |= (src.at<_Tp>(i+1,j+1) >= center) << 3;
-            code |= (src.at<_Tp>(i+1,j)   >= center) << 2;
+            code |= (src.at<_Tp>(i+1,j) >= center) << 2;
             code |= (src.at<_Tp>(i+1,j-1) >= center) << 1;
-            code |= (src.at<_Tp>(i,j-1)   >= center) << 0;
+            code |= (src.at<_Tp>(i,j-1) >= center) << 0;
             dst.at<unsigned char>(i-1,j-1) = code;
         }
     }
@@ -92,21 +122,18 @@ void olbp_(InputArray _src, OutputArray _dst)
 //------------------------------------------------------------------------------
 // cv::elbp
 //------------------------------------------------------------------------------
-
 template <typename _Tp> static
 inline void elbp_(InputArray _src, OutputArray _dst, int radius, int neighbors)
 {
     //get matrices
     Mat src = _src.getMat();
-
     // allocate memory for result
     _dst.create(src.rows-2*radius, src.cols-2*radius, CV_32SC1);
     Mat dst = _dst.getMat();
-
     // zero
     dst.setTo(0);
 
-    for(int n = 0 ; n < neighbors ; n++)
+    for(int n=0; n<neighbors; n++)
     {
         // sample points
         float x = static_cast<float>(radius * cos(2.0*CV_PI*n/static_cast<float>(neighbors)));
@@ -129,9 +156,9 @@ inline void elbp_(InputArray _src, OutputArray _dst, int radius, int neighbors)
         float w4 =      tx  *      ty;
 
         // iterate through your data
-        for(int i = radius ; i < src.rows-radius ; i++)
+        for(int i=radius; i < src.rows-radius;i++)
         {
-            for(int j = radius ; j < src.cols-radius ; j++)
+            for(int j=radius;j < src.cols-radius;j++)
             {
                 // calculate interpolated value
                 float t = static_cast<float>(w1*src.at<_Tp>(i+fy,j+fx) + w2*src.at<_Tp>(i+fy,j+cx) + w3*src.at<_Tp>(i+cy,j+fx) + w4*src.at<_Tp>(i+cy,j+cx));
@@ -174,10 +201,10 @@ static Mat histc_(const Mat& src, int minVal=0, int maxVal=255, bool normed=fals
     Mat result;
 
     // Establish the number of bins.
-    int histSize           = maxVal-minVal+1;
+    int histSize = maxVal-minVal+1;
 
     // Set the ranges.
-    float range[]          = { static_cast<float>(minVal), static_cast<float>(maxVal+1) };
+    float range[] = { static_cast<float>(minVal), static_cast<float>(maxVal+1) };
     const float* histRange = { range };
 
     // calc histogram
@@ -195,7 +222,6 @@ static Mat histc_(const Mat& src, int minVal=0, int maxVal=255, bool normed=fals
 static Mat histc(InputArray _src, int minVal, int maxVal, bool normed)
 {
     Mat src = _src.getMat();
-
     switch (src.type())
     {
         case CV_8SC1:
@@ -245,9 +271,9 @@ static Mat spatial_histogram(InputArray _src, int numPatterns,
 
     // iterate through grid
 
-    for(int i = 0 ; i < grid_y ; i++)
+    for(int i = 0; i < grid_y; i++)
     {
-        for(int j = 0 ; j < grid_x ; j++)
+        for(int j = 0; j < grid_x; j++)
         {
             Mat src_cell   = Mat(src, Range(i*height,(i+1)*height), Range(j*width,(j+1)*width));
             Mat cell_hist  = histc(src_cell, 0, (numPatterns-1), true);
@@ -280,111 +306,27 @@ static Mat elbp(InputArray src, int radius, int neighbors)
  * Implementation not copied from OpenCV
 void LBPHFaceRecognizer::load(const FileStorage& fs)
 {
-    fs["radius"]    >> d->radius;
-    fs["neighbors"] >> d->neighbors;
-    fs["grid_x"]    >> d->grid_x;
-    fs["grid_y"]    >> d->grid_y;
+    fs["radius"] >> _radius;
+    fs["neighbors"] >> _neighbors;
+    fs["grid_x"] >> _grid_x;
+    fs["grid_y"] >> _grid_y;
     //read matrices
-    readFileNodeList(fs["histograms"], d->histograms);
-    fs["labels"]    >> d->labels;
+    readFileNodeList(fs["histograms"], _histograms);
+    fs["labels"] >> _labels;
 }
 
 // See FaceRecognizer::save.
 void LBPHFaceRecognizer::save(FileStorage& fs) const
 {
-    fs << "radius"    << d->radius;
-    fs << "neighbors" << d->neighbors;
-    fs << "grid_x"    << d->grid_x;
-    fs << "grid_y"    << d->grid_y;
+    fs << "radius" << _radius;
+    fs << "neighbors" << _neighbors;
+    fs << "grid_x" << _grid_x;
+    fs << "grid_y" << _grid_y;
     // write matrices
-    writeFileNodeList(fs, "histograms", d->histograms);
-    fs << "labels"    << d->labels;
+    writeFileNodeList(fs, "histograms", _histograms);
+    fs << "labels" << _labels;
 }
 */
-
-// ----------------------------------------------------------------------------------
-
-class LBPHFaceRecognizer::Private
-{
-public:
-
-    Private()
-    {
-        radius         = 1;
-        neighbors      = 8;
-        grid_x         = 8;
-        grid_y         = 8;
-        threshold      = DBL_MAX;
-        statisticsMode = NearestNeighbor;
-    }
-
-    int                  grid_x;
-    int                  grid_y;
-    int                  radius;
-    int                  neighbors;
-    double               threshold;
-    int                  statisticsMode;
-
-    std::vector<cv::Mat> histograms;
-    cv::Mat              labels;
-};
-
-LBPHFaceRecognizer::LBPHFaceRecognizer(int radius_, int neighbors_,
-                    int gridx, int gridy,
-                    double threshold,
-                    PredictionStatistics statistics)
-    : d(new Private)
-{
-    d->grid_x         = gridx;
-    d->grid_y         = gridy;
-    d->radius         = radius_;
-    d->neighbors      = neighbors_;
-    d->threshold      = threshold;
-    d->statisticsMode = statistics;
-}
-
-LBPHFaceRecognizer::LBPHFaceRecognizer(cv::InputArrayOfArrays src,
-                    cv::InputArray labels,
-                    int radius_, int neighbors_,
-                    int gridx, int gridy,
-                    double threshold,
-                    PredictionStatistics statistics)
-    : d(new Private)
-{
-    d->grid_x         = gridx;
-    d->grid_y         = gridy;
-    d->radius         = radius_;
-    d->neighbors      = neighbors_;
-    d->threshold      = threshold;
-    d->statisticsMode = statistics;
-
-    train(src, labels);
-}
-
-LBPHFaceRecognizer::~LBPHFaceRecognizer()
-{
-    delete d;
-}
-
-int LBPHFaceRecognizer::neighbors() const
-{
-    return d->neighbors;
-}
-
-int LBPHFaceRecognizer::radius() const
-{
-    return d->radius;
-}
-
-int LBPHFaceRecognizer::grid_x() const
-{
-    return d->grid_x;
-}
-
-int LBPHFaceRecognizer::grid_y() const
-{
-    return d->grid_y;
-}
 
 void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _in_labels)
 {
@@ -429,44 +371,43 @@ void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _in_labels
     // check if data is well- aligned
     if(labels.total() != src.size())
     {
-        String error_message = format("The number of samples (src) must equal the number of labels (labels). Was len(samples)=%d, len(labels)=%d.", src.size(), d->labels.total());
+        String error_message = format("The number of samples (src) must equal the number of labels (labels). Was len(samples)=%d, len(labels)=%d.", src.size(), _labels.total());
         CV_Error(CV_StsBadArg, error_message);
     }
 
     // if this model should be trained without preserving old data, delete old model data
     if(!preserveData)
     {
-        d->labels.release();
-        d->histograms.clear();
+        _labels.release();
+        _histograms.clear();
     }
 
-    // append labels to d->labels matrix
-    for(size_t labelIdx = 0 ; labelIdx < labels.total() ; labelIdx++)
+    // append labels to _labels matrix
+    for(size_t labelIdx = 0; labelIdx < labels.total(); labelIdx++)
     {
-        d->labels.push_back(labels.at<int>((int)labelIdx));
+        _labels.push_back(labels.at<int>((int)labelIdx));
     }
 
     // store the spatial histograms of the original data
-    for(size_t sampleIdx = 0 ; sampleIdx < src.size() ; sampleIdx++)
+    for(size_t sampleIdx = 0; sampleIdx < src.size(); sampleIdx++)
     {
         // calculate lbp image
-        Mat lbp_image = elbp(src[sampleIdx], d->radius, d->neighbors);
-
+        Mat lbp_image = elbp(src[sampleIdx], _radius, _neighbors);
         // get spatial histogram from this lbp image
-        Mat p         = spatial_histogram(lbp_image,                                                          // lbp_image
-                                          static_cast<int>(std::pow(2.0, static_cast<double>(d->neighbors))), // number of possible patterns
-                                          d->grid_x,                                                          // grid size x
-                                          d->grid_y,                                                          // grid size y
-                                          true);
-
+        Mat p = spatial_histogram(
+                lbp_image, /* lbp_image */
+                static_cast<int>(std::pow(2.0, static_cast<double>(_neighbors))), /* number of possible patterns */
+                _grid_x, /* grid size x */
+                _grid_y, /* grid size y */
+                true);
         // add to templates
-        d->histograms.push_back(p);
+        _histograms.push_back(p);
     }
 }
 
 void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist) const
 {
-    if(d->histograms.empty())
+    if(_histograms.empty())
     {
         // throw error if no data (or simply return -1?)
         String error_message = "This LBPH model is not computed yet. Did you call the train method?";
@@ -476,29 +417,29 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
     Mat src = _src.getMat();
 
     // get the spatial histogram from input image
-    Mat lbp_image = elbp(src, d->radius, d->neighbors);
+    Mat lbp_image = elbp(src, _radius, _neighbors);
     Mat query     = spatial_histogram(
             lbp_image, /* lbp_image */
-            static_cast<int>(std::pow(2.0, static_cast<double>(d->neighbors))), /* number of possible patterns */
-            d->grid_x, /* grid size x */
-            d->grid_y, /* grid size y */
-            true       /* normed histograms */);
+            static_cast<int>(std::pow(2.0, static_cast<double>(_neighbors))), /* number of possible patterns */
+            _grid_x, /* grid size x */
+            _grid_y, /* grid size y */
+            true /* normed histograms */);
     minDist      = DBL_MAX;
     minClass     = -1;
 
     // This is the standard method
 
-    if (d->statisticsMode == NearestNeighbor)
+    if (_statisticsMode == NearestNeighbor)
     {
         // find 1-nearest neighbor
-        for(size_t sampleIdx = 0 ; sampleIdx < d->histograms.size() ; sampleIdx++)
+        for(size_t sampleIdx = 0; sampleIdx < _histograms.size(); sampleIdx++)
         {
-            double dist = compareHist(d->histograms[sampleIdx], query, CV_COMP_CHISQR);
+            double dist = compareHist(_histograms[sampleIdx], query, CV_COMP_CHISQR);
 
-            if((dist < minDist) && (dist < d->threshold))
+            if((dist < minDist) && (dist < _threshold))
             {
                 minDist = dist;
-                minClass = d->labels.at<int>((int) sampleIdx);
+                minClass = _labels.at<int>((int) sampleIdx);
             }
         }
     }
@@ -506,15 +447,15 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
     // All other methods are just unvalidated examples.
     // Development can take place only if there is proper alignment available
 
-    else if (d->statisticsMode == NearestMean)
+    else if (_statisticsMode == NearestMean)
     {
         // Create map "label -> vector of distances to all histograms for this label"
         std::map<int, std::vector<int> > distancesMap;
 
-        for(size_t sampleIdx = 0 ; sampleIdx < d->histograms.size() ; sampleIdx++) 
+        for(size_t sampleIdx = 0; sampleIdx < _histograms.size(); sampleIdx++) 
         {
-            double dist = compareHist(d->histograms[sampleIdx], query, CV_COMP_CHISQR);
-            std::vector<int>& distances = distancesMap[d->labels.at<int>((int) sampleIdx)];
+            double dist = compareHist(_histograms[sampleIdx], query, CV_COMP_CHISQR);
+            std::vector<int>& distances = distancesMap[_labels.at<int>((int) sampleIdx)];
             distances.push_back(dist);
         }
 
@@ -525,8 +466,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         for (it = distancesMap.begin(); it != distancesMap.end(); ++it)
         {
             double sum = 0;
-
-            for (std::vector<int>::const_iterator it2 = it->second.begin() ; it2 != it->second.end() ; ++it2)
+            for (std::vector<int>::const_iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2)
             {
                 sum += *it2;
             }
@@ -534,16 +474,16 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             double mean = sum / it->second.size();
             s += QString("%1: %2 - ").arg(it->first).arg(mean);
 
-            if((mean < minDist) && (mean < d->threshold))
+            if((mean < minDist) && (mean < _threshold))
             {
-                minDist  = mean;
+                minDist = mean;
                 minClass = it->first;
             }
         }
 
         kDebug() << s;
     }
-    else if (d->statisticsMode == MostNearestNeighbors)
+    else if (_statisticsMode == MostNearestNeighbors)
     {
         // Create map "distance -> label"
         std::multimap<double, int> distancesMap;
@@ -551,10 +491,10 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         // map "label -> number of histograms"
         std::map<int, int> countMap;
 
-        for(size_t sampleIdx = 0 ; sampleIdx < d->histograms.size() ; sampleIdx++) 
+        for(size_t sampleIdx = 0; sampleIdx < _histograms.size(); sampleIdx++) 
         {
-            int label   = d->labels.at<int>((int) sampleIdx);
-            double dist = compareHist(d->histograms[sampleIdx], query, CV_COMP_CHISQR);
+            int label   = _labels.at<int>((int) sampleIdx);
+            double dist = compareHist(_histograms[sampleIdx], query, CV_COMP_CHISQR);
             distancesMap.insert(std::pair<double, int>(dist, label));
             countMap[label]++;
         }
@@ -571,10 +511,10 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         minDist = 0;
         QString s("Nearest Neighbor score: ");
 
-        for (std::map<int,int>::iterator it = scoreMap.begin() ; it != scoreMap.end() ; ++it)
+        for (std::map<int,int>::iterator it = scoreMap.begin(); it != scoreMap.end(); ++it)
         {
             double score = double(it->second) / countMap.at(it->first);
-            s           += QString("%1/%2 %3  ").arg(it->second).arg(countMap.at(it->first)).arg(score);
+            s += QString("%1/%2 %3  ").arg(it->second).arg(countMap.at(it->first)).arg(score);
 
             if (score > minDist)
             {
@@ -589,46 +529,25 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
 
 int LBPHFaceRecognizer::predict(InputArray _src) const
 {
-    int    label;
+    int label;
     double dummy;
     predict(_src, label, dummy);
     return label;
 }
 
-// Static method
-
 Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, int grid_x, int grid_y, double threshold, PredictionStatistics statistics)
 {
-    Ptr<LBPHFaceRecognizer> ptr;
-
-    LBPHFaceRecognizer* const fr = new LBPHFaceRecognizer(radius, neighbors, grid_x, grid_y, threshold, statistics);
-
-    if (!fr)
-    {
-        kWarning() << "Cannot create LBPHFaceRecognizer instance";
-        return ptr;
-    }
-
-    ptr = Ptr<LBPHFaceRecognizer>(fr);
-
-    if (ptr.empty())
-    {
-        kWarning() << "LBPHFaceRecognizer instance is empty";
-    }
-
-    return ptr;
+    return Ptr<LBPHFaceRecognizer>(new LBPHFaceRecognizer(radius, neighbors, grid_x, grid_y, threshold, statistics));
 }
 
-// NOTE: CV_INIT_ALGORITHM is declared in opencv2/core/internal.hpp
-
 CV_INIT_ALGORITHM(LBPHFaceRecognizer, "FaceRecognizer.LBPH-KFaceIface",
-                  obj.info()->addParam(obj, "radius",     obj.d->radius);
-                  obj.info()->addParam(obj, "neighbors",  obj.d->neighbors);
-                  obj.info()->addParam(obj, "grid_x",     obj.d->grid_x);
-                  obj.info()->addParam(obj, "grid_y",     obj.d->grid_y);
-                  obj.info()->addParam(obj, "threshold",  obj.d->threshold);
-                  obj.info()->addParam(obj, "histograms", obj.d->histograms);         // modification: Make Read/Write
-                  obj.info()->addParam(obj, "labels",     obj.d->labels);             // modification: Make Read/Write
-                  obj.info()->addParam(obj, "statistic",  obj.d->statisticsMode));    // modification: Add parameter
+                  obj.info()->addParam(obj, "radius", obj._radius);
+                  obj.info()->addParam(obj, "neighbors", obj._neighbors);
+                  obj.info()->addParam(obj, "grid_x", obj._grid_x);
+                  obj.info()->addParam(obj, "grid_y", obj._grid_y);
+                  obj.info()->addParam(obj, "threshold", obj._threshold);
+                  obj.info()->addParam(obj, "histograms", obj._histograms);     // modification: Make Read/Write
+                  obj.info()->addParam(obj, "labels", obj._labels);             // modification: Make Read/Write
+                  obj.info()->addParam(obj, "statistic", obj._statisticsMode)); // modification: Add parameter
 
 } // namespace KFaceIface
