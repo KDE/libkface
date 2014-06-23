@@ -63,7 +63,7 @@ void TrainingDB::setSetting(const QString& keyword, const QString& value)
                     keyword, value );
 }
 
-QString TrainingDB::setting(const QString& keyword)
+QString TrainingDB::setting(const QString& keyword) const
 {
     QList<QVariant> values;
     d->db->execSql( QString("SELECT value FROM Settings "
@@ -80,7 +80,7 @@ QString TrainingDB::setting(const QString& keyword)
     }
 }
 
-int TrainingDB::addIdentity()
+int TrainingDB::addIdentity() const
 {
     QVariant id;
     d->db->execSql("INSERT INTO Identities (type) VALUES (0)", 0, &id);
@@ -104,7 +104,7 @@ void TrainingDB::deleteIdentity(int id)
     d->db->execSql("DELETE FROM Identities WHERE id=?", id);
 }
 
-QList<Identity> TrainingDB::identities()
+QList<Identity> TrainingDB::identities() const
 {
     QList<QVariant> ids;
     QList<Identity> results;
@@ -133,7 +133,7 @@ QList<Identity> TrainingDB::identities()
     return results;
 }
 
-QList<int> TrainingDB::identityIds()
+QList<int> TrainingDB::identityIds() const
 {
     QList<QVariant> ids;
     d->db->execSql("SELECT id FROM Identities", &ids);
@@ -176,27 +176,35 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 
     QList<LBPHistogramMetadata> metadataList = model.histogramMetadata();
 
-    for (int i=0; i<metadataList.size(); i++)
+    for (int i = 0 ; i < metadataList.size() ; i++)
     {
         const LBPHistogramMetadata& metadata = metadataList[i];
 
         if (metadata.storageStatus == LBPHistogramMetadata::Created)
         {
-            OpenCVMatData data = model.histogramData(i);
-            QByteArray compressed = qCompress(data.data);
-            QVariantList histogramValues;
-            QVariant insertedId;
-            histogramValues << model.databaseId << metadata.identity << metadata.context
-                            << data.type << data.rows << data.cols << compressed;
+            OpenCVMatData data       = model.histogramData(i);
+            QByteArray    compressed = qCompress(data.data);
+            QVariantList  histogramValues;
+            QVariant      insertedId;
+
+            histogramValues << model.databaseId
+                            << metadata.identity
+                            << metadata.context
+                            << data.type
+                            << data.rows
+                            << data.cols
+                            << compressed;
+
             d->db->execSql("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, context, type, rows, cols, data) "
                            "VALUES (?,?,?,?,?,?,?)",
                            histogramValues, 0, &insertedId);
+
             model.setWrittenToDatabase(i, insertedId.toInt());
         }
     }
 }
 
-LBPHFaceModel TrainingDB::lbphFaceModel()
+LBPHFaceModel TrainingDB::lbphFaceModel() const
 {
     QVariantList values;
     //kDebug() << "Loading LBPH model";
@@ -245,11 +253,12 @@ LBPHFaceModel TrainingDB::lbphFaceModel()
             metadata.storageStatus = LBPHistogramMetadata::InDatabase;
 
             // cv::Mat
-            data.type       = query.value(3).toInt();
-            data.rows       = query.value(4).toInt();
-            data.cols       = query.value(5).toInt();
-            data.data       = qUncompress(query.value(6).toByteArray());
-            //kDebug() << "Adding histogram" << metadata.databaseId << "identity" << metadata.identity << "size" << data.data.size();
+            data.type              = query.value(3).toInt();
+            data.rows              = query.value(4).toInt();
+            data.cols              = query.value(5).toInt();
+            data.data              = qUncompress(query.value(6).toByteArray());
+
+            kDebug() << "Adding histogram" << metadata.databaseId << "identity" << metadata.identity << "size" << data.data.size();
 
             histograms << data;
             histogramMetadata << metadata;

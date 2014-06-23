@@ -45,18 +45,18 @@ public:
     ~TrainingDB();
 
     void setSetting(const QString& keyword, const QString& value);
-    QString setting(const QString& keyword);
+    QString setting(const QString& keyword) const;
 
-    int addIdentity();
+    int  addIdentity() const;
     void updateIdentity(const Identity& p);
     void deleteIdentity(int id);
-    QList<Identity> identities();
-    QList<int> identityIds();
+    QList<Identity> identities()  const;
+    QList<int>      identityIds() const;
 
     /// OpenCV LBPH
 
     void updateLBPHFaceModel(LBPHFaceModel& model);
-    LBPHFaceModel lbphFaceModel();
+    LBPHFaceModel lbphFaceModel() const;
     void clearLBPHTraining(const QString& context = QString());
     void clearLBPHTraining(const QList<int>& identities, const QString& context = QString());
 
