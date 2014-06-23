@@ -28,19 +28,35 @@
 namespace KFaceIface
 {
 
-DBActionType::DBActionType()
+class DBActionType::Private
 {
-    m_isValue = false;
+
+public:
+    Private()
+        : isValue(false)
+    {
+    }
+
+    bool     isValue;
+    QVariant actionValue;
+};
+
+DBActionType::DBActionType()
+    : d(new Private)
+{
 }
 
 DBActionType::DBActionType(const DBActionType& actionType)
+    : d(new Private)
 {
-    m_isValue     = actionType.m_isValue;
-    m_ActionValue = actionType.m_ActionValue;
+    d->isValue     = actionType.d->isValue;
+    d->actionValue = actionType.d->actionValue;
 }
+
 DBActionType::~DBActionType()
 {
-    m_ActionValue.~QVariant();
+    d->actionValue.~QVariant();
+    delete d;
 }
 
 DBActionType DBActionType::value(const QVariant& value)
@@ -59,24 +75,24 @@ DBActionType DBActionType::fieldEntry(const QVariant& actionValue)
     return actionType;
 }
 
-QVariant DBActionType::getActionValue()
+QVariant DBActionType::getActionValue() const
 {
-    return m_ActionValue;
+    return d->actionValue;
 }
 
 void DBActionType::setActionValue(const QVariant& actionValue)
 {
-    m_ActionValue = actionValue;
+    d->actionValue = actionValue;
 }
 
 bool DBActionType::isValue() const
 {
-    return m_isValue;
+    return d->isValue;
 }
 
 void DBActionType::setValue(bool isValue)
 {
-    m_isValue = isValue;
+    d->isValue = isValue;
 }
 
 } // namespace KFaceIface

@@ -51,7 +51,7 @@ public:
     /**
     * Returns the wrapped object.
     */
-    QVariant getActionValue();
+    QVariant getActionValue() const;
 
     /**
     * Sets the wrapped object.
@@ -73,8 +73,8 @@ public:
 
 private:
 
-    bool     m_isValue;
-    QVariant m_ActionValue;
+    class Private;
+    Private* const d;
 };
 
 } // namespace KFaceIface
