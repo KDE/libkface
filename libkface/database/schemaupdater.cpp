@@ -44,18 +44,48 @@
 namespace KFaceIface
 {
 
+class SchemaUpdater::Private
+{
+public:
+
+    Private()
+        : setError(false),
+          currentVersion(0),
+          currentRequiredVersion(0),
+          access(0),
+          observer(0)
+    {
+    }
+
+    bool                    setError;
+
+    int                     currentVersion;
+    int                     currentRequiredVersion;
+
+    DatabaseAccess*         access;
+
+    InitializationObserver* observer;
+};
+
+SchemaUpdater::SchemaUpdater(DatabaseAccess* const access)
+    : d(new Private)
+{
+    d->access = access;
+}
+
+SchemaUpdater::~SchemaUpdater()
+{
+    delete d;
+}
+
 int SchemaUpdater::schemaVersion()
 {
     return 1;
 }
 
-SchemaUpdater::SchemaUpdater(DatabaseAccess* const access)
+void SchemaUpdater::setObserver(InitializationObserver* const observer)
 {
-    m_access                 = access;
-    m_currentVersion         = 0;
-    m_currentRequiredVersion = 0;
-    m_observer               = 0;
-    m_setError               = false;
+    d->observer = observer;
 }
 
 bool SchemaUpdater::update()
@@ -63,40 +93,35 @@ bool SchemaUpdater::update()
     bool success = startUpdates();
 
     // even on failure, try to set current version - it may have incremented
-    if (m_currentVersion)
+    if (d->currentVersion)
     {
-        m_access->db()->setSetting("DBVersion", QString::number(m_currentVersion));
+        d->access->db()->setSetting("DBVersion", QString::number(d->currentVersion));
     }
 
-    if (m_currentRequiredVersion)
+    if (d->currentRequiredVersion)
     {
-        m_access->db()->setSetting("DBVersionRequired", QString::number(m_currentRequiredVersion));
+        d->access->db()->setSetting("DBVersionRequired", QString::number(d->currentRequiredVersion));
     }
 
     return success;
 }
 
-void SchemaUpdater::setObserver(InitializationObserver* const observer)
-{
-    m_observer = observer;
-}
-
 bool SchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
-    QStringList tables = m_access->backend()->tables();
+    QStringList tables = d->access->backend()->tables();
 
     if (tables.contains("Settings", Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version         = m_access->db()->setting("DBVersion");
-        QString versionRequired = m_access->db()->setting("DBVersionRequired");
+        QString version         = d->access->db()->setting("DBVersion");
+        QString versionRequired = d->access->db()->setting("DBVersionRequired");
         kDebug() << "Have a database structure version " << version;
 
         // mini schema update
-        if (version.isEmpty() && m_access->parameters().isSQLite())
+        if (version.isEmpty() && d->access->parameters().isSQLite())
         {
-            version = m_access->db()->setting("DBVersion");
+            version = d->access->db()->setting("DBVersion");
         }
 
         // We absolutely require the DBVersion setting
@@ -110,12 +135,12 @@ bool SchemaUpdater::startUpdates()
                                     "The current database schema version cannot be verified. "
                                     "Try to start with an empty database. ");
 
-            m_access->setLastError(errorMsg);
+            d->access->setLastError(errorMsg);
 
-            if (m_observer)
+            if (d->observer)
             {
-                m_observer->error(errorMsg);
-                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                d->observer->error(errorMsg);
+                d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
 
             return false;
@@ -123,9 +148,9 @@ bool SchemaUpdater::startUpdates()
 
         // current version describes the current state of the schema in the db,
         // schemaVersion is the version required by the program.
-        m_currentVersion = version.toInt();
+        d->currentVersion = version.toInt();
 
-        if (m_currentVersion > schemaVersion())
+        if (d->currentVersion > schemaVersion())
         {
             // trying to open a database with a more advanced than this SchemaUpdater supports
             if (!versionRequired.isEmpty() && versionRequired.toInt() <= schemaVersion())
@@ -140,12 +165,12 @@ bool SchemaUpdater::startUpdates()
                                         "(This means this digiKam version is too old, or the database format is to recent) "
                                         "Please use the more recent version of digikam that you used before. ");
 
-                m_access->setLastError(errorMsg);
+                d->access->setLastError(errorMsg);
 
-                if (m_observer)
+                if (d->observer)
                 {
-                    m_observer->error(errorMsg);
-                    m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                    d->observer->error(errorMsg);
+                    d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
                 }
 
                 return false;
@@ -159,19 +184,19 @@ bool SchemaUpdater::startUpdates()
     else
     {
         //kDebug() << "No database file available";
-        DatabaseParameters parameters = m_access->parameters();
+        DatabaseParameters parameters = d->access->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
             QString errorMsg = i18n("Failed to create tables in database.\n ")
-                               + m_access->backend()->lastError();
-            m_access->setLastError(errorMsg);
+                               + d->access->backend()->lastError();
+            d->access->setLastError(errorMsg);
 
-            if (m_observer)
+            if (d->observer)
             {
-                m_observer->error(errorMsg);
-                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                d->observer->error(errorMsg);
+                d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
 
             return false;
@@ -183,9 +208,9 @@ bool SchemaUpdater::startUpdates()
 
 bool SchemaUpdater::makeUpdates()
 {
-    if (m_currentVersion < schemaVersion())
+    if (d->currentVersion < schemaVersion())
     {
-        if (m_currentVersion == 1)
+        if (d->currentVersion == 1)
         {
             updateV1ToV2();
         }
@@ -199,8 +224,8 @@ bool SchemaUpdater::createDatabase()
 {
     if ( createTables() && createIndices() && createTriggers())
     {
-        m_currentVersion         = schemaVersion();
-        m_currentRequiredVersion = 1;
+        d->currentVersion         = schemaVersion();
+        d->currentRequiredVersion = 1;
         return true;
     }
     else
@@ -211,35 +236,35 @@ bool SchemaUpdater::createDatabase()
 
 bool SchemaUpdater::createTables()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateDB"))        &&
-           m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateDBOpenTLD")) &&
-           m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateDBOpenCVLBPH"));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDB"))        &&
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDBOpenTLD")) &&
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDBOpenCVLBPH"));
 }
 
 bool SchemaUpdater::createIndices()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateIndices")) &&
-           m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateIndicesOpenTLD"));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateIndices")) &&
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateIndicesOpenTLD"));
 }
 
 bool SchemaUpdater::createTriggers()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateTriggers")) &&
-           m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateTriggersOpenTLD"));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateTriggers")) &&
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateTriggersOpenTLD"));
 }
 
 bool SchemaUpdater::updateV1ToV2()
 {
 /*
-    if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction("UpdateDBSchemaFromV1ToV2")))
+    if (!d->access->backend()->execDBAction(d->access->backend()->getDBAction("UpdateDBSchemaFromV1ToV2")))
     {
         qError() << "Schema upgrade in DB from V1 to V2 failed!";
         return false;
     }
 */
 
-    m_currentVersion         = 2;
-    m_currentRequiredVersion = 1;
+    d->currentVersion         = 2;
+    d->currentRequiredVersion = 1;
     return true;
 }
 

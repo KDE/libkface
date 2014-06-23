@@ -39,10 +39,12 @@ class SchemaUpdater
 public:
 
     SchemaUpdater(DatabaseAccess* const access);
+    ~SchemaUpdater();
 
-    static int schemaVersion();
     bool update();
     void setObserver(InitializationObserver* const observer);
+
+    static int schemaVersion();
 
 private:
 
@@ -56,14 +58,8 @@ private:
 
 private:
 
-    bool                    m_setError;
-
-    int                     m_currentVersion;
-    int                     m_currentRequiredVersion;
-
-    DatabaseAccess*         m_access;
-
-    InitializationObserver* m_observer;
+    class Private;
+    Private* const d;
 };
 
 } // namespace KFaceIface

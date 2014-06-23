@@ -37,6 +37,7 @@ namespace KFaceIface
 
 class TrainingDB::Private
 {
+
 public:
     Private()
         : db(0)
