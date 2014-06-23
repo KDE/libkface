@@ -275,43 +275,43 @@ static Mat elbp(InputArray src, int radius, int neighbors)
  * Implementation not copied from OpenCV
 void LBPHFaceRecognizer::load(const FileStorage& fs)
 {
-    fs["radius"] >> _radius;
-    fs["neighbors"] >> _neighbors;
-    fs["grid_x"] >> _grid_x;
-    fs["grid_y"] >> _grid_y;
+    fs["radius"] >> m_radius;
+    fs["neighbors"] >> m_neighbors;
+    fs["grid_x"] >> m_grid_x;
+    fs["grid_y"] >> m_grid_y;
     //read matrices
-    readFileNodeList(fs["histograms"], _histograms);
-    fs["labels"] >> _labels;
+    readFileNodeList(fs["histograms"], m_histograms);
+    fs["labels"] >> m_labels;
 }
 
 // See FaceRecognizer::save.
 void LBPHFaceRecognizer::save(FileStorage& fs) const
 {
-    fs << "radius" << _radius;
-    fs << "neighbors" << _neighbors;
-    fs << "grid_x" << _grid_x;
-    fs << "grid_y" << _grid_y;
+    fs << "radius" << m_radius;
+    fs << "neighbors" << m_neighbors;
+    fs << "grid_x" << m_grid_x;
+    fs << "grid_y" << m_grid_y;
     // write matrices
-    writeFileNodeList(fs, "histograms", _histograms);
-    fs << "labels" << _labels;
+    writeFileNodeList(fs, "histograms", m_histograms);
+    fs << "labels" << m_labels;
 }
 */
 
-void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _in_labels)
+void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labels)
 {
-    this->train(_in_src, _in_labels, false);
+    this->train(_in_src, _inm_labels, false);
 }
 
-void LBPHFaceRecognizer::update(InputArrayOfArrays _in_src, InputArray _in_labels)
+void LBPHFaceRecognizer::update(InputArrayOfArrays _in_src, InputArray _inm_labels)
 {
     // got no data, just return
     if(_in_src.total() == 0)
         return;
 
-    this->train(_in_src, _in_labels, true);
+    this->train(_in_src, _inm_labels, true);
 }
 
-void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _in_labels, bool preserveData)
+void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labels, bool preserveData)
 {
     if(_in_src.kind() != _InputArray::STD_VECTOR_MAT && _in_src.kind() != _InputArray::STD_VECTOR_VECTOR)
     {
@@ -324,9 +324,9 @@ void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _in_labels
         String error_message = format("Empty training data was given. You'll need more than one sample to learn a model.");
         CV_Error(CV_StsUnsupportedFormat, error_message);
     }
-    else if(_in_labels.getMat().type() != CV_32SC1)
+    else if(_inm_labels.getMat().type() != CV_32SC1)
     {
-        String error_message = format("Labels must be given as integer (CV_32SC1). Expected %d, but was %d.", CV_32SC1, _in_labels.type());
+        String error_message = format("Labels must be given as integer (CV_32SC1). Expected %d, but was %d.", CV_32SC1, _inm_labels.type());
         CV_Error(CV_StsUnsupportedFormat, error_message);
     }
 
@@ -335,48 +335,48 @@ void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _in_labels
     _in_src.getMatVector(src);
 
     // get the label matrix
-    Mat labels = _in_labels.getMat();
+    Mat labels = _inm_labels.getMat();
 
     // check if data is well- aligned
     if(labels.total() != src.size())
     {
-        String error_message = format("The number of samples (src) must equal the number of labels (labels). Was len(samples)=%d, len(labels)=%d.", src.size(), _labels.total());
+        String error_message = format("The number of samples (src) must equal the number of labels (labels). Was len(samples)=%d, len(labels)=%d.", src.size(), m_labels.total());
         CV_Error(CV_StsBadArg, error_message);
     }
 
     // if this model should be trained without preserving old data, delete old model data
     if(!preserveData)
     {
-        _labels.release();
-        _histograms.clear();
+        m_labels.release();
+        m_histograms.clear();
     }
 
-    // append labels to _labels matrix
+    // append labels to m_labels matrix
     for(size_t labelIdx = 0; labelIdx < labels.total(); labelIdx++)
     {
-        _labels.push_back(labels.at<int>((int)labelIdx));
+        m_labels.push_back(labels.at<int>((int)labelIdx));
     }
 
     // store the spatial histograms of the original data
     for(size_t sampleIdx = 0; sampleIdx < src.size(); sampleIdx++)
     {
         // calculate lbp image
-        Mat lbp_image = elbp(src[sampleIdx], _radius, _neighbors);
+        Mat lbp_image = elbp(src[sampleIdx], m_radius, m_neighbors);
         // get spatial histogram from this lbp image
-        Mat p = spatial_histogram(lbp_image,                                                        /* lbp_image                   */
-                                  static_cast<int>(std::pow(2.0, static_cast<double>(_neighbors))), /* number of possible patterns */
-                                  _grid_x,                                                          /* grid size x                 */
-                                  _grid_y,                                                          /* grid size y                 */
+        Mat p = spatial_histogram(lbp_image,                                                         /* lbp_image                   */
+                                  static_cast<int>(std::pow(2.0, static_cast<double>(m_neighbors))), /* number of possible patterns */
+                                  m_grid_x,                                                          /* grid size x                 */
+                                  m_grid_y,                                                          /* grid size y                 */
                                   true
 				 );
         // add to templates
-        _histograms.push_back(p);
+        m_histograms.push_back(p);
     }
 }
 
 void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist) const
 {
-    if(_histograms.empty())
+    if(m_histograms.empty())
     {
         // throw error if no data (or simply return -1?)
         String error_message = "This LBPH model is not computed yet. Did you call the train method?";
@@ -386,29 +386,29 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
     Mat src = _src.getMat();
 
     // get the spatial histogram from input image
-    Mat lbp_image = elbp(src, _radius, _neighbors);
-    Mat query     = spatial_histogram(lbp_image,                                                        /* lbp_image                   */
-                                      static_cast<int>(std::pow(2.0, static_cast<double>(_neighbors))), /* number of possible patterns */
-                                      _grid_x,                                                          /* grid size x                 */
-                                      _grid_y,                                                          /* grid size y                 */
-                                      true                                                              /* normed histograms           */
+    Mat lbp_image = elbp(src, m_radius, m_neighbors);
+    Mat query     = spatial_histogram(lbp_image,                                                         /* lbp_image                   */
+                                      static_cast<int>(std::pow(2.0, static_cast<double>(m_neighbors))), /* number of possible patterns */
+                                      m_grid_x,                                                          /* grid size x                 */
+                                      m_grid_y,                                                          /* grid size y                 */
+                                      true                                                               /* normed histograms           */
 				     );
     minDist      = DBL_MAX;
     minClass     = -1;
 
     // This is the standard method
 
-    if (_statisticsMode == NearestNeighbor)
+    if (m_statisticsMode == NearestNeighbor)
     {
         // find 1-nearest neighbor
-        for(size_t sampleIdx = 0; sampleIdx < _histograms.size(); sampleIdx++)
+        for(size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++)
         {
-            double dist = compareHist(_histograms[sampleIdx], query, CV_COMP_CHISQR);
+            double dist = compareHist(m_histograms[sampleIdx], query, CV_COMP_CHISQR);
 
-            if((dist < minDist) && (dist < _threshold))
+            if((dist < minDist) && (dist < m_threshold))
             {
-                minDist = dist;
-                minClass = _labels.at<int>((int) sampleIdx);
+                minDist  = dist;
+                minClass = m_labels.at<int>((int) sampleIdx);
             }
         }
     }
@@ -416,15 +416,15 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
     // All other methods are just unvalidated examples.
     // Development can take place only if there is proper alignment available
 
-    else if (_statisticsMode == NearestMean)
+    else if (m_statisticsMode == NearestMean)
     {
         // Create map "label -> vector of distances to all histograms for this label"
         std::map<int, std::vector<int> > distancesMap;
 
-        for(size_t sampleIdx = 0; sampleIdx < _histograms.size(); sampleIdx++) 
+        for(size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++) 
         {
-            double dist                 = compareHist(_histograms[sampleIdx], query, CV_COMP_CHISQR);
-            std::vector<int>& distances = distancesMap[_labels.at<int>((int) sampleIdx)];
+            double dist                 = compareHist(m_histograms[sampleIdx], query, CV_COMP_CHISQR);
+            std::vector<int>& distances = distancesMap[m_labels.at<int>((int) sampleIdx)];
             distances.push_back(dist);
         }
 
@@ -444,7 +444,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             double mean = sum / it->second.size();
             s          += QString("%1: %2 - ").arg(it->first).arg(mean);
 
-            if((mean < minDist) && (mean < _threshold))
+            if((mean < minDist) && (mean < m_threshold))
             {
                 minDist = mean;
                 minClass = it->first;
@@ -453,7 +453,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
 
         kDebug() << s;
     }
-    else if (_statisticsMode == MostNearestNeighbors)
+    else if (m_statisticsMode == MostNearestNeighbors)
     {
         // Create map "distance -> label"
         std::multimap<double, int> distancesMap;
@@ -461,10 +461,10 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         // map "label -> number of histograms"
         std::map<int, int> countMap;
 
-        for(size_t sampleIdx = 0; sampleIdx < _histograms.size(); sampleIdx++) 
+        for(size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++) 
         {
-            int label   = _labels.at<int>((int) sampleIdx);
-            double dist = compareHist(_histograms[sampleIdx], query, CV_COMP_CHISQR);
+            int label   = m_labels.at<int>((int) sampleIdx);
+            double dist = compareHist(m_histograms[sampleIdx], query, CV_COMP_CHISQR);
             distancesMap.insert(std::pair<double, int>(dist, label));
             countMap[label]++;
         }
@@ -530,13 +530,13 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 }
 
 CV_INIT_ALGORITHM(LBPHFaceRecognizer, "FaceRecognizer.LBPH-KFaceIface",
-                  obj.info()->addParam(obj, "radius",     obj._radius);
-                  obj.info()->addParam(obj, "neighbors",  obj._neighbors);
-                  obj.info()->addParam(obj, "grid_x",     obj._grid_x);
-                  obj.info()->addParam(obj, "grid_y",     obj._grid_y);
-                  obj.info()->addParam(obj, "threshold",  obj._threshold);
-                  obj.info()->addParam(obj, "histograms", obj._histograms);     // modification: Make Read/Write
-                  obj.info()->addParam(obj, "labels",     obj._labels);             // modification: Make Read/Write
-                  obj.info()->addParam(obj, "statistic",  obj._statisticsMode)); // modification: Add parameter
+                  obj.info()->addParam(obj, "radius",     obj.m_radius);
+                  obj.info()->addParam(obj, "neighbors",  obj.m_neighbors);
+                  obj.info()->addParam(obj, "grid_x",     obj.m_grid_x);
+                  obj.info()->addParam(obj, "grid_y",     obj.m_grid_y);
+                  obj.info()->addParam(obj, "threshold",  obj.m_threshold);
+                  obj.info()->addParam(obj, "histograms", obj.m_histograms);         // modification: Make Read/Write
+                  obj.info()->addParam(obj, "labels",     obj.m_labels);             // modification: Make Read/Write
+                  obj.info()->addParam(obj, "statistic",  obj.m_statisticsMode));    // modification: Add parameter
 
 } // namespace KFaceIface

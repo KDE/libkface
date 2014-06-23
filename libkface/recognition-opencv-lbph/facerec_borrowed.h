@@ -66,12 +66,12 @@ public:
                        int gridx=8, int gridy=8,
                        double threshold = DBL_MAX,
                        PredictionStatistics statistics = NearestNeighbor) :
-        _grid_x(gridx),
-        _grid_y(gridy),
-        _radius(radius_),
-        _neighbors(neighbors_),
-        _threshold(threshold),
-        _statisticsMode(statistics)
+        m_grid_x(gridx),
+        m_grid_y(gridy),
+        m_radius(radius_),
+        m_neighbors(neighbors_),
+        m_threshold(threshold),
+        m_statisticsMode(statistics)
     {
     }
 
@@ -86,12 +86,12 @@ public:
                        int gridx=8, int gridy=8,
                        double threshold = DBL_MAX,
                        PredictionStatistics statistics = NearestNeighbor) :
-        _grid_x(gridx),
-        _grid_y(gridy),
-        _radius(radius_),
-        _neighbors(neighbors_),
-        _threshold(threshold),
-        _statisticsMode(statistics)
+        m_grid_x(gridx),
+        m_grid_y(gridy),
+        m_radius(radius_),
+        m_neighbors(neighbors_),
+        m_threshold(threshold),
+        m_statisticsMode(statistics)
     {
         train(src, labels);
     }
@@ -124,12 +124,12 @@ public:
     void save(cv::FileStorage&) const {}
 
     // Getter functions.
-    int neighbors() const { return _neighbors; }
-    int radius() const    { return _radius;    }
-    int grid_x() const    { return _grid_x;    }
-    int grid_y() const    { return _grid_y;    }
+    int neighbors() const { return m_neighbors; }
+    int radius()    const { return m_radius;    }
+    int grid_x()    const { return m_grid_x;    }
+    int grid_y()    const { return m_grid_y;    }
 
-    // NOTE: Implementation done through CV_INIT_ALGORITHM macro.
+    // NOTE: Implementation done through CV_INIT_ALGORITHM macro from OpenCV.
     cv::AlgorithmInfo* info() const;
 
 private:
@@ -143,15 +143,15 @@ private:
 private:
 
     // NOTE: Do not use a d private internal container, this will crash OpenCV in cv::Algorithm::set()
-    int                  _grid_x;
-    int                  _grid_y;
-    int                  _radius;
-    int                  _neighbors;
-    double               _threshold;
-    int                  _statisticsMode;
+    int                  m_grid_x;
+    int                  m_grid_y;
+    int                  m_radius;
+    int                  m_neighbors;
+    double               m_threshold;
+    int                  m_statisticsMode;
 
-    std::vector<cv::Mat> _histograms;
-    cv::Mat              _labels;
+    std::vector<cv::Mat> m_histograms;
+    cv::Mat              m_labels;
 };
 
 } // namespace KFaceIface
