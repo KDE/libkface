@@ -59,8 +59,8 @@ public:
         if (!m_backend)
         {
             QStringList cascadeDirs;
-            cascadeDirs << KGlobal::dirs()->findDirs("data", "libkface/haarcascades");
-            cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../opencv/haarcascades");
+            cascadeDirs << KGlobal::dirs()->findDirs("data",         "libkface/haarcascades");
+            cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../OpenCV/haarcascades");
 
             kDebug() << "OpenCV Haar Cascades dir found at " << cascadeDirs;
 
