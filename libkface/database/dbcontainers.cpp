@@ -52,7 +52,16 @@ void OpenCVMatData::setMat(const cv::Mat& mat)
 cv::Mat OpenCVMatData::toMat() const
 {
     // shallow copy (only creates header)
+
+    if (data.isEmpty())
+    {
+        kWarning() << "Array data to clone are empty.";
+    }
+
     cv::Mat mat(rows, cols, type, (void*)data.data());
+
+    kDebug() << "Clone Array size [" << rows << ", " << cols << "] of type " << type;
+
     return mat.clone();
 }
 
