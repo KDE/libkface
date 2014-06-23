@@ -6,6 +6,12 @@
  *
  * @date    2010-01-03
  * @brief   Class to perform faces detection.
+ *          Modesto Castrillón, Oscar Déniz, Daniel Hernández, Javier Lorenzo
+ *          A comparison of face and facial feature detectors based
+ *          on the Viola–Jones general object detection framework
+ *          Machine Vision and Applications, 01/2008
+ *          DOI 10.1007/s00138-010-0250-7
+ *
  * @section DESCRIPTION
  *
  * @author Copyright (C) 2010 by Alex Jironkin
@@ -120,15 +126,17 @@ public:
         return cv::Size(0,0);
     }
 
-    /** Assumptions on the relation of the size of a facial feature to the whole face.
-     *  Basically, we say the size is between 1/10 and 1/4, approx 1/6
+    /**
+     * Assumptions on the relation of the size of a facial feature to the whole face.
+     * Basically, we say the size is between 1/10 and 1/4, approx 1/6
      */
     static double faceToFeatureRelationMin()      { return 10; }
     static double faceToFeatureRelationMax()      { return 4;  }
     static double faceToFeatureRelationPresumed() { return 6;  }
 
-    /** A primary cascade does the initial scan on the whole image area
-     *  A verifying cascade scans the area reported by the primary cascade
+    /**
+     * A primary cascade does the initial scan on the whole image area
+     * A verifying cascade scans the area reported by the primary cascade
      */
     void setPrimaryCascade(bool isPrimary = true)
     {
@@ -146,9 +154,10 @@ public:
         return roi.isValid();
     }
 
-    /** given the full face rect (relative to whole image), returns the rectangle
-     *  of the region of interest of this cascade (still relative to whole image).
-     *  For frontal face cascades, returns the given parameter unchanged.
+    /**
+     * given the full face rect (relative to whole image), returns the rectangle
+     * of the region of interest of this cascade (still relative to whole image).
+     * For frontal face cascades, returns the given parameter unchanged.
      */
     cv::Rect faceROI(const CvRect& faceRect) const
     {
@@ -205,8 +214,8 @@ public:
             faceSize.height / faceToFeatureRelationMin() >= getOriginalWindowSize().height)
             return 1.0;
 
-        return max(double(getOriginalWindowSize().width)  * faceToFeatureRelationPresumed() / faceSize.width,
-                   double(getOriginalWindowSize().height) * faceToFeatureRelationPresumed() / faceSize.height);
+        return qMax(double(getOriginalWindowSize().width)  * faceToFeatureRelationPresumed() / faceSize.width,
+                    double(getOriginalWindowSize().height) * faceToFeatureRelationPresumed() / faceSize.height);
     }
 
     bool lessThanWindowSize(const cv::Size& size) const
@@ -219,9 +228,10 @@ public:
     bool   primaryCascade;
     bool   verifyingCascade;
 
-    /** Facial features have a region of interest, e.g., the left eye is typically
-     *  located in the left upper region of the presumed face.
-     *  For frontal face cascades, this is 0,0 - 1x1. */
+    /**
+     * Facial features have a region of interest, e.g., the left eye is typically
+     * located in the left upper region of the presumed face.
+     * For frontal face cascades, this is 0,0 - 1x1. */
     QRectF roi;
 };
 
@@ -274,6 +284,8 @@ static cv::Rect fromQRect(const QRect& rect)
 OpenCVFaceDetector::OpenCVFaceDetector(const QStringList& cascadeDirs)
     : d(new Private)
 {
+    if (cascadeDirs.isEmpty())
+        kError() << "OpenCV Haar Cascade director cannot be found. Did you install OpenCV XML data files?";
 
     d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt.xml");
     d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_default.xml");
@@ -293,14 +305,6 @@ OpenCVFaceDetector::OpenCVFaceDetector(const QStringList& cascadeDirs)
     d->cascades[6].setROI(0.4, 0,    0.6, 0.6);
     d->cascades[7].setROI(0.2, 0.25, 0.6, 0.6);
     d->cascades[8].setROI(0.1, 0.4,  0.8, 0.6);
-
-    /**
-     * Modesto Castrillón, Oscar Déniz, Daniel Hernández, Javier Lorenzo
-     * A comparison of face and facial feature detectors based
-     * on the Viola–Jones general object detection framework
-     * Machine Vision and Applications, 01/2008
-     * DOI 10.1007/s00138-010-0250-7
-     */
 }
 
 OpenCVFaceDetector::~OpenCVFaceDetector()
@@ -330,7 +334,7 @@ void OpenCVFaceDetector::setSpecificity(double sensitivityVsSpecificity)
 
 void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const cv::Size& originalSize)
 {
-    double origSize = double(max(originalSize.width, originalSize.height)) / 1000;
+    double origSize = double(qMax(originalSize.width, originalSize.height)) / 1000;
 
     /* Search increment will determine the number of passes over the image.
      * But with fewer passes, we will miss some faces.
@@ -352,21 +356,22 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
     else
         d->primaryParams.grouping = 3;
 
-    // flag speeds up (very much faster) and potentially lowers sensitivity: We mostly use it,
-    // unless in we want very high sensitivity at low speed
+    /* Flag speeds up (very much faster) and potentially lowers sensitivity: We mostly use it,
+     * unless in we want very high sensitivity at low speed
+     */
     if (d->sensitivityVsSpecificity > 0.1 || d->speedVsAccuracy < 0.9)
         d->primaryParams.flags = CV_HAAR_DO_CANNY_PRUNING;
     else
         d->primaryParams.flags = 0;
 
-    /* greater min size will filter small images, lowering sensitivity, enhancing specificity,
+    /* Greater min size will filter small images, lowering sensitivity, enhancing specificity,
      * with false positives often small
      */
     double minSize = 32 * d->sensitivityVsSpecificity;
 
     /* Original small images deserve a smaller minimum size
      */
-    minSize -= 10 * (1.0 - min(1.0, origSize));
+    minSize -= 10 * (1.0 - qMin(1.0, origSize));
 
     /* A small min size means small starting size, together with search increment, determining
      * the number of operations and thus speed
@@ -374,17 +379,21 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
     if (d->speedVsAccuracy < 0.75)
         minSize += 100 * (0.75 - d->speedVsAccuracy);
 
-    // Cascade minimum is 20 for most of our cascades (one is 24). Passing 0 will use the cascade minimum.
+    /* Cascade minimum is 20 for most of our cascades (one is 24).
+     * Passing 0 will use the cascade minimum.
+     */
     if (minSize < 20)
         minSize = 0;
+
     d->primaryParams.minSize = cv::Size(lround(minSize), lround(minSize));
 
-    d->maxDistance   = 15;    // Maximum distance between two faces to call them unique
-    d->minDuplicates = 0;
+    d->maxDistance                     = 15;    // Maximum distance between two faces to call them unique
+    d->minDuplicates                   = 0;
 
     d->verifyingParams.searchIncrement = 1.1;
     d->verifyingParams.flags           = 0;
-    // min size is adjusted each time
+
+    // NOTE: min size is adjusted each time
 
 /*
     kDebug() << "updateParameters: accuracy " << d->speedVsAccuracy
@@ -421,7 +430,7 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
 
 QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
                                                Cascade& cascade,
-                                               const DetectObjectParameters& params)
+                                               const DetectObjectParameters& params) const
 {
     // Check whether the cascade has loaded successfully. Else report and error and quit
     if (cascade.empty())
@@ -458,7 +467,7 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
     return results;
 }
 
-bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face)
+bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face) const
 {
     // check if we need to verify
     bool hasVerifyingCascade = false;
@@ -478,15 +487,15 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
     // Face coordinates. Add a certain margin for the other frontal cascades.
     const cv::Rect faceRect = fromQRect(face);
     const cv::Size faceSize = cv::Size(face.width(), face.height());
-    const int margin        = min(40, max(faceRect.width, faceRect.height));
+    const int margin        = qMin(40, qMax(faceRect.width, faceRect.height));
 
     // Clip to bounds of image, after adding the margin
-    cv::Rect extendedRect   = cv::Rect( max(0, faceRect.x - margin),
-                                        max(0, faceRect.y - margin),
+    cv::Rect extendedRect   = cv::Rect( qMax(0, faceRect.x - margin),
+                                        qMax(0, faceRect.y - margin),
                                         faceRect.width + 2*margin,
                                         faceRect.height + 2*margin );
-    extendedRect.width      = min(inputImage.cols - extendedRect.x, extendedRect.width);
-    extendedRect.height     = min(inputImage.rows - extendedRect.y, extendedRect.height);
+    extendedRect.width      = qMin(inputImage.cols - extendedRect.x, extendedRect.width);
+    extendedRect.height     = qMin(inputImage.rows - extendedRect.y, extendedRect.height);
 
 
     // shallow copy by ROI
@@ -523,17 +532,20 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                 IplImage* feature = LibFaceUtils::scaledSection(inputImage, roi, factor);
 
                 // kDebug() << "Facial feature in roi " << cascade.roi << "scaled up to" << feature->width << feature->height;
+
                 foundFaces = cascadeResult(feature, cascade.cascade, d->verifyingParams);
 
                 for (vector<Face>::iterator it = foundFaces.begin(); it != foundFaces.end(); ++it)
                 {
-                    cout << "Feature face " << it->getX1() << " " << it->getY1() << " " << it->getWidth() << "x" << it->getHeight() << endl;
+                    kDebug() << "Feature face " << it->getX1() << " " << it->getY1() << " " << it->getWidth() << "x" << it->getHeight();
+
                     double widthScaled = it->getWidth() / factor;
                     double heightScaled = it->getHeight() / factor;
 
-                    / *cout << "Hit feature size " << widthScaled << " " << heightScaled << " "
-                         << (faceSize.width / CascadeProperties::faceToFeatureRelationMin()) << " "
-                         << (faceSize.width / CascadeProperties::faceToFeatureRelationMax()) << endl;* /
+                    // kDebug() << "Hit feature size " << widthScaled << " " << heightScaled << " "
+                    //          << (faceSize.width / CascadeProperties::faceToFeatureRelationMin()) << " "
+                    //          << (faceSize.width / CascadeProperties::faceToFeatureRelationMax());
+
                     if (
                         (widthScaled > faceSize.width / Cascade::faceToFeatureRelationMin()
                          && widthScaled < faceSize.width / Cascade::faceToFeatureRelationMax())
@@ -543,7 +555,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
                         )
                     {
                         facialFeatureVotes++;
-                        kDebug() << "voting" << endl;
+                        kDebug() << "voting";
                         break;
                     }
                 }
@@ -583,13 +595,15 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
             verified = false;
     }
 
-    //kDebug() << "Verification finished. Votes: Frontal " << frontalFaceVotes << " Features "
-      //       << facialFeatureVotes << ". Face verified: " << verified;
+    /*
+    kDebug() << "Verification finished. Votes: Frontal " << frontalFaceVotes << " Features "
+             << facialFeatureVotes << ". Face verified: " << verified;
+    */
 
     return verified;
 }
 
-QList<QRect> OpenCVFaceDetector::mergeFaces(const cv::Mat& inputImage, const QList< QList<QRect> >& combo)
+QList<QRect> OpenCVFaceDetector::mergeFaces(const cv::Mat& inputImage, const QList< QList<QRect> >& combo) const
 {
     Q_UNUSED(inputImage);
 
@@ -665,7 +679,7 @@ int OpenCVFaceDetector::recommendedImageSizeForDetection()
     return 800;
 }
 
-cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage)
+cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage) const
 {
     if (inputImage.isNull() || !inputImage.size().isValid())
     {
@@ -680,9 +694,9 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage)
     {
         // Resize to 1024 * 768 (or comparable area for different aspect ratio)
         // Looking for scale factor z where A = w*z * h*z => z = sqrt(A/(w*h))
-        qreal z = qSqrt(qreal(maxAcceptableInputArea) / image.width() / image.height());
+        qreal z          = qSqrt(qreal(maxAcceptableInputArea) / image.width() / image.height());
         QSize scaledSize = image.size() * z;
-        image   = image.scaled(scaledSize);
+        image            = image.scaled(scaledSize);
     }
 
     //TODO: move to common utils, opentldrecognition
