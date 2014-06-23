@@ -112,10 +112,11 @@ IF (OpenCV_FOUND)
 # 0.1.0 => 0.1.0     (During digiKam GoSC2010)
 # 2.0.0 => 1.0.0     (Included into digiKam 2.0.0 Software Collection)
 # 3.0.0 => 2.0.0     (Including OpenTLD for face recognition)
+# 3.1.0 => 2.0.0     (Big private code review. No BC broken).
 
 # Library API version
 SET(KFACE_LIB_MAJOR_VERSION "3")
-SET(KFACE_LIB_MINOR_VERSION "0")
+SET(KFACE_LIB_MINOR_VERSION "1")
 SET(KFACE_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
