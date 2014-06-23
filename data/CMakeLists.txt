@@ -6,7 +6,7 @@
 # @date   2010-06-16
 # @brief  LibKFace library interface for KDE
 #
-# @author Copyright (C) 2010-2012 by Gilles Caulier
+# @author Copyright (C) 2010-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -22,9 +22,15 @@
 #
 # ============================================================
 
+# Under Windows, Haar Cascade XML files used by Face Detection are not installed with OpenCV rules. Why ???
+# Tested with OpenCV 2.4.9.
+# So we generalize installation of these files directly through libkface.
+
 FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.xml")
 INSTALL( FILES ${files}
          DESTINATION ${DATA_INSTALL_DIR}/libkface/haarcascades )
+
+# ---------------------------------------------------------------
 
 ADD_CUSTOM_COMMAND(OUTPUT face-funnel.data
                    COMMAND ${CMAKE_COMMAND} -E tar xz ${CMAKE_CURRENT_SOURCE_DIR}/face-funnel.data.tgz)
@@ -33,7 +39,7 @@ INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/face-funnel.data
          DESTINATION ${DATA_INSTALL_DIR}/libkface/alignment-congealing)
 
 #ADD_CUSTOM_COMMAND(OUTPUT flandmark_model.dat
- #                  COMMAND ${CMAKE_COMMAND} -E tar xz ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_model.dat.tgz)
+#                   COMMAND ${CMAKE_COMMAND} -E tar xz ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_model.dat.tgz)
 #ADD_CUSTOM_TARGET(extract_flandmark_data ALL DEPENDS flandmark_model.dat)
 #INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/flandmark_model.dat
- #        DESTINATION ${DATA_INSTALL_DIR}/libkface/alignment-flandmark)
+#         DESTINATION ${DATA_INSTALL_DIR}/libkface/alignment-flandmark)

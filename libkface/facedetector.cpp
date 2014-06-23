@@ -59,7 +59,10 @@ public:
         if (!m_backend)
         {
             QStringList cascadeDirs;
+            // Typically work everywhere. Files are installed with libkface as well
             cascadeDirs << KGlobal::dirs()->findDirs("data",         "libkface/haarcascades");
+
+            // Work only under Linux and OSX. OpenCV do not install XML files under Windows (checked with OpenCV 2.4.9)
             cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../OpenCV/haarcascades");
 
             kDebug() << "OpenCV Haar Cascades dir found at " << cascadeDirs;
