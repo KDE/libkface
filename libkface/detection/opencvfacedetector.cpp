@@ -726,7 +726,7 @@ QList<QRect> OpenCVFaceDetector::detectFaces(const cv::Mat& inputImage, const cv
 {
     if (inputImage.empty())
     {
-        cout<<"Invalid image given, not detecting faces."<<endl;
+        kDebug() << "Invalid image given, not detecting faces.";
         return QList<QRect>();
     }
 
