@@ -43,11 +43,10 @@ class DatabaseParameters
 public:
 
     /**
-      * This class encapsulates all parameters needed to establish
-      * a connection to a database (inspired by the API of QT SQL of Qt4).
-      * The values can be read from and written to a KUrl.
-      */
-
+     * This class encapsulates all parameters needed to establish
+     * a connection to a database (inspired by the API of QT SQL of Qt4).
+     * The values can be read from and written to a KUrl.
+     */
     DatabaseParameters(const QString& type, const QString& databaseFilePath);
     DatabaseParameters();
 
@@ -57,28 +56,31 @@ public:
     bool operator==(const DatabaseParameters& other) const;
     bool operator!=(const DatabaseParameters& other) const;
 
-    /** Performs basic checks that the parameters are not empty and have the information
-     *  required for the databaseType.
+    /**
+     * Performs basic checks that the parameters are not empty and have the information
+     * required for the databaseType.
      */
     bool isValid() const;
 
-    bool isSQLite() const;
-    bool isMySQL() const;
+    bool    isSQLite() const;
+    bool    isMySQL() const;
     QString SQLiteDatabaseFile() const;
 
     /**
-     *  Returns the databaseType designating the said database.
-     *  If you have a DatabaseParameters object already, you can use isSQLite() as well.
-     *  These strings are identical to the driver identifiers in the Qt SQL module.
+     * Returns the databaseType designating the said database.
+     * If you have a DatabaseParameters object already, you can use isSQLite() as well.
+     * These strings are identical to the driver identifiers in the Qt SQL module.
      */
     static QString SQLiteDatabaseType();
     static QString MySQLDatabaseType();
 
-    /** Return a set of default parameters for the give type */
+    /**
+     * Return a set of default parameters for the give type
+     */
     static DatabaseParameters defaultParameters(const QString databaseType);
 
-    //static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KGlobal::config(),
-      //      const QString& configGroup = QString());
+    //static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString());
+
     /**
      * Read and write parameters from config. You can specify the group,
      * or use the default value.

@@ -34,26 +34,27 @@ namespace KFaceIface
 class DatabaseAccess;
 class DatabaseAccessData;
 
+/**
+ * When you intend to execute a number of write operations to the database,
+ * group them while holding a DatabaseOperationGroup.
+ * For some database systems (SQLite), keeping a transaction across write operations
+ * occurring in short time results in enormous speedup (800x).
+ * For system that do not need this optimization, this class is a no-op.
+ */
 class DatabaseOperationGroup
 {
 public:
 
     /**
-     * When you intend to execute a number of write operations to the database,
-     * group them while holding a DatabaseOperationGroup.
-     * For some database systems (SQLite), keeping a transaction across write operations
-     * occurring in short time results in enormous speedup (800x).
-     * For system that do not need this optimization, this class is a no-op.
-     */
-
-    /**
      * Retrieve a DatabaseAccess object each time when constructing and destructing.
      */
     DatabaseOperationGroup(DatabaseAccessData* const db);
+
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
     DatabaseOperationGroup(DatabaseAccess* const access);
+
     ~DatabaseOperationGroup();
 
     /**
@@ -64,8 +65,11 @@ public:
 
     void setMaximumTime(int msecs);
 
-    /** Resets to 0 the time used by allowLift() */
+    /**
+     * Resets to 0 the time used by allowLift()
+     */
     void resetTime();
+
     /**
      * Allows to lift(). The transaction will be lifted if the time set by setMaximumTime()
      * has expired.

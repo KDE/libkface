@@ -7,7 +7,7 @@
  * Description : Storage container for database connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Holger Foerster <hamsi2k at freenet dot de>
+ * Copyright (C) 2010      by Holger Foerster <hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,8 +45,7 @@ DatabaseParameters::DatabaseParameters()
 {
 }
 
-DatabaseParameters::DatabaseParameters(const QString& type,
-                                       const QString& databaseName)
+DatabaseParameters::DatabaseParameters(const QString& type, const QString& databaseName)
     : databaseType(type), databaseName(databaseName)
 {
 }
