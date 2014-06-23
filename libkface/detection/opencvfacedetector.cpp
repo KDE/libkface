@@ -214,8 +214,8 @@ public:
             faceSize.height / faceToFeatureRelationMin() >= getOriginalWindowSize().height)
             return 1.0;
 
-        return qMax(double(getOriginalWindowSize().width)  * faceToFeatureRelationPresumed() / faceSize.width,
-                    double(getOriginalWindowSize().height) * faceToFeatureRelationPresumed() / faceSize.height);
+        return cv::max(double(getOriginalWindowSize().width)  * faceToFeatureRelationPresumed() / faceSize.width,
+                       double(getOriginalWindowSize().height) * faceToFeatureRelationPresumed() / faceSize.height);
     }
 
     bool lessThanWindowSize(const cv::Size& size) const
@@ -334,7 +334,7 @@ void OpenCVFaceDetector::setSpecificity(double sensitivityVsSpecificity)
 
 void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const cv::Size& originalSize)
 {
-    double origSize = double(qMax(originalSize.width, originalSize.height)) / 1000;
+    double origSize = double(cv::max(originalSize.width, originalSize.height)) / 1000;
 
     /* Search increment will determine the number of passes over the image.
      * But with fewer passes, we will miss some faces.
@@ -371,7 +371,7 @@ void OpenCVFaceDetector::updateParameters(const cv::Size& /*scaledSize*/, const 
 
     /* Original small images deserve a smaller minimum size
      */
-    minSize -= 10 * (1.0 - qMin(1.0, origSize));
+    minSize -= 10 * (1.0 - cv::min(1.0, origSize));
 
     /* A small min size means small starting size, together with search increment, determining
      * the number of operations and thus speed
@@ -487,15 +487,16 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
     // Face coordinates. Add a certain margin for the other frontal cascades.
     const cv::Rect faceRect = fromQRect(face);
     const cv::Size faceSize = cv::Size(face.width(), face.height());
-    const int margin        = qMin(40, qMax(faceRect.width, faceRect.height));
+    const int margin        = cv::min(40, cv::max(faceRect.width, faceRect.height));
 
     // Clip to bounds of image, after adding the margin
-    cv::Rect extendedRect   = cv::Rect( qMax(0, faceRect.x - margin),
-                                        qMax(0, faceRect.y - margin),
-                                        faceRect.width + 2*margin,
-                                        faceRect.height + 2*margin );
-    extendedRect.width      = qMin(inputImage.cols - extendedRect.x, extendedRect.width);
-    extendedRect.height     = qMin(inputImage.rows - extendedRect.y, extendedRect.height);
+    cv::Rect extendedRect   = cv::Rect(cv::max(0, faceRect.x - margin),
+                                       cv::max(0, faceRect.y - margin),
+                                               faceRect.width  + 2*margin,
+                                               faceRect.height + 2*margin);
+
+    extendedRect.width      = cv::min(inputImage.cols - extendedRect.x, extendedRect.width);
+    extendedRect.height     = cv::min(inputImage.rows - extendedRect.y, extendedRect.height);
 
 
     // shallow copy by ROI

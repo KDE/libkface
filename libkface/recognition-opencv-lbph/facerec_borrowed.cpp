@@ -469,7 +469,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             countMap[label]++;
         }
 
-        int nearestElementCount = qMin(100, int(distancesMap.size()/3+1));
+        int nearestElementCount = cv::min(100, int(distancesMap.size()/3+1));
         // map "label -> number of nearest neighbors"
         std::map<int, int> scoreMap;
 

@@ -113,7 +113,7 @@ cv::Mat TanTriggsPreprocessor::preprocessRaw(const cv::Mat& inputImage)
 
         {
             cv::Mat tmp;
-            cv::pow(qMin(cv::abs(I), tau), alpha, tmp);
+            cv::pow(cv::min(cv::abs(I), tau), alpha, tmp);
             meanI = cv::mean(tmp).val[0];
         }
 
