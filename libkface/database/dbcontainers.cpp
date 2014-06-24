@@ -58,7 +58,7 @@ cv::Mat OpenCVMatData::toMat() const
         kWarning() << "Array data to clone are empty.";
     }
 
-    cv::Mat mat(rows, cols, type, (void*)data.data());
+    cv::Mat mat(rows, cols, type, (void*)data.constData());
 
     kDebug() << "Clone Array size [" << rows << ", " << cols << "] of type " << type;
 
