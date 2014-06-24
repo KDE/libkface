@@ -67,9 +67,9 @@ void TrainingDB::setSetting(const QString& keyword, const QString& value)
 QString TrainingDB::setting(const QString& keyword) const
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT value FROM Settings "
-                            "WHERE keyword=?;"),
-                    keyword, &values );
+    d->db->execSql(QString("SELECT value FROM Settings "
+                           "WHERE keyword=?;"),
+                   keyword, &values);
 
     if (values.isEmpty())
     {
@@ -183,24 +183,42 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 
         if (metadata.storageStatus == LBPHistogramMetadata::Created)
         {
-            OpenCVMatData data       = model.histogramData(i);
-            QByteArray    compressed = qCompress(data.data);
-            QVariantList  histogramValues;
-            QVariant      insertedId;
+            OpenCVMatData data = model.histogramData(i);
 
-            histogramValues << model.databaseId
-                            << metadata.identity
-                            << metadata.context
-                            << data.type
-                            << data.rows
-                            << data.cols
-                            << compressed;
+            if (data.data.isEmpty())
+            {
+                kWarning() << "Histogram data to commit in database are empty for Identity " << metadata.identity;
+            }
+            else
+            {
+                QByteArray compressed = qCompress(data.data);
 
-            d->db->execSql("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, context, type, rows, cols, data) "
-                           "VALUES (?,?,?,?,?,?,?)",
-                           histogramValues, 0, &insertedId);
+                if (compressed.isEmpty())
+                {
+                    kWarning() << "Cannot compress histogram data to commit in database for Identity " << metadata.identity;
+                }
+                else
+                {
+                    QVariantList  histogramValues;
+                    QVariant      insertedId;
 
-            model.setWrittenToDatabase(i, insertedId.toInt());
+                    histogramValues << model.databaseId
+                                    << metadata.identity
+                                    << metadata.context
+                                    << data.type
+                                    << data.rows
+                                    << data.cols
+                                    << compressed;
+
+                    d->db->execSql("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, context, type, rows, cols, data) "
+                                   "VALUES (?,?,?,?,?,?,?)",
+                                   histogramValues, 0, &insertedId);
+
+                    model.setWrittenToDatabase(i, insertedId.toInt());
+
+                    kDebug() << "Commit compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << compressed.size();
+                }
+            }
         }
     }
 }
@@ -246,7 +264,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
         while (query.next())
         {
             LBPHistogramMetadata metadata;
-            OpenCVMatData data;
+            OpenCVMatData        data;
 
             metadata.databaseId    = query.value(0).toInt();
             metadata.identity      = query.value(1).toInt();
@@ -257,12 +275,28 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
             data.type              = query.value(3).toInt();
             data.rows              = query.value(4).toInt();
             data.cols              = query.value(5).toInt();
-            data.data              = qUncompress(query.value(6).toByteArray());
+            QByteArray cData       = query.value(6).toByteArray();
 
-            kDebug() << "Adding histogram" << metadata.databaseId << "identity" << metadata.identity << "size" << data.data.size();
+            if (!cData.isEmpty())
+            {
+                data.data = qUncompress(cData);
 
-            histograms << data;
-            histogramMetadata << metadata;
+                if (data.data.isEmpty())
+                {
+                    kWarning() << "Cannot uncompress histogram data to checkout from database for Identity " << metadata.identity;
+                }
+                else
+                {
+                    kDebug() << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
+
+                    histograms        << data;
+                    histogramMetadata << metadata;
+                }
+            }
+            else
+            {
+                kWarning() << "Histogram data to checkout from database are empty for Identity " << metadata.identity;
+            }
         }
 
         model.setHistograms(histograms, histogramMetadata);
