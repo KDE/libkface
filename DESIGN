@@ -1,0 +1,62 @@
+API
+---
+
+The library API has two main tasks, which is face detection and face recognition.
+
+The detection interface is contained in facedetector.h
+
+The recognition interface in contained in recognitiondatabaase.h
+
+Detection only processes image data, and recognition requires persistent storage
+of learned results, so there is a database and some code to manage identities.
+
+Faces database is hosted in home directory at ~/.kde4/share/apps/libkface/database/recognition.db
+
+Identity is defined in identity.h, to identify real persons based on various data.
+dataproviders.h defines interfaces to feed the recognition process.
+These four header files are quite well documented using Doxygen.
+
+facedetector.cpp is quite shallow as the backend is separated.
+recognitiondatabase.cpp has some more code, locking, database creation, and
+persistence as well as identity management is contained here. But no backend
+either.
+
+The database/ subdirectory contains a stripped-down version of the digikam
+database code, just enough to comfortably keep a database with recognition
+data.
+
+detection/ is the detection backend, we use OpenCV Haar cascades, and try to
+fine tune things.
+
+recognition-opencv-lbph is the recognizer which we currently use, based on
+Phillip Wagner's Local Binary Patterns Histograms implementation in OpenCV.
+
+http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms
+
+alignment-congealing, alignment-flandmark and preprocessing-tantriggs are
+implemented algorithms which are currently not used because they
+deliverd inferior results.
+
+TEST TOOLS
+----------
+
+libkface/test/ is the best place to play around with the library and
+fine tune algorithms.
+
+Align tool : alignment means to take a detected face, try to find out from which angle the
+photos was taken, and re-align the face so that the recognition algorithm does
+not need to care for misalignment. We currently do not have such an algorithm,
+but people believe that commercial solutions have it.
+
+Preprocess tool : Preprocessing is suggested to remove influence of lightning conditions etc.
+I implemented the Tan-Triggs algorithm, which is simple, but in my non-
+exhaustive tests had rather an adverse effect.
+
+Detect tool : perform face detection on image and display result in a window.
+
+Recognize tool : perform face recognition using a face database for storage of trained faces.
+This tool is able to use ORL database which are freely available set of images to test face recognition.
+It contain IIRC 10 photos of 20 different peoples from slightly different angles. See here for details :
+
+http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html
+
