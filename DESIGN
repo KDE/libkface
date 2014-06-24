@@ -60,3 +60,5 @@ It contain IIRC 10 photos of 20 different peoples from slightly different angles
 
 http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html
 
+KFaceGui is a simple application able to run detection and recognition without to use CLI.
+Currently detection is implemented ands recognition is broken.
