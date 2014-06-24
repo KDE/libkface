@@ -5,10 +5,11 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date    2012-01-03
- * @brief   Face Recognition based on Local Binary Patterns.
+ * @brief   <a href="http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms">Face Recognition based on Local Binary Patterns Histograms</a>
  *          Ahonen T, Hadid A. and Pietikäinen M. "Face description with local binary
  *          patterns: Application to face recognition." IEEE Transactions on Pattern
  *          Analysis and Machine Intelligence, 28(12):2037-2041.
+ *
  * @section DESCRIPTION
  *
  * @author Copyright (C) 2012-2013 by Marcel Wiesweg
