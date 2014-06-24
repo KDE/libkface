@@ -1,7 +1,7 @@
 API
 ---
 
-The library API has two main tasks, which is face detection and face recognition.
+The library has two main tasks, which is face detection and face recognition.
 
 The detection interface is contained in facedetector.h
 
@@ -10,25 +10,33 @@ The recognition interface in contained in recognitiondatabaase.h
 Detection only processes image data, and recognition requires persistent storage
 of learned results, so there is a database and some code to manage identities.
 
-Faces database is hosted in home directory at ~/.kde4/share/apps/libkface/database/recognition.db
+Faces database file is hosted in home directory to be shared with all applications
+which use libkface :
+
+Linux :   ~/.kde4/share/apps/libkface/database/recognition.db
+OSX :     ~/Library/Preferences/KDE/share/apps/libkface/database/recognition.db
+Windows : ~/AppData/Roaming/.kde/share/apps/libkface/database/recognition.db
 
 Identity is defined in identity.h, to identify real persons based on various data.
 dataproviders.h defines interfaces to feed the recognition process.
-These four header files are quite well documented using Doxygen.
+These header files are quite well documented using Doxygen.
 
 facedetector.cpp is quite shallow as the backend is separated.
 recognitiondatabase.cpp has some more code, locking, database creation, and
 persistence as well as identity management is contained here. But no backend
 either.
 
-The database/ subdirectory contains a stripped-down version of the digikam
+The database/ subdirectory contains a stripped-down version of the digiKam
 database code, just enough to comfortably keep a database with recognition
 data.
 
 detection/ is the detection backend, we use OpenCV Haar cascades, and try to
-fine tune things.
+fine tune things. To work fine, Haar cascade XML files are require and loaded 
+by libkface. For obscur reasons, these files are not published with Windows version
+of OpenCV. To reduce problems with face detection, XML files are published 
+as well through libkface.
 
-recognition-opencv-lbph is the recognizer which we currently use, based on
+recognition-opencv-lbph/ is the recognizer which we currently use, based on
 Phillip Wagner's Local Binary Patterns Histograms implementation in OpenCV.
 
 http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms
@@ -61,4 +69,4 @@ It contain IIRC 10 photos of 20 different peoples from slightly different angles
 http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html
 
 KFaceGui is a simple application able to run detection and recognition without to use CLI.
-Currently detection is implemented ands recognition is broken.
+Currently detection is implemented and recognition is broken.
