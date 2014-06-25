@@ -85,7 +85,7 @@ public:
         {
             return;
         }
-        for (QVariantMap::const_iterator it = parameters.constBegin(); it != parameters.constEnd(); ++it)
+        for (QVariantMap::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it)
         {
             if (it.key() == "accuracy")
             {
@@ -108,12 +108,14 @@ public:
 
 public:
 
-    QVariantMap parameters;
+    QVariantMap         m_parameters;
 
 private:
 
     OpenCVFaceDetector* m_backend;
 };
+
+// ---------------------------------------------------------------------------------
 
 FaceDetector::FaceDetector()
     : d(new Private)
@@ -176,7 +178,7 @@ QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& origin
 
 void FaceDetector::setParameter(const QString& parameter, const QVariant& value)
 {
-    d->parameters.insert(parameter, value);
+    d->m_parameters.insert(parameter, value);
     d->applyParameters();
 }
 
@@ -184,7 +186,7 @@ void FaceDetector::setParameters(const QVariantMap& parameters)
 {
     for (QVariantMap::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
     {
-        d->parameters.insert(it.key(), it.value());
+        d->m_parameters.insert(it.key(), it.value());
     }
 
     d->applyParameters();
@@ -192,7 +194,7 @@ void FaceDetector::setParameters(const QVariantMap& parameters)
 
 QVariantMap FaceDetector::parameters() const
 {
-    return d->parameters;
+    return d->m_parameters;
 }
 
 int FaceDetector::recommendedImageSize(const QSize& availableSize) const
@@ -210,10 +212,10 @@ QRectF FaceDetector::toRelativeRect(const QRect& abs, const QSize& s)
         return QRectF();
     }
 
-    return QRectF(qreal(abs.x())       / qreal(s.width()),
-                  qreal(abs.y())       / qreal(s.height()),
-                  qreal(abs.width())   / qreal(s.width()),
-                  qreal(abs.height())  / qreal(s.height()));
+    return QRectF(qreal(abs.x())      / qreal(s.width()),
+                  qreal(abs.y())      / qreal(s.height()),
+                  qreal(abs.width())  / qreal(s.width()),
+                  qreal(abs.height()) / qreal(s.height()));
 }
 
 QRect FaceDetector::toAbsoluteRect(const QRectF& rel, const QSize& s)
