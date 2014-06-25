@@ -55,7 +55,6 @@ DBActionType::DBActionType(const DBActionType& actionType)
 
 DBActionType::~DBActionType()
 {
-    d->actionValue.~QVariant();
     delete d;
 }
 
