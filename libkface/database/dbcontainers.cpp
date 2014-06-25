@@ -36,6 +36,9 @@ OpenCVMatData::OpenCVMatData()
 }
 
 OpenCVMatData::OpenCVMatData(const cv::Mat& mat)
+    : type(-1), 
+      rows(0),
+      cols(0)
 {
     setMat(mat);
 }
@@ -55,7 +58,7 @@ cv::Mat OpenCVMatData::toMat() const
 
     if (data.isEmpty())
     {
-        kWarning() << "Array data to clone are empty.";
+        kWarning() << "Array data to clone is empty.";
     }
 
     cv::Mat mat(rows, cols, type, (void*)data.constData());
