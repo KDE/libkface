@@ -1,7 +1,11 @@
 /** @mainpage libKFace
 
-Libkface is a Qt/C++ library to perform face detection and recognition over pictures. Have a look at KFaceIface::FaceDetector to get started.
+Libkface is a Qt/C++ library to perform face detection and face recognition over pictures.
+Have a look at KFaceIface::FaceDetector to get started with face detection.
+
+Have a look at KFaceIface::RecognitionDatabase to get started with face recognition.
 
 @see KFaceIface::FaceDetector
+@see KFaceIface::RecognitionDatabase
 
  */
