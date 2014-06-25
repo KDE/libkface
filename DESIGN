@@ -64,7 +64,7 @@ Detect tool : perform face detection on image and display result in a window.
 
 Recognize tool : perform face recognition using a face database for storage of trained faces.
 This tool is able to use ORL database which are freely available set of images to test face recognition.
-It contain IIRC 10 photos of 20 different peoples from slightly different angles. See here for details :
+It contain 10 photos of 20 different peoples from slightly different angles. See here for details :
 
 http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html
 
