@@ -104,27 +104,41 @@ public:
 
     static cv::Ptr<LBPHFaceRecognizer> create(int radius=1, int neighbors=8, int grid_x=8, int grid_y=8, double threshold = DBL_MAX, PredictionStatistics statistics = NearestNeighbor);
 
-    // Computes a LBPH model with images in src and
-    // corresponding labels in labels.
+    /**
+     * Computes a LBPH model with images in src and
+     * corresponding labels in labels.
+     */
     void train(cv::InputArrayOfArrays src, cv::InputArray labels);
 
-    // Updates this LBPH model with images in src and
-    // corresponding labels in labels.
+    /**
+     * Updates this LBPH model with images in src and
+     * corresponding labels in labels.
+     */
     void update(cv::InputArrayOfArrays src, cv::InputArray labels);
 
-    // Predicts the label of a query image in src.
+    /**
+     * Predicts the label of a query image in src.
+     */
     int predict(cv::InputArray src) const;
 
-    // Predicts the label and confidence for a given sample.
+    /**
+     * Predicts the label and confidence for a given sample.
+     */
     void predict(cv::InputArray _src, int &label, double &dist) const;
 
-    // See FaceRecognizer::load.
+    /**
+     * See FaceRecognizer::load().
+     */
     void load(const cv::FileStorage&) {}
 
-    // See FaceRecognizer::save.
+    /**
+     * See FaceRecognizer::save().
+     */
     void save(cv::FileStorage&) const {}
 
-    // Getter functions.
+    /**
+     * Getter functions.
+     */
     int neighbors() const { return m_neighbors; }
     int radius()    const { return m_radius;    }
     int grid_x()    const { return m_grid_x;    }

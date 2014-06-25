@@ -369,7 +369,7 @@ void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_label
                                   m_grid_x,                                                          /* grid size x                 */
                                   m_grid_y,                                                          /* grid size y                 */
                                   true
-				 );
+                                 );
         // add to templates
         m_histograms.push_back(p);
     }
@@ -393,7 +393,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
                                       m_grid_x,                                                          /* grid size x                 */
                                       m_grid_y,                                                          /* grid size y                 */
                                       true                                                               /* normed histograms           */
-				     );
+                                     );
     minDist      = DBL_MAX;
     minClass     = -1;
 
@@ -471,6 +471,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         }
 
         int nearestElementCount = cv::min(100, int(distancesMap.size()/3+1));
+
         // map "label -> number of nearest neighbors"
         std::map<int, int> scoreMap;
 
@@ -506,7 +507,7 @@ int LBPHFaceRecognizer::predict(InputArray _src) const
     return label;
 }
 
-// Static method
+// Static method ----------------------------------------------------
 
 Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, int grid_x, int grid_y, double threshold, PredictionStatistics statistics)
 {

@@ -91,6 +91,24 @@ static QString findFileInDirs(const QStringList& dirs, const QString& fileName)
     return QString();
 }
 
+static int distanceOfCenters(const QRect& r1, const QRect& r2)
+{
+    QPointF diff = r1.center() - r2.center();
+    return lround(sqrt(diff.x() * diff.x() + diff.y() * diff.y()));    // Euclidean distance
+}
+
+static QRect toQRect(const cv::Rect& rect)
+{
+    return QRect(rect.x, rect.y, rect.width, rect.height);
+}
+
+static cv::Rect fromQRect(const QRect& rect)
+{
+    return cv::Rect(rect.x(), rect.y(), rect.width(), rect.height());
+}
+
+// --------------------------------------------------------------------------------
+
 class Cascade : public cv::CascadeClassifier
 {
 public:
@@ -265,21 +283,7 @@ public:
     double                         sensitivityVsSpecificity;
 };
 
-static int distanceOfCenters(const QRect& r1, const QRect& r2)
-{
-    QPointF diff = r1.center() - r2.center();
-    return lround(sqrt(diff.x() * diff.x() + diff.y() * diff.y()));    // Euclidean distance
-}
-
-static QRect toQRect(const cv::Rect& rect)
-{
-    return QRect(rect.x, rect.y, rect.width, rect.height);
-}
-
-static cv::Rect fromQRect(const QRect& rect)
-{
-    return cv::Rect(rect.x(), rect.y(), rect.width(), rect.height());
-}
+// --------------------------------------------------------------------------------
 
 OpenCVFaceDetector::OpenCVFaceDetector(const QStringList& cascadeDirs)
     : d(new Private)
@@ -503,7 +507,8 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
     cv::Mat extendedFaceImg = inputImage(extendedRect);
 
     QList<QRect> foundFaces;
-    int frontalFaceVotes = 0, facialFeatureVotes = 0;
+    int frontalFaceVotes   = 0;
+    int facialFeatureVotes = 0;
 
     for (int i=0; i<d->cascades.size(); ++i)
     {
@@ -596,10 +601,10 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
             verified = false;
     }
 
-    /*
+/*
     kDebug() << "Verification finished. Votes: Frontal " << frontalFaceVotes << " Features "
              << facialFeatureVotes << ". Face verified: " << verified;
-    */
+*/
 
     return verified;
 }
