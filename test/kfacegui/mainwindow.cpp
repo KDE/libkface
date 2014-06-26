@@ -251,20 +251,26 @@ void MainWindow::slotOpenDatabase()
 
 void MainWindow::slotRecognise()
 {
-/*
-    QList<double> closeness = d->database->recognizeFaces(d->currentFaces);
+    setCursor(Qt::WaitCursor);
 
-    if (closeness.isEmpty())
-        return;
+    int i = 0;
 
-    for(int i = 0; i < d->currentFaces.size(); ++i)
+    foreach(FaceItem* const item, d->faceitems)
     {
-        d->faceitems[i]->suggest(d->currentFaces[i].name());
-        kDebug() << "Face #"<< i+1 << " is closest to the person with ID " << d->currentFaces[i].id()
-                 << " and name "<< d->currentFaces[i].name()
-                 << " with a distance of "<< closeness[i];
+        Identity identity = d->database.recognizeFace(d->currentPhoto.copy(item->originalRect()));
+
+        if (!identity.isNull())
+        {
+            item->suggest(identity.attributes["fullName"]);
+
+            kDebug() << "Face #"<< i+1 << " is closest to the person with ID " << identity.id
+                     << " and name "<< identity.attributes["fullName"];
+        }
+
+        i++;
     }
-*/
+
+    unsetCursor();
 }
 
 void MainWindow::slotUpdateDatabase()

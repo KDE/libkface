@@ -378,7 +378,7 @@ void FaceItem::switchToSuggestionMode()
 {
     d->suggestionMode = true;
     d->faceName->setEnabled(false);
-    d->faceName->setHtml("Is this <b>" + d->name + "</b>?");
+    d->faceName->setHtml("Is this <b>" + d->name + "</b> ?");
     d->acceptButton->hide();
     d->suggestionAcceptButton->show();
     d->suggestionRejectButton->show();
