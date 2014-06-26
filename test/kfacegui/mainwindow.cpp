@@ -87,21 +87,25 @@ MainWindow::MainWindow(QWidget* const parent)
 {
     d->ui = new Ui::MainWindow;
     d->ui->setupUi(this);
+    d->ui->recogniseBtn->setEnabled(false);
+    d->ui->updateDatabaseBtn->setEnabled(false);
+    d->ui->detectFacesBtn->setEnabled(false);
+    d->ui->configLocation->setReadOnly(true);
 
     connect(d->ui->openImageBtn, SIGNAL(clicked()),
             this, SLOT(slotOpenImage()));
 
-    connect(d->ui->openDatabaseBtn, SIGNAL(clicked()),
-            this, SLOT(slotOpenDatabase()));
+    connect(d->ui->horizontalSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotUpdateAccuracy()));
 
     connect(d->ui->detectFacesBtn, SIGNAL(clicked()),
             this, SLOT(slotDetectFaces()));
 
+    connect(d->ui->openDatabaseBtn, SIGNAL(clicked()),
+            this, SLOT(slotOpenDatabase()));
+
     connect(d->ui->recogniseBtn, SIGNAL(clicked()),
             this, SLOT(slotRecognise()));
-
-    connect(d->ui->horizontalSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotUpdateAccuracy()));
 
     connect(d->ui->updateDatabaseBtn, SIGNAL(clicked()),
             this, SLOT(slotUpdateDatabase()));
@@ -192,6 +196,7 @@ void MainWindow::slotOpenImage()
     d->lastPhotoItem->setScale(d->scale);
 
     d->myScene->addItem(d->lastPhotoItem);
+    d->ui->detectFacesBtn->setEnabled(true);
 }
 
 void MainWindow::slotDetectFaces()
@@ -238,9 +243,29 @@ void MainWindow::slotOpenDatabase()
     d->ui->configLocation->setText(directory);
 
     d->database = RecognitionDatabase::addDatabase(directory);
+    d->ui->recogniseBtn->setEnabled(true);
+    d->ui->updateDatabaseBtn->setEnabled(true);
 }
 
 // TODO: port these method to FaceRecognitionDatabase API
+
+void MainWindow::slotRecognise()
+{
+/*
+    QList<double> closeness = d->database->recognizeFaces(d->currentFaces);
+
+    if (closeness.isEmpty())
+        return;
+
+    for(int i = 0; i < d->currentFaces.size(); ++i)
+    {
+        d->faceitems[i]->suggest(d->currentFaces[i].name());
+        kDebug() << "Face #"<< i+1 << " is closest to the person with ID " << d->currentFaces[i].id()
+                 << " and name "<< d->currentFaces[i].name()
+                 << " with a distance of "<< closeness[i];
+    }
+*/
+}
 
 void MainWindow::slotUpdateDatabase()
 {
@@ -267,24 +292,6 @@ void MainWindow::slotUpdateDatabase()
     else
     {
         kDebug() << "No faces to train.";
-    }
-*/
-}
-
-void MainWindow::slotRecognise()
-{
-/*
-    QList<double> closeness = d->database->recognizeFaces(d->currentFaces);
-
-    if (closeness.isEmpty())
-        return;
-
-    for(int i = 0; i < d->currentFaces.size(); ++i)
-    {
-        d->faceitems[i]->suggest(d->currentFaces[i].name());
-        kDebug() << "Face #"<< i+1 << " is closest to the person with ID " << d->currentFaces[i].id()
-                 << " and name "<< d->currentFaces[i].name()
-                 << " with a distance of "<< closeness[i];
     }
 */
 }
