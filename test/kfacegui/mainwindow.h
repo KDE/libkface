@@ -33,25 +33,6 @@
 // Qt includes
 
 #include <QMainWindow>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsPixmapItem>
-#include <QFileDialog>
-#include <QLabel>
-
-// libkface includes
-
-#include "recognitiondatabase.h"
-#include "facedetector.h"
-#include "faceitem.h"
-
-namespace Ui
-{
-    class MainWindow;
-}
-
-using namespace KFaceIface;
-using namespace std;
 
 class MainWindow : public QMainWindow
 {
@@ -79,20 +60,11 @@ private:
 
     void clearScene();
 
+
 private:
 
-    Ui::MainWindow*      ui;
-    QGraphicsScene*      myScene;
-    QGraphicsView*       myView;
-    QGraphicsPixmapItem* lastPhotoItem;
-    QList<FaceItem*>     faceitems;
-
-    RecognitionDatabase  database;
-    FaceDetector*        detector;
-    QImage               currentPhoto;
-    double               scale;
-    QList<QRectF>        currentFaces;
-    QString              lastFileOpenPath;
+    class Private;
+    Private* const d;
 };
 
 #endif // MAINWINDOW_H
