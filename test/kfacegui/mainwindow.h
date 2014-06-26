@@ -45,12 +45,12 @@ public:
 
 public Q_SLOTS:
 
-    void openImage();
-    void openConfig();
-    void detectFaces();
-    void updateConfig();
-    void recognise();
-    void updateAccuracy();
+    void slotOpenImage();
+    void slotOpenDatabase();
+    void slotDetectFaces();
+    void slotUpdateDatabase();
+    void slotRecognise();
+    void slotUpdateAccuracy();
 
 protected:
 

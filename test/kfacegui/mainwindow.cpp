@@ -86,27 +86,25 @@ MainWindow::MainWindow(QWidget* const parent)
     : QMainWindow(parent), d(new Private)
 {
     d->ui = new Ui::MainWindow;
-
     d->ui->setupUi(this);
 
     connect(d->ui->openImageBtn, SIGNAL(clicked()),
-            this, SLOT(openImage()));
+            this, SLOT(slotOpenImage()));
 
-    connect(d->ui->openConfigBtn, SIGNAL(clicked()),
-            this, SLOT(openConfig()));
+    connect(d->ui->openDatabaseBtn, SIGNAL(clicked()),
+            this, SLOT(slotOpenDatabase()));
 
     connect(d->ui->detectFacesBtn, SIGNAL(clicked()),
-            this, SLOT(detectFaces()));
+            this, SLOT(slotDetectFaces()));
 
     connect(d->ui->recogniseBtn, SIGNAL(clicked()),
-            this, SLOT(recognise()));
-
-    connect(d->ui->updateDatabaseBtn, SIGNAL(clicked()),
-            this, SLOT(updateConfig()));
+            this, SLOT(slotRecognise()));
 
     connect(d->ui->horizontalSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(updateAccuracy()));
+            this, SLOT(slotUpdateAccuracy()));
 
+    connect(d->ui->updateDatabaseBtn, SIGNAL(clicked()),
+            this, SLOT(slotUpdateDatabase()));
 
     d->myScene                = new QGraphicsScene();
     QGridLayout* const layout = new QGridLayout;
@@ -123,7 +121,6 @@ MainWindow::MainWindow(QWidget* const parent)
     d->myView->show();
 
     d->detector = new FaceDetector();
-    d->database = RecognitionDatabase::addDatabase(QDir::currentPath());
 
     d->ui->configLocation->setText(QDir::currentPath());
     d->ui->horizontalSlider->setValue(80);
@@ -152,7 +149,17 @@ void MainWindow::changeEvent(QEvent* e)
     }
 }
 
-void MainWindow::openImage()
+void MainWindow::clearScene()
+{
+    QList<QGraphicsItem*> list = d->myScene->items();
+
+    for(int i=0; i<list.size(); i++)
+    {
+        d->myScene->removeItem(list.at(i));
+    }
+}
+
+void MainWindow::slotOpenImage()
 {
     QString file = KFileDialog::getOpenFileName(
             d->lastFileOpenPath,
@@ -187,7 +194,7 @@ void MainWindow::openImage()
     d->myScene->addItem(d->lastPhotoItem);
 }
 
-void MainWindow::detectFaces()
+void MainWindow::slotDetectFaces()
 {
     d->currentFaces.clear();
     d->currentFaces = d->detector->detectFaces(d->currentPhoto);
@@ -214,40 +221,28 @@ void MainWindow::detectFaces()
     }
 }
 
-void MainWindow::updateAccuracy()
+void MainWindow::slotUpdateAccuracy()
 {
     int value = d->ui->horizontalSlider->value();
     d->ui->lcdNumber->display(value);
     d->detector->setParameter("accuracy", value/100.0);
 }
 
-void MainWindow::clearScene()
+void MainWindow::slotOpenDatabase()
 {
-    QList<QGraphicsItem*> list = d->myScene->items();
+    QString directory = KFileDialog::getExistingDirectory(
+            QDir::currentPath(),
+            this,
+            "Select Database Directory");
 
-    for(int i=0; i<list.size(); i++)
-    {
-        d->myScene->removeItem(list.at(i));
-    }
+    d->ui->configLocation->setText(directory);
+
+    d->database = RecognitionDatabase::addDatabase(directory);
 }
 
 // TODO: port these method to FaceRecognitionDatabase API
 
-void MainWindow::openConfig()
-{
-/*
-    QString directory = KFileDialog::getExistingDirectory(
-            QDir::currentPath(),
-            this,
-            "Select Config Directory");
-
-    d->ui->configLocation->setText(directory);
-
-    d->database = new Database(directory);
-*/
-}
-
-void MainWindow::updateConfig()
+void MainWindow::slotUpdateDatabase()
 {
 /*
     kDebug() << "Path of config directory = " << d->database->configPath();
@@ -276,7 +271,7 @@ void MainWindow::updateConfig()
 */
 }
 
-void MainWindow::recognise()
+void MainWindow::slotRecognise()
 {
 /*
     QList<double> closeness = d->database->recognizeFaces(d->currentFaces);

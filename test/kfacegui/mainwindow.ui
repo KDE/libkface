@@ -84,9 +84,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="saveConfigBtn">
+       <widget class="QPushButton" name="saveDatabaseBtn">
         <property name="text">
-         <string>Save Config</string>
+         <string>Save Database</string>
         </property>
        </widget>
       </item>
@@ -100,9 +100,9 @@
      </widget>
     </item>
     <item row="2" column="3">
-     <widget class="QPushButton" name="openConfigBtn">
+     <widget class="QPushButton" name="openDatabaseBtn">
       <property name="text">
-       <string>Config Directory</string>
+       <string>Database Directory</string>
       </property>
      </widget>
     </item>
