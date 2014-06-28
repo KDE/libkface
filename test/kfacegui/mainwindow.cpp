@@ -54,6 +54,42 @@
 using namespace std;
 using namespace KFaceIface;
 
+// --------------------------------------------------------------------------------------------------
+
+class SimpleTrainingDataProvider : public TrainingDataProvider
+{
+public:
+
+    SimpleTrainingDataProvider(const Identity& identity, const QImage& newImage)
+        : identity(identity), toTrain(QList<QImage>() << newImage)
+    {
+    }
+
+    ImageListProvider* newImages(const Identity& id)
+    {
+        if (identity == id)
+        {
+            toTrain.reset();
+            return &toTrain;
+        }
+
+        return &empty;
+    }
+
+    ImageListProvider* images(const Identity&)
+    {
+        return &empty;
+    }
+
+public:
+
+    Identity               identity;
+    QListImageListProvider toTrain;
+    QListImageListProvider empty;
+};
+
+// --------------------------------------------------------------------------------------------------
+
 class MainWindow::Private
 {
 public:
@@ -277,33 +313,46 @@ void MainWindow::slotRecognise()
     unsetCursor();
 }
 
-// TODO: port these method to FaceRecognitionDatabase API
-
 void MainWindow::slotUpdateDatabase()
 {
-/*
-    kDebug() << "Path of config directory = " << d->database->configPath();
+    setCursor(Qt::WaitCursor);
 
-    // Assign the text of the d->faceitems to the name of each face. When there is no text, drop that face from currentfaces.
-    QList<QRectF> updateList;
+    int i = 0;
 
-    for(int i = 0 ; i <d->currentFaces.size(); ++i)
+    foreach(FaceItem* const item, d->faceitems)
     {
-        if (d->faceitems[i]->text() != "?")
+        if (item->text() != QString("?"))
         {
-            d->currentFaces[i].setName(d->faceitems[i]->text());
-            updateList.append(d->currentFaces.at(i));
+            QTime time;
+            time.start();
+
+            QString name = item->text();
+            kDebug() << "Face #" << i+1 << ": training name '" << name << "'";
+        
+            Identity identity = d->database.findIdentity("name", name);
+
+            if (identity.isNull())
+            {
+                QMap<QString, QString> attributes;
+                attributes["name"] = name;
+                identity           = d->database.addIdentity(attributes);
+                kDebug() << "Adding new identity ID " << identity.id << " to database for name " << name;                
+            }
+            else
+            {
+                kDebug() << "Found existing identity ID " << identity.id << " from database for name " << name;                
+            }            
+              
+            SimpleTrainingDataProvider data(identity, d->currentPhoto.copy(item->originalRect()));
+            d->database.train(identity, &data, "test application");  
+              
+            int elapsed = time.elapsed();
+
+            kDebug() << "Training took " << elapsed << " for Face #" << i+1;
         }
+        
+        i++;
     }
 
-    if( d->database->updateFaces(updateList) )
-    {
-        kDebug() << "Trained";
-        d->database->saveConfig();
-    }
-    else
-    {
-        kDebug() << "No faces to train.";
-    }
-*/
+    unsetCursor();
 }
