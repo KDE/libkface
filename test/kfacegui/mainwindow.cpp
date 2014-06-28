@@ -252,16 +252,25 @@ void MainWindow::slotRecognise()
 
     foreach(FaceItem* const item, d->faceitems)
     {
+        QTime time;
+        time.start();
         Identity identity = d->database.recognizeFace(d->currentPhoto.copy(item->originalRect()));
+        int elapsed       = time.elapsed();
 
+        kDebug() << "Recognition took " << elapsed << " for Face #" << i+1;
+        
         if (!identity.isNull())
         {
             item->suggest(identity.attributes["fullName"]);
 
-            kDebug() << "Face #"<< i+1 << " is closest to the person with ID " << identity.id
+            kDebug() << "Face #" << i+1 << " is closest to the person with ID " << identity.id
                      << " and name "<< identity.attributes["fullName"];
         }
-
+        else
+        {
+            kDebug() << "Face #" << i+1 << " : no Identity match from database.";
+        }
+        
         i++;
     }
 
