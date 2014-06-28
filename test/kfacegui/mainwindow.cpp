@@ -78,7 +78,6 @@ public:
     FaceDetector*        detector;
     QImage               currentPhoto;
     double               scale;
-    QList<QRectF>        currentFaces;
     QString              lastFileOpenPath;
 };
 
@@ -201,13 +200,12 @@ void MainWindow::slotOpenImage()
 
 void MainWindow::slotDetectFaces()
 {
-    d->currentFaces.clear();
-    d->currentFaces = d->detector->detectFaces(d->currentPhoto);
+    QList<QRectF> currentFaces = d->detector->detectFaces(d->currentPhoto);
 
-    kDebug() << "libkface detected : " << d->currentFaces.size() << " faces.";
+    kDebug() << "libkface detected : " << currentFaces.size() << " faces.";
     kDebug() << "Coordinates of detected faces : ";
 
-    foreach(const QRectF& r, d->currentFaces)
+    foreach(const QRectF& r, currentFaces)
     {
         kDebug() << r;
     }
@@ -216,11 +214,10 @@ void MainWindow::slotDetectFaces()
         item->setVisible(false);
 
     d->faceitems.clear();
-    QRect face;
 
-    for(int i = 0; i < d->currentFaces.size(); ++i)
+    for(int i = 0; i < currentFaces.size(); ++i)
     {
-        face = d->detector->toAbsoluteRect(d->currentFaces[i], d->currentPhoto.size());
+        QRect face = d->detector->toAbsoluteRect(currentFaces[i], d->currentPhoto.size());
         d->faceitems.append(new FaceItem(0, d->myScene, face, d->scale));
         kDebug() << face;
     }
