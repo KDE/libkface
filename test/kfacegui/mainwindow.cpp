@@ -247,8 +247,6 @@ void MainWindow::slotOpenDatabase()
     d->ui->updateDatabaseBtn->setEnabled(true);
 }
 
-// TODO: port these method to FaceRecognitionDatabase API
-
 void MainWindow::slotRecognise()
 {
     setCursor(Qt::WaitCursor);
@@ -272,6 +270,8 @@ void MainWindow::slotRecognise()
 
     unsetCursor();
 }
+
+// TODO: port these method to FaceRecognitionDatabase API
 
 void MainWindow::slotUpdateDatabase()
 {
