@@ -11,7 +11,7 @@
  *         <a href="mailto:madcat at mymadcat dot com">madcat at mymadcat dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2013 by Gilles Caulier
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -57,7 +57,7 @@ public:
     ~Marquee();
 
     QRectF boundingRect() const;
-    QRectF toRectF();
+    QRectF toRectF()      const;
 
 Q_SIGNALS:
 

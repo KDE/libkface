@@ -60,7 +60,6 @@ private:
 
     void clearScene();
 
-
 private:
 
     class Private;

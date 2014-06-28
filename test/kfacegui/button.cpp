@@ -7,7 +7,7 @@
  * @date   2010-06-29
  * @brief  Pressable Button class using QGraphicsItem
  *
- * @author Copyright (C) 2010 by Frederico Duarte
+ * @author Copyright (C) 2010      by Frederico Duarte
  * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *

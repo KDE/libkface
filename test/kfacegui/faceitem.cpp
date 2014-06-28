@@ -11,7 +11,7 @@
  *         <a href="mailto:alexjironkin at gmail dot com">alexjironkin at gmail dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2013 by Gilles Caulier
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -29,10 +29,6 @@
 
 #include "faceitem.moc"
 
-// C++ includes
-
-#include <cmath>
-
 // Qt includes
 
 #include <QWidget>
@@ -42,6 +38,7 @@
 #include <QGraphicsScene>
 #include <QColor>
 #include <QDebug>
+#include <qmath.h>
 
 // KDE include
 
@@ -115,15 +112,14 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
     d->origScale     = originalscale;
     d->scale         = scale;
     d->origRect      = rect;
-    FancyRect* fancy = 0;
     d->sceneWidth    = scene->width();
     d->sceneHeight   = scene->height();
 
     // Scale all coordinates to fit the initial size of the scene
-    d->x1 = rect.topLeft().x()*scale;
-    d->y1 = rect.topLeft().y()*scale;
-    d->x2 = rect.bottomRight().x()*scale;
-    d->y2 = rect.bottomRight().y()*scale;
+    d->x1 = rect.topLeft().x()     * scale;
+    d->y1 = rect.topLeft().y()     * scale;
+    d->x2 = rect.bottomRight().x() * scale;
+    d->y2 = rect.bottomRight().y() * scale;
 
     // A QRect containing coordinates for the face rectangle
     QRect scaledRect;
@@ -131,13 +127,13 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
     scaledRect.setBottomRight(QPoint(d->x2, d->y2));
 
     // marquee
-    fancy          = new FancyRect(scaledRect);
-    d->faceMarquee = new Marquee(fancy);
+    FancyRect* const fancy = new FancyRect(scaledRect);
+    d->faceMarquee         = new Marquee(fancy);
     scene->addItem(d->faceMarquee);
 
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
-    d->nameRect = new QGraphicsRectItem( 0, scene);
-    d->faceName = new QGraphicsTextItem (name, 0, scene);
+    d->nameRect = new QGraphicsRectItem(0, scene);
+    d->faceName = new QGraphicsTextItem(name, 0, scene);
 
     // Make the bounding box for the name update itself to cover all the text whenever contents are changed
     QTextDocument* const doc = d->faceName->document();
@@ -226,10 +222,6 @@ QRectF FaceItem::boundingRect() const
                    36 + adjust,  60 + adjust);
 }
 
-void FaceItem::paint(QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
-{
-}
-
 void FaceItem::setText(const QString& newName)
 {
     d->faceName->setHtml(newName);
@@ -266,9 +258,9 @@ void FaceItem::update()
     d->faceName->setPos(bl.x() + 5, bl.y() + 5);
 
     d->rejectButton->setPos(bl.x() - 16, bl.y() + 9);
-    d->acceptButton->setPos(br.x() + 4, bl.y() + 11);
+    d->acceptButton->setPos(br.x() + 4,  bl.y() + 11);
 
-    d->suggestionAcceptButton->setPos(br.x() + 4, bl.y() + 11);
+    d->suggestionAcceptButton->setPos(br.x() + 4,  bl.y() + 11);
     d->suggestionRejectButton->setPos(br.x() + 20, bl.y() + 11);
 
     QRectF r      = d->faceName->mapRectToScene(d->faceName->boundingRect());
@@ -277,7 +269,7 @@ void FaceItem::update()
     kDebug() << "Origscale is : " << d->origScale << " and scale is " << d->scale;
 
     QSize s(newRect.size());
-    s.scale(newRect.width()*std::sqrt(d->origScale), newRect.height()*std::sqrt(d->origScale), Qt::KeepAspectRatio);
+    s.scale(newRect.width() * qSqrt(d->origScale), newRect.height() * qSqrt(d->origScale), Qt::KeepAspectRatio);
     newRect.setSize(s);
 
     //newRect.setRect(x,y,w,h);
@@ -315,18 +307,6 @@ void FaceItem::clearText()
     d->faceName->setPlainText(QString());
 }
 
-void FaceItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
-{
-}
-
-void FaceItem::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
-{
-}
-
-void FaceItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* /*event*/)
-{
-}
-
 void FaceItem::clearAndHide()
 {
     clearText();
@@ -341,12 +321,12 @@ void FaceItem::accepted()
     emit acceptButtonClicked(this->text(), this->originalRect());
 }
 
-QRect FaceItem::originalRect()
+QRect FaceItem::originalRect() const
 {
     return d->origRect;
 }
 
-double FaceItem::originalScale()
+double FaceItem::originalScale() const
 {
     return d->origScale;
 }
@@ -397,6 +377,10 @@ void FaceItem::slotSuggestionRejected()
     switchToEditMode();
     d->faceName->setHtml("<b>" + QString() + "</b>");
     emit suggestionRejectButtonClicked(this->text(), this->originalRect());
+}
+
+void FaceItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
+{
 }
 
 } // namespace KFaceIface

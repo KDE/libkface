@@ -247,7 +247,9 @@ void MainWindow::slotDetectFaces()
     }
 
     foreach(FaceItem* const item, d->faceitems)
+    {
         item->setVisible(false);
+    }
 
     d->faceitems.clear();
 

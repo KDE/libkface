@@ -11,7 +11,7 @@
  *         <a href="mailto:madcat at mymadcat dot com">madcat at mymadcat dot com</a>
  * @author Copyright (C) 2010 by Aditya Bhatt
  *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
- * @author Copyright (C) 2010-2013 by Gilles Caulier
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -121,7 +121,7 @@ QRectF Marquee::boundingRect() const
     return d->rect->rect();
 }
 
-QRectF Marquee::toRectF()
+QRectF Marquee::toRectF() const
 {
     return QRectF(x(), y(), d->rect->rect().width(), d->rect->rect().height());
 }
@@ -157,9 +157,9 @@ void Marquee::placeHandles()
     qreal oy = d->rect->rect().y();
     qreal hs = d->hbr->boundingRect().width();
 
-    d->htl->setPos(ox, oy);
+    d->htl->setPos(ox,       oy);
     d->htr->setPos(ox+rw-hs, oy);
-    d->hbl->setPos(ox, oy+rh-hs);
+    d->hbl->setPos(ox,       oy+rh-hs);
     d->hbr->setPos(ox+rw-hs, oy+rh-hs);
 }
 
