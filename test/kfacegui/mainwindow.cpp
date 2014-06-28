@@ -297,10 +297,10 @@ void MainWindow::slotRecognise()
         
         if (!identity.isNull())
         {
-            item->suggest(identity.attributes["fullName"]);
+            item->suggest(identity.attributes["name"]);
 
             kDebug() << "Face #" << i+1 << " is closest to the person with ID " << identity.id
-                     << " and name "<< identity.attributes["fullName"];
+                     << " and name "<< identity.attributes["name"];
         }
         else
         {
