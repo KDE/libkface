@@ -53,6 +53,14 @@ class Marquee::Private
 {
 public:
 
+    enum ResizeType
+    {
+        TopLeft = 0,
+        TopRight,
+        BottomLeft,
+        BottomRight
+    };    
+    
     Private()
     {
         htl        = 0;
@@ -171,26 +179,26 @@ void Marquee::mousePressEvent(QGraphicsSceneMouseEvent* e)
     if (d->htl->isUnderMouse())
     {
         d->resizing   = true;
-        d->resizeType = 0;
+        d->resizeType = Private::TopLeft;
         return;
     }
 
     if (d->htr->isUnderMouse())
     {
         d->resizing   = true;
-        d->resizeType = 1;
+        d->resizeType = Private::TopRight;
         return;
     }
     if (d->hbl->isUnderMouse())
     {
         d->resizing   = true;
-        d->resizeType = 2;
+        d->resizeType = Private::BottomLeft;
         return;
     }
     if (d->hbr->isUnderMouse())
     {
         d->resizing   = true;
-        d->resizeType = 3;
+        d->resizeType = Private::BottomRight;
         return;
     }
 
@@ -207,18 +215,19 @@ void Marquee::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
     if (d->resizing)
     {
         QRectF r = d->rect->rect();
+
         switch(d->resizeType)
         {
-            case 0:
+            case Private::TopLeft:
                 r.setTopLeft(e->pos());
                 break;
-            case 1:
+            case Private::TopRight:
                 r.setTopRight(e->pos());
                 break;
-            case 2:
+            case Private::BottomLeft:
                 r.setBottomLeft(e->pos());
                 break;
-            case 3:
+            case Private::BottomRight:
                 r.setBottomRight(e->pos());
                 break;
             default:
