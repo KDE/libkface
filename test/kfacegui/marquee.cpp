@@ -89,14 +89,13 @@ public:
     bool                     moving;     // Tells if we are moving the marquee
     QPointF                  moveOffset; // where the mouse was when the user began to drag the marquee
     bool                     resizing;   // Tells if we are resizing the marquee
-    char                     resizeType; // 0 = from top left, 1 = top right, etc.
-    QString                  mid;        // Nepomuk resource id, only set for previously existing regions
+    int                      resizeType; // See ResizeType values.
 };
 
 Marquee::Marquee(FancyRect* const rect, QGraphicsItem* const parent)
     : QObject(0), QGraphicsItemGroup(parent), d(new Private)
 {
-    d->rect = rect;
+    d->rect   = rect;
     d->rectPen.setColor(Qt::red);
     d->rectPen.setWidth(2);
     d->outlinePen.setColor(Qt::red);
@@ -106,16 +105,18 @@ Marquee::Marquee(FancyRect* const rect, QGraphicsItem* const parent)
     d->rect->setPos(0, 0);
     createHandles();
 
-    d->label = new QGraphicsSimpleTextItem("", this);
+    d->label   = new QGraphicsSimpleTextItem("", this);
     d->label->setBrush(QBrush(d->rectPen.color()));
     d->label->setPen(d->outlinePen);
     d->label->setZValue(2);
+
     QFont font = d->label->font();
     font.setBold(true);
     font.setPointSize(12);
     d->label->setFont(font);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setSelected(true);
+
     emit selected(this);
 }
 
