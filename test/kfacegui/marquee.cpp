@@ -44,8 +44,6 @@
 
 #include "fancyrect.h"
 
-#define HANDLESIZE 10
-
 namespace KFaceIface
 {
 
@@ -62,6 +60,7 @@ public:
     };    
     
     Private()
+      : handleSize(10)
     {
         htl        = 0;
         rect       = 0;
@@ -74,6 +73,7 @@ public:
         resizeType = 0;
     }
 
+    const int                handleSize;
     QPen                     rectPen;    // The pen used to draw the frames
     QPen                     outlinePen; // Text outline pen
 
@@ -136,13 +136,13 @@ QRectF Marquee::toRectF() const
 
 void Marquee::createHandles()
 {
-    d->htl = new FancyRect(0, 0, HANDLESIZE, HANDLESIZE);
+    d->htl = new FancyRect(0, 0, d->handleSize, d->handleSize);
     d->htl->setZValue(1);
-    d->htr = new FancyRect(0, 0, HANDLESIZE, HANDLESIZE);
+    d->htr = new FancyRect(0, 0, d->handleSize, d->handleSize);
     d->htr->setZValue(1);
-    d->hbl = new FancyRect(0, 0, HANDLESIZE, HANDLESIZE);
+    d->hbl = new FancyRect(0, 0, d->handleSize, d->handleSize);
     d->hbl->setZValue(1);
-    d->hbr = new FancyRect(0, 0, HANDLESIZE, HANDLESIZE);
+    d->hbr = new FancyRect(0, 0, d->handleSize, d->handleSize);
     d->hbr->setZValue(1);
 
     d->htl->setPen(d->rectPen);
@@ -165,10 +165,10 @@ void Marquee::placeHandles()
     qreal oy = d->rect->rect().y();
     qreal hs = d->hbr->boundingRect().width();
 
-    d->htl->setPos(ox,       oy);
-    d->htr->setPos(ox+rw-hs, oy);
-    d->hbl->setPos(ox,       oy+rh-hs);
-    d->hbr->setPos(ox+rw-hs, oy+rh-hs);
+    d->htl->setPos(ox,         oy);
+    d->htr->setPos(ox+rw-hs+2, oy);
+    d->hbl->setPos(ox,         oy+rh-hs+2);
+    d->hbr->setPos(ox+rw-hs+2, oy+rh-hs+2);
 }
 
 void Marquee::mousePressEvent(QGraphicsSceneMouseEvent* e)
@@ -189,12 +189,14 @@ void Marquee::mousePressEvent(QGraphicsSceneMouseEvent* e)
         d->resizeType = Private::TopRight;
         return;
     }
+
     if (d->hbl->isUnderMouse())
     {
         d->resizing   = true;
         d->resizeType = Private::BottomLeft;
         return;
     }
+
     if (d->hbr->isUnderMouse())
     {
         d->resizing   = true;
@@ -234,7 +236,7 @@ void Marquee::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
                 break;
         }
 
-        if (r.width() < 2*HANDLESIZE || r.height() < 2*HANDLESIZE)
+        if (r.width() < 2*d->handleSize || r.height() < 2*d->handleSize)
             return;
 
         setPos(pos() + r.topLeft());
