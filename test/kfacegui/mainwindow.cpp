@@ -32,13 +32,9 @@
 
 // Qt includes
 
-#include <QLayout>
-#include <QFormLayout>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
-#include <QFileDialog>
-#include <QLabel>
 
 // KDE include
 
@@ -215,17 +211,17 @@ void MainWindow::slotOpenImage()
 
     kDebug() << "Opened file " << file.toAscii().data();
 
-    QPixmap* const photo = new QPixmap(file);
-    d->lastPhotoItem     = new QGraphicsPixmapItem(*photo);
-    d->currentPhoto      = photo->toImage();
+    QPixmap photo(file);
+    d->lastPhotoItem = new QGraphicsPixmapItem(photo);
+    d->currentPhoto  = photo.toImage();
 
-    if (1.0 * d->ui->widget->width() / photo->width() < 1.0 * d->ui->widget->height() / photo->height())
+    if (1.0 * d->ui->widget->width() / photo.width() < 1.0 * d->ui->widget->height() / photo.height())
     {
-        d->scale = 1.0 * d->ui->widget->width() / photo->width();
+        d->scale = 1.0 * d->ui->widget->width() / photo.width();
     }
     else
     {
-        d->scale = 1.0 * d->ui->widget->height() / photo->height();
+        d->scale = 1.0 * d->ui->widget->height() / photo.height();
     }
 
     d->lastPhotoItem->setScale(d->scale);
@@ -296,7 +292,7 @@ void MainWindow::slotRecognise()
         int elapsed       = time.elapsed();
 
         kDebug() << "Recognition took " << elapsed << " for Face #" << i+1;
-        
+
         if (!identity.isNull())
         {
             item->suggest(identity.attributes["name"]);
@@ -308,7 +304,7 @@ void MainWindow::slotRecognise()
         {
             kDebug() << "Face #" << i+1 << " : no Identity match from database.";
         }
-        
+
         i++;
     }
 
@@ -330,7 +326,7 @@ void MainWindow::slotUpdateDatabase()
 
             QString name = item->text();
             kDebug() << "Face #" << i+1 << ": training name '" << name << "'";
-        
+
             Identity identity = d->database.findIdentity("name", name);
 
             if (identity.isNull())
@@ -343,16 +339,16 @@ void MainWindow::slotUpdateDatabase()
             else
             {
                 kDebug() << "Found existing identity ID " << identity.id << " from database for name " << name;                
-            }            
-              
+            }
+
             SimpleTrainingDataProvider data(identity, d->currentPhoto.copy(item->originalRect()));
             d->database.train(identity, &data, "test application");  
-              
+
             int elapsed = time.elapsed();
 
             kDebug() << "Training took " << elapsed << " for Face #" << i+1;
         }
-        
+
         i++;
     }
 
