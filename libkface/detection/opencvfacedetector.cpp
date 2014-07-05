@@ -118,16 +118,18 @@ public:
           verifyingCascade(true)
     {
         const QString file = findFileInDirs(dirs, fileName);
-
+            
         if (file.isEmpty())
         {
-            kDebug() << "failed to locate cascade" << fileName << "in" << dirs;
+            kDebug() << "Failed to locate cascade " << fileName << " in " << dirs;
             return;
         }
 
+        kDebug() << "Loading cascade " << file;
+        
         if (!load(file.toStdString()))
         {
-            kDebug() << "failed to load cascade" << file;
+            kDebug() << "Failed to load cascade " << file;
             return;
         }
     }
@@ -141,7 +143,7 @@ public:
             return oldCascade->orig_window_size;
         }
 
-        return cv::Size(0,0);
+        return cv::Size(0, 0);
     }
 
     /**
@@ -270,17 +272,17 @@ public:
 
 public:
 
-    QList<Cascade>                 cascades;
+    QList<Cascade>         cascades;
 
-    int                            maxDistance;    // Maximum distance between two faces to call them unique
-    int                            minDuplicates;  // Minimum number of duplicates required to qualify as a genuine face
+    int                    maxDistance;    // Maximum distance between two faces to call them unique
+    int                    minDuplicates;  // Minimum number of duplicates required to qualify as a genuine face
 
     // Tunable values, for accuracy
-    DetectObjectParameters         primaryParams;
-    DetectObjectParameters         verifyingParams;
+    DetectObjectParameters primaryParams;
+    DetectObjectParameters verifyingParams;
 
-    double                         speedVsAccuracy;
-    double                         sensitivityVsSpecificity;
+    double                 speedVsAccuracy;
+    double                 sensitivityVsSpecificity;
 };
 
 // --------------------------------------------------------------------------------
@@ -289,8 +291,11 @@ OpenCVFaceDetector::OpenCVFaceDetector(const QStringList& cascadeDirs)
     : d(new Private)
 {
     if (cascadeDirs.isEmpty())
-        kError() << "OpenCV Haar Cascade director cannot be found. Did you install OpenCV XML data files?";
-
+    {
+        kError() << "OpenCV Haar Cascade directory cannot be found. Did you install OpenCV XML data files?";
+        return;        
+    }
+    
     d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt.xml");
     d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_default.xml");
     d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt2.xml");
@@ -439,7 +444,7 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
     // Check whether the cascade has loaded successfully. Else report and error and quit
     if (cascade.empty())
     {
-        kDebug() << "Cascade is not loaded.";
+        kDebug() << "Cascade XML data are not loaded.";
         return QList<QRect>();
     }
 
@@ -467,7 +472,7 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
         results << toQRect(*it);
     }
 
-    kDebug() << "detectMultiScale gave" << results;
+    kDebug() << "detectMultiScale gave " << results;
     return results;
 }
 
@@ -512,7 +517,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
     for (int i=0; i<d->cascades.size(); ++i)
     {
-        kDebug() << "Verifying face" << face << "using cascade" << i;
+        kDebug() << "Verifying face " << face << " using cascade " << i;
 
         if (d->cascades[i].verifyingCascade)
         {
@@ -524,7 +529,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
                 cv::Rect roi      = d->cascades[i].faceROI(faceRect);
                 cv::Mat  feature  = inputImage(roi);
-                kDebug() << "feature" << d->cascades[i].roi << toQRect(faceRect) << toQRect(roi);
+                kDebug() << "feature " << d->cascades[i].roi << toQRect(faceRect) << toQRect(roi);
                 foundFaces        = cascadeResult(feature, d->cascades[i], d->verifyingParams);
 
                 if (!foundFaces.isEmpty())
@@ -675,7 +680,7 @@ QList<QRect> OpenCVFaceDetector::mergeFaces(const cv::Mat& inputImage, const QLi
         }
     }
 
-    kDebug() << "Faces parsed:" << ctr << "number of final faces:" << results.size();
+    kDebug() << "Faces parsed: " << ctr << " number of final faces: " << results.size();
 
     return results;
 }
