@@ -143,9 +143,12 @@ SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_
 
 # =======================================================
 
-SUBDIRS(libkface)
-SUBDIRS(test)
 SUBDIRS(data)
+SUBDIRS(libkface)
+
+IF(KDE4_BUILD_TESTS)
+    MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
+ENDIF(KDE4_BUILD_TESTS)
 
 IF(NOT WIN32)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkface.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)
