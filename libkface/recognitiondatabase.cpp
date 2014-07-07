@@ -591,6 +591,9 @@ int RecognitionDatabase::recommendedImageSize(const QSize& availableSize) const
 Identity RecognitionDatabase::recognizeFace(const QImage& image)
 {
     QList<Identity> result = recognizeFaces(QList<QImage>() << image);
+    
+    if (result.isEmpty())
+        return Identity();
 
     return result.first();
 }
