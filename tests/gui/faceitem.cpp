@@ -44,7 +44,7 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <kicon.h>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -161,27 +161,21 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
 
     //---------------------
 
-    QString s("dialog-close");
-    KIcon* const icon  = new KIcon(s);
-    QPixmap rejectPix  = icon->pixmap(QSize(16,16));
-
+    QPixmap rejectPix  = SmallIcon("dialog-close");
     d->rejectButton    = new Button( rejectPix, rejectPix);
     scene->addItem(d->rejectButton);
     d->rejectButton->show();
 
-    QString s1("dialog-ok");
-    KIcon* const icon1 = new KIcon(s1);
-    QPixmap acceptPix  = icon1->pixmap(QSize(16,16));
-
+    QPixmap acceptPix  = SmallIcon("dialog-ok");
     d->acceptButton    = new Button( acceptPix, acceptPix);
     scene->addItem(d->acceptButton);
     //d->acceptButton->show();
 
-    d->suggestionRejectButton = new Button( rejectPix, rejectPix);
+    d->suggestionRejectButton = new Button(rejectPix, rejectPix);
     scene->addItem(d->suggestionRejectButton);
     //d->suggestionAcceptButton->hide();
 
-    d->suggestionAcceptButton = new Button( acceptPix, acceptPix);
+    d->suggestionAcceptButton = new Button(acceptPix, acceptPix);
     scene->addItem(d->suggestionAcceptButton);
     //d->suggestionRejectButton->hide();
 

@@ -232,6 +232,8 @@ void MainWindow::slotOpenImage()
 
 void MainWindow::slotDetectFaces()
 {
+    setCursor(Qt::WaitCursor);
+
     QList<QRectF> currentFaces = d->detector->detectFaces(d->currentPhoto);
 
     kDebug() << "libkface detected : " << currentFaces.size() << " faces.";
@@ -255,6 +257,8 @@ void MainWindow::slotDetectFaces()
         d->faceitems.append(new FaceItem(0, d->myScene, face, d->scale));
         kDebug() << face;
     }
+
+    unsetCursor();
 }
 
 void MainWindow::slotUpdateAccuracy()
