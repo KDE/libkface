@@ -82,7 +82,8 @@ public:
      * When called multiple times with the same path, will return the same database.
      * The database is closed and configuration written after the last object is destroyed.
      * @param configurationPath The path where the RecognitionDatabase configuration file will be stored.
-     * If null, a default path is located by KStandardDirs.
+     * If null, database file located in default path from current home directory is open
+     * (typically ~/.kde4/share/apps/libkface/database/recognition.db under Linux).
      */
     static RecognitionDatabase addDatabase(const QString& configurationPath = QString());
 
