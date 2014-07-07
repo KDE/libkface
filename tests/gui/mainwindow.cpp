@@ -156,7 +156,8 @@ MainWindow::MainWindow(QWidget* const parent)
     d->myView->show();
 
     d->detector = new FaceDetector();
-
+    d->database = RecognitionDatabase::addDatabase(); // use default DB path
+    
     d->ui->configLocation->setText(QDir::currentPath());
     d->ui->horizontalSlider->setValue(80);
 
@@ -257,6 +258,9 @@ void MainWindow::slotDetectFaces()
         kDebug() << face;
     }
 
+    d->ui->recogniseBtn->setEnabled(true);
+    d->ui->updateDatabaseBtn->setEnabled(true);
+
     unsetCursor();
 }
 
@@ -274,11 +278,11 @@ void MainWindow::slotOpenDatabase()
             this,
             "Select Database Directory");
 
+    if (directory.isEmpty())
+        return;
+    
     d->ui->configLocation->setText(directory);
-
     d->database = RecognitionDatabase::addDatabase(directory);
-    d->ui->recogniseBtn->setEnabled(true);
-    d->ui->updateDatabaseBtn->setEnabled(true);
 }
 
 void MainWindow::slotRecognise()

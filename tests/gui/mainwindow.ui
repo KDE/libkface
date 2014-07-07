@@ -88,14 +88,14 @@
     <item row="2" column="0">
      <widget class="QLineEdit" name="configLocation">
       <property name="text">
-       <string>Database file directory</string>
+       <string>Default database file open</string>
       </property>
      </widget>
     </item>
     <item row="2" column="3">
      <widget class="QPushButton" name="openDatabaseBtn">
       <property name="text">
-       <string>Open Database</string>
+       <string>Select Database</string>
       </property>
      </widget>
     </item>
