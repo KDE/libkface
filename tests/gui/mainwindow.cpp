@@ -211,17 +211,16 @@ void MainWindow::slotOpenImage()
 
     kDebug() << "Opened file " << file.toAscii().data();
 
-    QPixmap photo(file);
-    d->lastPhotoItem = new QGraphicsPixmapItem(photo);
-    d->currentPhoto  = photo.toImage();
+    d->currentPhoto.load(file);
+    d->lastPhotoItem = new QGraphicsPixmapItem(QPixmap::fromImage(d->currentPhoto));
 
-    if (1.0 * d->ui->widget->width() / photo.width() < 1.0 * d->ui->widget->height() / photo.height())
+    if (1.0 * d->ui->widget->width() / d->currentPhoto.width() < 1.0 * d->ui->widget->height() / d->currentPhoto.height())
     {
-        d->scale = 1.0 * d->ui->widget->width() / photo.width();
+        d->scale = 1.0 * d->ui->widget->width() / d->currentPhoto.width();
     }
     else
     {
-        d->scale = 1.0 * d->ui->widget->height() / photo.height();
+        d->scale = 1.0 * d->ui->widget->height() / d->currentPhoto.height();
     }
 
     d->lastPhotoItem->setScale(d->scale);
