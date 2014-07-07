@@ -199,8 +199,8 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
                 }
                 else
                 {
-                    QVariantList  histogramValues;
-                    QVariant      insertedId;
+                    QVariantList histogramValues;
+                    QVariant     insertedId;
 
                     histogramValues << model.databaseId
                                     << metadata.identity
@@ -236,7 +236,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
         ++it;
         //kDebug() << "Found model id" << model.databaseId;
 
-        int version = it->toInt();
+        int version      = it->toInt();
         ++it;
 
         if (version > LBPHStorageVersion)

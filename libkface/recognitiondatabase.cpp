@@ -631,7 +631,7 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
 {
     if (!d || !d->dbAvailable)
     {
-            return QList<Identity>();
+        return QList<Identity>();
     }
 
     QMutexLocker lock(&d->mutex);
