@@ -28,10 +28,8 @@
  * ============================================================ */
 
 // OpenCV includes need to show up before Qt includes
-#include "recognition-opencv-lbph/opencvlbphfacerecognizer.h"
-#include "preprocessing-tantriggs/tantriggspreprocessor.h"
-
-#include "recognitiondatabase.h"
+#include "opencvlbphfacerecognizer.h"
+#include "funnelreal.h"
 
 // Qt includes
 
@@ -48,11 +46,11 @@
 
 // Local includes
 
+#include "recognitiondatabase.h"
 #include "databaseaccess.h"
 #include "databaseoperationgroup.h"
 #include "databaseparameters.h"
 #include "dataproviders.h"
-#include "funnelreal.h"
 #include "trainingdb.h"
 #include "version.h"
 

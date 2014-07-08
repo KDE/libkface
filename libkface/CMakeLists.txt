@@ -29,8 +29,9 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
-                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
+#                    ${CMAKE_CURRENT_SOURCE_DIR}/alignment-flandmark
+#                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
                    )
 
 SET(kface_LIB_SRCS facedetector.cpp
