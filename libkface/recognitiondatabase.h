@@ -179,15 +179,29 @@ public:
      * An identifier for the current training context is given,
      * which can identify the application or group of collections.
      * (It is assumed that training from different contexts is based on
-     * non-overlapping collections of images. Keep is always constant for your app.)
+     * non-overlapping collections of images. Keep it always constant for your app.)
      */
     void train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* const data,
                const QString& trainingContext);
     void train(const Identity& identityToBeTrained, TrainingDataProvider* const data,
                const QString& trainingContext);
 
+    /**
+     * Deletes the training data for all identities,
+     * leaving the identities as such in the database.
+     */
     void clearAllTraining(const QString& trainingContext = QString());
+
+    /**
+     * Deletes the training data for the given identity,
+     * leaving the identity as such in the database.
+     */
     void clearTraining(const QList<Identity>& identitiesToClean, const QString& trainingContext = QString());
+
+    /**
+     * Deletes an identity from the database.
+     */
+    void deleteIdentity(const Identity& identityToBeDeleted);
 
 public:
 

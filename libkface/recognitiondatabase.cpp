@@ -820,6 +820,19 @@ void RecognitionDatabase::clearTraining(const QList<Identity>& identitiesToClean
     d->clear(d->recognizer(), ids, trainingContext);
 }
 
+void RecognitionDatabase::deleteIdentity(const Identity& identityToBeDeleted)
+{
+    if (!d || !d->dbAvailable || identityToBeDeleted.isNull())
+    {
+        return;
+    }
+
+    QMutexLocker lock(&d->mutex);
+
+    DatabaseAccess(d->db).db()->deleteIdentity(identityToBeDeleted.id);
+    d->identityCache.remove(identityToBeDeleted.id);
+}
+
 // --- Runtime version info static methods (declared in version.h) --------------------------------------------------
 
 QString LibOpenCVVersion()
