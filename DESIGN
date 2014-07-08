@@ -5,7 +5,7 @@ The library has two main tasks, which is face detection and face recognition.
 
 The detection interface is contained in facedetector.h
 
-The recognition interface in contained in recognitiondatabaase.h
+The recognition interface is contained in recognitiondatabaase.h
 
 Detection only processes image data, and recognition requires persistent storage
 of learned results, so there is a database and some code to manage identities.
@@ -18,37 +18,33 @@ OSX :     ~/Library/Preferences/KDE/share/apps/libkface/database/recognition.db
 Windows : ~/AppData/Roaming/.kde/share/apps/libkface/database/recognition.db
 
 Identity is defined in identity.h, to identify real persons based on various data.
-dataproviders.h defines interfaces to feed the recognition process.
+File dataproviders.h defines interfaces to feed the recognition process.
 These header files are quite well documented using Doxygen.
 
-facedetector.cpp is quite shallow as the backend is separated.
-recognitiondatabase.cpp has some more code, locking, database creation, and
-persistence as well as identity management is contained here. But no backend
-either.
+File facedetector.cpp is quite shallow as the backend is separated.
+File recognitiondatabase.cpp has some more code, locking, database creation, and
+persistence as well as identity management is contained here. But no backend either.
 
 The database/ subdirectory contains a stripped-down version of the digiKam
-database code, just enough to comfortably keep a database with recognition
-data.
+database code, just enough to comfortably keep a database with recognition data.
 
-detection/ is the detection backend, we use OpenCV Haar cascades, and try to
-fine tune things. To work fine, Haar cascade XML files are require and loaded 
-by libkface. For obscur reasons, these files are not published with Windows version
-of OpenCV. To reduce problems with face detection, XML files are published 
-as well through libkface.
+The detection/ subdirectory contains the face detection backend, we use OpenCV Haar cascades,
+and try to fine tune things. To work fine, Haar cascade XML files are require and loaded 
+by libkface. For obscur reasons, these files are not published with OpenCV Windows version.
+To reduce problems with face detection, XML files are published as well through libkface.
 
-recognition-opencv-lbph/ is the recognizer which we currently use, based on
-Phillip Wagner's Local Binary Patterns Histograms implementation in OpenCV.
+The recognition-opencv-lbph/ subdirectory contains the face recognizer backend which we currently use,
+based on Phillip Wagner's Local Binary Patterns Histograms implementation from OpenCV.
 
 http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms
 
-alignment-congealing, alignment-flandmark and preprocessing-tantriggs are
-implemented algorithms which are currently not used because they
-deliverd inferior results.
+The alignment-congealing/, alignment-flandmark/ and preprocessing-tantriggs/ subdirectories are
+implemented algorithms which are currently not used because they deliverd inferior results.
 
 TEST TOOLS
 ----------
 
-libkface/test/ is the best place to play around with the library and
+The libkface/test/ subdirectory is the best place to play around with the library and
 fine tune algorithms.
 
 Align tool : alignment means to take a detected face, try to find out from which angle the
@@ -68,4 +64,4 @@ It contain 10 photos of 20 different peoples from slightly different angles. See
 
 http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html
 
-KFaceGui is a simple application able to run detection and recognition without to use CLI.
+KFaceGui tool : it's a simple GUI application able to run detection and recognition without to use CLI.
