@@ -9,6 +9,8 @@
  *
  * @author Copyright (C) 2010 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2010-2014 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,9 +26,7 @@
  * ============================================================ */
 
 // OpenCV includes need to show up before Qt includes
-#include "detection/opencvfacedetector.h"
-
-#include "facedetector.h"
+#include "opencvfacedetector.h"
 
 // Qt includes
 
@@ -36,6 +36,10 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
+
+// Local includes
+
+#include "facedetector.h"
 
 namespace KFaceIface
 {
