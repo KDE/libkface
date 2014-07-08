@@ -41,6 +41,10 @@ SET(preprocess_SRCS preprocess.cpp)
 KDE4_ADD_EXECUTABLE(preprocess ${preprocess_SRCS})
 TARGET_LINK_LIBRARIES(preprocess kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES} )
 
+SET(traindb_SRCS traindb.cpp)
+KDE4_ADD_EXECUTABLE(traindb ${traindb_SRCS})
+TARGET_LINK_LIBRARIES(traindb kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+
 # -----------------------------------------------------------------------------
 
 SET(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
