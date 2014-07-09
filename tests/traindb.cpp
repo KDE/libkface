@@ -28,7 +28,6 @@
 #include <QApplication>
 #include <QDir>
 #include <QImage>
-#include <QTime>
 
 // KDE includes
 
@@ -85,16 +84,35 @@ int main(int argc, char** argv)
 
     Identity identity;
 
+    // Process records to database.
+    
     for (int i=0 ; i < 100 ; i++)
     {
-        QString name = QString("face%1").arg(i);
-        kDebug() << "Training " << name;
+        QString name      = QString("face%1").arg(i);
+        kDebug() << "Record Identity " << name << " to DB";
         QMap<QString, QString> attributes;
         attributes["name"] = name;
         identity           = db.addIdentity(attributes);
         SimpleTrainingDataProvider data(identity, image);
         db.train(identity, &data, "test application");    
     }   
+    
+    // Process query to database.
+    
+    for (int i=0 ; i < 100 ; i++)
+    {
+        QString name = QString("face%1").arg(i);
+        identity     = db.findIdentity("name", name);
+
+        if (!identity.isNull())
+        {
+            kDebug() << "Identity " << name << " is present from DB";
+        }
+        else
+        {
+            kDebug() << "Identity " << name << " is absent from DB";
+        }
+    }    
     
     return 0;
 }
