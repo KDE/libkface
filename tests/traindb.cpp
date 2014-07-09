@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 
     Identity identity;
 
-    // Process records to database.
+    // Populate database.
     
     for (int i=0 ; i < 100 ; i++)
     {
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
         db.train(identity, &data, "test application");    
     }   
     
-    // Process query to database.
+    // Check records in database.
     
     for (int i=0 ; i < 100 ; i++)
     {
@@ -106,13 +106,29 @@ int main(int argc, char** argv)
 
         if (!identity.isNull())
         {
-            kDebug() << "Identity " << name << " is present from DB";
+            kDebug() << "Identity " << name << " is present in DB";
         }
         else
         {
-            kDebug() << "Identity " << name << " is absent from DB";
+            kDebug() << "Identity " << name << " is absent in DB";
         }
     }    
     
+    // Process recognition in database.
+    
+    QList<Identity> list = db.recognizeFaces(QList<QImage>() << image);
+    
+    if (!list.empty())
+    {
+        foreach(Identity id, list)
+        {
+            kDebug() << "Identity " << id.attributes.value("name") << " recognized";
+        }
+    }
+    else
+    {
+        kDebug() << "No Identity recognized from DB";
+    }
+
     return 0;
 }
