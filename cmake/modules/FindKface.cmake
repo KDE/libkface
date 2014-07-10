@@ -11,7 +11,7 @@
 #  KFACE_DEFINITIONS - Compiler switches required for using libkface
 #
 
-# Copyright (c) 2010, Gilles Caulier, <caulier.gilles@gmail.com>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier.gilles@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -32,10 +32,10 @@ ELSE (KFACE_INCLUDE_DIR AND KFACE_LIBRARIES AND KFACE_DEFINITIONS)
   IF (KFACE_LOCAL_DIR)
     SET(KFACE_LOCAL_FOUND TRUE)
   ELSE (KFACE_LOCAL_DIR)
-    FIND_FILE(KFACE_LOCAL_FOUND libkface/version.h.cmake.in ${CMAKE_SOURCE_DIR}/libkface ${CMAKE_SOURCE_DIR}/libs/libkface NO_DEFAULT_PATH)
+    FIND_FILE(KFACE_LOCAL_FOUND libkface/libkface_export.h ${CMAKE_SOURCE_DIR}/libkface ${CMAKE_SOURCE_DIR}/libs/libkface NO_DEFAULT_PATH)
 
     IF (KFACE_LOCAL_FOUND)
-      FIND_FILE(KFACE_LOCAL_FOUND_IN_LIBS libkface/version.h.cmake.in ${CMAKE_SOURCE_DIR}/libs/libkface NO_DEFAULT_PATH)
+      FIND_FILE(KFACE_LOCAL_FOUND_IN_LIBS libkface/libkface_export.h ${CMAKE_SOURCE_DIR}/libs/libkface NO_DEFAULT_PATH)
       IF (KFACE_LOCAL_FOUND_IN_LIBS)
         SET(KFACE_LOCAL_DIR libs/libkface)
       ELSE (KFACE_LOCAL_FOUND_IN_LIBS)
