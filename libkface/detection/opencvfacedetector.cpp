@@ -7,8 +7,8 @@
  * @date    2010-01-03
  * @brief   Class to perform faces detection.
  *          Modesto Castrillón, Oscar Déniz, Daniel Hernández, Javier Lorenzo
- *          A comparison of face and facial feature detectors based
- *          on the Viola–Jones general object detection framework
+ *          A comparison of face and facial feature detectors based on the
+ *          <a href="http://en.wikipedia.org/wiki/Viola-Jones_object_detection_framework">Viola–Jones general object detection framework</a>
  *          Machine Vision and Applications, 01/2008
  *          DOI 10.1007/s00138-010-0250-7
  *
