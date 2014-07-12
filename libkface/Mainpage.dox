@@ -8,101 +8,105 @@ Have a look at KFaceIface::FaceDetector to get started with face detection.
 
 Have a look at KFaceIface::RecognitionDatabase to get started with face recognition.
 
-This Library has been writen and is maintained by <a href="http://www.digikam.org">digiKam team</a>.
+This Library has been writen and is maintained by the <a href="http://www.digikam.org">digiKam team</a>.
 
 <h1>Technical Background</h1>
 
-Detection only processes image data, and recognition requires persistent storage
+Detection only processes image data. Recognition requires persistent storage
 of learned results, so there is a database and some code to manage identities.
 
-Faces database is Sqlite file hosted in home directory to be shared with all applications
-which use libkface :
+The faces database is an SQLite file. If nothing else is requested, it's hosted in the user's
+home directory and can be shared with other applications which use libkface. The default
+location depends on the OS used:
 
 <ul>
-    <li>Linux : ~/.kde4/share/apps/libkface/database/recognition.db</li>
-    <li>OSX : ~/Library/Preferences/KDE/share/apps/libkface/database/recognition.db</li>
-    <li>Windows : ~/AppData/Roaming/.kde/share/apps/libkface/database/recognition.db</li>
+    <li>Linux: ~/.kde4/share/apps/libkface/database/recognition.db</li>
+    <li>OSX: ~/Library/Preferences/KDE/share/apps/libkface/database/recognition.db</li>
+    <li>Windows: ~/AppData/Roaming/.kde/share/apps/libkface/database/recognition.db</li>
 </ul>
 
-An identity is defined in \ref KFaceIface::Identity, to identify real persons based on various data.
-\ref KFaceIface::TrainingDataProvider defines interfaces to feed the recognition process.
+An identity is defined in \ref KFaceIface::Identity and used to identify real persons based on
+various data. \ref KFaceIface::TrainingDataProvider defines interfaces to feed the recognition
+process.
 
 \ref KFaceIface::FaceDetector is quite shallow as the backend is separated.
-\ref KFaceIface::RecognitionDatabase has some more code, locking, database creation, and
-persistence as well as identity management is contained here. But no backend either.
+\ref KFaceIface::RecognitionDatabase has some more code. Locking, database creation, and
+persistence, as well as identity management is includede. But no backend either.
 
 The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/database">database</a>
-subdirectory contains a stripped-down version of the digiKam database management code, just enough to comfortably keep a database with recognition data.
-To process database operations, backend use Qt QSL driver.
+subdirectory contains a stripped-down version of the digiKam database management code, just enough
+to comfortably keep a database with recognition data. To process database operations, the backend
+usees Qt's QSL driver.
 
-The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/detection">detection</a> 
-subdirectory contains the <b>face detection backend</b>, implemented by comparison of face and facial feature detectors based on the 
-<a href="http://en.wikipedia.org/wiki/Viola-Jones_object_detection_framework">Viola–Jones general object detection framework</a>
-(paper from Modesto Castrillón, Oscar Déniz, Daniel Hernández and Javier Lorenzo, Machine Vision and Applications, january 2008).
-This algorithm use OpenCV Haar cascades, and try to fine tune things. 
-To work fine, Haar cascade XML files are require and loaded by libkface. 
-For obscur reasons, these files are not published with OpenCV Windows version.
-To reduce problems with face detection, XML files are published as well through libkface.
+The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/detection">detection</a>
+subdirectory contains the <b>face detection backend</b>, implemented by comparison of face and
+facial feature detectors based on the
+<a href="http://en.wikipedia.org/wiki/Viola-Jones_object_detection_framework">Viola-Jones general object detection framework</a>
+(paper from Modesto Castrillón, Oscar Déniz, Daniel Hernández and Javier Lorenzo, Machine Vision
+and Applications, january 2008).
+This algorithm uses OpenCV Haar cascades, and tries to fine tune things. To work fine, Haar cascade
+XML files are required and loaded by libkface. For obscur reasons, these files are not published
+with OpenCV's Windows version. Thus, XML files are published through libkface to reduce problems
+with face detection.
 
 The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/recognition-opencv-lbph">recognition-opencv-lbph</a>
-subdirectory contains the <b>face recognizer backend</b> which we currently use, based on 
+subdirectory contains the <b>face recognizer backend</b> which we currently use. It's based on
 <a href="http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms">Phillip Wagner's Local Binary Patterns Histograms implementation from OpenCV</a>.
 
 The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/alignment-congealingh">alignment-congealing</a>,
-<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/alignment-flandmark">alignment-flandmark</a>, 
+<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/alignment-flandmark">alignment-flandmark</a>,
 and <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/preprocessing-tantriggs">preprocessing-tantriggs</a>
-subdirectories are implemented algorithms which are currently not used because they deliverd inferior results.
-
+subdirectories are implemented algorithms which should improve the performance of face recognition
+but they are currently not used because using them lead to inferior results.
 
 <h1>Database Contents</h1>
 
-Sqlite file made of tables listed below:
+The SQLite file contains the tables listed below:
 
 <ul>
-    <li>Identities : contains list of identities with type.</li>
-    <li>IdentityAttributes : contains identities attributes as text name and UUID.</li>
-    <li>OpenCVLBPHRecognizer : ????</li>
-    <li>OpenCVLBPHistograms : contains faces histogram data for each identity depending of application used to train.</li>
-    <li>OpenTLDData : ????</li>
-    <li>Settings : include dabase version rules.</li>
+    <li>Identities: contains a list of identities with type.</li>
+    <li>IdentityAttributes: contains identity attributes as text name and UUID.</li>
+    <li>OpenCVLBPHRecognizer</li>
+    <li>OpenCVLBPHistograms: contains face histogram data for each identity depending of the application that was used when the training was done.</li>
+    <li>OpenTLDData</li>
+    <li>Settings: includes dabase version rules.</li>
 </ul>
 
-
 <h1>Test Tools</h1>
- 
+
 The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/tests">tests</a>
 subdirectory is the best place to play around with the library and fine tune algorithms.
 
-<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/align.cpp">Align tool</a> : 
-alignment means to take a detected face, try to find out from which angle the
-photos was taken, and re-align the face so that the recognition algorithm does
-not need to care for misalignment. We currently do not have such an algorithm,
-but people believe that commercial solutions have it.
+<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/align.cpp">Align tool</a>:
+Alignment means to take a detected face, try to find out from which angle the photo was taken, and
+re-align the face so that the recognition algorithm does not need to care for misalignment. We
+currently do not have such an algorithm, but people believe that commercial solutions have it.
 
-<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/preprocess.cpp">Preprocess tool</a> : 
-Preprocessing is suggested to remove influence of lightning conditions etc.
-We have implemented the Tan-Triggs algorithm, which is simple, but in my non-
-exhaustive tests had rather an adverse effect.
+<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/preprocess.cpp">Preprocess tool</a>:
+Preprocessing is suggested to remove the influence of lighting conditions etc. We have implemented
+the Tan-Triggs algorithm, which is quite simple. In non-exhaustive tests, the use of the algorithm
+lead to worse recognition performance.
 
-<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/detect.cpp">Detect tool</a> : 
-perform faces detection on image and display results in a GUI window.
+<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/detect.cpp">Detect tool</a>:
+Performs face detection on an image and displays the results in a GUI window.
 
-<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/recognize.cpp">Recognize tool</a> : 
-perform face recognition using a face database for storage of trained faces.
-This tool is able to use <a href="http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html">ORL database</a>
-which are freely available set of images to test face recognition.
-It contain 10 photos of 20 different peoples from slightly different angles.
+<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/recognize.cpp">Recognize tool</a>:
+Performs face recognition using a face database for storage of trained faces.
+This tool is able to use the <a href="http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html">ORL database</a>
+which contains a freely available set of face images to test face recognition. It consists of 10
+photos each of 20 different peoples from slightly different angles.
 
-<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/traindb.cpp">TrainDB tool</a> :
-it's a simple program to create a local training DB, record 100 dumy items, verify
-items registration, and call recognition. We can quickly check database management code.
+<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/traindb.cpp">TrainDB tool</a>:
+This is a simple program to create a local training DB, record 100 dummy items, verify items
+registration, and call recognition. It's purpose is to quickly check the database management
+code.
 
-<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/gui/">KFaceGui tool</a> :
-it's a simple GUI application able to run detection and recognition without to use CLI tools. 
+<a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/gui/">KFaceGui tool</a>:
+A simple GUI application able to run detection and recognition without using CLI tools.
 
 <h1>Client Applications</h1>
 
-Libkface is currently used in digiKam software to perform face management. Look in 
-<a href="https://projects.kde.org/projects/extragear/graphics/digikam/repository/revisions/master/show/utilities/facemanagement">these implementations</a>
+Libkface is currently used by digiKam to do face management. Look at <a href="https://projects.kde.org/projects/extragear/graphics/digikam/repository/revisions/master/show/utilities/facemanagement">these implementations</a>
 for details.
- */
+
+*/
