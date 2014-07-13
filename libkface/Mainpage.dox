@@ -51,7 +51,7 @@ with face detection.
 
 The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/recognition-opencv-lbph">recognition-opencv-lbph</a>
 subdirectory contains the <b>face recognizer backend</b> which we currently use. It's based on
-<a href="http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms">Phillip Wagner's Local Binary Patterns Histograms implementation from OpenCV</a>.
+<a href="http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms">Phillip Wagner's Local Binary Patterns Histograms (LPBH) implementation from OpenCV</a>.
 
 The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/alignment-congealingh">alignment-congealing</a>,
 <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/alignment-flandmark">alignment-flandmark</a>,
@@ -66,9 +66,12 @@ The SQLite file contains the tables listed below:
 <ul>
     <li>Identities: contains a list of identities with type.</li>
     <li>IdentityAttributes: contains identity attributes as text name and UUID.</li>
-    <li>OpenCVLBPHRecognizer</li>
+    <li>OpenCVLBPHRecognizer: this table currently will have only one entry, there is only one recognizer (LPBH algorithm). 
+                              But the database in theory supports to have multiple recognizers, possibly with
+                              different settings, or with training data from different sources, or different
+                              subsets of training data.</li>
     <li>OpenCVLBPHistograms: contains face histogram data for each identity depending of the application that was used when the training was done.</li>
-    <li>OpenTLDData</li>
+    <li>OpenTLDData: this one is obsolete and not used.</li>
     <li>Settings: includes dabase version rules.</li>
 </ul>
 
