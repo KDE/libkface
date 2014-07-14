@@ -71,7 +71,6 @@ The SQLite file contains the tables listed below:
                               different settings, or with training data from different sources, or different
                               subsets of training data.</li>
     <li>OpenCVLBPHistograms: contains face histogram data for each identity depending of the application that was used when the training was done.</li>
-    <li>OpenTLDData: this one is obsolete and not used.</li>
     <li>Settings: includes dabase version rules.</li>
 </ul>
 
