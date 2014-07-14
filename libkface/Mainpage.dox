@@ -46,8 +46,9 @@ facial feature detectors based on the
 and Applications, january 2008).
 This algorithm uses OpenCV Haar cascades, and tries to fine tune things. To work fine, Haar cascade
 XML files are required and loaded by libkface. For obscur reasons, these files are not published
-with OpenCV's Windows version. Thus, XML files are published through libkface to reduce problems
-with face detection.
+with OpenCV's Windows version.
+Thus, <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/data">XML files</a>
+are published through libkface to reduce problems with face detection.
 
 The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/recognition-opencv-lbph">recognition-opencv-lbph</a>
 subdirectory contains the <b>face recognizer backend</b> which we currently use. It's based on
