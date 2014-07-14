@@ -4,8 +4,8 @@
  * This file is a part of digiKam project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * @date    2010-03-03
- * @brief   openTLD interface.
+ * @date   2010-03-03
+ * @brief  LBPH interface.
  *
  * @author Copyright (C) 2012-2013 by Mahesh Hegde
  *         <a href="mailto:maheshmhegade at gmail dot com">maheshmhegade at gmail dot com</a>
@@ -45,15 +45,27 @@ namespace KFaceIface
 {
 
 LBPHistogramMetadata::LBPHistogramMetadata()
-    : databaseId(0), identity(0), storageStatus(Created)
+    : databaseId(0), 
+      identity(0), 
+      storageStatus(Created)
 {
 }
 
+LBPHistogramMetadata::~LBPHistogramMetadata()
+{
+}
+
+// ------------------------------------------------------------------------------------
+
 LBPHFaceModel::LBPHFaceModel()
-      : cv::Ptr<LBPHFaceRecognizer>(LBPHFaceRecognizer::create()),
+    : cv::Ptr<LBPHFaceRecognizer>(LBPHFaceRecognizer::create()),
       databaseId(0)
 {
     ptr()->set("threshold", 100.0);
+}
+
+LBPHFaceModel::~LBPHFaceModel()
+{
 }
 
 LBPHFaceRecognizer* LBPHFaceModel::ptr()

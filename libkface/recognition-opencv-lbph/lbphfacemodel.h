@@ -4,8 +4,8 @@
  * This file is a part of digiKam project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * @date    2010-03-03
- * @brief   openTLD interface.
+ * @date   2010-03-03
+ * @brief  LBPH interface.
  *
  * @author Copyright (C) 2012-2013 by Mahesh Hegde
  *         <a href="mailto:maheshmhegade at gmail dot com">maheshmhegade at gmail dot com</a>
@@ -52,13 +52,18 @@ class LBPHistogramMetadata
 {
 public:
 
-    LBPHistogramMetadata();
-
     enum StorageStatus
     {
         Created,
         InDatabase
     };
+
+public:
+
+    LBPHistogramMetadata();
+    ~LBPHistogramMetadata();
+
+public:
 
     int           databaseId;
     int           identity;
@@ -74,6 +79,7 @@ class LBPHFaceModel : public cv::Ptr<LBPHFaceRecognizer>
 public:
 
     LBPHFaceModel();
+    ~LBPHFaceModel();
 
     LBPHFaceRecognizer*       ptr();
     const LBPHFaceRecognizer* ptr() const;
@@ -99,6 +105,8 @@ public:
 
     /// Make sure to call this instead of FaceRecognizer::update directly!
     void update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context);
+
+public:
 
     int databaseId;
 
