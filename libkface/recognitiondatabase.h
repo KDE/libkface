@@ -187,6 +187,16 @@ public:
                const QString& trainingContext);
 
     /**
+     * Performs training by using image data directly.
+     *
+     * This is a convenience function for simple setups.
+     * If you want good performance and/or a more versatile implementation, be sure to
+     * implement your own TrainingDataProvider and use one of the above functions.
+     */
+    void train(const Identity& identityToBeTrained, const QImage& image,
+               const QString& trainingContext);
+
+    /**
      * Deletes the training data for all identities,
      * leaving the identities as such in the database.
      */

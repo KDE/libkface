@@ -773,6 +773,45 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
     d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
 }
 
+class SimpleTrainingDataProvider : public TrainingDataProvider
+{
+
+public:
+    SimpleTrainingDataProvider(const Identity& identity, const QImage& newImage)
+        : identity(identity), toTrain(QList<QImage>() << newImage)
+    {
+    }
+
+    ImageListProvider* newImages(const Identity& id)
+    {
+        if (identity == id)
+        {
+            toTrain.reset();
+            return &toTrain;
+        }
+        return &empty;
+    }
+
+    ImageListProvider* images(const Identity&)
+    {
+        return &empty;
+    }
+
+public:
+    Identity identity;
+    QListImageListProvider toTrain;
+    QListImageListProvider empty;
+
+};
+
+void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImage& image,
+                                const QString& trainingContext)
+{
+    SimpleTrainingDataProvider* data = new SimpleTrainingDataProvider(identityToBeTrained, image);
+    train(identityToBeTrained, data, trainingContext);
+    delete data;
+}
+
 void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext)
 {
     // force later reload

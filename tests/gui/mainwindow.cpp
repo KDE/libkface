@@ -52,40 +52,6 @@ using namespace KFaceIface;
 
 // --------------------------------------------------------------------------------------------------
 
-class SimpleTrainingDataProvider : public TrainingDataProvider
-{
-public:
-
-    SimpleTrainingDataProvider(const Identity& identity, const QImage& newImage)
-        : identity(identity), toTrain(QList<QImage>() << newImage)
-    {
-    }
-
-    ImageListProvider* newImages(const Identity& id)
-    {
-        if (identity == id)
-        {
-            toTrain.reset();
-            return &toTrain;
-        }
-
-        return &empty;
-    }
-
-    ImageListProvider* images(const Identity&)
-    {
-        return &empty;
-    }
-
-public:
-
-    Identity               identity;
-    QListImageListProvider toTrain;
-    QListImageListProvider empty;
-};
-
-// --------------------------------------------------------------------------------------------------
-
 class MainWindow::Private
 {
 public:
@@ -157,7 +123,7 @@ MainWindow::MainWindow(QWidget* const parent)
 
     d->detector = new FaceDetector();
     d->database = RecognitionDatabase::addDatabase(); // use default DB path
-    
+
     d->ui->configLocation->setText(QDir::currentPath());
     d->ui->horizontalSlider->setValue(80);
 
@@ -280,7 +246,7 @@ void MainWindow::slotOpenDatabase()
 
     if (directory.isEmpty())
         return;
-    
+
     d->ui->configLocation->setText(directory);
     d->database = RecognitionDatabase::addDatabase(directory);
 }
@@ -341,15 +307,14 @@ void MainWindow::slotUpdateDatabase()
                 QMap<QString, QString> attributes;
                 attributes["name"] = name;
                 identity           = d->database.addIdentity(attributes);
-                kDebug() << "Adding new identity ID " << identity.id << " to database for name " << name;                
+                kDebug() << "Adding new identity ID " << identity.id << " to database for name " << name;
             }
             else
             {
-                kDebug() << "Found existing identity ID " << identity.id << " from database for name " << name;                
+                kDebug() << "Found existing identity ID " << identity.id << " from database for name " << name;
             }
 
-            SimpleTrainingDataProvider data(identity, d->currentPhoto.copy(item->originalRect()));
-            d->database.train(identity, &data, "test application");  
+            d->database.train(identity, d->currentPhoto.copy(item->originalRect()), "test application");
 
             int elapsed = time.elapsed();
 

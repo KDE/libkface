@@ -39,38 +39,6 @@
 
 using namespace KFaceIface;
 
-class SimpleTrainingDataProvider : public TrainingDataProvider
-{
-public:
-
-    SimpleTrainingDataProvider(const Identity& identity, const QImage& newImage)
-        : identity(identity), toTrain(QList<QImage>() << newImage)
-    {
-    }
-
-    ImageListProvider* newImages(const Identity& id)
-    {
-        if (identity == id)
-        {
-            toTrain.reset();
-            return &toTrain;
-        }
-
-        return &empty;
-    }
-
-    ImageListProvider* images(const Identity&)
-    {
-        return &empty;
-    }
-
-public:
-
-    Identity               identity;
-    QListImageListProvider toTrain;
-    QListImageListProvider empty;
-};
-
 // --------------------------------------------------------------------------------------------------
 
 int main(int argc, char** argv)
@@ -85,7 +53,7 @@ int main(int argc, char** argv)
     Identity identity;
 
     // Populate database.
-    
+
     for (int i=0 ; i < 100 ; i++)
     {
         QString name      = QString("face%1").arg(i);
@@ -93,12 +61,11 @@ int main(int argc, char** argv)
         QMap<QString, QString> attributes;
         attributes["name"] = name;
         identity           = db.addIdentity(attributes);
-        SimpleTrainingDataProvider data(identity, image);
-        db.train(identity, &data, "test application");    
-    }   
-    
+        db.train(identity, image, "test application");
+    }
+
     // Check records in database.
-    
+
     for (int i=0 ; i < 100 ; i++)
     {
         QString name = QString("face%1").arg(i);
@@ -112,12 +79,12 @@ int main(int argc, char** argv)
         {
             kDebug() << "Identity " << name << " is absent in DB";
         }
-    }    
-    
+    }
+
     // Process recognition in database.
-    
+
     QList<Identity> list = db.recognizeFaces(QList<QImage>() << image);
-    
+
     if (!list.empty())
     {
         foreach(Identity id, list)
