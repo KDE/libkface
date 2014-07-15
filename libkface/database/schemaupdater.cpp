@@ -80,7 +80,7 @@ SchemaUpdater::~SchemaUpdater()
 
 int SchemaUpdater::schemaVersion()
 {
-    return 1;
+    return 2;
 }
 
 void SchemaUpdater::setObserver(InitializationObserver* const observer)
@@ -236,21 +236,18 @@ bool SchemaUpdater::createDatabase()
 
 bool SchemaUpdater::createTables()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDB"))        &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDBOpenTLD")) &&
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDB")) &&
            d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDBOpenCVLBPH"));
 }
 
 bool SchemaUpdater::createIndices()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateIndices")) &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateIndicesOpenTLD"));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateIndices"));
 }
 
 bool SchemaUpdater::createTriggers()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateTriggers")) &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateTriggersOpenTLD"));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateTriggers"));
 }
 
 bool SchemaUpdater::updateV1ToV2()

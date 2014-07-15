@@ -32,7 +32,7 @@
     <!-- Increment this version number whenever you change this file.
          On version mismatch, users will be warned.
     -->
-    <version>1</version>
+    <version>2</version>
 
     <database name="QSQLITE">
         <hostName>TestHost</hostName>
@@ -61,21 +61,6 @@
                       (id INTEGER,
                        attribute TEXT,
                        value TEXT)
-                  </statement>
-              </dbaction>
-
-              <dbaction name="CreateDBOpenTLD" mode="transaction">
-                  <statement mode="plain">
-                      CREATE TABLE OpenTLDData
-                      (id INTEGER PRIMARY KEY,
-                       identity INTEGER,
-                       width  INTEGER,
-                       height INTEGER,
-                       minVar FLOAT,
-                       positivePatches BLOB,
-                       negativePatches BLOB,
-                       allFeatures BLOB,
-                       allLeaves BLOB)
                   </statement>
               </dbaction>
 
@@ -125,10 +110,6 @@
                   </statement>-->
               </dbaction>
 
-              <dbaction name="CreateIndicesOpenTLD" mode="transaction">
-                  <statement mode="plain">CREATE INDEX opentld_index  ON OpenTLDData (id);</statement>
-              </dbaction>
-
               <!-- Triggers -->
               <dbaction name="CreateTriggers" mode="transaction">
                   <statement mode="plain">
@@ -136,16 +117,6 @@
                       BEGIN
                           DELETE FROM IdentityAttributes
                           WHERE IdentityAttributes.id = OLD.id;
-                      END;
-                  </statement>
-              </dbaction>
-
-              <dbaction name="CreateTriggersOpenTLD" mode="transaction">
-                  <statement mode="plain">
-                      CREATE TRIGGER delete_identities_opentld DELETE ON Identities
-                      BEGIN
-                          DELETE FROM OpenTLDData
-                          WHERE OpenTLDData.id = OLD.id;
                       END;
                   </statement>
               </dbaction>
