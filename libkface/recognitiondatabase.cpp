@@ -57,6 +57,42 @@
 namespace KFaceIface
 {
 
+/** Simple QImage training data container used by RecognitionDatabase::train(Identity, QImage, QString)
+ */
+class SimpleTrainingDataProvider : public TrainingDataProvider
+{
+public:
+
+    SimpleTrainingDataProvider(const Identity& identity, const QImage& newImage)
+        : identity(identity), toTrain(QList<QImage>() << newImage)
+    {
+    }
+
+    ImageListProvider* newImages(const Identity& id)
+    {
+        if (identity == id)
+        {
+            toTrain.reset();
+            return &toTrain;
+        }
+
+        return &empty;
+    }
+
+    ImageListProvider* images(const Identity&)
+    {
+        return &empty;
+    }
+
+public:
+
+    Identity               identity;
+    QListImageListProvider toTrain;
+    QListImageListProvider empty;
+};
+
+// -----------------------------------------------------------------------------------------------
+
 /**
  * The RecognitionDatabaseStaticPriv holds a hash to all exising RecognitionDatabase data,
  * mutex protected.
@@ -91,7 +127,7 @@ public:
 
 K_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------
 
 class RecognitionDatabase::Private : public QSharedData
 {
@@ -589,7 +625,7 @@ int RecognitionDatabase::recommendedImageSize(const QSize& availableSize) const
 Identity RecognitionDatabase::recognizeFace(const QImage& image)
 {
     QList<Identity> result = recognizeFaces(QList<QImage>() << image);
-    
+
     if (result.isEmpty())
         return Identity();
 
@@ -684,7 +720,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 {
     ImageListProvider* const images = data->newImages(identity);
 
-    kDebug() << "Training" << images->size() << "images for identity" << identity.id;
+    kDebug() << "Training " << images->size() << " images for identity " << identity.id;
 
     for (; !images->atEnd(); images->proceed())
     {
@@ -737,7 +773,7 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
             }
         }
 
-        kDebug() << "Training" << images.size() << "images for identity" << identity.id;
+        kDebug() << "Training " << images.size() << " images for identity " << identity.id;
 
         try
         {
@@ -773,41 +809,11 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
     d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
 }
 
-class SimpleTrainingDataProvider : public TrainingDataProvider
-{
-
-public:
-    SimpleTrainingDataProvider(const Identity& identity, const QImage& newImage)
-        : identity(identity), toTrain(QList<QImage>() << newImage)
-    {
-    }
-
-    ImageListProvider* newImages(const Identity& id)
-    {
-        if (identity == id)
-        {
-            toTrain.reset();
-            return &toTrain;
-        }
-        return &empty;
-    }
-
-    ImageListProvider* images(const Identity&)
-    {
-        return &empty;
-    }
-
-public:
-    Identity identity;
-    QListImageListProvider toTrain;
-    QListImageListProvider empty;
-
-};
 
 void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImage& image,
                                 const QString& trainingContext)
 {
-    SimpleTrainingDataProvider* data = new SimpleTrainingDataProvider(identityToBeTrained, image);
+    SimpleTrainingDataProvider* const  data = new SimpleTrainingDataProvider(identityToBeTrained, image);
     train(identityToBeTrained, data, trainingContext);
     delete data;
 }

@@ -92,6 +92,7 @@ public:
 
     RecognitionDatabase(const RecognitionDatabase& other);
     ~RecognitionDatabase();
+
     RecognitionDatabase& operator=(const RecognitionDatabase& other);
 
     bool isNull() const;
@@ -166,7 +167,9 @@ public:
     QList<Identity> recognizeFaces(const QList<QImage>& images);
     Identity        recognizeFace(const QImage& image);
 
-    /// Gives a hint about the complexity of training for the current backend.
+    /**
+     * Gives a hint about the complexity of training for the current backend.
+     */
     TrainingCostHint trainingCostHint() const;
 
     /**
