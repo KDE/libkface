@@ -554,7 +554,7 @@ void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QStr
 
 QString RecognitionDatabase::backendIdentifier() const
 {
-    return QString("opentld");
+    return QString("opencvlbph");
 }
 
 void RecognitionDatabase::Private::applyParameters()
