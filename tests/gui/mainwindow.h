@@ -51,6 +51,7 @@ public Q_SLOTS:
     void slotUpdateDatabase();
     void slotRecognise();
     void slotUpdateAccuracy();
+    void slotUpdateSensitivity();
 
 protected:
 
