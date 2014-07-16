@@ -63,8 +63,8 @@ class SimpleTrainingDataProvider : public TrainingDataProvider
 {
 public:
 
-    SimpleTrainingDataProvider(const Identity& identity, const QImage& newImage)
-        : identity(identity), toTrain(QList<QImage>() << newImage)
+    SimpleTrainingDataProvider(const Identity& identity, const QList<QImage>& newImages)
+        : identity(identity), toTrain(newImages)
     {
     }
 
@@ -75,7 +75,6 @@ public:
             toTrain.reset();
             return &toTrain;
         }
-
         return &empty;
     }
 
@@ -813,7 +812,18 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
 void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImage& image,
                                 const QString& trainingContext)
 {
-    SimpleTrainingDataProvider* const  data = new SimpleTrainingDataProvider(identityToBeTrained, image);
+    SimpleTrainingDataProvider* const  data = new SimpleTrainingDataProvider(
+        identityToBeTrained,
+        QList<QImage>() << image
+    );
+    train(identityToBeTrained, data, trainingContext);
+    delete data;
+}
+
+void RecognitionDatabase::train(const Identity& identityToBeTrained, const QList<QImage>& images,
+                                const QString& trainingContext)
+{
+    SimpleTrainingDataProvider* const  data = new SimpleTrainingDataProvider(identityToBeTrained, images);
     train(identityToBeTrained, data, trainingContext);
     delete data;
 }

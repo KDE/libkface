@@ -192,11 +192,13 @@ public:
     /**
      * Performs training by using image data directly.
      *
-     * This is a convenience function for simple setups.
+     * These are convenience functions for simple setups.
      * If you want good performance and/or a more versatile implementation, be sure to
      * implement your own TrainingDataProvider and use one of the above functions.
      */
     void train(const Identity& identityToBeTrained, const QImage& image,
+               const QString& trainingContext);
+    void train(const Identity& identityToBeTrained, const QList<QImage>& images,
                const QString& trainingContext);
 
     /**

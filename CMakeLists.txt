@@ -114,11 +114,12 @@ IF (OpenCV_FOUND)
 # 3.0.0 => 2.0.0     (Including LBPH algorithm for face recognition)
 # 3.1.0 => 2.0.0     (Big private code review. No BC broken).
 # 3.2.0 => 2.0.0     (Added the deleteIdentity function to the RecognitionDatabase class)
-# 3.3.0 => 2.0.0     (Added a "simple" training method using image data directly)
+# 3.3.0 => 2.0.0     (Added a "simple" training method using image data directly for a single image)
+# 3.4.0 => 2.0.0     (Added a "simple" training method using image data directly for an image list)
 
 # Library API version
 SET(KFACE_LIB_MAJOR_VERSION "3")
-SET(KFACE_LIB_MINOR_VERSION "3")
+SET(KFACE_LIB_MINOR_VERSION "4")
 SET(KFACE_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:

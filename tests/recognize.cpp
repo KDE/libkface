@@ -6,7 +6,7 @@
  *
  * @date   2010-06-16
  * @brief  Face Recognition CLI tool
- *         NOTE: This tool is able to use ORL database which are 
+ *         NOTE: This tool is able to use ORL database which are
  *         freely available set of images to test face recognition.
  *         It contain 10 photos of 20 different peoples from slightly
  *         different angles. See here for details:
@@ -73,40 +73,6 @@ QList<QImage> toImages(const QStringList& paths)
 
 // --------------------------------------------------------------------------------------------------
 
-class SimpleTrainingDataProvider : public TrainingDataProvider
-{
-public:
-
-    SimpleTrainingDataProvider(const Identity& identity, const QList<QImage>& newImages)
-        : identity(identity), toTrain(newImages)
-    {
-    }
-
-    ImageListProvider* newImages(const Identity& id)
-    {
-        if (identity == id)
-        {
-            toTrain.reset();
-            return &toTrain;
-        }
-
-        return &empty;
-    }
-
-    ImageListProvider* images(const Identity&)
-    {
-        return &empty;
-    }
-
-public:
-
-    Identity               identity;
-    QListImageListProvider toTrain;
-    QListImageListProvider empty;
-};
-
-// --------------------------------------------------------------------------------------------------
-
 int main(int argc, char** argv)
 {
     if (argc < 2 || (argv[1] == QLatin1String("train") && argc < 3))
@@ -157,8 +123,7 @@ int main(int argc, char** argv)
         QTime time;
         time.start();
 
-        SimpleTrainingDataProvider data(identity, images);
-        db.train(identity, &data, "test application");
+        db.train(identity, images, "test application");
 
         int elapsed = time.elapsed();
         kDebug() << "Training took " << elapsed << " for " << images.size() << ", " << ((float)elapsed/images.size()) << " per image";
@@ -252,9 +217,8 @@ int main(int argc, char** argv)
             }
 
             QList<QImage> images = toImages(it.value());
-            SimpleTrainingDataProvider data(identity, images);
             kDebug() << "Training ORL directory " << it.key();
-            db.train(identity, &data, trainingContext);
+            db.train(identity, images, trainingContext);
             totalTrained        += images.size();
         }
 
