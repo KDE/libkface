@@ -31,6 +31,7 @@
 
     <!-- Increment this version number whenever you change this file.
          On version mismatch, users will be warned.
+         Don't forget to update SchemaUpdater::schemaVersion()
     -->
     <version>2</version>
 
