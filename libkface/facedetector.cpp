@@ -69,7 +69,7 @@ public:
             // Work only under Linux and OSX. OpenCV do not install XML files under Windows (checked with OpenCV 2.4.9)
             cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../OpenCV/haarcascades");
 
-            kDebug() << "OpenCV Haar Cascades dir search at " << cascadeDirs;
+            kDebug() << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
 
             m_backend = new OpenCVFaceDetector(cascadeDirs);
             applyParameters();

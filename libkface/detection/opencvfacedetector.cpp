@@ -78,7 +78,7 @@ public:
 
 static QString findFileInDirs(const QStringList& dirs, const QString& fileName)
 {
-    foreach (const QString &dir, dirs)
+    foreach (const QString& dir, dirs)
     {
         const QString file = dir + (dir.endsWith("/") ? "" : "/") + fileName;
 
@@ -118,7 +118,7 @@ public:
           verifyingCascade(true)
     {
         const QString file = findFileInDirs(dirs, fileName);
-            
+
         if (file.isEmpty())
         {
             kDebug() << "Failed to locate cascade " << fileName << " in " << dirs;
@@ -126,7 +126,7 @@ public:
         }
 
         kDebug() << "Loading cascade " << file;
-        
+
         if (!load(file.toStdString()))
         {
             kDebug() << "Failed to load cascade " << file;
@@ -293,9 +293,9 @@ OpenCVFaceDetector::OpenCVFaceDetector(const QStringList& cascadeDirs)
     if (cascadeDirs.isEmpty())
     {
         kError() << "OpenCV Haar Cascade directory cannot be found. Did you install OpenCV XML data files?";
-        return;        
+        return;
     }
-    
+
     d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt.xml");
     d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_default.xml");
     d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt2.xml");
