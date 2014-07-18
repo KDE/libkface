@@ -198,8 +198,10 @@ int main(int argc, char** argv)
             return 0;
         }
 
+        // close previous db
+        RecognitionDatabase();
+
         // reload db
-        db = RecognitionDatabase();
         db = RecognitionDatabase::addDatabase(QDir::currentPath());
 
         QTime time;
