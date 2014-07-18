@@ -886,7 +886,7 @@ void RecognitionDatabase::deleteIdentity(const Identity& identityToBeDeleted)
     d->identityCache.remove(identityToBeDeleted.id);
 }
 
-// --- Runtime version info static methods (declared in version.h) --------------------------------------------------
+// --- Runtime version info static methods --------------------------------------------------
 
 QString LibOpenCVVersion()
 {
