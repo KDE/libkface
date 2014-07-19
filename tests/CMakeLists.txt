@@ -22,6 +22,7 @@
 #
 # ============================================================
 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../libkface)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkface)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 

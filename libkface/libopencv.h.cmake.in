@@ -26,6 +26,9 @@
 #ifndef LIB_OPEN_CV_H
 #define LIB_OPEN_CV_H
 
+// Used to find shared Haar Cascade files.
+#define OPENCV_ROOT_PATH "${OpenCV_DIR}"
+
 // OpenCV includes
 
 #include <opencv2/core/version.hpp>

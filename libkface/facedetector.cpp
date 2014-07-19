@@ -63,12 +63,15 @@ public:
         if (!m_backend)
         {
             QStringList cascadeDirs;
-            // Typically work everywhere. Files are installed with libkface as well
+            // First try : typically work everywhere if packagers don't drop libkface shared data files.
             cascadeDirs << KGlobal::dirs()->findDirs("data",         "libkface/haarcascades");
 
-            // Work only under Linux and OSX. OpenCV do not install XML files under Windows (checked with OpenCV 2.4.9)
+            // Second try to find OpenCV shared files. Work only under Linux and OSX. OpenCV do not install XML files under Windows (checked with OpenCV 2.4.9)
             cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../OpenCV/haarcascades");
-
+            
+            // Last try to find OpenCV shared files, using cmake env variables.
+            cascadeDirs << QString("%1/haarcascades").arg(OPENCV_ROOT_PATH);
+            
             kDebug() << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
 
             m_backend = new OpenCVFaceDetector(cascadeDirs);
