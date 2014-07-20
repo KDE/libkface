@@ -38,6 +38,10 @@
 
 #include <kdebug.h>
 
+// libkface includes
+
+#include "libkface/preprocessing-tantriggs/tantriggspreprocessor.h"
+
 // Implementation not exported
 
 #include "libkface/preprocessing-tantriggs/tantriggspreprocessor.cpp"
@@ -46,11 +50,11 @@ using namespace KFaceIface;
 
 // --------------------------------------------------------------------------------------------------
 
-QStringList toPaths(char** argv, int startIndex, int argc)
+QStringList toPaths(char** const argv, int startIndex, int argc)
 {
     QStringList files;
 
-    for (int i=startIndex; i<argc; i++)
+    for (int i = startIndex; i < argc; i++)
     {
         files << QString::fromLocal8Bit(argv[i]);
     }
@@ -78,7 +82,8 @@ class OpenCVSideBySideDisplay
 public:
 
     OpenCVSideBySideDisplay(int rows, int uiSize = 200)
-        : uiSize(uiSize), currentRow(0)
+        : uiSize(uiSize),
+          currentRow(0)
     {
         bigImage = cv::Mat::zeros(uiSize*rows, 2*uiSize, CV_8UC3);
     }
@@ -92,7 +97,7 @@ public:
 
         const int top = currentRow*uiSize;
         cv::Mat scaledLeft, scaledRight;
-        cv::resize(left, scaledLeft, scaleSize);
+        cv::resize(left,  scaledLeft,  scaleSize);
         cv::resize(right, scaledRight, scaleSize);
 
         if (scaledLeft.channels() == 1)
@@ -111,7 +116,7 @@ public:
         currentRow++;
     }
 
-    void show(const char* title = "images")
+    void show(const char* const title = "images")
     {
         cv::namedWindow(title);
         cv::imshow(title, bigImage);
@@ -128,7 +133,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        kDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " align <image1> <image2> ... ";
+        kDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " preprocess <image1> <image2> ... ";
         return 0;
     }
 
@@ -145,13 +150,14 @@ int main(int argc, char** argv)
 
     foreach (const cv::Mat& image, images)
     {
-        kDebug() << "channels" << image.channels();
+        kDebug() << "channels " << image.channels();
         cv::Mat processed = preprocessor.preprocess(image);
         display.add(image, processed);
     }
 
     int elapsed = time.elapsed();
-    kDebug() << "Preprocessing took" << elapsed << "for" << images.size() << "," << ((float)elapsed/images.size()) << "per image";
+    kDebug() << "Preprocessing took " << elapsed << " for " << images.size() << " , " 
+             << ((float)elapsed/images.size()) << " per image";
 
     display.show();
     app.exec();

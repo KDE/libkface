@@ -41,22 +41,18 @@
 // libkface includes
 
 #include "libkface/alignment-congealing/funnelreal.h"
-//#include "libkface/alignment-flandmark/flandmarkaligner.h"
 
 // Implementation not exported
 
 #include "libkface/alignment-congealing/funnelreal.cpp"
-//#include "libkface/alignment-flandmark/flandmark_detector.cpp"
-//#include "libkface/alignment-flandmark/liblbp.cpp"
-//#include "libkface/alignment-flandmark/flandmarkaligner.cpp"
 
 using namespace KFaceIface;
 
-QStringList toPaths(char** argv, int startIndex, int argc)
+QStringList toPaths(char** const argv, int startIndex, int argc)
 {
     QStringList files;
 
-    for (int i=startIndex; i<argc; i++)
+    for (int i = startIndex; i < argc; i++)
     {
         files << QString::fromLocal8Bit(argv[i]);
     }
@@ -85,7 +81,8 @@ class OpenCVSideBySideDisplay
 public:
 
     OpenCVSideBySideDisplay(int rows, int uiSize = 200)
-        : uiSize(uiSize), currentRow(0)
+        : uiSize(uiSize),
+          currentRow(0)
     {
         bigImage = cv::Mat::zeros(uiSize*rows, 2*uiSize, CV_8UC3);
     }
@@ -99,7 +96,7 @@ public:
 
         const int top = currentRow*uiSize;
         cv::Mat scaledLeft, scaledRight;
-        cv::resize(left, scaledLeft, scaleSize);
+        cv::resize(left,  scaledLeft,  scaleSize);
         cv::resize(right, scaledRight, scaleSize);
 
         if (scaledLeft.channels() == 1)
@@ -118,7 +115,7 @@ public:
         currentRow++;
     }
 
-    void show(const char* title = "images")
+    void show(const char* const title = "images")
     {
         cv::namedWindow(title);
         cv::imshow(title, bigImage);
@@ -146,25 +143,24 @@ int main(int argc, char** argv)
 
     QTime time;
     time.start();
-    //FunnelReal funnel;
-    //FlandmarkAligner fa;
-    kDebug() << "Setup of Aligner took" << time.restart();
+
+    FunnelReal funnel;
+    kDebug() << "Setup of Aligner took " << time.restart();
 
     OpenCVSideBySideDisplay display(images.size());
 
     foreach (const cv::Mat& image, images)
     {
-        Q_UNUSED(image);
-        //cv::Mat aligned = funnel.align(image);
-        //cv::Mat aligned = fa.align(image);
-        //display.add(image, aligned);
+        cv::Mat aligned = funnel.align(image);
+        display.add(image, aligned);
     }
 
     int elapsed = time.elapsed();
-    kDebug() << "Alignment took" << elapsed << "for" << images.size() << "," << ((float)elapsed/images.size()) << "per image";
+    kDebug() << "Alignment took " << elapsed << " for " << images.size() << " , " 
+             << ((float)elapsed/images.size()) << " per image";
 
-    //display.show();
-    //app.exec();
+    display.show();
+    app.exec();
 
     return 0;
 }
