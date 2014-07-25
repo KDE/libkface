@@ -71,7 +71,7 @@ MESSAGE(STATUS "OpenCV Root directory is: ${OpenCV_DIR}")
 
 # check OpenCV version
 
-# Libkface can be compiled with OpenCV 2.4.3, but at least 2.4.5 is suitbale without main bugs for Faces Recognition.
+# Libkface can be compiled with OpenCV 2.4.5, but at least 2.4.9 is suitbale without main bugs for Faces Recognition.
 SET(OPENCV_MIN_VERSION "2.4.9")
 
 IF (OpenCV_VERSION)
