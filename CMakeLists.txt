@@ -61,7 +61,7 @@ FIND_PACKAGE(OpenCV COMPONENTS core highgui objdetect contrib)
 
 IF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
   MESSAGE(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
-  SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules_opencv)
+  SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
   FIND_PACKAGE(OpenCV REQUIRED COMPONENTS core highgui objdetect contrib)
 ELSE (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
   MESSAGE(STATUS "Great, found OpenCV on the first try.")
