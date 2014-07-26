@@ -53,66 +53,68 @@ INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 
 IF (OpenCV_FOUND)
 
-# =======================================================
-# Information to update before to release this library.
+    # =======================================================
+    # Information to update before to release this library.
 
-# Library version history:
-# API      ABI
-# 0.1.0 => 0.1.0     (During digiKam GoSC2010)
-# 2.0.0 => 1.0.0     (Included into digiKam 2.0.0 Software Collection)
-# 3.0.0 => 2.0.0     (Including LBPH algorithm for face recognition)
-# 3.1.0 => 2.0.0     (Big private code review. No BC broken).
-# 3.2.0 => 2.0.0     (Added the deleteIdentity function to the RecognitionDatabase class)
-# 3.3.0 => 2.0.0     (Added a "simple" training method using image data directly for a single image)
-# 3.4.0 => 2.0.0     (Added a "simple" training method using image data directly for an image list)
+    # Library version history:
+    # API      ABI
+    # 0.1.0 => 0.1.0     (During digiKam GoSC2010)
+    # 2.0.0 => 1.0.0     (Included into digiKam 2.0.0 Software Collection)
+    # 3.0.0 => 2.0.0     (Including LBPH algorithm for face recognition)
+    # 3.1.0 => 2.0.0     (Big private code review. No BC broken).
+    # 3.2.0 => 2.0.0     (Added the deleteIdentity function to the RecognitionDatabase class)
+    # 3.3.0 => 2.0.0     (Added a "simple" training method using image data directly for a single image)
+    # 3.4.0 => 2.0.0     (Added a "simple" training method using image data directly for an image list)
 
-# Library API version
-SET(KFACE_LIB_MAJOR_VERSION "3")
-SET(KFACE_LIB_MINOR_VERSION "4")
-SET(KFACE_LIB_PATCH_VERSION "0")
+    # Library API version
+    SET(KFACE_LIB_MAJOR_VERSION "3")
+    SET(KFACE_LIB_MINOR_VERSION "4")
+    SET(KFACE_LIB_PATCH_VERSION "0")
 
-# Suffix to add at end of version string. Usual values are:
-# "-git"   : alpha code unstable from git. Do not use in production
-# "-beta1" : beta1 release.
-# "-beta2" : beta2 release.
-# "-beta3" : beta3 release.
-# "-rc"    : release candidate.
-# ""       : final relase. Can be used in production.
-SET(KFACE_LIB_SUFFIX_VERSION "")
+    # Suffix to add at end of version string. Usual values are:
+    # "-git"   : alpha code unstable from git. Do not use in production
+    # "-beta1" : beta1 release.
+    # "-beta2" : beta2 release.
+    # "-beta3" : beta3 release.
+    # "-rc"    : release candidate.
+    # ""       : final relase. Can be used in production.
+    SET(KFACE_LIB_SUFFIX_VERSION "")
 
-# Library ABI version used by linker.
-# For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(KFACE_LIB_SO_CUR_VERSION "2")
-SET(KFACE_LIB_SO_REV_VERSION "0")
-SET(KFACE_LIB_SO_AGE_VERSION "0")
+    # Library ABI version used by linker.
+    # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
+    SET(KFACE_LIB_SO_CUR_VERSION "2")
+    SET(KFACE_LIB_SO_REV_VERSION "0")
+    SET(KFACE_LIB_SO_AGE_VERSION "0")
 
-# =======================================================
-# Set env. variables accordinly.
+    # =======================================================
+    # Set env. variables accordinly.
 
-SET(KFACE_LIB_VERSION_STRING "${KFACE_LIB_MAJOR_VERSION}.${KFACE_LIB_MINOR_VERSION}.${KFACE_LIB_PATCH_VERSION}${KFACE_LIB_SUFFIX_VERSION}")
-SET(KFACE_LIB_VERSION_ID "0x0${KFACE_LIB_MAJOR_VERSION}0${KFACE_LIB_MINOR_VERSION}0${KFACE_LIB_PATCH_VERSION}")
-SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_VERSION}.${KFACE_LIB_SO_AGE_VERSION}")
+    SET(KFACE_LIB_VERSION_STRING "${KFACE_LIB_MAJOR_VERSION}.${KFACE_LIB_MINOR_VERSION}.${KFACE_LIB_PATCH_VERSION}${KFACE_LIB_SUFFIX_VERSION}")
+    SET(KFACE_LIB_VERSION_ID "0x0${KFACE_LIB_MAJOR_VERSION}0${KFACE_LIB_MINOR_VERSION}0${KFACE_LIB_PATCH_VERSION}")
+    SET(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_VERSION}.${KFACE_LIB_SO_AGE_VERSION}")
 
-# =======================================================
+    # =======================================================
 
-SUBDIRS(data)
-SUBDIRS(libkface)
+    SUBDIRS(data)
+    SUBDIRS(libkface)
 
-IF(KDE4_BUILD_TESTS)
-    MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
-ENDIF(KDE4_BUILD_TESTS)
+    IF(KDE4_BUILD_TESTS)
+        MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
+    ENDIF()
 
-IF(NOT WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkface.lsm)
-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-ENDIF(NOT WIN32)
+    IF(NOT WIN32)
+        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)
+        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkface.lsm)
+        INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+    ENDIF()
 
-# Install find cmake script to the system for client applications.
+    # Install find cmake script to the system for client applications.
 
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKface.cmake
-        DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKface.cmake
+            DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
 
-ELSE(OpenCV_FOUND)
+ELSE()
+
     MESSAGE(FATAL_ERROR "LibKface cannot be compiled.")
-ENDIF(OpenCV_FOUND)
+
+ENDIF()
