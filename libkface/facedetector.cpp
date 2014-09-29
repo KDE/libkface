@@ -67,7 +67,9 @@ public:
             cascadeDirs << KGlobal::dirs()->findDirs("data",         "libkface/haarcascades");
 
             // Second try to find OpenCV shared files. Work only under Linux and OSX. OpenCV do not install XML files under Windows (checked with OpenCV 2.4.9)
+            // Try under both CamelCase *and* lowercase directories, as both seems to be used.
             cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../OpenCV/haarcascades");
+            cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../opencv/haarcascades");
             
             // Last try to find OpenCV shared files, using cmake env variables.
             cascadeDirs << QString("%1/haarcascades").arg(OPENCV_ROOT_PATH);
