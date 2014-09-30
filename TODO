@@ -1,0 +1,6 @@
+Add Red Eyes management feature:
+
+- Move into libkface Red Eyes Detection and Correction code from RedEyesRemoval kipi-plugin based on OpenCV
+- Shared Red Eyes Management through new API in libkface.
+- Use and test this API with kipi-plugins and digiKam image editor.
+
