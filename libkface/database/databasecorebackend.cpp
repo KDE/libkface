@@ -165,6 +165,7 @@ QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
 void DatabaseCoreBackendPrivate::closeDatabaseForThread()
 {
     QThread* const thread = QThread::currentThread();
+
     // scope, so that db is destructed when calling removeDatabase
     {
         QSqlDatabase db = threadDatabases[thread];
@@ -174,6 +175,7 @@ void DatabaseCoreBackendPrivate::closeDatabaseForThread()
             db.close();
         }
     }
+
     threadDatabases.remove(thread);
     databaseErrors.remove(thread);
     databasesValid[thread] = 0;
@@ -303,15 +305,15 @@ bool DatabaseCoreBackendPrivate::reconnectOnError() const
 
 bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery& query) const
 {
-    return parameters.isSQLite()
-           && (query.lastError().number() == 5 /*SQLITE_BUSY*/ || query.lastError().number() == 6/*SQLITE_LOCKED*/);
+    return parameters.isSQLite() &&
+           (query.lastError().number() == 5 /*SQLITE_BUSY*/ || query.lastError().number() == 6/*SQLITE_LOCKED*/);
 }
 
 bool DatabaseCoreBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
 {
-    return parameters.isSQLite()
-           && lastError.type() == QSqlError::TransactionError
-           && lastError.databaseText() == QLatin1String("database is locked");
+    return parameters.isSQLite() &&
+           lastError.type()         == QSqlError::TransactionError &&
+           lastError.databaseText() == QLatin1String("database is locked");
     // wouldnt it be great if they gave us the database error number...
 }
 
@@ -596,6 +598,7 @@ DatabaseCoreBackend::~DatabaseCoreBackend()
 {
     Q_D(DatabaseCoreBackend);
     close();
+
     delete d;
 }
 
@@ -618,25 +621,25 @@ DatabaseAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, QList<QVariant>* const values,
-        QVariant* const lastInsertId)
+                                                                  QVariant* const lastInsertId)
 {
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const QString& action, QList<QVariant>* const values,
-        QVariant* const lastInsertId)
+                                                                  QVariant* const lastInsertId)
 {
     return execDBAction(getDBAction(action), QMap<QString, QVariant>(), values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const QString& action, const QMap<QString, QVariant>& bindingMap,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                                  QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     return execDBAction(getDBAction(action), bindingMap, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                                  QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     Q_D(DatabaseCoreBackend);
 
@@ -910,7 +913,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery&
     return DatabaseCoreBackend::NoErrors;
 }
 
-// --
+// ----------------------------------------------------------------------------------------------------
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, QList<QVariant>* const values, QVariant* const lastInsertId)
 {
