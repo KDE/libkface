@@ -9,6 +9,8 @@
  *
  * @author Copyright (C) 2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2014 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +32,7 @@
 
 #include <QMap>
 #include <QString>
+#include <QExplicitlySharedDataPointer>
 
 // Local includes
 
@@ -59,15 +62,33 @@ public:
      * natural persons play a role.
      */
     Identity();
+    Identity(const Identity& other);
     ~Identity();
 
-    bool isNull() const;
+    Identity& operator=(const Identity& other);
+
+    bool isNull()                          const;
     bool operator==(const Identity& other) const;
 
-public:
+    /** Id value accessor.
+     */
+    int  id() const;
+    void setId(int id);
 
-    int                    id;
-    QMap<QString, QString> attributes;
+    /** Attribute value accessor.
+     */
+    QString attribute(const QString& att) const;
+    void    setAttribute(const QString& att, const QString& val);
+
+    /** Attributes map accessor.
+     */
+    QMap<QString, QString> attributesMap() const;
+    void setAttributesMap(const QMap<QString, QString>& attributes);
+
+private:
+
+    class Private;
+    QExplicitlySharedDataPointer<Private> d;
 };
 
 } // namespace KFaceIface

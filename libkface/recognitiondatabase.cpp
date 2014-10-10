@@ -253,7 +253,7 @@ RecognitionDatabase::Private::Private(const QString& configPath)
     {
         foreach (const Identity& identity, DatabaseAccess(db).db()->identities())
         {
-            identityCache[identity.id] = identity;
+            identityCache[identity.id()] = identity;
         }
     }
 }
@@ -342,9 +342,10 @@ Identity RecognitionDatabase::identity(int id) const
 // Takes care that there may be multiple values of attribute in identity's attributes
 bool RecognitionDatabase::Private::identityContains(const Identity& identity, const QString& attribute, const QString& value) const
 {
-    QMap<QString, QString>::const_iterator it = identity.attributes.find(attribute);
+    QMap<QString, QString> map                = identity.attributesMap();
+    QMap<QString, QString>::const_iterator it = map.find(attribute);
 
-    for (; it != identity.attributes.end() && it.key() == attribute; ++it)
+    for (; it != map.end() && it.key() == attribute; ++it)
     {
         if (it.value() == value)
         {
@@ -488,14 +489,14 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
     Identity identity;
     {
         DatabaseOperationGroup group(d->db);
-        int id                      = DatabaseAccess(d->db).db()->addIdentity();
-        identity.id                 = id;
-        identity.attributes         = attributes;
-        identity.attributes["uuid"] = QUuid::createUuid().toString();
+        int id = DatabaseAccess(d->db).db()->addIdentity();
+        identity.setId(id);
+        identity.setAttributesMap(attributes);
+        identity.setAttribute("uuid", QUuid::createUuid().toString());
         DatabaseAccess(d->db).db()->updateIdentity(identity);
     }
 
-    d->identityCache[identity.id] = identity;
+    d->identityCache[identity.id()] = identity;
 
     return identity;
 }
@@ -513,7 +514,9 @@ void RecognitionDatabase::addIdentityAttributes(int id, const QMap<QString, QStr
 
     if (it != d->identityCache.end())
     {
-        it->attributes.unite(attributes);
+        QMap<QString, QString> map = it->attributesMap();
+        map.unite(attributes);
+        it->setAttributesMap(map);
         DatabaseAccess(d->db).db()->updateIdentity(*it);
     }
 }
@@ -530,7 +533,9 @@ void RecognitionDatabase::addIdentityAttribute(int id, const QString& attribute,
 
     if (it != d->identityCache.end())
     {
-        it->attributes.insertMulti(attribute, value);
+        QMap<QString, QString> map = it->attributesMap();
+        map.insertMulti(attribute, value);
+        it->setAttributesMap(map);
         DatabaseAccess(d->db).db()->updateIdentity(*it);
     }
 }
@@ -547,7 +552,7 @@ void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QStr
 
     if (it != d->identityCache.end())
     {
-        it->attributes = attributes;
+        it->setAttributesMap(attributes);
         DatabaseAccess(d->db).db()->updateIdentity(*it);
     }
 }
@@ -719,7 +724,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 {
     ImageListProvider* const images = data->newImages(identity);
 
-    kDebug() << "Training " << images->size() << " images for identity " << identity.id;
+    kDebug() << "Training " << images->size() << " images for identity " << identity.id();
 
     for (; !images->atEnd(); images->proceed())
     {
@@ -759,7 +764,7 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
             {
                 cv::Mat cvImage = d->preprocessingChain(imageList->image());
 
-                labels.push_back(identity.id);
+                labels.push_back(identity.id());
                 images.push_back(cvImage);
             }
             catch (cv::Exception& e)
@@ -772,7 +777,7 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
             }
         }
 
-        kDebug() << "Training " << images.size() << " images for identity " << identity.id;
+        kDebug() << "Training " << images.size() << " images for identity " << identity.id();
 
         try
         {
@@ -867,7 +872,7 @@ void RecognitionDatabase::clearTraining(const QList<Identity>& identitiesToClean
 
     foreach (const Identity& id, identitiesToClean)
     {
-        ids << id.id;
+        ids << id.id();
     }
 
     d->clear(d->recognizer(), ids, trainingContext);
@@ -882,8 +887,8 @@ void RecognitionDatabase::deleteIdentity(const Identity& identityToBeDeleted)
 
     QMutexLocker lock(&d->mutex);
 
-    DatabaseAccess(d->db).db()->deleteIdentity(identityToBeDeleted.id);
-    d->identityCache.remove(identityToBeDeleted.id);
+    DatabaseAccess(d->db).db()->deleteIdentity(identityToBeDeleted.id());
+    d->identityCache.remove(identityToBeDeleted.id());
 }
 
 // --- Runtime version info static methods --------------------------------------------------

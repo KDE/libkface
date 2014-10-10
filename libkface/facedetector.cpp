@@ -70,10 +70,10 @@ public:
             // Try under both CamelCase *and* lowercase directories, as both seems to be used.
             cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../OpenCV/haarcascades");
             cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../opencv/haarcascades");
-            
+
             // Last try to find OpenCV shared files, using cmake env variables.
             cascadeDirs << QString("%1/haarcascades").arg(OPENCV_ROOT_PATH);
-            
+
             kDebug() << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
 
             m_backend = new OpenCVFaceDetector(cascadeDirs);

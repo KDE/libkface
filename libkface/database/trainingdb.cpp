@@ -90,12 +90,13 @@ int TrainingDB::addIdentity() const
 
 void TrainingDB::updateIdentity(const Identity& p)
 {
-    d->db->execSql("DELETE FROM IdentityAttributes WHERE id=?", p.id);
+    d->db->execSql("DELETE FROM IdentityAttributes WHERE id=?", p.id());
+    QMap<QString, QString> map = p.attributesMap();
     QMap<QString, QString>::const_iterator it;
 
-    for (it=p.attributes.begin(); it != p.attributes.end(); ++it)
+    for (it = map.begin(); it != map.end(); ++it)
     {
-        d->db->execSql("INSERT INTO IdentityAttributes (id, attribute, value) VALUES (?, ?,?)", p.id, it.key(), it.value());
+        d->db->execSql("INSERT INTO IdentityAttributes (id, attribute, value) VALUES (?, ?,?)", p.id(), it.key(), it.value());
     }
 }
 
@@ -114,9 +115,9 @@ QList<Identity> TrainingDB::identities() const
     foreach (const QVariant& v, ids)
     {
         QList<QVariant> values;
-        Identity id;
-        id.id = v.toInt();
-        d->db->execSql("SELECT attribute, value FROM IdentityAttributes WHERE id=?", id.id, &values);
+        Identity p;
+        p.setId(v.toInt());
+        d->db->execSql("SELECT attribute, value FROM IdentityAttributes WHERE id=?", p.id(), &values);
 
         for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
         {
@@ -125,10 +126,10 @@ QList<Identity> TrainingDB::identities() const
             QString value     = it->toString();
             ++it;
 
-            id.attributes[attribute] = value;
+            p.setAttribute(attribute, value);
         }
 
-        results << id;
+        results << p;
     }
 
     return results;

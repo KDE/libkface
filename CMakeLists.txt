@@ -65,10 +65,11 @@ IF (OpenCV_FOUND)
     # 3.2.0 => 2.0.0     (Added the deleteIdentity function to the RecognitionDatabase class)
     # 3.3.0 => 2.0.0     (Added a "simple" training method using image data directly for a single image)
     # 3.4.0 => 2.0.0     (Added a "simple" training method using image data directly for an image list)
+    # 3.5.0 => 3.0.0     (Added d private internal container to reduce binary uncompatibility with Identity class)
 
     # Library API version
     SET(KFACE_LIB_MAJOR_VERSION "3")
-    SET(KFACE_LIB_MINOR_VERSION "4")
+    SET(KFACE_LIB_MINOR_VERSION "5")
     SET(KFACE_LIB_PATCH_VERSION "0")
 
     # Suffix to add at end of version string. Usual values are:
@@ -82,7 +83,7 @@ IF (OpenCV_FOUND)
 
     # Library ABI version used by linker.
     # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-    SET(KFACE_LIB_SO_CUR_VERSION "2")
+    SET(KFACE_LIB_SO_CUR_VERSION "3")
     SET(KFACE_LIB_SO_REV_VERSION "0")
     SET(KFACE_LIB_SO_AGE_VERSION "0")
 
