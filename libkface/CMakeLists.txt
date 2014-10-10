@@ -38,6 +38,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
 
 SET(kface_LIB_SRCS facedetector.cpp
                    identity.cpp
+                   dataproviders.cpp
                    recognitiondatabase.cpp
                    detection/opencvfacedetector.cpp
                    recognition-opencv-lbph/lbphfacemodel.cpp

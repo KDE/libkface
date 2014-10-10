@@ -89,7 +89,7 @@ int main(int argc, char** argv)
     {
         foreach(Identity id, list)
         {
-            kDebug() << "Identity " << id.attributes.value("name") << " recognized";
+            kDebug() << "Identity " << id.attribute("name") << " recognized";
         }
     }
     else

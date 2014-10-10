@@ -277,10 +277,10 @@ void MainWindow::slotRecognise()
 
         if (!identity.isNull())
         {
-            item->suggest(identity.attributes["name"]);
+            item->suggest(identity.attribute("name"));
 
-            kDebug() << "Face #" << i+1 << " is closest to the person with ID " << identity.id
-                     << " and name "<< identity.attributes["name"];
+            kDebug() << "Face #" << i+1 << " is closest to the person with ID " << identity.id()
+                     << " and name "<< identity.attribute("name");
         }
         else
         {
@@ -316,11 +316,11 @@ void MainWindow::slotUpdateDatabase()
                 QMap<QString, QString> attributes;
                 attributes["name"] = name;
                 identity           = d->database.addIdentity(attributes);
-                kDebug() << "Adding new identity ID " << identity.id << " to database for name " << name;
+                kDebug() << "Adding new identity ID " << identity.id() << " to database for name " << name;
             }
             else
             {
-                kDebug() << "Found existing identity ID " << identity.id << " from database for name " << name;
+                kDebug() << "Found existing identity ID " << identity.id() << " from database for name " << name;
             }
 
             d->database.train(identity, d->currentPhoto.copy(item->originalRect()), "test application");

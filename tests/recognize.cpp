@@ -100,7 +100,7 @@ int main(int argc, char** argv)
 
         for (int i = 0 ; i < paths.size() ; i++)
         {
-            kDebug() << "Identified " << identities[i].attributes.value("name") << " in " << paths[i];
+            kDebug() << "Identified " << identities[i].attribute("name") << " in " << paths[i];
         }
     }
     else if (argv[1] == QLatin1String("train"))
@@ -162,7 +162,7 @@ int main(int argc, char** argv)
             {
                 Identity identity = db.addIdentity(attributes);
                 idMap[i]          = identity;
-                kDebug() << "Created identity " << identity.id << " for ORL directory " << i;
+                kDebug() << "Created identity " << identity.id() << " for ORL directory " << i;
             }
             else
             {
@@ -243,7 +243,7 @@ int main(int argc, char** argv)
             QList<QImage> images    = toImages(it.value());
             QList<Identity> results = db.recognizeFaces(images);
 
-            kDebug() << "Result for " << it.value().first() << " is identity " << results.first().id;
+            kDebug() << "Result for " << it.value().first() << " is identity " << results.first().id();
 
             foreach (const Identity& foundId, results)
             {

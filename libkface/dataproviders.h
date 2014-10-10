@@ -9,6 +9,8 @@
  *
  * @author Copyright (C) 2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2014 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,14 +50,12 @@ class KFACE_EXPORT ImageListProvider
 {
 public:
 
-    virtual ~ImageListProvider()
-    {
-    }
+    virtual ~ImageListProvider();
 
-    virtual int  size() const           = 0;
-    virtual bool atEnd() const          = 0;
-    virtual void proceed(int steps = 1) = 0;
-    virtual QImage image()              = 0;
+    virtual int    size() const           = 0;
+    virtual bool   atEnd() const          = 0;
+    virtual void   proceed(int steps = 1) = 0;
+    virtual QImage image()                = 0;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -67,24 +67,17 @@ class KFACE_EXPORT QListImageListProvider : public ImageListProvider
 {
 public:
 
-    QListImageListProvider(const QList<QImage>& lst)
-        : list(lst),
-          it(list.constBegin())
-    {
-    }
+    QListImageListProvider(const QList<QImage>& lst);
+    QListImageListProvider();
 
-    QListImageListProvider()
-        : it(list.constBegin())
-    {
-    }
+    void reset();
 
-    virtual int  size()  const                  { return list.size();           }
-    virtual bool atEnd() const                  { return it == list.constEnd(); }
-    virtual void proceed(int steps = 1)         { it += steps;                  }
+public:
 
-    void reset()                                { it = list.constBegin();       }
-
-    virtual QImage image()                      { return *it;                   }
+    virtual int    size()  const;
+    virtual bool   atEnd() const;
+    virtual void   proceed(int steps = 1);
+    virtual QImage image();
 
 public:
 
@@ -98,10 +91,10 @@ class KFACE_EXPORT EmptyImageListProvider : public ImageListProvider
 {
 public:
 
-    virtual int  size()  const          { return 0;        }
-    virtual bool atEnd() const          { return true;     }
-    virtual void proceed(int steps = 1) { Q_UNUSED(steps)  }
-    virtual QImage image()              { return QImage(); }
+    virtual int    size()  const;
+    virtual bool   atEnd() const;
+    virtual void   proceed(int steps = 1);
+    virtual QImage image();
 };
 
 // ----------------------------------------------------------------------------------------
@@ -116,9 +109,7 @@ class KFACE_EXPORT TrainingDataProvider
 {
 public:
 
-    virtual ~TrainingDataProvider()
-    {
-    }
+    virtual ~TrainingDataProvider();
 
     /**
      * Provides those images for the given identity that have not yet been
