@@ -6,3 +6,9 @@ endif()
 
 set(Kface_LIBRARY Kface::kface)
 set(Kface_LIBRARIES ${Kface_LIBRARY})
+
+# set uppercase variables for compatibility
+set(KFACE_FOUND TRUE)
+set(KFACE_INCLUDE_DIR "${Kface_INCLUDE_DIR}")
+set(KFACE_LIBRARIES "${Kface_LIBRARIES}")
+set(KFACE_DEFINITIONS)
