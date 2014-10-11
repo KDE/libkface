@@ -28,23 +28,23 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 SET(detect_SRCS detect.cpp)
 KDE4_ADD_EXECUTABLE(detect ${detect_SRCS})
-TARGET_LINK_LIBRARIES(detect kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(detect kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
 
 SET(recognize_SRCS recognize.cpp)
 KDE4_ADD_EXECUTABLE(recognize ${recognize_SRCS})
-TARGET_LINK_LIBRARIES(recognize kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(recognize kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
 
 SET(align_SRCS align.cpp)
 KDE4_ADD_EXECUTABLE(align ${align_SRCS})
-TARGET_LINK_LIBRARIES(align kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES} )
+TARGET_LINK_LIBRARIES(align kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
 
 SET(preprocess_SRCS preprocess.cpp)
 KDE4_ADD_EXECUTABLE(preprocess ${preprocess_SRCS})
-TARGET_LINK_LIBRARIES(preprocess kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES} )
+TARGET_LINK_LIBRARIES(preprocess kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
 
 SET(traindb_SRCS traindb.cpp)
 KDE4_ADD_EXECUTABLE(traindb ${traindb_SRCS})
-TARGET_LINK_LIBRARIES(traindb kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(traindb kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
 
 # -----------------------------------------------------------------------------
 
@@ -64,4 +64,5 @@ TARGET_LINK_LIBRARIES(kfacegui kface ${KDE4_KDECORE_LIBS}
                                      ${KDE4_KIO_LIBS}
                                      ${QT_QTCORE_LIBRARY}
                                      ${QT_QTGUI_LIBRARY}
+                                     ${OpenCV_LIBRARIES}
                      )
