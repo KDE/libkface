@@ -111,8 +111,24 @@ IF (OpenCV_FOUND)
 
     # Install find cmake script to the system for client applications.
 
-    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKface.cmake
-            DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
+    INCLUDE(CMakePackageConfigHelpers)
+    CONFIGURE_PACKAGE_CONFIG_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/kface-config.cmake.in kface-config.cmake
+                                  INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
+                                  PATH_VARS INCLUDE_INSTALL_DIR
+                                  NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+    WRITE_BASIC_PACKAGE_VERSION_FILE(kface-config-version.cmake
+                                     VERSION "${KFACE_LIB_MAJOR_VERSION}.${KFACE_LIB_MINOR_VERSION}.${KFACE_LIB_PATCH_VERSION}"
+                                     COMPATIBILITY SameMajorVersion)
+    INSTALL(EXPORT Kface
+            DESTINATION "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
+            NAMESPACE Kface::
+            FILE Kface-export.cmake)
+    INSTALL(FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/kface-config.cmake
+            ${CMAKE_CURRENT_BINARY_DIR}/kface-config-version.cmake
+            DESTINATION
+            "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
+           )
 
 ELSE()
 
