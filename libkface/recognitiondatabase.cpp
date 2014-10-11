@@ -730,7 +730,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
     {
         try
         {
-            r->train(identity.id, d->preprocessingChain(images->image()), trainingContext);
+            r->train(identity.id(), d->preprocessingChain(images->image()), trainingContext);
         }
         catch (cv::Exception& e)
         {
