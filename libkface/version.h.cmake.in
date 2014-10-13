@@ -26,8 +26,6 @@
 #ifndef KFACE_VERSION_H
 #define KFACE_VERSION_H
 
-#include "libkface_export.h"
-
 static const char kface_version[] = "${KFACE_LIB_VERSION_STRING}";
 
 #define KFACE_VERSION ${KFACE_LIB_VERSION_ID}
