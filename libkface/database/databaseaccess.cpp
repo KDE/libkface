@@ -30,6 +30,7 @@
 
 // KDE includes
 
+#include <klibloader.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -38,6 +39,8 @@
 #include "databasecorebackend.h"
 #include "trainingdb.h"
 #include "schemaupdater.h"
+
+static const KCatalogLoader loader("libkface");
 
 namespace KFaceIface
 {
