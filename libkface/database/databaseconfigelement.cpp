@@ -219,7 +219,7 @@ bool DatabaseConfigElementLoader::readConfig()
     if (!file.exists())
     {
         errorMessage = i18n("Could not open the dbconfig.xml file. "
-                            "This file is installed with libkface"
+                            "This file is installed with libkface "
                             "and is absolutely required to run recognition. "
                             "Please check your installation.");
         return false;
