@@ -1,2 +1,3 @@
 #! /bin/sh
-$XGETTEXT libkface/database/*.cpp -o $podir/libkface.pot
+$XGETTEXT `find ./libkface -name "*.cpp" -o -name "*.h"` -o $podir/libkface.pot
+
