@@ -89,7 +89,7 @@ void Identity::setId(int id)
 
 QString Identity::attribute(const QString& att) const
 {
-    return d->attributes[att];
+    return d->attributes.value(att);
 }
 
 void Identity::setAttribute(const QString& att, const QString& val)
