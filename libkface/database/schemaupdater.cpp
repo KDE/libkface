@@ -162,8 +162,8 @@ bool SchemaUpdater::startUpdates()
             {
                 QString errorMsg = i18n("The database has been used with a more recent version of digiKam "
                                         "and has been updated to a database schema which cannot be used with this version. "
-                                        "(This means this digiKam version is too old, or the database format is to recent) "
-                                        "Please use the more recent version of digikam that you used before. ");
+                                        "(This means this digiKam version is too old, or the database format is to recent.) "
+                                        "Please use the more recent version of digikam that you used before.");
 
                 d->access->setLastError(errorMsg);
 
@@ -189,8 +189,8 @@ bool SchemaUpdater::startUpdates()
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
-            QString errorMsg = i18n("Failed to create tables in database.\n ")
-                               + d->access->backend()->lastError();
+            QString errorMsg = i18n("Failed to create tables in database.\n%1",
+                                    d->access->backend()->lastError());
             d->access->setLastError(errorMsg);
 
             if (d->observer)

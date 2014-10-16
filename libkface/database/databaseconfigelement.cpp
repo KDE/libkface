@@ -227,7 +227,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        errorMessage = i18n("Could not open dbconfig.xml file <filename>%1</filename>").arg(filepath);
+        errorMessage = i18n("Could not open dbconfig.xml file <filename>%1</filename>", filepath);
         return false;
     }
 
@@ -237,7 +237,7 @@ bool DatabaseConfigElementLoader::readConfig()
     {
         file.close();
         errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
-                            "is invalid and cannot be read.").arg(filepath);
+                            "is invalid and cannot be read.", filepath);
         return false;
     }
 
@@ -248,7 +248,7 @@ bool DatabaseConfigElementLoader::readConfig()
     if (element.isNull())
     {
         errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
-                            "is missing the required element <icode>%2</icode>").arg(filepath).arg(element.tagName());
+                            "is missing the required element <icode>%2</icode>", filepath, element.tagName());
         return false;
     }
 
@@ -266,7 +266,7 @@ bool DatabaseConfigElementLoader::readConfig()
     {
         errorMessage = i18n("An old version of the dbconfig.xml file <filename>%1</filename> "
                             "is found. Please ensure that the version released "
-                            "with the running version of digiKam is installed. ").arg(filepath);
+                            "with the running version of digiKam is installed.", filepath);
         return false;
     }
 
