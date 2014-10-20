@@ -265,8 +265,8 @@ bool DatabaseConfigElementLoader::readConfig()
     if (version < dbconfig_xml_version)
     {
         errorMessage = i18n("An old version of the dbconfig.xml file <filename>%1</filename> "
-                            "is found. Please ensure that the version released "
-                            "with the running version of digiKam is installed.", filepath);
+                            "is found. Please ensure that the right version of libkface "
+                            "is installed.", filepath);
         return false;
     }
 

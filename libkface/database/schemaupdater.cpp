@@ -160,10 +160,10 @@ bool SchemaUpdater::startUpdates()
             }
             else
             {
-                QString errorMsg = i18n("The database has been used with a more recent version of digiKam "
+                QString errorMsg = i18n("The database has been used with a more recent version of libkface "
                                         "and has been updated to a database schema which cannot be used with this version. "
-                                        "(This means this digiKam version is too old, or the database format is to recent.) "
-                                        "Please use the more recent version of digikam that you used before.");
+                                        "(This means this libkface version is too old, or the database format is to recent.) "
+                                        "Please use the more recent version of libkface that you used before.");
 
                 d->access->setLastError(errorMsg);
 
