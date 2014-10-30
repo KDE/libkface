@@ -81,11 +81,16 @@ INSTALL(TARGETS kface EXPORT Kface ${INSTALL_TARGETS_DEFAULT_ARGS})
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
         DESTINATION ${DATA_INSTALL_DIR}/libkface/database )
 
-INSTALL(FILES facedetector.h
-              recognitiondatabase.h
-              identity.h
-              dataproviders.h
-              libkface_export.h
-              ${CMAKE_CURRENT_BINARY_DIR}/version.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
-       )
+# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
+IF(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
+
+    INSTALL(FILES facedetector.h
+                  recognitiondatabase.h
+                  identity.h
+                  dataproviders.h
+                  libkface_export.h
+                  ${CMAKE_CURRENT_BINARY_DIR}/version.h
+            DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
+        )
+
+ENDIF()
