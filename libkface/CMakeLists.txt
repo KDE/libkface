@@ -1,33 +1,15 @@
-# ===========================================================
 #
-# This file is a part of digiKam project
-# <a href="http://www.digikam.org">http://www.digikam.org</a>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
-# @date   2010-06-16
-# @brief  LibKFace library interface for KDE
-#
-# @author Copyright (C) 2010-2014 by Gilles Caulier
-#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
-#
-# This program is free software; you can redistribute it
-# and/or modify it under the terms of the GNU General
-# Public License as published by the Free Software Foundation;
-# either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# ============================================================
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-REMOVE_DEFINITIONS(-DQT_NO_STL)
+remove_definitions(-DQT_NO_STL)
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in   ${CMAKE_CURRENT_BINARY_DIR}/version.h)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libopencv.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libopencv.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in   ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libopencv.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libopencv.h)
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
+include_directories(${CMAKE_CURRENT_BINARY_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
@@ -36,7 +18,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}
 #                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
                    )
 
-SET(kface_LIB_SRCS facedetector.cpp
+set(kface_LIB_SRCS facedetector.cpp
                    identity.cpp
                    dataproviders.cpp
                    recognitiondatabase.cpp
@@ -49,7 +31,7 @@ SET(kface_LIB_SRCS facedetector.cpp
 #                   preprocessing-tantriggs/tantriggspreprocessor.cpp
    )
 
-SET(kface_database_LIB_SRCS database/databaseaccess.cpp
+set(kface_database_LIB_SRCS database/databaseaccess.cpp
                             database/databasecorebackend.cpp
                             database/databaseparameters.cpp
                             database/dbactiontype.cpp
@@ -63,7 +45,7 @@ SET(kface_database_LIB_SRCS database/databaseaccess.cpp
 
 KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${kface_database_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
+target_link_libraries(kface ${KDE4_KDECORE_LIBS}
                             ${KDE4_KDEUI_LIBS}
 
                             ${QT_QTGUI_LIBRARY}
@@ -73,24 +55,24 @@ TARGET_LINK_LIBRARIES(kface ${KDE4_KDECORE_LIBS}
                             ${OpenCV_LIBRARIES}
                       )
 
-SET_TARGET_PROPERTIES(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
+set_target_properties(kface PROPERTIES VERSION ${KFACE_LIB_SO_VERSION_STRING}
                             SOVERSION ${KFACE_LIB_SO_CUR_VERSION})
 
-INSTALL(TARGETS kface EXPORT Kface ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kface EXPORT Kface ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
         DESTINATION ${DATA_INSTALL_DIR}/libkface/database )
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-IF(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
+if(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
 
-    INSTALL(FILES facedetector.h
+    install(FILES facedetector.h
                   recognitiondatabase.h
                   identity.h
                   dataproviders.h
                   libkface_export.h
                   ${CMAKE_CURRENT_BINARY_DIR}/version.h
             DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
-        )
+           )
 
-ENDIF()
+endif()
