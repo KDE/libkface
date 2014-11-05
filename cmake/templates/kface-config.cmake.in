@@ -1,14 +1,15 @@
 @PACKAGE_INIT@
 set_and_check(Kface_INCLUDE_DIR @PACKAGE_INCLUDE_INSTALL_DIR@)
+
 if(NOT TARGET Kface::kface)
   include(${CMAKE_CURRENT_LIST_DIR}/Kface-export.cmake)
 endif()
 
-set(Kface_LIBRARY Kface::kface)
+set(Kface_LIBRARY   Kface::kface)
 set(Kface_LIBRARIES ${Kface_LIBRARY})
 
 # set uppercase variables for compatibility
-set(KFACE_FOUND TRUE)
+set(KFACE_FOUND       TRUE)
 set(KFACE_INCLUDE_DIR "${Kface_INCLUDE_DIR}")
-set(KFACE_LIBRARIES "${Kface_LIBRARIES}")
+set(KFACE_LIBRARIES   "${Kface_LIBRARIES}")
 set(KFACE_DEFINITIONS)
