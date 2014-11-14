@@ -28,6 +28,8 @@
 #include <QApplication>
 #include <QDir>
 #include <QImage>
+#include <QThreadPool>
+#include <QRunnable>
 
 // KDE includes
 
@@ -41,48 +43,78 @@ using namespace KFaceIface;
 
 // --------------------------------------------------------------------------------------------------
 
+const int firstMultiplier = 20;
+const int secondMultiplier = 20;
+
+class Runnable : public QRunnable
+{
+public:
+    Runnable(int number, RecognitionDatabase db)
+        : number(number), db(db)
+    {
+    }
+
+    virtual void run()
+    {
+        QImage image(256, 256, QImage::Format_ARGB32);
+        image.fill(Qt::red);
+
+        Identity identity;
+
+        // Populate database.
+
+        for (int i=number*secondMultiplier ; i < number*secondMultiplier+secondMultiplier; i++)
+        {
+            QString name      = QString("face%1").arg(i);
+            kDebug() << "Record Identity " << name << " to DB";
+            QMap<QString, QString> attributes;
+            attributes["name"] = name;
+            identity           = db.addIdentity(attributes);
+            db.train(identity, image, "test application");
+        }
+        qDebug() << "Trained group" << number;
+
+        // Check records in database.
+
+        for (int i=number*secondMultiplier ; i < number*secondMultiplier+secondMultiplier; i++)
+        {
+            QString name = QString("face%1").arg(i);
+            identity     = db.findIdentity("name", name);
+
+            if (!identity.isNull())
+            {
+                kDebug() << "Identity " << name << " is present in DB";
+            }
+            else
+            {
+                kDebug() << "Identity " << name << " is absent in DB";
+            }
+        }
+    }
+
+    const int number;
+    RecognitionDatabase db;
+};
+
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
 
     RecognitionDatabase db = RecognitionDatabase::addDatabase(QDir::currentPath());
+    QThreadPool pool;
+    pool.setMaxThreadCount(101);
 
-    QImage image(256, 256, QImage::Format_ARGB32);
-    image.fill(Qt::red);
-
-    Identity identity;
-
-    // Populate database.
-
-    for (int i=0 ; i < 100 ; i++)
+    for (int i=0;i<firstMultiplier;i++)
     {
-        QString name      = QString("face%1").arg(i);
-        kDebug() << "Record Identity " << name << " to DB";
-        QMap<QString, QString> attributes;
-        attributes["name"] = name;
-        identity           = db.addIdentity(attributes);
-        db.train(identity, image, "test application");
+        Runnable* r= new Runnable(i, db);
+        pool.start(r);
     }
+    pool.waitForDone();
 
-    // Check records in database.
-
-    for (int i=0 ; i < 100 ; i++)
-    {
-        QString name = QString("face%1").arg(i);
-        identity     = db.findIdentity("name", name);
-
-        if (!identity.isNull())
-        {
-            kDebug() << "Identity " << name << " is present in DB";
-        }
-        else
-        {
-            kDebug() << "Identity " << name << " is absent in DB";
-        }
-    }
 
     // Process recognition in database.
 
+    QImage image(256, 256, QImage::Format_ARGB32);
     QList<Identity> list = db.recognizeFaces(QList<QImage>() << image);
 
     if (!list.empty())
