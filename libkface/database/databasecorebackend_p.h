@@ -29,6 +29,7 @@
 #include <QHash>
 #include <QSqlDatabase>
 #include <QThread>
+#include <QThreadStorage>
 #include <QWaitCondition>
 
 // Local includes
@@ -38,40 +39,54 @@
 namespace KFaceIface
 {
 
+class DatabaseThreadData
+{
+public:
+
+    DatabaseThreadData();
+    ~DatabaseThreadData();
+
+    void closeDatabase();
+
+    QSqlDatabase database;
+    int          valid;
+    int          transactionCount;
+    QSqlError    lastError;
+};
+
 class DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
-    DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend);
-    virtual ~DatabaseCoreBackendPrivate() {}
+    explicit DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend);
+    virtual ~DatabaseCoreBackendPrivate();
 
     void init(const QString& connectionName, DatabaseLocking* const locking);
 
-    QString connectionName(QThread* const thread);
+    QString connectionName();
 
     QSqlDatabase databaseForThread();
     QSqlError    databaseErrorForThread();
     void         setDatabaseErrorForThread(const QSqlError& lastError);
 
+    QSqlDatabase createDatabaseConnection();
     void closeDatabaseForThread();
-    bool open(QSqlDatabase& db);
     bool incrementTransactionCount();
     bool decrementTransactionCount();
-    bool isInTransactionInOtherThread() const;
 
     bool isInMainThread() const;
-    bool isInUIThread() const;
+    bool isInUIThread()   const;
 
-    bool reconnectOnError() const;
-    bool isSQLiteLockError(const SqlQuery& query) const;
+    bool reconnectOnError()                                       const;
+    bool isSQLiteLockError(const SqlQuery& query)                 const;
     bool isSQLiteLockTransactionError(const QSqlError& lastError) const;
-    bool checkRetrySQLiteLockError(int retries);
-    bool isConnectionError(const SqlQuery& query) const;
-    bool needToConsultUserForError(const SqlQuery& query) const;
-    bool needToHandleWithErrorHandler(const SqlQuery& query) const;
-    void debugOutputFailedQuery(const QSqlQuery& query) const;
-    void debugOutputFailedTransaction(const QSqlError& error) const;
+    bool isConnectionError(const SqlQuery& query)                 const;
+    bool needToConsultUserForError(const SqlQuery& query)         const;
+    bool needToHandleWithErrorHandler(const SqlQuery& query)      const;
+    void debugOutputFailedQuery(const QSqlQuery& query)           const;
+    void debugOutputFailedTransaction(const QSqlError& error)     const;
 
+    bool checkRetrySQLiteLockError(int retries);
     bool checkOperationStatus();
     bool handleWithErrorHandler(const SqlQuery* const query);
     void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
@@ -80,19 +95,14 @@ public:
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();
-
     virtual void transactionFinished();
 
 public:
 
-    // this is always accessed in mutex context, no need for QThreadStorage
-    QHash<QThread*, QSqlDatabase>             threadDatabases;
-    // this is not only db.isValid(), but also "parameters changed, need to reopen"
-    QHash<QThread*, int>                      databasesValid;
-    // for recursive transactions
-    QHash<QThread*, int>                      transactionCount;
+    QThreadStorage<DatabaseThreadData*>       threadDataStorage;
 
-    QHash<QThread*, QSqlError>                databaseErrors;
+    // This compares to DatabaseThreadData's valid. If currentValidity is increased and > valid, the db is marked as invalid
+    int                                       currentValidity;
 
     bool                                      isInTransaction;
 
@@ -121,7 +131,7 @@ public :
     {
     public:
 
-        AbstractUnlocker(DatabaseCoreBackendPrivate* const d);
+        explicit AbstractUnlocker(DatabaseCoreBackendPrivate* const d);
         ~AbstractUnlocker();
 
         void finishAcquire();
@@ -157,7 +167,7 @@ public :
     {
     public:
 
-        ErrorLocker(DatabaseCoreBackendPrivate* const d);
+        explicit ErrorLocker(DatabaseCoreBackendPrivate* const d);
         void wait();
     };
 
@@ -167,7 +177,7 @@ public :
     {
     public:
 
-        BusyWaiter(DatabaseCoreBackendPrivate* const d);
+        explicit BusyWaiter(DatabaseCoreBackendPrivate* const d);
     };
 
 public :

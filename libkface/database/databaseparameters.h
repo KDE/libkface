@@ -52,6 +52,7 @@ public:
 
     QString databaseType;
     QString databaseName;
+    QString connectOptions;
 
     bool operator==(const DatabaseParameters& other) const;
     bool operator!=(const DatabaseParameters& other) const;

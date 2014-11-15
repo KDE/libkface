@@ -44,6 +44,7 @@ namespace KFaceIface
 {
 
 class DatabaseCoreBackendPrivate;
+class DatabaseErrorHandler;
 class SchemaUpdater;
 
 class DatabaseLocking
@@ -147,17 +148,18 @@ public:
      */
     void close();
 
-    // -----------------------------------------------------------
+public:
 
     class QueryState
     {
     public:
 
-        QueryState() : value(DatabaseCoreBackend::NoErrors)
+        QueryState()
+            : value(DatabaseCoreBackend::NoErrors)
         {
         }
 
-        QueryState(QueryStateEnum value)
+        QueryState(const QueryStateEnum value)
             : value(value)
         {
         }
@@ -176,6 +178,8 @@ public:
 
         QueryStateEnum value;
     };
+
+public:
 
     /**
      * Returns the current status of the database backend
@@ -275,10 +279,8 @@ public:
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        const QVariant& boundValue3, const QVariant& boundValue4,
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
-    QueryState execSql(const QString& sql,
-                       const QList<QVariant>& boundValues,
-                       QList<QVariant>* const values = 0,
-                       QVariant* const lastInsertId = 0);
+    QueryState execSql(const QString& sql, const QList<QVariant>& boundValues,
+                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     QueryState execSql(SqlQuery& preparedQuery, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(SqlQuery& preparedQuery, const QVariant& boundValue1,
@@ -438,6 +440,12 @@ public:
      */
     QSqlError lastSQLError();
 
+    /**
+     * Returns the maximum number of bound parameters allowed per query.
+     * This value depends on the database engine.
+     */
+    int maximumBoundValues() const;
+
     /*
         Qt SQL driver supported features
         SQLITE3:
@@ -461,11 +469,6 @@ public:
             QuerySize
             LastInsertId
     */
-
-private Q_SLOTS:
-
-    void slotThreadFinished();
-    void slotMainThreadFinished();
 
 protected:
 

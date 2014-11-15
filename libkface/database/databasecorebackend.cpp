@@ -21,12 +21,6 @@
  *
  * ============================================================ */
 
-/*
-#ifndef DATABASCOREBACKEND_DEBUG
-#define DATABASCOREBACKEND_DEBUG
-#endif
-*/
-
 #include "databasecorebackend.moc"
 #include "databasecorebackend_p.h"
 
@@ -51,8 +45,8 @@
 
 // Local includes
 
-#include "schemaupdater.h"
 #include "dbactiontype.h"
+#include "schemaupdater.h"
 
 namespace KFaceIface
 {
@@ -102,22 +96,65 @@ DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate*
 
 // -----------------------------------------------------------------------------------------
 
-DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend)
-    : q(backend)
+
+DatabaseThreadData::DatabaseThreadData()
+    : valid(0),
+      transactionCount(0)
 {
-    status                   = DatabaseCoreBackend::Unavailable;
-    isInTransaction          = false;
-    operationStatus          = DatabaseCoreBackend::ExecuteNormal;
-    errorLockOperationStatus = DatabaseCoreBackend::ExecuteNormal;
-    errorHandler             = 0;
-    lock                     = 0;
+}
+
+DatabaseThreadData::~DatabaseThreadData()
+{
+    if (transactionCount)
+    {
+        kDebug() << "WARNING !!! Transaction count is" << transactionCount << "when destroying database!!!";
+    }
+    closeDatabase();
+}
+
+void DatabaseThreadData::closeDatabase()
+{
+    QString connectionToRemove;
+    if (database.isOpen())
+    {
+        connectionToRemove = database.connectionName();
+    }
+
+    // Destroy object
+    database = QSqlDatabase();
+
+    valid            = 0;
+    transactionCount = 0;
+    lastError        = QSqlError();
+
+    // Remove connection
+    if (!connectionToRemove.isNull())
+    {
+        QSqlDatabase::removeDatabase(connectionToRemove);
+    }
+}
+
+DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend)
+    : currentValidity(0),
+      isInTransaction(false),
+      status(DatabaseCoreBackend::Unavailable),
+      lock(0),
+      operationStatus(DatabaseCoreBackend::ExecuteNormal),
+      errorLockOperationStatus(DatabaseCoreBackend::ExecuteNormal),
+      errorHandler(0),
+      q(backend)
+{
+}
+
+DatabaseCoreBackendPrivate::~DatabaseCoreBackendPrivate()
+{
+    // Must be shut down from the main thread.
+    // Clean up the QThreadStorage. It deletes any stored data.
+    threadDataStorage.setLocalData(0);
 }
 
 void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* const l)
 {
-    QObject::connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
-                     q, SLOT(slotMainThreadFinished()));
-
     backendName = name;
     lock        = l;
 
@@ -133,84 +170,44 @@ void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* cons
 // finishing of the thread.
 QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
 {
-    QThread* const thread = QThread::currentThread();
-    QSqlDatabase db       = threadDatabases[thread];
-    int isValid           = databasesValid[thread];
-
-    if (!isValid || !db.isOpen())
+    DatabaseThreadData* threadData = 0;
+    if (!threadDataStorage.hasLocalData())
     {
-        // need to open a db for thread
-        bool success = open(db);
-
-        if (!success)
-        {
-            kDebug() << "Error while opening the database. Details: [" << db.lastError() << "]";
-        }
-
-        QObject::connect(thread, SIGNAL(finished()),
-                         q, SLOT(slotThreadFinished()));
+        threadData = new DatabaseThreadData;
+        threadDataStorage.setLocalData(threadData);
     }
-
-#ifdef DATABASCOREBACKEND_DEBUG
     else
     {
-        kDebug() << "Database ["<< connectionName(thread) <<"] already open for thread ["<< thread <<"].";
+        threadData = threadDataStorage.localData();
     }
 
-#endif
-
-    return db;
-}
-
-void DatabaseCoreBackendPrivate::closeDatabaseForThread()
-{
-    QThread* const thread = QThread::currentThread();
-
-    // scope, so that db is destructed when calling removeDatabase
+    // do we need to reopen the database because parameter changed and validity was increased?
+    if (threadData->valid && threadData->valid < currentValidity)
     {
-        QSqlDatabase db = threadDatabases[thread];
+        threadData->closeDatabase();
+    }
 
-        if (db.isValid())
+    if (!threadData->valid || !threadData->database.isOpen())
+    {
+        threadData->database = createDatabaseConnection();
+
+        if (threadData->database.open())
         {
-            db.close();
+            threadData->valid = currentValidity;
+        }
+        else
+        {
+            kDebug() << "Error while opening the database. Error was" << threadData->database.lastError();
         }
     }
 
-    threadDatabases.remove(thread);
-    databaseErrors.remove(thread);
-    databasesValid[thread] = 0;
-    transactionCount.remove(thread);
-    QSqlDatabase::removeDatabase(connectionName(thread));
+    return threadData->database;
 }
 
-QSqlError DatabaseCoreBackendPrivate::databaseErrorForThread()
+QSqlDatabase DatabaseCoreBackendPrivate::createDatabaseConnection()
 {
-    QThread* const thread = QThread::currentThread();
-    return databaseErrors[thread];
-}
-
-void DatabaseCoreBackendPrivate::setDatabaseErrorForThread(const QSqlError& lastError)
-{
-    QThread* const thread = QThread::currentThread();
-    databaseErrors.insert(thread, lastError);
-}
-
-QString DatabaseCoreBackendPrivate::connectionName(QThread* const thread)
-{
-    return backendName + QString::number((quintptr)thread);
-}
-
-bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
-{
-    if (db.isValid())
-    {
-        db.close();
-    }
-
-    QThread* const thread = QThread::currentThread();
-    db                    = QSqlDatabase::addDatabase(parameters.databaseType, connectionName(thread));
-
-    QString connectOptions;// = parameters.connectOptions;
+    QSqlDatabase db        = QSqlDatabase::addDatabase(parameters.databaseType, connectionName());
+    QString connectOptions = parameters.connectOptions;
 
     if (parameters.isSQLite())
     {
@@ -230,55 +227,48 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
 
     db.setDatabaseName(parameters.databaseName);
     db.setConnectOptions(connectOptions);
-    /*db.setHostName(parameters.hostName);
-    db.setPort(parameters.port);
-    db.setUserName(parameters.userName);
-    db.setPassword(parameters.password);*/
 
-    bool success = db.open();
+    return db;
+}
 
-    if (success)
+void DatabaseCoreBackendPrivate::closeDatabaseForThread()
+{
+    if (threadDataStorage.hasLocalData())
     {
-        db.exec("PRAGMA synchronous=1;");
+        threadDataStorage.localData()->closeDatabase();
     }
-    else
+}
+
+QSqlError DatabaseCoreBackendPrivate::databaseErrorForThread()
+{
+    if (threadDataStorage.hasLocalData())
     {
-        kDebug() << "Error while opening the database. Error was <" << db.lastError() << ">";
+        return threadDataStorage.localData()->lastError;
     }
+    return QSqlError();
+}
 
-    threadDatabases[thread]  = db;
-    databasesValid[thread]   = 1;
-    transactionCount[thread] = 0;
+void DatabaseCoreBackendPrivate::setDatabaseErrorForThread(const QSqlError& lastError)
+{
+    if (threadDataStorage.hasLocalData())
+    {
+        threadDataStorage.localData()->lastError = lastError;
+    }
+}
 
-    return success;
+QString DatabaseCoreBackendPrivate::connectionName()
+{
+    return backendName + QString::number((quintptr)QThread::currentThread());
 }
 
 bool DatabaseCoreBackendPrivate::incrementTransactionCount()
 {
-    QThread* const thread = QThread::currentThread();
-    return !transactionCount[thread]++;
+    return (!threadDataStorage.localData()->transactionCount++);
 }
 
 bool DatabaseCoreBackendPrivate::decrementTransactionCount()
 {
-    QThread* const thread = QThread::currentThread();
-    return !--transactionCount[thread];
-}
-
-bool DatabaseCoreBackendPrivate::isInTransactionInOtherThread() const
-{
-    QThread* const thread = QThread::currentThread();
-    QHash<QThread*, int>::const_iterator it;
-
-    for (it = transactionCount.constBegin(); it != transactionCount.constEnd(); ++it)
-    {
-        if (it.key() != thread && it.value())
-        {
-            return true;
-        }
-    }
-
-    return false;
+    return (!--threadDataStorage.localData()->transactionCount);
 }
 
 bool DatabaseCoreBackendPrivate::isInMainThread() const
@@ -295,7 +285,7 @@ bool DatabaseCoreBackendPrivate::isInUIThread() const
         return false;
     }
 
-    return QThread::currentThread() == app->thread();
+    return (QThread::currentThread() == app->thread());
 }
 
 bool DatabaseCoreBackendPrivate::reconnectOnError() const
@@ -325,7 +315,8 @@ bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery& query) const
         return false;
     }
 
-    return (query.lastError().type() == QSqlError::ConnectionError || query.lastError().number()==2006);
+    return query.lastError().type()   == QSqlError::ConnectionError ||
+           query.lastError().number() == 2006;
 }
 
 bool DatabaseCoreBackendPrivate::needToConsultUserForError(const SqlQuery&) const
@@ -336,12 +327,15 @@ bool DatabaseCoreBackendPrivate::needToConsultUserForError(const SqlQuery&) cons
 
 bool DatabaseCoreBackendPrivate::needToHandleWithErrorHandler(const SqlQuery& query) const
 {
-    return isConnectionError(query) || needToConsultUserForError(query);
+    return (isConnectionError(query) || needToConsultUserForError(query));
 }
 
 bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
 {
-    kDebug() << "Database is locked. Waited" << retries*10;
+    if (!(retries % 25))
+    {
+        kDebug() << "Database is locked. Waited" << retries*10;
+    }
 
     const int uiMaxRetries = 50;
     const int maxRetries   = 1000;
@@ -476,7 +470,7 @@ bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* const qu
     }
     else
     {
-        //TODO check if it's better to use an own error handler for kio slaves.
+        // TODO check if it's better to use an own error handler for kio slaves.
         // But for now, close only the database in the hope, that the next
         // access will be successful.
         closeDatabaseForThread();
@@ -755,18 +749,6 @@ void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler* const ha
     d->errorHandler = handler;
 }
 
-void DatabaseCoreBackend::slotThreadFinished()
-{
-    Q_D(DatabaseCoreBackend);
-    d->closeDatabaseForThread();
-}
-
-void DatabaseCoreBackend::slotMainThreadFinished()
-{
-    Q_D(DatabaseCoreBackend);
-    d->closeDatabaseForThread();
-}
-
 bool DatabaseCoreBackend::isCompatible(const DatabaseParameters& parameters)
 {
     return QSqlDatabase::drivers().contains(parameters.databaseType);
@@ -776,10 +758,8 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
 {
     Q_D(DatabaseCoreBackend);
     d->parameters = parameters;
-
-    // Force possibly opened thread dbs to re-open with new parameters.
-    // They are not accessible from this thread!
-    d->databasesValid.clear();
+    // This will make possibly opened thread dbs reload at next access
+    d->currentValidity++;
 
     int retries = 0;
 
@@ -913,7 +893,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery&
     return DatabaseCoreBackend::NoErrors;
 }
 
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, QList<QVariant>* const values, QVariant* const lastInsertId)
 {
@@ -922,51 +902,53 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QVariant& boundValue1,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             const QVariant& boundValue1, const QVariant& boundValue2,
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        const QVariant& boundValue3, QList<QVariant>* const values,
-        QVariant* const lastInsertId)
+                                                             const QVariant& boundValue1, const QVariant& boundValue2,
+                                                             const QVariant& boundValue3, QList<QVariant>* const values,
+                                                             QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        const QVariant& boundValue3, const QVariant& boundValue4,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             const QVariant& boundValue1, const QVariant& boundValue2,
+                                                             const QVariant& boundValue3, const QVariant& boundValue4,
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3, boundValue4);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QList<QVariant>& boundValues,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValues);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, bindingMap);
     return handleQueryResult(query, values, lastInsertId);
 }
+
+// -------------------------------------------------------------------------------------
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery, QList<QVariant>* const values, QVariant* const lastInsertId)
 {
@@ -1013,6 +995,8 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQ
     execQuery(preparedQuery, boundValues);
     return handleQueryResult(preparedQuery, values, lastInsertId);
 }
+
+// -------------------------------------------------------------------------------------
 
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QVariant& boundValue1)
 {
@@ -1066,6 +1050,8 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql)
     return query;
 }
 
+// -------------------------------------------------------------------------------------
+
 void DatabaseCoreBackend::execQuery(SqlQuery& query, const QVariant& boundValue1)
 {
     query.bindValue(0, boundValue1);
@@ -1110,6 +1096,8 @@ void DatabaseCoreBackend::execQuery(SqlQuery& query, const QList<QVariant>& boun
 
     exec(query);
 }
+
+// -------------------------------------------------------------------------------------
 
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap)
 {
@@ -1252,7 +1240,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
     SqlQuery query = prepareQuery(preparedString);
 
-    for (int i=0; i<valuesToBind.size(); ++i)
+    for (int i=0; i < valuesToBind.size(); ++i)
     {
         query.bindValue(i, valuesToBind.at(i));
     }
@@ -1262,12 +1250,12 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const DatabaseAction& action, const QVariant& id,
-        const QStringList fieldNames, const QList<QVariant>& values)
+                                                                        const QStringList fieldNames, const QList<QVariant>& values)
 {
     QMap<QString, QVariant> parameters;
     QMap<QString, QVariant> fieldValueMap;
 
-    for (int i=0; i<fieldNames.size(); ++i)
+    for (int i = 0; i < fieldNames.size(); ++i)
     {
         fieldValueMap.insert(fieldNames.at(i), values.at(i));
     }
@@ -1285,7 +1273,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const Da
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const QString& action, const QVariant& id,
-        const QStringList fieldNames, const QList<QVariant>& values)
+                                                                        const QStringList fieldNames, const QList<QVariant>& values)
 {
     return execUpsertDBAction(getDBAction(action), id, fieldNames, values);
 }
@@ -1516,6 +1504,7 @@ SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
 #endif
     query.prepare(old.lastQuery());
     query.setForwardOnly(old.isForwardOnly());
+
     // only for positional binding
     QList<QVariant> boundValues = old.boundValues().values();
 
@@ -1635,7 +1624,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::commitTransaction()
 bool DatabaseCoreBackend::isInTransaction() const
 {
     Q_D(const DatabaseCoreBackend);
-    return d->isInTransactionInOtherThread();
+    return d->isInTransaction;
 }
 
 void DatabaseCoreBackend::rollbackTransaction()
@@ -1661,6 +1650,20 @@ QString DatabaseCoreBackend::lastError()
 {
     Q_D(DatabaseCoreBackend);
     return d->databaseForThread().lastError().text();
+}
+
+int DatabaseCoreBackend::maximumBoundValues() const
+{
+    Q_D(const DatabaseCoreBackend);
+
+    if (d->parameters.isSQLite())
+    {
+        return 999;   // SQLITE_MAX_VARIABLE_NUMBER
+    }
+    else
+    {
+        return 65535; // MySQL
+    }
 }
 
 } // namespace KFaceIface
