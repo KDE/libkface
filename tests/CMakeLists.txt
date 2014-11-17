@@ -9,27 +9,28 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libkface)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 set(detect_SRCS detect.cpp)
-KDE4_ADD_EXECUTABLE(detect ${detect_SRCS})
-target_link_libraries(detect kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
+add_executable(detect ${detect_SRCS})
+target_link_libraries(detect kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
 set(recognize_SRCS recognize.cpp)
-KDE4_ADD_EXECUTABLE(recognize ${recognize_SRCS})
-target_link_libraries(recognize kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
+add_executable(recognize ${recognize_SRCS})
+target_link_libraries(recognize kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
 set(align_SRCS align.cpp)
-KDE4_ADD_EXECUTABLE(align ${align_SRCS})
-target_link_libraries(align kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
+add_executable(align ${align_SRCS})
+target_link_libraries(align kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
 set(preprocess_SRCS preprocess.cpp)
-KDE4_ADD_EXECUTABLE(preprocess ${preprocess_SRCS})
-target_link_libraries(preprocess kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
+add_executable(preprocess ${preprocess_SRCS})
+target_link_libraries(preprocess kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
 set(traindb_SRCS traindb.cpp)
-KDE4_ADD_EXECUTABLE(traindb ${traindb_SRCS})
-target_link_libraries(traindb kface ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OpenCV_LIBRARIES})
+add_executable(traindb ${traindb_SRCS})
+target_link_libraries(traindb kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
 # -----------------------------------------------------------------------------
-
+#PORT QT5
+if (false) 
 set(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/faceitem.cpp
@@ -38,13 +39,13 @@ set(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/fancyrect.cpp
    )
 
-KDE4_ADD_UI_FILES(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
-KDE4_ADD_EXECUTABLE(kfacegui ${kfacegui_SRCS})
+ki18n_wrap_ui(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
+add_executable(kfacegui ${kfacegui_SRCS})
 
-target_link_libraries(kfacegui kface ${KDE4_KDECORE_LIBS}
-                                     ${KDE4_KDEUI_LIBS}
-                                     ${KDE4_KIO_LIBS}
-                                     ${QT_QTCORE_LIBRARY}
-                                     ${QT_QTGUI_LIBRARY}
+target_link_libraries(kfacegui kface KF5::KDELibs4Support
+                                     KF5::KIOCore
+                                     Qt5::Core
+                                     Qt5::Gui
                                      ${OpenCV_LIBRARIES}
                      )
+endif()

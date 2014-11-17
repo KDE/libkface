@@ -343,9 +343,9 @@ Identity RecognitionDatabase::identity(int id) const
 bool RecognitionDatabase::Private::identityContains(const Identity& identity, const QString& attribute, const QString& value) const
 {
     QMap<QString, QString> map                = identity.attributesMap();
-    QMap<QString, QString>::const_iterator it = map.find(attribute);
+    QMap<QString, QString>::const_iterator it = map.constFind(attribute);
 
-    for (; it != map.end() && it.key() == attribute; ++it)
+    for (; it != map.constEnd() && it.key() == attribute; ++it)
     {
         if (it.value() == value)
         {

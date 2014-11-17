@@ -69,7 +69,7 @@ QList<cv::Mat> toImages(const QStringList& paths)
     foreach (const QString& path, paths)
     {
         QByteArray s = path.toLocal8Bit();
-        images << cv::imread(std::string(s), CV_LOAD_IMAGE_GRAYSCALE);
+        images << cv::imread(std::string(s.data()), CV_LOAD_IMAGE_GRAYSCALE);
     }
 
     return images;

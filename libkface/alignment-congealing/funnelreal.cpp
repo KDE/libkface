@@ -219,7 +219,7 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
 {
     try
     {
-        std::ifstream trainingInfo(path.toLocal8Bit());
+        std::ifstream trainingInfo(path.toLocal8Bit().data());
         trainingInfo.exceptions(std::ifstream::badbit);
 
         trainingInfo >> numFeatureClusters >> edgeDescDim;

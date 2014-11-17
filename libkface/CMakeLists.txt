@@ -43,15 +43,12 @@ set(kface_database_LIB_SRCS database/databaseaccess.cpp
                             database/dbcontainers.cpp
    )
 
-KDE4_ADD_LIBRARY(kface SHARED ${kface_LIB_SRCS} ${kface_database_LIB_SRCS})
+add_library(kface SHARED ${kface_LIB_SRCS} ${kface_database_LIB_SRCS})
 
-target_link_libraries(kface ${KDE4_KDECORE_LIBS}
-                            ${KDE4_KDEUI_LIBS}
-
-                            ${QT_QTGUI_LIBRARY}
-                            ${QT_QTXML_LIBRARY}
-                            ${QT_QTSQL_LIBRARY}
-
+target_link_libraries(kface KF5::KDELibs4Support
+                            Qt5::Gui
+                            Qt5::Xml
+                            Qt5::Sql
                             ${OpenCV_LIBRARIES}
                       )
 

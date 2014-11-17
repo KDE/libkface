@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "faceitem.moc"
+#include "faceitem.h"
 
 // Qt includes
 

@@ -94,7 +94,7 @@ void TrainingDB::updateIdentity(const Identity& p)
     QMap<QString, QString> map = p.attributesMap();
     QMap<QString, QString>::const_iterator it;
 
-    for (it = map.begin(); it != map.end(); ++it)
+    for (it = map.constBegin(); it != map.constEnd(); ++it)
     {
         d->db->execSql("INSERT INTO IdentityAttributes (id, attribute, value) VALUES (?, ?,?)", p.id(), it.key(), it.value());
     }
