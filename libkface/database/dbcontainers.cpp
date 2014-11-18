@@ -20,10 +20,7 @@
  * ============================================================ */
 
 #include "dbcontainers.h"
-
-// KDE includes
-
-#include <kdebug.h>
+#include "libkface_debug.h"
 
 namespace KFaceIface
 {
@@ -58,12 +55,12 @@ cv::Mat OpenCVMatData::toMat() const
 
     if (data.isEmpty())
     {
-        kWarning() << "Array data to clone is empty.";
+        qCWarning(LIBKFACE_LOG) << "Array data to clone is empty.";
     }
 
     cv::Mat mat(rows, cols, type, (void*)data.constData());
 
-    kDebug() << "Clone Array size [" << rows << ", " << cols << "] of type " << type;
+    qCDebug(LIBKFACE_LOG) << "Clone Array size [" << rows << ", " << cols << "] of type " << type;
 
     return mat.clone();
 }

@@ -21,6 +21,7 @@
  *
  * ============================================================ */
 
+#include "libkface_debug.h"
 // Qt includes
 
 #include <QDomDocument>
@@ -32,7 +33,6 @@
 // KDE includes
 
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
@@ -75,7 +75,7 @@ DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 
     if (!isValid)
     {
-        kWarning() << errorMessage;
+        qCWarning(LIBKFACE_LOG) << errorMessage;
     }
 }
 
@@ -86,7 +86,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (!databaseElement.hasAttribute("name"))
     {
-        kDebug() << "Missing statement attribute <name>.";
+        qCDebug(LIBKFACE_LOG) << "Missing statement attribute <name>.";
     }
 
     configElement.databaseID = databaseElement.attribute("name");
@@ -94,7 +94,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <databaseName>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <databaseName>.";
     }
 
     configElement.databaseName = element.text();
@@ -102,7 +102,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <userName>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <userName>.";
     }
 
     configElement.userName = element.text();
@@ -110,7 +110,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <password>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <password>.";
     }
 
     configElement.password = element.text();
@@ -118,7 +118,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <hostName>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <hostName>.";
     }
 
     configElement.hostName = element.text();
@@ -126,7 +126,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <port>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <port>.";
     }
 
     configElement.port = element.text();
@@ -134,7 +134,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <connectoptions>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <connectoptions>.";
     }
 
     configElement.connectOptions = element.text();
@@ -142,7 +142,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <dbservercmd>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <dbservercmd>.";
     }
 
     configElement.dbServerCmd = element.text();
@@ -150,7 +150,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <dbinitcmd>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <dbinitcmd>.";
     }
 
     configElement.dbInitCmd = element.text();
@@ -158,7 +158,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
     if (element.isNull())
     {
-        kDebug() << "Missing element <dbactions>.";
+        qCDebug(LIBKFACE_LOG) << "Missing element <dbactions>.";
     }
 
     readDBActions(element, configElement);
@@ -174,12 +174,12 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
     {
         if (!dbActionElement.hasAttribute("name"))
         {
-            kDebug() << "Missing statement attribute <name>.";
+            qCDebug(LIBKFACE_LOG) << "Missing statement attribute <name>.";
         }
 
         DatabaseAction action;
         action.name = dbActionElement.attribute("name");
-        //kDebug() << "Getting attribute " << dbActionElement.attribute("name");
+        //qCDebug(LIBKFACE_LOG) << "Getting attribute " << dbActionElement.attribute("name");
 
         if (dbActionElement.hasAttribute("mode"))
         {
@@ -192,7 +192,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
         {
             if (!databaseElement.hasAttribute("mode"))
             {
-                kDebug() << "Missing statement attribute <mode>.";
+                qCDebug(LIBKFACE_LOG) << "Missing statement attribute <mode>.";
             }
 
             DatabaseActionElement actionElement;
@@ -252,7 +252,7 @@ bool DatabaseConfigElementLoader::readConfig()
     QDomElement versionElement = element.namedItem("version").toElement();
     int version = 0;
 
-    kDebug() << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
+    qCDebug(LIBKFACE_LOG) << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
 
     if (!versionElement.isNull())
     {

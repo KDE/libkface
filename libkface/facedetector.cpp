@@ -27,14 +27,13 @@
 
 // OpenCV includes need to show up before Qt includes
 #include "opencvfacedetector.h"
-
+#include "libkface_debug.h"
 // Qt includes
 
 #include <QSharedData>
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <KGlobal>
 // Local includes
@@ -74,7 +73,7 @@ public:
             // Last try to find OpenCV shared files, using cmake env variables.
             cascadeDirs << QString("%1/haarcascades").arg(OPENCV_ROOT_PATH);
 
-            kDebug() << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
+            qCDebug(LIBKFACE_LOG) << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
 
             m_backend = new OpenCVFaceDetector(cascadeDirs);
             applyParameters();
@@ -175,11 +174,11 @@ QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& origin
     }
     catch (cv::Exception& e)
     {
-        kError() << "cv::Exception:" << e.what();
+        qCCritical(LIBKFACE_LOG) << "cv::Exception:" << e.what();
     }
     catch(...)
     {
-        kError() << "Default exception from OpenCV";
+        qCCritical(LIBKFACE_LOG) << "Default exception from OpenCV";
     }
 
     return result;

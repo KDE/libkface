@@ -22,13 +22,7 @@
  * ============================================================ */
 
 #include "schemaupdater.h"
-
-// Qt includes
-
-
-// KDE includes
-
-#include <kdebug.h>
+#include "libkface_debug.h"
 #include <klocale.h>
 
 // Local includes
@@ -113,7 +107,7 @@ bool SchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version         = d->access->db()->setting("DBVersion");
         QString versionRequired = d->access->db()->setting("DBVersionRequired");
-        kDebug() << "Have a database structure version " << version;
+        qCDebug(LIBKFACE_LOG) << "Have a database structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && d->access->parameters().isSQLite())
@@ -125,7 +119,7 @@ bool SchemaUpdater::startUpdates()
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kWarning() << "DBVersion not available! Giving up schema upgrading.";
+            qCWarning(LIBKFACE_LOG) << "DBVersion not available! Giving up schema upgrading.";
 
             QString errorMsg = i18n("The database is not valid: "
                                     "the \"DBVersion\" setting does not exist. "
@@ -180,7 +174,7 @@ bool SchemaUpdater::startUpdates()
     }
     else
     {
-        //kDebug() << "No database file available";
+        //qCDebug(LIBKFACE_LOG) << "No database file available";
         DatabaseParameters parameters = d->access->parameters();
 
         // No legacy handling: start with a fresh db

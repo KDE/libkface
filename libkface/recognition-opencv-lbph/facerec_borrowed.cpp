@@ -37,15 +37,12 @@
  * ============================================================ */
 
 #include "facerec_borrowed.h"
-
+#include "libkface_debug.h"
 // C++ includes
 
 #include <set>
 #include <limits>
 
-// KDE includes
-
-#include <kdebug.h>
 
 using namespace cv;
 
@@ -452,7 +449,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             }
         }
 
-        kDebug() << s;
+        qCDebug(LIBKFACE_LOG) << s;
     }
     else if (m_statisticsMode == MostNearestNeighbors)
     {
@@ -495,7 +492,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             }
         }
 
-        kDebug() << s;
+        qCDebug(LIBKFACE_LOG) << s;
     }
 }
 
@@ -517,7 +514,7 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 
     if (!fr)
     {
-        kWarning() << "Cannot create LBPHFaceRecognizer instance";
+        qCWarning(LIBKFACE_LOG) << "Cannot create LBPHFaceRecognizer instance";
         return ptr;
     }
 
@@ -525,7 +522,7 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 
     if (ptr.empty())
     {
-        kWarning() << "LBPHFaceRecognizer instance is empty";
+        qCWarning(LIBKFACE_LOG) << "LBPHFaceRecognizer instance is empty";
     }
 
     return ptr;

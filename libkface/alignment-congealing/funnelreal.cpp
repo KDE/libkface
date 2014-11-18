@@ -32,7 +32,7 @@
  * ============================================================ */
 
 #include "funnelreal.h"
-
+#include "libkface_debug.h"
 // C++ includes
 
 #include <cmath>
@@ -47,7 +47,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 
 namespace KFaceIface
@@ -76,25 +75,25 @@ public:
 /*
         if(outerDimW - innerDimW < 2*windowSize)
         {
-            kDebug() << "difference between outerDimW and innerDimW is not greater than window size for SIFT descriptor)";
+            qCDebug(LIBKFACE_LOG) << "difference between outerDimW and innerDimW is not greater than window size for SIFT descriptor)";
             return -1;
         }
 
         if( (outerDimW - innerDimW) % 2 != 0)
         {
-            kDebug() << "shrinking innerDimW by 1 so outerDimW - innerDimW is divisible by 2";
+            qCDebug(LIBKFACE_LOG) << "shrinking innerDimW by 1 so outerDimW - innerDimW is divisible by 2";
             --innerDimW;
         }
 
         if(outerDimH - innerDimH < 2*windowSize)
         {
-            kDebug() << "difference between outerDimH and innerDimH is not greater than window size for SIFT descriptor)";
+            qCDebug(LIBKFACE_LOG) << "difference between outerDimH and innerDimH is not greater than window size for SIFT descriptor)";
             return -1;
         }
 
         if( (outerDimH - innerDimH) % 2 != 0)
         {
-            kDebug() << "shrinking innerDimH by 1 so outerDimH - innerDimH is divisible by 2";
+            qCDebug(LIBKFACE_LOG) << "shrinking innerDimH by 1 so outerDimH - innerDimH is divisible by 2";
             --innerDimH;
         }
 */
@@ -167,7 +166,7 @@ FunnelReal::FunnelReal()
 
     if (!QFileInfo(trainingFile).exists())
     {
-        kError() << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
+        qCCritical(LIBKFACE_LOG) << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
         return;
     }
 
@@ -266,11 +265,11 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
     }
     catch (const std::ifstream::failure& e)
     {
-        kError() << "Error loading Congealing/Funnel training data:" << e.what();
+        qCCritical(LIBKFACE_LOG) << "Error loading Congealing/Funnel training data:" << e.what();
     }
     catch(...)
     {
-        kError() << "Default exception";
+        qCCritical(LIBKFACE_LOG) << "Default exception";
     }
 
     computeGaussian(Gaussian, windowSize);

@@ -28,13 +28,9 @@
  * ============================================================ */
 
 #include "opencvlbphfacerecognizer.h"
-
+#include "libkface_debug.h"
 // Qt includes
 
-
-// KDE includes
-
-#include <kdebug.h>
 
 // local includes
 
@@ -150,7 +146,7 @@ int OpenCVLBPHFaceRecognizer::recognize(const cv::Mat& inputImage)
     int predictedLabel = -1;
     double confidence  = 0;
     d->lbph()->predict(inputImage, predictedLabel, confidence);
-    kDebug() << predictedLabel << confidence;
+    qCDebug(LIBKFACE_LOG) << predictedLabel << confidence;
 
     if (confidence > d->threshold)
     {

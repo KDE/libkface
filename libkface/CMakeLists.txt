@@ -19,6 +19,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}
                    )
 
 set(kface_LIB_SRCS facedetector.cpp
+                   libkface_debug.cpp
                    identity.cpp
                    dataproviders.cpp
                    recognitiondatabase.cpp

@@ -30,7 +30,7 @@
 // OpenCV includes need to show up before Qt includes
 #include "opencvlbphfacerecognizer.h"
 #include "funnelreal.h"
-
+#include "libkface_debug.h"
 // Qt includes
 
 #include <QMutex>
@@ -40,7 +40,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
@@ -479,7 +478,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
         {
             // This situation is not well defined.
 
-            kDebug() << "Called addIdentity with a given UUID, and there is such a UUID already in the database."
+            qCDebug(LIBKFACE_LOG) << "Called addIdentity with a given UUID, and there is such a UUID already in the database."
                      << "The existing identity is returned without adjusting properties!";
 
             return matchByUuid;
@@ -655,12 +654,12 @@ cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
     }
     catch (cv::Exception& e)
     {
-        kError() << "cv::Exception:" << e.what();
+        qCCritical(LIBKFACE_LOG) << "cv::Exception:" << e.what();
         return cv::Mat();
     }
     catch(...)
     {
-        kError() << "Default exception from OpenCV";
+        qCCritical(LIBKFACE_LOG) << "Default exception from OpenCV";
         return cv::Mat();
     }
 }
@@ -686,11 +685,11 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
         }
         catch (cv::Exception& e)
         {
-            kError() << "cv::Exception:" << e.what();
+            qCCritical(LIBKFACE_LOG) << "cv::Exception:" << e.what();
         }
         catch(...)
         {
-            kError() << "Default exception from OpenCV";
+            qCCritical(LIBKFACE_LOG) << "Default exception from OpenCV";
         }
 
         if (id == -1)
@@ -724,7 +723,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 {
     ImageListProvider* const images = data->newImages(identity);
 
-    kDebug() << "Training " << images->size() << " images for identity " << identity.id();
+    qCDebug(LIBKFACE_LOG) << "Training " << images->size() << " images for identity " << identity.id();
 
     for (; !images->atEnd(); images->proceed())
     {
@@ -734,11 +733,11 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
         }
         catch (cv::Exception& e)
         {
-            kError() << "cv::Exception:" << e.what();
+            qCCritical(LIBKFACE_LOG) << "cv::Exception:" << e.what();
         }
         catch(...)
         {
-            kError() << "Default exception from OpenCV";
+            qCCritical(LIBKFACE_LOG) << "Default exception from OpenCV";
         }
     }
 }
@@ -769,15 +768,15 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
             }
             catch (cv::Exception& e)
             {
-                kError() << "cv::Exception preparing image for LBPH:" << e.what();
+                qCCritical(LIBKFACE_LOG) << "cv::Exception preparing image for LBPH:" << e.what();
             }
             catch(...)
             {
-                kError() << "Default exception from OpenCV";
+                qCCritical(LIBKFACE_LOG) << "Default exception from OpenCV";
             }
         }
 
-        kDebug() << "Training " << images.size() << " images for identity " << identity.id();
+        qCDebug(LIBKFACE_LOG) << "Training " << images.size() << " images for identity " << identity.id();
 
         try
         {
@@ -785,11 +784,11 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
         }
         catch (cv::Exception& e)
         {
-            kError() << "cv::Exception training LBPH:" << e.what();
+            qCCritical(LIBKFACE_LOG) << "cv::Exception training LBPH:" << e.what();
         }
         catch(...)
         {
-            kError() << "Default exception from OpenCV";
+            qCCritical(LIBKFACE_LOG) << "Default exception from OpenCV";
         }
     }
 }

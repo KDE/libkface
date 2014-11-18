@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "databaseaccess.h"
-
+#include "libkface_debug.h"
 // Qt includes
 
 #include <QMutex>
@@ -31,7 +31,6 @@
 // KDE includes
 
 #include <klibloader.h>
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
@@ -205,7 +204,7 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, Initializatio
 
     if (!drivers.contains("QSQLITE"))
     {
-        kWarning() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCWarning(LIBKFACE_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt.");
         return false;
@@ -216,7 +215,7 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, Initializatio
 
     if (!d->backend)
     {
-        kWarning() << "No database backend available in checkReadyForUse. "
+        qCWarning(LIBKFACE_LOG) << "No database backend available in checkReadyForUse. "
                       "Did you call setParameters before?";
         return false;
     }

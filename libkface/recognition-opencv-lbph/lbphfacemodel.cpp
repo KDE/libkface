@@ -28,14 +28,10 @@
  * ============================================================ */
 
 #include "lbphfacemodel.h"
-
+#include "libkface_debug.h"
 // Qt includes
 
 #include <QList>
-
-// KDE includes
-
-#include <kdebug.h>
 
 // local includes
 
@@ -73,7 +69,7 @@ LBPHFaceRecognizer* LBPHFaceModel::ptr()
     LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator KFaceIface::LBPHFaceRecognizer*();
 
     if (!ptr) 
-        kWarning() << "LBPHFaceRecognizer pointer is null";
+        qCWarning(LIBKFACE_LOG) << "LBPHFaceRecognizer pointer is null";
 
     return ptr;
 }
@@ -83,7 +79,7 @@ const LBPHFaceRecognizer* LBPHFaceModel::ptr() const
     const LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator const KFaceIface::LBPHFaceRecognizer*();
 
     if (!ptr) 
-        kWarning() << "LBPHFaceRecognizer pointer is null";
+        qCWarning(LIBKFACE_LOG) << "LBPHFaceRecognizer pointer is null";
 
     return ptr;
 }

@@ -93,7 +93,8 @@ if(OpenCV_FOUND)
     subdirs(libkface)
 
     #if(KDE4_BUILD_TESTS)
-        add_subdirectory(tests)
+        #REACTIVATE IT
+        #add_subdirectory(tests)
     #endif()
 
     if(NOT WIN32)

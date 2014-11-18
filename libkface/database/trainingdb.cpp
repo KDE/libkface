@@ -23,10 +23,7 @@
 #include "lbphfacemodel.h"
 
 #include "trainingdb.h"
-
-// KDE includes
-
-#include <kdebug.h>
+#include "libkface_debug.h"
 
 // Local includes
 
@@ -188,7 +185,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 
             if (data.data.isEmpty())
             {
-                kWarning() << "Histogram data to commit in database are empty for Identity " << metadata.identity;
+                qCWarning(LIBKFACE_LOG) << "Histogram data to commit in database are empty for Identity " << metadata.identity;
             }
             else
             {
@@ -196,7 +193,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 
                 if (compressed.isEmpty())
                 {
-                    kWarning() << "Cannot compress histogram data to commit in database for Identity " << metadata.identity;
+                    qCWarning(LIBKFACE_LOG) << "Cannot compress histogram data to commit in database for Identity " << metadata.identity;
                 }
                 else
                 {
@@ -217,7 +214,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 
                     model.setWrittenToDatabase(i, insertedId.toInt());
 
-                    kDebug() << "Commit compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << compressed.size();
+                    qCDebug(LIBKFACE_LOG) << "Commit compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << compressed.size();
                 }
             }
         }
@@ -227,7 +224,7 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
 LBPHFaceModel TrainingDB::lbphFaceModel() const
 {
     QVariantList values;
-    //kDebug() << "Loading LBPH model";
+    //qCDebug(LIBKFACE_LOG) << "Loading LBPH model";
     d->db->execSql("SELECT id, version, radius, neighbors, grid_x, grid_y FROM OpenCVLBPHRecognizer", &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
@@ -235,14 +232,14 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
         LBPHFaceModel model;
         model.databaseId = it->toInt();
         ++it;
-        //kDebug() << "Found model id" << model.databaseId;
+        //qCDebug(LIBKFACE_LOG) << "Found model id" << model.databaseId;
 
         int version      = it->toInt();
         ++it;
 
         if (version > LBPHStorageVersion)
         {
-            kDebug() << "Unsupported LBPH storage version" << version;
+            qCDebug(LIBKFACE_LOG) << "Unsupported LBPH storage version" << version;
             it += 4;
             continue;
         }
@@ -284,11 +281,11 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
 
                 if (data.data.isEmpty())
                 {
-                    kWarning() << "Cannot uncompress histogram data to checkout from database for Identity " << metadata.identity;
+                    qCWarning(LIBKFACE_LOG) << "Cannot uncompress histogram data to checkout from database for Identity " << metadata.identity;
                 }
                 else
                 {
-                    kDebug() << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
+                    qCDebug(LIBKFACE_LOG) << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
 
                     histograms        << data;
                     histogramMetadata << metadata;
@@ -296,7 +293,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
             }
             else
             {
-                kWarning() << "Histogram data to checkout from database are empty for Identity " << metadata.identity;
+                qCWarning(LIBKFACE_LOG) << "Histogram data to checkout from database are empty for Identity " << metadata.identity;
             }
         }
 
