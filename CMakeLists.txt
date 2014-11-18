@@ -28,6 +28,7 @@ set(KF5_VERSION "5.3.0")
 set(REQUIRED_QT_VERSION "5.2.0")
 
 
+
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: libkface")
 
