@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "mainwindow.h"
+#include "mainwindow.moc"
 #include "ui_mainwindow.h"
 
 // Qt includes
@@ -35,7 +35,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
-#include <QTime>
+
 // KDE include
 
 #include <kdebug.h>
@@ -167,12 +167,11 @@ void MainWindow::clearScene()
 
 void MainWindow::slotOpenImage()
 {
-#if 0 //PORT QT5
     QString file = KFileDialog::getOpenFileName(
             d->lastFileOpenPath,
-            QString::fromLatin1("Image Files (*.png *.jpg *.bmp *.pgm)"),
+            "Image Files (*.png *.jpg *.bmp *.pgm)",
             this,
-            QString::fromLatin1("Open Image"));
+            "Open Image");
 
     if (file.isEmpty())
         return;
@@ -199,7 +198,6 @@ void MainWindow::slotOpenImage()
 
     d->myScene->addItem(d->lastPhotoItem);
     d->ui->detectFacesBtn->setEnabled(true);
-#endif
 }
 
 void MainWindow::slotDetectFaces()
@@ -250,7 +248,6 @@ void MainWindow::slotUpdateSensitivity()
 
 void MainWindow::slotOpenDatabase()
 {
-#if 0 //PORT QT5
     QString directory = KFileDialog::getExistingDirectory(
             QDir::currentPath(),
             this,
@@ -261,7 +258,6 @@ void MainWindow::slotOpenDatabase()
 
     d->ui->configLocation->setText(directory);
     d->database = RecognitionDatabase::addDatabase(directory);
-#endif
 }
 
 void MainWindow::slotRecognise()

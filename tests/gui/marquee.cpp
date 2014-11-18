@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "marquee.h"
+#include "marquee.moc"
 
 // Qt includes
 
@@ -35,7 +35,7 @@
 #include <QPen>
 #include <QString>
 #include <QGraphicsSimpleTextItem>
-#include <QGraphicsScene>
+
 // KDE includes
 
 #include <kdebug.h>

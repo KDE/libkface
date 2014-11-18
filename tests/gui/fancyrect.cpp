@@ -30,7 +30,7 @@
 #include "fancyrect.h"
 
 // Qt includes
-#include <QGraphicsScene>
+
 #include <QGraphicsItem>
 #include <QRectF>
 #include <QPainter>

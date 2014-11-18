@@ -6,44 +6,35 @@
 
 project(libkface)
 
-cmake_minimum_required(VERSION 2.8.12)
-
-# ECM setup
-find_package(ECM 1.3.0 CONFIG REQUIRED)
-set(CMAKE_MODULE_PATH ${libkface_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
-
-include(GenerateExportHeader)
-include(ECMGenerateHeaders)
-include(ECMGeneratePriFile)
-include(ECMPackageConfigHelpers)
-include(ECMSetupVersion)
-include(FeatureSummary)
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDEFrameworkCompilerSettings)
-
-set(KF5_VERSION "5.3.0")
-
-############## Find Packages ##############
-set(REQUIRED_QT_VERSION "5.2.0")
-
-
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: libkface")
 
-find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
-find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Sql)
+find_package(Qt4 4.6.0 REQUIRED)
+find_package(KDE4 REQUIRED)
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
+include(KDE4Defaults)
+include(MacroLibrary)
+include(MacroOptionalAddSubdirectory)
+include(MacroOptionalFindPackage)
+include(FindPackageHandleStandardArgs)
+
+add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS} -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
+include_directories(${QDBUS_INCLUDE_DIRS} ${KDE4_INCLUDES})
+
+set(LIBKFACE_AREA_CODE_GENERAL 51005)
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${LIBKFACE_AREA_CODE_GENERAL})
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 include(MacroOpenCV)
 DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-
-
 if(OpenCV_FOUND)
-    kde_enable_exceptions()
+
     # =======================================================
     # Information to update before to release this library.
 
@@ -90,9 +81,9 @@ if(OpenCV_FOUND)
     subdirs(data)
     subdirs(libkface)
 
-    #if(KDE4_BUILD_TESTS)
-        add_subdirectory(tests)
-    #endif()
+    if(KDE4_BUILD_TESTS)
+        MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
+    endif()
 
     if(NOT WIN32)
         configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)

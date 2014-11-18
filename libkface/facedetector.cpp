@@ -36,7 +36,7 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <KGlobal>
+
 // Local includes
 
 #include "facedetector.h"

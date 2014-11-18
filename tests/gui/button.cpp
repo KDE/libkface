@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#include "button.h"
-#include <QGraphicsScene>
+#include "button.moc"
+
 namespace KFaceIface
 {
 
