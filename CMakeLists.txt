@@ -41,6 +41,7 @@ DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
+add_definitions(-DTRANSLATION_DOMAIN=\"libkface\")
 
 
 if(OpenCV_FOUND)

@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "libkface_export.h"
+#include "kface_export.h"
 
 namespace KFaceIface
 {

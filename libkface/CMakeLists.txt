@@ -45,6 +45,9 @@ set(kface_database_LIB_SRCS database/databaseaccess.cpp
 
 add_library(kface SHARED ${kface_LIB_SRCS} ${kface_database_LIB_SRCS})
 
+generate_export_header(kface BASE_NAME kface)
+
+
 target_link_libraries(kface KF5::KDELibs4Support
                             Qt5::Gui
                             Qt5::Xml
@@ -67,7 +70,7 @@ if(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
                   recognitiondatabase.h
                   identity.h
                   dataproviders.h
-                  libkface_export.h
+                  ${CMAKE_CURRENT_BINARY_DIR}/kface_export.h
                   ${CMAKE_CURRENT_BINARY_DIR}/version.h
             DESTINATION ${INCLUDE_INSTALL_DIR}/libkface COMPONENT Devel
            )
