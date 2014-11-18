@@ -25,9 +25,6 @@
 
 // Qt includes
 
-#include <QFileInfo>
-#include <QFile>
-#include <QDir>
 
 // KDE includes
 

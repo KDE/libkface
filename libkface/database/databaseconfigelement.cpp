@@ -23,14 +23,11 @@
 
 // Qt includes
 
-#include <QDir>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDomNode>
-#include <QDomNodeList>
 #include <QFile>
 #include <QIODevice>
-#include <QTextStream>
 
 // KDE includes
 

@@ -26,8 +26,6 @@
 
 // Qt includes
 
-#include <QDir>
-#include <QFile>
 
 namespace KFaceIface
 {

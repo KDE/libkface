@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QVariant>
 
 namespace KFaceIface
 {

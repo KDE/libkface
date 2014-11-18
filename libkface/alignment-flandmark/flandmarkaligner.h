@@ -40,7 +40,6 @@
 
 // Qt include
 
-#include <QImage>
 
 namespace KFaceIface
 {

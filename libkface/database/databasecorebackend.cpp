@@ -28,16 +28,13 @@
 
 #include <QApplication>
 #include <QCoreApplication>
-#include <QFileInfo>
 #include <QHash>
 #include <QMap>
 #include <QRegExp>
 #include <QSqlDatabase>
-#include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QThread>
-#include <QTime>
 
 // KDE includes
 
