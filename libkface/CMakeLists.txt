@@ -64,7 +64,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
         DESTINATION ${DATA_INSTALL_DIR}/libkface/database )
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-if(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
+if(NOT DIGIKAMSC_COMPILE_LIBKFACE)
 
     install(FILES facedetector.h
                   recognitiondatabase.h
