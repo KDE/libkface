@@ -341,7 +341,7 @@ Identity RecognitionDatabase::identity(int id) const
 // Takes care that there may be multiple values of attribute in identity's attributes
 bool RecognitionDatabase::Private::identityContains(const Identity& identity, const QString& attribute, const QString& value) const
 {
-    QMap<QString, QString> map                = identity.attributesMap();
+    const QMap<QString, QString> map          = identity.attributesMap();
     QMap<QString, QString>::const_iterator it = map.constFind(attribute);
 
     for (; it != map.constEnd() && it.key() == attribute; ++it)
