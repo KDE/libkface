@@ -4,33 +4,37 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/../libkface)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libkface)
+kde_enable_exceptions()
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/../src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-set(detect_SRCS detect.cpp)
+set(detect_SRCS detect.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
 add_executable(detect ${detect_SRCS})
-target_link_libraries(detect kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
+target_link_libraries(detect KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
-set(recognize_SRCS recognize.cpp)
+set(recognize_SRCS recognize.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
 add_executable(recognize ${recognize_SRCS})
-target_link_libraries(recognize kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
+target_link_libraries(recognize KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
-set(align_SRCS align.cpp)
+set(align_SRCS align.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
 add_executable(align ${align_SRCS})
-target_link_libraries(align kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
+target_link_libraries(align KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
-set(preprocess_SRCS preprocess.cpp)
+set(preprocess_SRCS preprocess.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
 add_executable(preprocess ${preprocess_SRCS})
-target_link_libraries(preprocess kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
+target_link_libraries(preprocess KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
-set(traindb_SRCS traindb.cpp)
+set(traindb_SRCS traindb.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
 add_executable(traindb ${traindb_SRCS})
-target_link_libraries(traindb kface KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
+target_link_libraries(traindb KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
 # -----------------------------------------------------------------------------
-#PORT QT5
+# TODO PORT QT5
+
 if (false) 
+
 set(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/faceitem.cpp
@@ -42,10 +46,12 @@ set(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
 ki18n_wrap_ui(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
 add_executable(kfacegui ${kfacegui_SRCS})
 
-target_link_libraries(kfacegui kface KF5::KDELibs4Support
-                                     KF5::KIOCore
-                                     Qt5::Core
-                                     Qt5::Gui
-                                     ${OpenCV_LIBRARIES}
-                     )
+target_link_libraries(kfacegui KF5KFace
+                               KF5::KDELibs4Support
+                               KF5::KIOCore
+                               Qt5::Core
+                               Qt5::Gui
+                               ${OpenCV_LIBRARIES}
+)
+
 endif()

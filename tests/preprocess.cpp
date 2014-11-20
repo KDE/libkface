@@ -36,15 +36,15 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include "libkface_debug.h"
 
 // libkface includes
 
-#include "libkface/preprocessing-tantriggs/tantriggspreprocessor.h"
+#include "src/preprocessing-tantriggs/tantriggspreprocessor.h"
 
 // Implementation not exported
 
-#include "libkface/preprocessing-tantriggs/tantriggspreprocessor.cpp"
+#include "src/preprocessing-tantriggs/tantriggspreprocessor.cpp"
 
 using namespace KFaceIface;
 
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        kDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " preprocess <image1> <image2> ... ";
+        qCDebug(LIBKFACE_LOG) << "Bad Arguments!!!\nUsage: " << argv[0] << " preprocess <image1> <image2> ... ";
         return 0;
     }
 
@@ -150,14 +150,14 @@ int main(int argc, char** argv)
 
     foreach (const cv::Mat& image, images)
     {
-        kDebug() << "channels " << image.channels();
+        qCDebug(LIBKFACE_LOG) << "channels " << image.channels();
         cv::Mat processed = preprocessor.preprocess(image);
         display.add(image, processed);
     }
 
     int elapsed = time.elapsed();
-    kDebug() << "Preprocessing took " << elapsed << " for " << images.size() << " , " 
-             << ((float)elapsed/images.size()) << " per image";
+    qCDebug(LIBKFACE_LOG) << "Preprocessing took " << elapsed << " for " << images.size() << " , " 
+                          << ((float)elapsed/images.size()) << " per image";
 
     display.show();
     app.exec();

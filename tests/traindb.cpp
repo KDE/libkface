@@ -33,11 +33,11 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include "libkface_debug.h"
 
 // libkface includes
 
-#include "libkface/recognitiondatabase.h"
+#include "src/recognitiondatabase.h"
 
 using namespace KFaceIface;
 
@@ -66,13 +66,14 @@ public:
         for (int i=number*secondMultiplier ; i < number*secondMultiplier+secondMultiplier; i++)
         {
             QString name      = QString("face%1").arg(i);
-            kDebug() << "Record Identity " << name << " to DB";
+            qCDebug(LIBKFACE_LOG) << "Record Identity " << name << " to DB";
             QMap<QString, QString> attributes;
             attributes["name"] = name;
             identity           = db.addIdentity(attributes);
             db.train(identity, image, "test application");
         }
-        qDebug() << "Trained group" << number;
+
+        qCDebug(LIBKFACE_LOG) << "Trained group" << number;
 
         // Check records in database.
 
@@ -83,11 +84,11 @@ public:
 
             if (!identity.isNull())
             {
-                kDebug() << "Identity " << name << " is present in DB";
+                qCDebug(LIBKFACE_LOG) << "Identity " << name << " is present in DB";
             }
             else
             {
-                kDebug() << "Identity " << name << " is absent in DB";
+                qCDebug(LIBKFACE_LOG) << "Identity " << name << " is absent in DB";
             }
         }
     }
@@ -121,12 +122,12 @@ int main(int argc, char** argv)
     {
         foreach(Identity id, list)
         {
-            kDebug() << "Identity " << id.attribute("name") << " recognized";
+            qCDebug(LIBKFACE_LOG) << "Identity " << id.attribute("name") << " recognized";
         }
     }
     else
     {
-        kDebug() << "No Identity recognized from DB";
+        qCDebug(LIBKFACE_LOG) << "No Identity recognized from DB";
     }
 
     return 0;

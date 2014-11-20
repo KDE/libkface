@@ -34,34 +34,34 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include "libkface_debug.h"
 
 // libkface includes
 
-#include "libkface/facedetector.h"
+#include "src/facedetector.h"
 
 using namespace KFaceIface;
 
 void detectFaces(const QString& file)
 {
-    kDebug() << "Loading" << file;
+    qCDebug(LIBKFACE_LOG) << "Loading" << file;
     QImage img(file);
-    kDebug() << "Detecting";
+    qCDebug(LIBKFACE_LOG) << "Detecting";
     FaceDetector detector;
     QList<QRectF> faces = detector.detectFaces(img);
-    kDebug() << "Detected";
+    qCDebug(LIBKFACE_LOG) << "Detected";
 
     if (faces.isEmpty())
     {
-        kDebug() << "No faces found";
+        qCDebug(LIBKFACE_LOG) << "No faces found";
         return;
     }
 
-    kDebug() << "Coordinates of detected faces : ";
+    qCDebug(LIBKFACE_LOG) << "Coordinates of detected faces : ";
 
     foreach(const QRectF& r, faces)
     {
-        kDebug() << r;
+        qCDebug(LIBKFACE_LOG) << r;
     }
 
     QWidget* const mainWidget = new QWidget;
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        kDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
+        qCDebug(LIBKFACE_LOG) << "Bad Arguments!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
         return 0;
     }
 

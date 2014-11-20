@@ -40,11 +40,11 @@
 
 // libkface includes
 
-#include "libkface/alignment-congealing/funnelreal.h"
+#include "src/alignment-congealing/funnelreal.h"
 
 // Implementation not exported
 
-#include "libkface/alignment-congealing/funnelreal.cpp"
+#include "src/alignment-congealing/funnelreal.cpp"
 
 using namespace KFaceIface;
 
