@@ -80,7 +80,7 @@ find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
 
 # OpenCV detection
 include(MacroOpenCV)
-DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
+DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 if(OpenCV_FOUND)

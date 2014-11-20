@@ -30,7 +30,7 @@
 // OpenCV includes need to show up before Qt includes
 #include "opencvlbphfacerecognizer.h"
 #include "funnelreal.h"
-#include "libkface_debug.h"
+
 // Qt includes
 
 #include <QMutex>
@@ -45,6 +45,7 @@
 
 // Local includes
 
+#include "libkface_debug.h"
 #include "recognitiondatabase.h"
 #include "databaseaccess.h"
 #include "databaseoperationgroup.h"
