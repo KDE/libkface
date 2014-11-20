@@ -91,7 +91,7 @@ int TrainingDB::addIdentity() const
 void TrainingDB::updateIdentity(const Identity& p)
 {
     d->db->execSql("DELETE FROM IdentityAttributes WHERE id=?", p.id());
-    QMap<QString, QString> map = p.attributesMap();
+    const QMap<QString, QString> map = p.attributesMap();
     QMap<QString, QString>::const_iterator it;
 
     for (it = map.begin(); it != map.end(); ++it)
