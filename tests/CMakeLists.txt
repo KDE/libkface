@@ -31,9 +31,6 @@ add_executable(traindb ${traindb_SRCS})
 target_link_libraries(traindb KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
 # -----------------------------------------------------------------------------
-# TODO PORT QT5
-
-if (false) 
 
 set(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.cpp
@@ -53,5 +50,3 @@ target_link_libraries(kfacegui KF5KFace
                                Qt5::Gui
                                ${OpenCV_LIBRARIES}
 )
-
-endif()
