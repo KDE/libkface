@@ -85,19 +85,15 @@ if(OpenCV_FOUND)
         MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
     endif()
 
-    if(NOT WIN32)
-        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)
-        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkface.lsm)
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-    endif()
-
     # Install find cmake script to the system for client applications.
 
     include(CMakePackageConfigHelpers)
+
     CONFIGURE_PACKAGE_CONFIG_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/kface-config.cmake.in kface-config.cmake
                                   INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
                                   PATH_VARS INCLUDE_INSTALL_DIR
                                   NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+
     WRITE_BASIC_PACKAGE_VERSION_FILE(kface-config-version.cmake
                                      VERSION "${KFACE_LIB_MAJOR_VERSION}.${KFACE_LIB_MINOR_VERSION}.${KFACE_LIB_PATCH_VERSION}"
                                      COMPATIBILITY SameMajorVersion)
@@ -105,12 +101,12 @@ if(OpenCV_FOUND)
             DESTINATION "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
             NAMESPACE Kface::
             FILE Kface-export.cmake)
+
     install(FILES
             ${CMAKE_CURRENT_BINARY_DIR}/kface-config.cmake
             ${CMAKE_CURRENT_BINARY_DIR}/kface-config-version.cmake
             DESTINATION
-            "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
-           )
+            "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}")
 
 else()
 
