@@ -22,11 +22,14 @@
  * ============================================================ */
 
 #include "schemaupdater.h"
-#include "libkface_debug.h"
+
+// KDE includes
+
 #include <klocale.h>
 
 // Local includes
 
+#include "libkface_debug.h"
 #include "databasecorebackend.h"
 #include "databaseaccess.h"
 #include "databaseinitializationobserver.h"

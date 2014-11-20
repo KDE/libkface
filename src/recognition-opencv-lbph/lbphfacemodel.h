@@ -35,6 +35,7 @@
 #include "libopencv.h"
 
 // Qt include
+
 #include <QList>
 
 // local includes

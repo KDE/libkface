@@ -28,12 +28,10 @@
  * ============================================================ */
 
 #include "opencvlbphfacerecognizer.h"
-#include "libkface_debug.h"
-// Qt includes
-
 
 // local includes
 
+#include "libkface_debug.h"
 #include "databaseaccess.h"
 #include "libopencv.h"
 #include "lbphfacemodel.h"

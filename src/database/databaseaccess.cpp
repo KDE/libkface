@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "databaseaccess.h"
-#include "libkface_debug.h"
+
 // Qt includes
 
 #include <QMutex>
@@ -35,11 +35,10 @@
 
 // Local includes
 
+#include "libkface_debug.h"
 #include "databasecorebackend.h"
 #include "trainingdb.h"
 #include "schemaupdater.h"
-
-static const KCatalogLoader loader("libkface");
 
 namespace KFaceIface
 {

@@ -24,9 +24,6 @@
 #ifndef DATABASEOPERATIONGROUP_H
 #define DATABASEOPERATIONGROUP_H
 
-// Qt includes
-
-
 namespace KFaceIface
 {
 

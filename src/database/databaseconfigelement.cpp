@@ -21,7 +21,8 @@
  *
  * ============================================================ */
 
-#include "libkface_debug.h"
+#include "databaseconfigelement.h"
+
 // Qt includes
 
 #include <QDomDocument>
@@ -37,7 +38,7 @@
 
 // Local includes
 
-#include "databaseconfigelement.h"
+#include "libkface_debug.h"
 //#include "dbconfigversion.h"
 
 namespace KFaceIface

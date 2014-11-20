@@ -54,6 +54,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/internal.hpp>
 #include <opencv2/contrib/contrib.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 // for old-style code
 #include <opencv2/opencv.hpp>

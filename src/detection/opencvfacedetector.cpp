@@ -39,12 +39,15 @@
  * ============================================================ */
 
 #include "opencvfacedetector.h"
-#include "libkface_debug.h"
+
 // Qt includes
 
 #include <QtCore/QFile>
 #include <QtCore/qmath.h>
 
+// Local includes
+
+#include "libkface_debug.h"
 
 using namespace std;
 

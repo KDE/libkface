@@ -22,11 +22,10 @@
 // OpenCV includes need to show up before Qt includes
 #include "lbphfacemodel.h"
 
-#include "trainingdb.h"
-#include "libkface_debug.h"
-
 // Local includes
 
+#include "trainingdb.h"
+#include "libkface_debug.h"
 #include "databasecorebackend.h"
 
 namespace KFaceIface

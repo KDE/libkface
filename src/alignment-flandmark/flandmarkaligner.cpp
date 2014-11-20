@@ -33,13 +33,14 @@
  * ============================================================ */
 
 #include "flandmarkaligner.h"
-#include "libkface_debug.h"
+
 // KDE includes
 
 #include <kstandarddirs.h>
 
 // local includes
 
+#include "libkface_debug.h"
 #include "flandmark_detector.h"
 
 namespace KFaceIface

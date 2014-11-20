@@ -28,13 +28,14 @@
  * ============================================================ */
 
 #include "lbphfacemodel.h"
-#include "libkface_debug.h"
+
 // Qt includes
 
 #include <QList>
 
 // local includes
 
+#include "libkface_debug.h"
 #include "databaseaccess.h"
 
 namespace KFaceIface

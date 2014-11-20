@@ -37,12 +37,15 @@
  * ============================================================ */
 
 #include "facerec_borrowed.h"
-#include "libkface_debug.h"
+
 // C++ includes
 
 #include <set>
 #include <limits>
 
+// Local includes
+
+#include "libkface_debug.h"
 
 using namespace cv;
 

@@ -37,11 +37,6 @@
  * ============================================================ */
 
 #include "tantriggspreprocessor.h"
- 
-// OpenCV includes
-
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 
 namespace KFaceIface
 {

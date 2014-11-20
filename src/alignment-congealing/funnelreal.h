@@ -38,9 +38,6 @@
 
 #include "libopencv.h"
 
-// Qt include
-
-
 namespace KFaceIface
 {
 

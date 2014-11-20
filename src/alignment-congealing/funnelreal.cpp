@@ -32,7 +32,7 @@
  * ============================================================ */
 
 #include "funnelreal.h"
-#include "libkface_debug.h"
+
 // C++ includes
 
 #include <cmath>
@@ -48,6 +48,10 @@
 // KDE includes
 
 #include <kstandarddirs.h>
+
+// Local includes
+
+#include "libkface_debug.h"
 
 namespace KFaceIface
 {

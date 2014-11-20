@@ -24,9 +24,6 @@
 
 #include "databaseparameters.h"
 
-// Qt includes
-
-
 namespace KFaceIface
 {
 

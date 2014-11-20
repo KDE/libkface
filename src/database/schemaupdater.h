@@ -24,9 +24,6 @@
 #ifndef SchemaUpdater_H
 #define SchemaUpdater_H
 
-// Qt includes
-
-
 namespace KFaceIface
 {
 

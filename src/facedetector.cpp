@@ -27,7 +27,7 @@
 
 // OpenCV includes need to show up before Qt includes
 #include "opencvfacedetector.h"
-#include "libkface_debug.h"
+
 // Qt includes
 
 #include <QSharedData>
@@ -35,9 +35,11 @@
 // KDE includes
 
 #include <kstandarddirs.h>
-#include <KGlobal>
+#include <kglobal.h>
+
 // Local includes
 
+#include "libkface_debug.h"
 #include "facedetector.h"
 
 namespace KFaceIface
