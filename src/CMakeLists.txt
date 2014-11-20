@@ -58,7 +58,6 @@ ecm_generate_headers(kface_CamelCase_HEADERS
 add_library(KF5KFace SHARED ${kface_LIB_SRCS} ${kface_database_LIB_SRCS})
 add_library(KF5::KFace ALIAS KF5KFace)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in   ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libopencv.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libopencv.h)
 
 generate_export_header(KF5KFace BASE_NAME libkface EXPORT_MACRO_NAME LIBKFACE_EXPORT)

@@ -46,13 +46,13 @@
 // Local includes
 
 #include "libkface_debug.h"
+#include "libkface_version.h"
 #include "recognitiondatabase.h"
 #include "databaseaccess.h"
 #include "databaseoperationgroup.h"
 #include "databaseparameters.h"
 #include "dataproviders.h"
 #include "trainingdb.h"
-#include "version.h"
 
 namespace KFaceIface
 {
@@ -900,7 +900,7 @@ QString LibOpenCVVersion()
 
 QString version()
 {
-    return QString(kface_version);
+    return QString(KFACE_VERSION_STRING);
 }
 
 } // namespace KFaceIface

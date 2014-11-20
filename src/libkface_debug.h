@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2014 Laurent Montel <montel@kde.org>
+    Copyright (C) 2014 Laurent Montel <montel at kde dot org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #define LIBKFACE_DEBUG_H
 
 #include <QLoggingCategory>
+
 Q_DECLARE_LOGGING_CATEGORY(LIBKFACE_LOG)
 
-#endif
-
+#endif // LIBKFACE_DEBUG_H
