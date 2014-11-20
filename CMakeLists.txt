@@ -70,7 +70,7 @@ include(FeatureSummary)
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
              Sql
-             Widgets
+             Xml
              Gui
 )
 
@@ -94,8 +94,6 @@ if(OpenCV_FOUND)
 
     ############## Targets #########################
 
-    kde_enable_exceptions()
-
     add_definitions(-DTRANSLATION_DOMAIN=\"libkface\")
 
     add_subdirectory(data)
@@ -117,15 +115,15 @@ if(OpenCV_FOUND)
     )
 
     install(FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/KF5KKFaceConfig.cmake"
-            "${CMAKE_CURRENT_BINARY_DIR}/KF5KKFaceConfigVersion.cmake"
+            "${CMAKE_CURRENT_BINARY_DIR}/KF5KFaceConfig.cmake"
+            "${CMAKE_CURRENT_BINARY_DIR}/KF5KFaceConfigVersion.cmake"
             DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
             COMPONENT   Devel
     )
 
-    install(EXPORT      KF5KKFaceTargets
+    install(EXPORT      KF5KFaceTargets
             DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-            FILE        KF5KKFaceTargets.cmake
+            FILE        KF5KFaceTargets.cmake
             NAMESPACE   KFace::
     )
 

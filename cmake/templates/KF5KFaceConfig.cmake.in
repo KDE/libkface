@@ -1,0 +1,19 @@
+# KFaceConfig.cmake provides information about the installed KFace library.
+# It can be used directly from CMake via find_package(KFace NO_MODULE)
+#
+# The following CMake variables are provided:
+#   KFace_VERSION_MAJOR - the major version number of KFace
+#   KFace_VERSION_MINOR - the minor version number of KFace
+#   KFace_VERSION_PATCH - the patch version number of KFace
+#   KFace_INCLUDE_DIRS  - the include directories to use
+#
+# Additionally, the following imported library targets are created, which may be used directly
+# with target_link_libraries():
+#   KF5::KFace - the kface library
+
+@PACKAGE_INIT@
+
+find_dependency(Qt5Core Qt5Sql Qt5Gui Qt5Xml @REQUIRED_QT_VERSION@)
+find_dependency(KF5KDELibs4Support)
+
+include("${CMAKE_CURRENT_LIST_DIR}/KF5KFaceTargets.cmake")
