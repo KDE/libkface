@@ -127,12 +127,6 @@ if(OpenCV_FOUND)
             NAMESPACE   KFace::
     )
 
-    if(NOT WIN32)
-        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)
-        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkface.lsm)
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-    endif()
-
 else()
 
     message(FATAL_ERROR "LibKface cannot be compiled.")
