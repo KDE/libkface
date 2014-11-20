@@ -89,13 +89,12 @@ if(OpenCV_FOUND)
 
     # =======================================================
 
-    subdirs(data)
-    subdirs(libkface)
+    add_subdirectory(data)
+    add_subdirectory(libkface)
 
-    #if(KDE4_BUILD_TESTS)
-        #REACTIVATE IT
-        #add_subdirectory(tests)
-    #endif()
+    if (BUILD_TESTING)
+        add_subdirectory(tests)
+    endif()
 
     if(NOT WIN32)
         configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)
