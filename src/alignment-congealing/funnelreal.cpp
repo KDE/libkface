@@ -44,14 +44,11 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QDebug>
 
 // KDE includes
 
 #include <kstandarddirs.h>
-
-// Local includes
-
-#include "libkface_debug.h"
 
 namespace KFaceIface
 {
@@ -170,7 +167,7 @@ FunnelReal::FunnelReal()
 
     if (!QFileInfo(trainingFile).exists())
     {
-        qCCritical(LIBKFACE_LOG) << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
+        qCritical() << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
         return;
     }
 
@@ -269,11 +266,11 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
     }
     catch (const std::ifstream::failure& e)
     {
-        qCCritical(LIBKFACE_LOG) << "Error loading Congealing/Funnel training data:" << e.what();
+        qCritical() << "Error loading Congealing/Funnel training data:" << e.what();
     }
     catch(...)
     {
-        qCCritical(LIBKFACE_LOG) << "Default exception";
+        qCritical() << "Default exception";
     }
 
     computeGaussian(Gaussian, windowSize);

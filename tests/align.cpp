@@ -33,10 +33,7 @@
 #include <QDir>
 #include <QImage>
 #include <QTime>
-
-// KDE includes
-
-#include <kdebug.h>
+#include <QDebug>
 
 // libkface includes
 
@@ -132,7 +129,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        kDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " align <image1> <image2> ... ";
+        qDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " align <image1> <image2> ... ";
         return 0;
     }
 
@@ -145,7 +142,7 @@ int main(int argc, char** argv)
     time.start();
 
     FunnelReal funnel;
-    kDebug() << "Setup of Aligner took " << time.restart();
+    qDebug() << "Setup of Aligner took " << time.restart();
 
     OpenCVSideBySideDisplay display(images.size());
 
@@ -156,7 +153,7 @@ int main(int argc, char** argv)
     }
 
     int elapsed = time.elapsed();
-    kDebug() << "Alignment took " << elapsed << " for " << images.size() << " , " 
+    qDebug() << "Alignment took " << elapsed << " for " << images.size() << " , " 
              << ((float)elapsed/images.size()) << " per image";
 
     display.show();

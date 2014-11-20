@@ -31,10 +31,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QWidget>
-
-// KDE includes
-
-#include "libkface_debug.h"
+#include <QDebug>
 
 // libkface includes
 
@@ -44,24 +41,24 @@ using namespace KFaceIface;
 
 void detectFaces(const QString& file)
 {
-    qCDebug(LIBKFACE_LOG) << "Loading" << file;
+    qDebug() << "Loading" << file;
     QImage img(file);
-    qCDebug(LIBKFACE_LOG) << "Detecting";
+    qDebug() << "Detecting";
     FaceDetector detector;
     QList<QRectF> faces = detector.detectFaces(img);
-    qCDebug(LIBKFACE_LOG) << "Detected";
+    qDebug() << "Detected";
 
     if (faces.isEmpty())
     {
-        qCDebug(LIBKFACE_LOG) << "No faces found";
+        qDebug() << "No faces found";
         return;
     }
 
-    qCDebug(LIBKFACE_LOG) << "Coordinates of detected faces : ";
+    qDebug() << "Coordinates of detected faces : ";
 
     foreach(const QRectF& r, faces)
     {
-        qCDebug(LIBKFACE_LOG) << r;
+        qDebug() << r;
     }
 
     QWidget* const mainWidget = new QWidget;
@@ -89,7 +86,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        qCDebug(LIBKFACE_LOG) << "Bad Arguments!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
+        qDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " <image1> <image2> ...";
         return 0;
     }
 

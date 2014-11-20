@@ -34,10 +34,7 @@
 #include <QDir>
 #include <QImage>
 #include <QTime>
-
-// KDE includes
-
-#include "libkface_debug.h"
+#include <QDebug>
 
 // libkface includes
 
@@ -77,7 +74,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2 || (argv[1] == QLatin1String("train") && argc < 3))
     {
-        qCDebug(LIBKFACE_LOG) << "Bad Arguments!!!\nUsage: " << argv[0] << " identify <image1> <image2> ... | train name <image1> <image2> ... "
+        qDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " identify <image1> <image2> ... | train name <image1> <image2> ... "
                                                               "| ORL <path to orl_faces>";
         return 0;
     }
@@ -96,17 +93,17 @@ int main(int argc, char** argv)
         QList<Identity> identities = db.recognizeFaces(images);
         int elapsed                = time.elapsed();
 
-        qCDebug(LIBKFACE_LOG) << "Recognition took " << elapsed << " for " << images.size() << ", " << ((float)elapsed/images.size()) << " per image";
+        qDebug() << "Recognition took " << elapsed << " for " << images.size() << ", " << ((float)elapsed/images.size()) << " per image";
 
         for (int i = 0 ; i < paths.size() ; i++)
         {
-            qCDebug(LIBKFACE_LOG) << "Identified " << identities[i].attribute("name") << " in " << paths[i];
+            qDebug() << "Identified " << identities[i].attribute("name") << " in " << paths[i];
         }
     }
     else if (argv[1] == QLatin1String("train"))
     {
         QString name = QString::fromLocal8Bit(argv[2]);
-        qCDebug(LIBKFACE_LOG) << "Training " << name;
+        qDebug() << "Training " << name;
 
         QStringList paths    = toPaths(argv, 3, argc);
         QList<QImage> images = toImages(paths);
@@ -114,7 +111,7 @@ int main(int argc, char** argv)
 
         if (identity.isNull())
         {
-            qCDebug(LIBKFACE_LOG) << "Adding new identity to database for name " << name;
+            qDebug() << "Adding new identity to database for name " << name;
             QMap<QString, QString> attributes;
             attributes["name"] = name;
             identity           = db.addIdentity(attributes);
@@ -126,7 +123,7 @@ int main(int argc, char** argv)
         db.train(identity, images, "test application");
 
         int elapsed = time.elapsed();
-        qCDebug(LIBKFACE_LOG) << "Training took " << elapsed << " for " << images.size() << ", " << ((float)elapsed/images.size()) << " per image";
+        qDebug() << "Training took " << elapsed << " for " << images.size() << ", " << ((float)elapsed/images.size()) << " per image";
     }
     else if (argv[1] == QLatin1String("orl"))
     {
@@ -141,7 +138,7 @@ int main(int argc, char** argv)
 
         if (!orlDir.exists())
         {
-            qCDebug(LIBKFACE_LOG) << "Cannot find orl_faces directory";
+            qDebug() << "Cannot find orl_faces directory";
             return 0;
         }
 
@@ -162,11 +159,11 @@ int main(int argc, char** argv)
             {
                 Identity identity = db.addIdentity(attributes);
                 idMap[i]          = identity;
-                qCDebug(LIBKFACE_LOG) << "Created identity " << identity.id() << " for ORL directory " << i;
+                qDebug() << "Created identity " << identity.id() << " for ORL directory " << i;
             }
             else
             {
-                qCDebug(LIBKFACE_LOG) << "Already have identity for ORL directory " << i << ", clearing training data";
+                qDebug() << "Already have identity for ORL directory " << i << ", clearing training data";
                 idMap[i] = identity;
                 trainingToBeCleared << identity;
             }
@@ -194,7 +191,7 @@ int main(int argc, char** argv)
 
         if (!QFileInfo(trainingImages.value(1).first()).exists())
         {
-            qCDebug(LIBKFACE_LOG) << "Could not find files of ORL database";
+            qDebug() << "Could not find files of ORL database";
             return 0;
         }
 
@@ -215,11 +212,11 @@ int main(int argc, char** argv)
 
             if (identity.isNull())
             {
-                qCDebug(LIBKFACE_LOG) << "Identity management failed for ORL person " << it.key();
+                qDebug() << "Identity management failed for ORL person " << it.key();
             }
 
             QList<QImage> images = toImages(it.value());
-            qCDebug(LIBKFACE_LOG) << "Training ORL directory " << it.key();
+            qDebug() << "Training ORL directory " << it.key();
             db.train(identity, images, trainingContext);
             totalTrained        += images.size();
         }
@@ -228,14 +225,14 @@ int main(int argc, char** argv)
 
         if (totalTrained)
         {
-            qCDebug(LIBKFACE_LOG) << "Training 5/10 or ORL took " << elapsed << " ms, " << ((float)elapsed/totalTrained) << " ms per image";
+            qDebug() << "Training 5/10 or ORL took " << elapsed << " ms, " << ((float)elapsed/totalTrained) << " ms per image";
         }
 
         // reload db
         db      = RecognitionDatabase();
         db      = RecognitionDatabase::addDatabase(QDir::currentPath());
         elapsed = time.restart();
-        qCDebug(LIBKFACE_LOG) << "Reloading database (probably from disk cache) took " << elapsed << " ms";
+        qDebug() << "Reloading database (probably from disk cache) took " << elapsed << " ms";
 
         for (QMap<int, QStringList>::const_iterator it = recognitionImages.constBegin() ; it != recognitionImages.constEnd() ; ++it)
         {
@@ -243,7 +240,7 @@ int main(int argc, char** argv)
             QList<QImage> images    = toImages(it.value());
             QList<Identity> results = db.recognizeFaces(images);
 
-            qCDebug(LIBKFACE_LOG) << "Result for " << it.value().first() << " is identity " << results.first().id();
+            qDebug() << "Result for " << it.value().first() << " is identity " << results.first().id();
 
             foreach (const Identity& foundId, results)
             {
@@ -268,14 +265,14 @@ int main(int argc, char** argv)
 
         if (totalRecognized)
         {
-            qCDebug(LIBKFACE_LOG) << "Recognition of 5/10 or ORL took " << elapsed << " ms, " << ((float)elapsed/totalRecognized) << " ms per image";
-            qCDebug(LIBKFACE_LOG) << correct       << " of 200 (" << (float(correct)       / totalRecognized*100) << "%) were correctly recognized";
-            qCDebug(LIBKFACE_LOG) << falsePositive << " of 200 (" << (float(falsePositive) / totalRecognized*100) << "%) were falsely assigned to an identity";
-            qCDebug(LIBKFACE_LOG) << notRecognized << " of 200 (" << (float(notRecognized) / totalRecognized*100) << "%) were not recognized";
+            qDebug() << "Recognition of 5/10 or ORL took " << elapsed << " ms, " << ((float)elapsed/totalRecognized) << " ms per image";
+            qDebug() << correct       << " of 200 (" << (float(correct)       / totalRecognized*100) << "%) were correctly recognized";
+            qDebug() << falsePositive << " of 200 (" << (float(falsePositive) / totalRecognized*100) << "%) were falsely assigned to an identity";
+            qDebug() << notRecognized << " of 200 (" << (float(notRecognized) / totalRecognized*100) << "%) were not recognized";
         }
         else
         {
-            qCDebug(LIBKFACE_LOG) << "No face recognized";
+            qDebug() << "No face recognized";
         }
     }
 

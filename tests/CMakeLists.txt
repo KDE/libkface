@@ -10,23 +10,23 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/../src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-set(detect_SRCS detect.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
+set(detect_SRCS detect.cpp)
 add_executable(detect ${detect_SRCS})
 target_link_libraries(detect KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
-set(recognize_SRCS recognize.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
+set(recognize_SRCS recognize.cpp)
 add_executable(recognize ${recognize_SRCS})
 target_link_libraries(recognize KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
-set(align_SRCS align.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
+set(align_SRCS align.cpp)
 add_executable(align ${align_SRCS})
 target_link_libraries(align KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
-set(preprocess_SRCS preprocess.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
+set(preprocess_SRCS preprocess.cpp)
 add_executable(preprocess ${preprocess_SRCS})
 target_link_libraries(preprocess KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 
-set(traindb_SRCS traindb.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../src/libkface_debug.cpp)
+set(traindb_SRCS traindb.cpp)
 add_executable(traindb ${traindb_SRCS})
 target_link_libraries(traindb KF5KFace KF5::KDELibs4Support Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 

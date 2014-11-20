@@ -33,10 +33,7 @@
 #include <QDir>
 #include <QImage>
 #include <QTime>
-
-// KDE includes
-
-#include "libkface_debug.h"
+#include <QDebug>
 
 // libkface includes
 
@@ -133,7 +130,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        qCDebug(LIBKFACE_LOG) << "Bad Arguments!!!\nUsage: " << argv[0] << " preprocess <image1> <image2> ... ";
+        qDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " preprocess <image1> <image2> ... ";
         return 0;
     }
 
@@ -150,13 +147,13 @@ int main(int argc, char** argv)
 
     foreach (const cv::Mat& image, images)
     {
-        qCDebug(LIBKFACE_LOG) << "channels " << image.channels();
+        qDebug() << "channels " << image.channels();
         cv::Mat processed = preprocessor.preprocess(image);
         display.add(image, processed);
     }
 
     int elapsed = time.elapsed();
-    qCDebug(LIBKFACE_LOG) << "Preprocessing took " << elapsed << " for " << images.size() << " , " 
+    qDebug() << "Preprocessing took " << elapsed << " for " << images.size() << " , " 
                           << ((float)elapsed/images.size()) << " per image";
 
     display.show();
