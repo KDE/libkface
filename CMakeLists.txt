@@ -6,95 +6,128 @@
 
 project(libkface)
 
-cmake_minimum_required(VERSION 2.8.12)
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
-# ECM setup
-find_package(ECM 1.1.0 CONFIG REQUIRED)
+set(CMAKE_MIN_VERSION   "2.8.12")
+set(ECM_MIN_VERSION     "1.1.0")
+set(KF5_VERSION         "5.1.0")
+set(REQUIRED_QT_VERSION "5.2.0")
+set(OPENCV_MIN_VERSION  "2.4.9")
+
+cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
+
+# =======================================================
+# Information to update before to release this library.
+
+# Library version history:
+# API      ABI
+# 0.1.0 => 0.1.0     (During digiKam GoSC2010)
+# 2.0.0 => 1.0.0     (Included into digiKam 2.0.0 Software Collection)
+# 3.0.0 => 2.0.0     (Including LBPH algorithm for face recognition)
+# 3.1.0 => 2.0.0     (Big private code review. No BC broken).
+# 3.2.0 => 2.0.0     (Added the deleteIdentity function to the RecognitionDatabase class)
+# 3.3.0 => 2.0.0     (Added a "simple" training method using image data directly for a single image)
+# 3.4.0 => 2.0.0     (Added a "simple" training method using image data directly for an image list)
+# 3.5.0 => 3.0.0     (Added d private internal container to reduce binary uncompatibility with Identity class)
+# 5.0.0 => 10.0.0    (Released with KDE 5.x)
+
+# Library API version
+set(KFACE_LIB_MAJOR_VERSION "5")
+set(KFACE_LIB_MINOR_VERSION "0")
+set(KFACE_LIB_PATCH_VERSION "0")
+
+# Library ABI version used by linker.
+# For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
+set(KFACE_LIB_SO_CUR_VERSION "10")
+set(KFACE_LIB_SO_REV_VERSION "0")
+set(KFACE_LIB_SO_AGE_VERSION "0")
+
+# =======================================================
+# Set env. variables accordinly.
+
+set(LIBKFACE_LIB_VERSION "${KFACE_LIB_MAJOR_VERSION}.${KFACE_LIB_MINOR_VERSION}.${KFACE_LIB_PATCH_VERSION}")
+set(LIBKFACE_SO_VERSION  "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_VERSION}.${KFACE_LIB_SO_AGE_VERSION}")
+
+############## ECM setup ######################
+
+find_package(ECM ${ECM_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${libkface_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
-include(GenerateExportHeader)
 include(ECMGenerateHeaders)
 include(ECMGeneratePriFile)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
-include(FeatureSummary)
+include(ECMMarkNonGuiExecutable)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings)
+include(GenerateExportHeader)
+include(FeatureSummary)
 
-set(KF5_VERSION "5.1.0")
+############## Find Packages ###################
 
-############## Find Packages ##############
-set(REQUIRED_QT_VERSION "5.2.0")
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+             Core
+             Sql
+             Widgets
+             Gui
+)
 
+find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
+             KDELibs4Support
+)
 
-
-message(STATUS "----------------------------------------------------------------------------------")
-message(STATUS "Starting CMake configuration for: libkface")
-
-find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
-find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Sql)
-
-
+# OpenCV detection
 include(MacroOpenCV)
 DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
-
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_definitions(-DTRANSLATION_DOMAIN=\"libkface\")
-
-
 if(OpenCV_FOUND)
+
+    ecm_setup_version(${LIBKFACE_LIB_VERSION}
+                      VARIABLE_PREFIX      KFACE
+                      VERSION_HEADER       "${CMAKE_CURRENT_BINARY_DIR}/libkface_version.h"
+                      PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KFaceConfigVersion.cmake"
+                      SOVERSION            ${LIBKFACE_SO_VERSION}
+    )
+
+    ############## Targets #########################
+
     kde_enable_exceptions()
-    # =======================================================
-    # Information to update before to release this library.
 
-    # Library version history:
-    # API      ABI
-    # 0.1.0 => 0.1.0     (During digiKam GoSC2010)
-    # 2.0.0 => 1.0.0     (Included into digiKam 2.0.0 Software Collection)
-    # 3.0.0 => 2.0.0     (Including LBPH algorithm for face recognition)
-    # 3.1.0 => 2.0.0     (Big private code review. No BC broken).
-    # 3.2.0 => 2.0.0     (Added the deleteIdentity function to the RecognitionDatabase class)
-    # 3.3.0 => 2.0.0     (Added a "simple" training method using image data directly for a single image)
-    # 3.4.0 => 2.0.0     (Added a "simple" training method using image data directly for an image list)
-    # 3.5.0 => 3.0.0     (Added d private internal container to reduce binary uncompatibility with Identity class)
-
-    # Library API version
-    set(KFACE_LIB_MAJOR_VERSION "3")
-    set(KFACE_LIB_MINOR_VERSION "5")
-    set(KFACE_LIB_PATCH_VERSION "0")
-
-    # Suffix to add at end of version string. Usual values are:
-    # "-git"   : alpha code unstable from git. Do not use in production
-    # "-beta1" : beta1 release.
-    # "-beta2" : beta2 release.
-    # "-beta3" : beta3 release.
-    # "-rc"    : release candidate.
-    # ""       : final relase. Can be used in production.
-    set(KFACE_LIB_SUFFIX_VERSION "")
-
-    # Library ABI version used by linker.
-    # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-    set(KFACE_LIB_SO_CUR_VERSION "3")
-    set(KFACE_LIB_SO_REV_VERSION "0")
-    set(KFACE_LIB_SO_AGE_VERSION "0")
-
-    # =======================================================
-    # Set env. variables accordinly.
-
-    set(KFACE_LIB_VERSION_STRING "${KFACE_LIB_MAJOR_VERSION}.${KFACE_LIB_MINOR_VERSION}.${KFACE_LIB_PATCH_VERSION}${KFACE_LIB_SUFFIX_VERSION}")
-    set(KFACE_LIB_VERSION_ID "0x0${KFACE_LIB_MAJOR_VERSION}0${KFACE_LIB_MINOR_VERSION}0${KFACE_LIB_PATCH_VERSION}")
-    set(KFACE_LIB_SO_VERSION_STRING "${KFACE_LIB_SO_CUR_VERSION}.${KFACE_LIB_SO_REV_VERSION}.${KFACE_LIB_SO_AGE_VERSION}")
-
-    # =======================================================
+    add_definitions(-DTRANSLATION_DOMAIN=\"libkface\")
 
     add_subdirectory(data)
-    add_subdirectory(libkface)
+    add_subdirectory(src)
 
     if (BUILD_TESTING)
         add_subdirectory(tests)
     endif()
+
+    ############## CMake Config Files ##############
+
+    message("${CMAKECONFIG_INSTALL_DIR}")
+    set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5KFace")
+
+    ecm_configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/KF5KFaceConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/KF5KFaceConfig.cmake"
+        INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+    )
+
+    install(FILES
+            "${CMAKE_CURRENT_BINARY_DIR}/KF5KKFaceConfig.cmake"
+            "${CMAKE_CURRENT_BINARY_DIR}/KF5KKFaceConfigVersion.cmake"
+            DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+            COMPONENT   Devel
+    )
+
+    install(EXPORT      KF5KKFaceTargets
+            DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+            FILE        KF5KKFaceTargets.cmake
+            NAMESPACE   KFace::
+    )
 
     if(NOT WIN32)
         configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkface.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc)
@@ -102,29 +135,10 @@ if(OpenCV_FOUND)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkface.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
     endif()
 
-    # Install find cmake script to the system for client applications.
-
-    include(CMakePackageConfigHelpers)
-    CONFIGURE_PACKAGE_CONFIG_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/kface-config.cmake.in kface-config.cmake
-                                  INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
-                                  PATH_VARS INCLUDE_INSTALL_DIR
-                                  NO_CHECK_REQUIRED_COMPONENTS_MACRO)
-    WRITE_BASIC_PACKAGE_VERSION_FILE(kface-config-version.cmake
-                                     VERSION "${KFACE_LIB_MAJOR_VERSION}.${KFACE_LIB_MINOR_VERSION}.${KFACE_LIB_PATCH_VERSION}"
-                                     COMPATIBILITY SameMajorVersion)
-    install(EXPORT Kface
-            DESTINATION "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
-            NAMESPACE Kface::
-            FILE Kface-export.cmake)
-    install(FILES
-            ${CMAKE_CURRENT_BINARY_DIR}/kface-config.cmake
-            ${CMAKE_CURRENT_BINARY_DIR}/kface-config-version.cmake
-            DESTINATION
-            "${LIB_INSTALL_DIR}/cmake/Kface-${KFACE_LIB_VERSION_STRING}"
-           )
-
 else()
 
     message(FATAL_ERROR "LibKface cannot be compiled.")
 
 endif()
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
