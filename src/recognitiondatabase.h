@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "kface_export.h"
+#include "libkface_export.h"
 #include "identity.h"
 #include "dataproviders.h"
 
@@ -58,7 +58,7 @@ namespace KFaceIface
  * - an instance of this class is thread-safe
  *   (this class is also reentrant, for different objects and paths)
  */
-class KFACE_EXPORT RecognitionDatabase
+class LIBKFACE_EXPORT RecognitionDatabase
 {
 
 public:
@@ -235,12 +235,12 @@ private:
 /**
  * Return a string version of LibOpenCV release in format "major.minor.patch"
  */
-KFACE_EXPORT QString LibOpenCVVersion();
+LIBKFACE_EXPORT QString LibOpenCVVersion();
 
 /**
  * Return a string version of libkface release
  */
-KFACE_EXPORT QString version();
+LIBKFACE_EXPORT QString version();
 
 } // namespace KFaceIface
 

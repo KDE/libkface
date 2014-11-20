@@ -38,12 +38,12 @@
 
 // Local includes
 
-#include "kface_export.h"
+#include "libkface_export.h"
 
 namespace KFaceIface
 {
 
-class KFACE_EXPORT FaceDetector
+class LIBKFACE_EXPORT FaceDetector
 {
 
 public:

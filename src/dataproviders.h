@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "kface_export.h"
+#include "libkface_export.h"
 #include "identity.h"
 
 namespace KFaceIface
@@ -46,7 +46,7 @@ namespace KFaceIface
  * where for each entry a QImage can be provided.
  * Only forward iteration is required.
  */
-class KFACE_EXPORT ImageListProvider
+class LIBKFACE_EXPORT ImageListProvider
 {
 public:
 
@@ -63,7 +63,7 @@ public:
 /**
  * A wrapper implementation for ImageListProvider if you have a QList of QImages
  */
-class KFACE_EXPORT QListImageListProvider : public ImageListProvider
+class LIBKFACE_EXPORT QListImageListProvider : public ImageListProvider
 {
 public:
 
@@ -87,7 +87,7 @@ public:
 
 // ----------------------------------------------------------------------------------------
 
-class KFACE_EXPORT EmptyImageListProvider : public ImageListProvider
+class LIBKFACE_EXPORT EmptyImageListProvider : public ImageListProvider
 {
 public:
 
@@ -105,7 +105,7 @@ public:
  * It is not specified, but depends on the backend which of the methods
  * in which order and for which identities will be called.
  */
-class KFACE_EXPORT TrainingDataProvider
+class LIBKFACE_EXPORT TrainingDataProvider
 {
 public:
 
