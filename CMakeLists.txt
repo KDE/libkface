@@ -124,7 +124,7 @@ if(OpenCV_FOUND)
     install(EXPORT      KF5KFaceTargets
             DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
             FILE        KF5KFaceTargets.cmake
-            NAMESPACE   KFace::
+            NAMESPACE   KF5::
     )
 
 else()
