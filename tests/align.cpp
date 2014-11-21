@@ -34,7 +34,7 @@
 #include <QImage>
 #include <QTime>
 #include <QDebug>
-
+#include <QGraphicsScene>
 // libkface includes
 
 #include "src/alignment-congealing/funnelreal.h"
@@ -44,7 +44,6 @@
 #include "src/alignment-congealing/funnelreal.cpp"
 
 using namespace KFaceIface;
-
 QStringList toPaths(char** const argv, int startIndex, int argc)
 {
     QStringList files;

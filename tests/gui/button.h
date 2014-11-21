@@ -33,7 +33,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QGraphicsSceneMouseEvent>
-
+#include <QGraphicsScene>
 // Local includes
 
 #include "libkface_export.h"
