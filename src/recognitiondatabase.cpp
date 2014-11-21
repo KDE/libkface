@@ -480,7 +480,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
             // This situation is not well defined.
 
             qCDebug(LIBKFACE_LOG) << "Called addIdentity with a given UUID, and there is such a UUID already in the database."
-                     << "The existing identity is returned without adjusting properties!";
+                                  << "The existing identity is returned without adjusting properties!";
 
             return matchByUuid;
         }
