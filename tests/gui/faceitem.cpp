@@ -132,8 +132,11 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
     scene->addItem(d->faceMarquee);
 
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
-    d->nameRect = new QGraphicsRectItem(0, scene);
-    d->faceName = new QGraphicsTextItem(name, 0, scene);
+    d->nameRect = new QGraphicsRectItem(0);
+    scene->addItem(d->nameRect);
+
+    d->faceName = new QGraphicsTextItem(name, 0);
+    scene->addItem(d->faceName);
 
     // Make the bounding box for the name update itself to cover all the text whenever contents are changed
     QTextDocument* const doc = d->faceName->document();
