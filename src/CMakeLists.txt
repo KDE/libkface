@@ -51,7 +51,7 @@ ecm_generate_headers(kface_CamelCase_HEADERS
                      Identity
                      DataProviders
 
-                     PREFIX           KFACE
+                     PREFIX           kface
                      REQUIRED_HEADERS kface_HEADERS
 )
 
@@ -66,17 +66,17 @@ generate_export_header(KF5KFace BASE_NAME libkface EXPORT_MACRO_NAME LIBKFACE_EX
 if(NOT DIGIKAMSC_COMPILE_LIBKFACE)
 
     install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkface_export.h
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFACE/kface
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/kface
             COMPONENT   Devel
     )
 
     install(FILES       ${kface_CamelCase_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFACE/kface
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/KFace
             COMPONENT   Devel
     )
 
     install(FILES       ${kface_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFACE/kface
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/kface
             COMPONENT   Devel
     )
 
@@ -88,7 +88,7 @@ if(NOT DIGIKAMSC_COMPILE_LIBKFACE)
 endif()
 
 target_include_directories(KF5KFace INTERFACE 
-                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KFACE;${KF5_INCLUDE_INSTALL_DIR}/KFACE/kface>"
+                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KFace>"
 )
 
 target_link_libraries(KF5KFace

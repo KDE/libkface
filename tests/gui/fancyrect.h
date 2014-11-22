@@ -32,12 +32,12 @@
 
 // Qt includes
 
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsRectItem>
-#include <QtCore/QRectF>
-#include <QtGui/QPainter>
-#include <QtGui/QStyleOptionGraphicsItem>
-#include <QtGui/QWidget>
+#include <QGraphicsItem>
+#include <QGraphicsRectItem>
+#include <QRectF>
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
+#include <QWidget>
 
 // Local includes
 

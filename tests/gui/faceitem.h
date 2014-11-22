@@ -34,8 +34,8 @@
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QObject>
-#include <QtGui/QGraphicsObject>
-#include <QtGui/QGraphicsRectItem>
+#include <QtWidgets/QGraphicsObject>
+#include <QtWidgets/QGraphicsRectItem>
 #include <QtGui/QBrush>
 #include <QtGui/QFont>
 

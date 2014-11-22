@@ -29,10 +29,10 @@
 
 // Qt includes
 
-#include <QtCore/QObject>
-#include <QtGui/QPainter>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QObject>
+#include <QPainter>
+#include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
 // Local includes
 

@@ -32,11 +32,11 @@
 
 // Qt includes
 
-#include <QtCore/QObject>
-#include <QtCore/QRectF>
-#include <QtGui/QGraphicsItemGroup>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QObject>
+#include <QRectF>
+#include <QGraphicsItemGroup>
+#include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
 // Local includes
 
