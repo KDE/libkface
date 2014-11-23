@@ -78,14 +78,14 @@ public:
      */
     static DatabaseParameters defaultParameters(const QString databaseType);
 
-    //static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString());
+    //static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString());
 
     /**
      * Read and write parameters from config. You can specify the group,
      * or use the default value.
      */
-    //void readFromConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString());
-    //void writeToConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString()) const;
+    //void readFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString());
+    //void writeToConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString()) const;
 
     /**
      * Convenience method to create a DatabaseParameters object for an
