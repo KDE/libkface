@@ -40,7 +40,6 @@
 
 // KDE includes
 
-#include <kglobal.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -124,7 +123,7 @@ public:
     DatabaseHash                                          databases;
 };
 
-K_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
+Q_GLOBAL_STATIC(RecognitionDatabaseStaticPriv, static_d)
 
 // -----------------------------------------------------------------------------------------------
 
