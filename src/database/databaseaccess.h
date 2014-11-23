@@ -29,7 +29,6 @@
 #include "databaseparameters.h"
 #include "databaseerrorhandler.h"
 
-class QMutexLocker;
 
 namespace KFaceIface
 {

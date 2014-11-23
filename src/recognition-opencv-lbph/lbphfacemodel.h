@@ -46,7 +46,6 @@
 namespace KFaceIface
 {
 
-class DatabaseAccessData;
 
 class LBPHistogramMetadata
 {
