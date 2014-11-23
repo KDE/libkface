@@ -188,23 +188,18 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
 
     d->acceptButton->hide();
 
-    connect(d->rejectButton, SIGNAL(clicked()),
-            this, SLOT(reject()));
+    connect(d->rejectButton, &Button::clicked, this, &FaceItem::reject);
 
-    connect(d->acceptButton, SIGNAL(clicked()),
-            this, SLOT(accepted()));
+    connect(d->acceptButton, &Button::clicked, this, &FaceItem::accepted);
 
-    connect(d->suggestionAcceptButton, SIGNAL(clicked()),
-            this, SLOT(slotSuggestionAccepted()) );
+    connect(d->suggestionAcceptButton, &Button::clicked, this, &FaceItem::slotSuggestionAccepted);
 
-    connect(d->suggestionRejectButton, SIGNAL (clicked()),
-            this, SLOT(slotSuggestionRejected()) );
+    connect(d->suggestionRejectButton, &Button::clicked, this, &FaceItem::slotSuggestionRejected);
 
     connect(doc, SIGNAL(contentsChanged()),
             this, SLOT(update()));
 
-    connect(d->faceMarquee, SIGNAL(changed()),
-            this, SLOT(update()));
+    connect(d->faceMarquee, &Marquee::changed, this, &FaceItem::update);
 }
 
 FaceItem::~FaceItem()
