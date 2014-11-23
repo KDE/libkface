@@ -27,7 +27,6 @@
 
 #include <QDomDocument>
 #include <QDomElement>
-#include <QDomNode>
 #include <QFile>
 #include <QIODevice>
 
