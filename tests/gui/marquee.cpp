@@ -36,9 +36,7 @@
 #include <QString>
 #include <QGraphicsSimpleTextItem>
 #include <QGraphicsScene>
-// KDE includes
-
-#include <kdebug.h>
+#include <QDebug>
 
 // Local includes
 

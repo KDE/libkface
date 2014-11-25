@@ -78,7 +78,7 @@ public:
     bool isInUIThread()   const;
 
     bool reconnectOnError()                                       const;
-    bool isSQLiteLockError(const SqlQuery& query)                 const;
+    bool isSQLiteLocqCritical(const SqlQuery& query)              const;
     bool isSQLiteLockTransactionError(const QSqlError& lastError) const;
     bool isConnectionError(const SqlQuery& query)                 const;
     bool needToConsultUserForError(const SqlQuery& query)         const;
@@ -86,7 +86,7 @@ public:
     void debugOutputFailedQuery(const QSqlQuery& query)           const;
     void debugOutputFailedTransaction(const QSqlError& error)     const;
 
-    bool checkRetrySQLiteLockError(int retries);
+    bool checkRetrySQLiteLocqCritical(int retries);
     bool checkOperationStatus();
     bool handleWithErrorHandler(const SqlQuery* const query);
     void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);

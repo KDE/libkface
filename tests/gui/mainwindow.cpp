@@ -36,9 +36,10 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QTime>
+#include <QDebug>
+
 // KDE include
 
-#include <kdebug.h>
 #include <kfiledialog.h>
 
 // libkface includes
@@ -181,7 +182,7 @@ void MainWindow::slotOpenImage()
 
     clearScene();
 
-    kDebug() << "Opened file " << file.toAscii().data();
+    qDebug() << "Opened file " << file.toAscii().data();
 
     d->currentPhoto.load(file);
     d->lastPhotoItem = new QGraphicsPixmapItem(QPixmap::fromImage(d->currentPhoto));
@@ -208,12 +209,12 @@ void MainWindow::slotDetectFaces()
 
     QList<QRectF> currentFaces = d->detector->detectFaces(d->currentPhoto);
 
-    kDebug() << "libkface detected : " << currentFaces.size() << " faces.";
-    kDebug() << "Coordinates of detected faces : ";
+    qDebug() << "libkface detected : " << currentFaces.size() << " faces.";
+    qDebug() << "Coordinates of detected faces : ";
 
     foreach(const QRectF& r, currentFaces)
     {
-        kDebug() << r;
+        qDebug() << r;
     }
 
     foreach(FaceItem* const item, d->faceitems)
@@ -227,7 +228,7 @@ void MainWindow::slotDetectFaces()
     {
         QRect face = d->detector->toAbsoluteRect(currentFaces[i], d->currentPhoto.size());
         d->faceitems.append(new FaceItem(0, d->myScene, face, d->scale));
-        kDebug() << face;
+        qDebug() << face;
     }
 
     d->ui->recogniseBtn->setEnabled(true);
@@ -277,18 +278,18 @@ void MainWindow::slotRecognise()
         Identity identity = d->database.recognizeFace(d->currentPhoto.copy(item->originalRect()));
         int elapsed       = time.elapsed();
 
-        kDebug() << "Recognition took " << elapsed << " for Face #" << i+1;
+        qDebug() << "Recognition took " << elapsed << " for Face #" << i+1;
 
         if (!identity.isNull())
         {
             item->suggest(identity.attribute("name"));
 
-            kDebug() << "Face #" << i+1 << " is closest to the person with ID " << identity.id()
+            qDebug() << "Face #" << i+1 << " is closest to the person with ID " << identity.id()
                      << " and name "<< identity.attribute("name");
         }
         else
         {
-            kDebug() << "Face #" << i+1 << " : no Identity match from database.";
+            qDebug() << "Face #" << i+1 << " : no Identity match from database.";
         }
 
         i++;
@@ -311,7 +312,7 @@ void MainWindow::slotUpdateDatabase()
             time.start();
 
             QString name = item->text();
-            kDebug() << "Face #" << i+1 << ": training name '" << name << "'";
+            qDebug() << "Face #" << i+1 << ": training name '" << name << "'";
 
             Identity identity = d->database.findIdentity("name", name);
 
@@ -320,18 +321,18 @@ void MainWindow::slotUpdateDatabase()
                 QMap<QString, QString> attributes;
                 attributes["name"] = name;
                 identity           = d->database.addIdentity(attributes);
-                kDebug() << "Adding new identity ID " << identity.id() << " to database for name " << name;
+                qDebug() << "Adding new identity ID " << identity.id() << " to database for name " << name;
             }
             else
             {
-                kDebug() << "Found existing identity ID " << identity.id() << " from database for name " << name;
+                qDebug() << "Found existing identity ID " << identity.id() << " from database for name " << name;
             }
 
             d->database.train(identity, d->currentPhoto.copy(item->originalRect()), "test application");
 
             int elapsed = time.elapsed();
 
-            kDebug() << "Training took " << elapsed << " for Face #" << i+1;
+            qDebug() << "Training took " << elapsed << " for Face #" << i+1;
         }
 
         i++;

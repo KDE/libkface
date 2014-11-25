@@ -23,7 +23,7 @@
 
 #include "databasecorebackend.h"
 #include "databasecorebackend_p.h"
-#include "libkface_debug.h"
+
 // Qt includes
 
 #include <QApplication>
@@ -36,9 +36,9 @@
 #include <QSqlRecord>
 #include <QThread>
 
-
 // Local includes
 
+#include "libkface_debug.h"
 #include "dbactiontype.h"
 #include "schemaupdater.h"
 
@@ -287,7 +287,7 @@ bool DatabaseCoreBackendPrivate::reconnectOnError() const
     return parameters.isMySQL();
 }
 
-bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery& query) const
+bool DatabaseCoreBackendPrivate::isSQLiteLocqCritical(const SqlQuery& query) const
 {
     return parameters.isSQLite() &&
            (query.lastError().number() == 5 /*SQLITE_BUSY*/ || query.lastError().number() == 6/*SQLITE_LOCKED*/);
@@ -324,7 +324,7 @@ bool DatabaseCoreBackendPrivate::needToHandleWithErrorHandler(const SqlQuery& qu
     return (isConnectionError(query) || needToConsultUserForError(query));
 }
 
-bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
+bool DatabaseCoreBackendPrivate::checkRetrySQLiteLocqCritical(int retries)
 {
     if (!(retries % 25))
     {
@@ -1292,9 +1292,9 @@ bool DatabaseCoreBackend::queryErrorHandling(SqlQuery& query, int retries)
 {
     Q_D(DatabaseCoreBackend);
 
-    if (d->isSQLiteLockError(query))
+    if (d->isSQLiteLocqCritical(query))
     {
-        if (d->checkRetrySQLiteLockError(retries))
+        if (d->checkRetrySQLiteLocqCritical(retries))
         {
             return true;
         }
@@ -1345,7 +1345,7 @@ bool DatabaseCoreBackend::transactionErrorHandling(const QSqlError& lastError, i
 
     if (d->isSQLiteLockTransactionError(lastError))
     {
-        if (d->checkRetrySQLiteLockError(retries))
+        if (d->checkRetrySQLiteLocqCritical(retries))
         {
             return true;
         }

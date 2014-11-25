@@ -42,7 +42,6 @@
 
 // KDE include
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
@@ -258,17 +257,17 @@ void FaceItem::update()
     QRectF r      = d->faceName->mapRectToScene(d->faceName->boundingRect());
     d->nameRect->setRect(r);
     QRect newRect = this->d->faceMarquee->mapRectToScene(d->faceMarquee->boundingRect()).toRect();
-    kDebug() << "Origscale is : " << d->origScale << " and scale is " << d->scale;
+    qDebug() << "Origscale is : " << d->origScale << " and scale is " << d->scale;
 
     QSize s(newRect.size());
     s.scale(newRect.width() * qSqrt(d->origScale), newRect.height() * qSqrt(d->origScale), Qt::KeepAspectRatio);
     newRect.setSize(s);
 
     //newRect.setRect(x,y,w,h);
-    kDebug() << "Orig before" << d->origRect;
+    qDebug() << "Orig before" << d->origRect;
 
     //d->origRect = newRect;
-    kDebug() << "Orig after" << d->origRect;
+    qDebug() << "Orig after" << d->origRect;
 }
 
 void FaceItem::setVisible(bool visible)
@@ -331,7 +330,7 @@ void FaceItem::reject()
 
 void FaceItem::suggest(const QString& name)
 {
-    kDebug() << "suggested name is " << name;
+    qDebug() << "suggested name is " << name;
     d->name = name;
     this->switchToSuggestionMode();
 }
