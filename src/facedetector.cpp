@@ -31,11 +31,7 @@
 // Qt includes
 
 #include <QSharedData>
-
-// KDE includes
-
-#include <kstandarddirs.h>
-#include <kglobal.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -65,12 +61,12 @@ public:
         {
             QStringList cascadeDirs;
             // First try : typically work everywhere if packagers don't drop libkface shared data files.
-            cascadeDirs << KGlobal::dirs()->findDirs("data",         "libkface/haarcascades");
+            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,  "libkface/haarcascades",  QStandardPaths::LocateDirectory);
 
             // Second try to find OpenCV shared files. Work only under Linux and OSX. OpenCV do not install XML files under Windows (checked with OpenCV 2.4.9)
             // Try under both CamelCase *and* lowercase directories, as both seems to be used.
-            cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../OpenCV/haarcascades");
-            cascadeDirs << KGlobal::dirs()->findDirs("xdgdata-apps", "../opencv/haarcascades");
+            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "../OpenCV/haarcascades", QStandardPaths::LocateDirectory);
+            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "../opencv/haarcascades", QStandardPaths::LocateDirectory);
 
             // Last try to find OpenCV shared files, using cmake env variables.
             cascadeDirs << QString("%1/haarcascades").arg(OPENCV_ROOT_PATH);

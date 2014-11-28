@@ -106,7 +106,7 @@ public:
     RecognitionDatabaseStaticPriv()
         : mutex(QMutex::Recursive)
     {
-        // Note: same line in Database. Keep in sync.
+        // Note: same line in databaseconfigelement.cpp. Keep in sync.
         defaultPath = KStandardDirs::locateLocal("data", "libkface/database/", true);
     }
 
