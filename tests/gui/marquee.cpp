@@ -55,8 +55,8 @@ public:
         TopRight,
         BottomLeft,
         BottomRight
-    };    
-    
+    };
+
     Private()
       : handleSize(10)
     {

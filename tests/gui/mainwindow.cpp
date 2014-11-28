@@ -168,7 +168,8 @@ void MainWindow::clearScene()
 
 void MainWindow::slotOpenImage()
 {
-#if 0 //PORT QT5
+#pragma message: PORT TO QT5
+/*
     QString file = KFileDialog::getOpenFileName(
             d->lastFileOpenPath,
             QString::fromLatin1("Image Files (*.png *.jpg *.bmp *.pgm)"),
@@ -200,7 +201,7 @@ void MainWindow::slotOpenImage()
 
     d->myScene->addItem(d->lastPhotoItem);
     d->ui->detectFacesBtn->setEnabled(true);
-#endif
+*/
 }
 
 void MainWindow::slotDetectFaces()
@@ -251,7 +252,8 @@ void MainWindow::slotUpdateSensitivity()
 
 void MainWindow::slotOpenDatabase()
 {
-#if 0 //PORT QT5
+#pragma message: PORT TO QT5
+/*
     QString directory = KFileDialog::getExistingDirectory(
             QDir::currentPath(),
             this,
@@ -262,7 +264,7 @@ void MainWindow::slotOpenDatabase()
 
     d->ui->configLocation->setText(directory);
     d->database = RecognitionDatabase::addDatabase(directory);
-#endif
+*/
 }
 
 void MainWindow::slotRecognise()
