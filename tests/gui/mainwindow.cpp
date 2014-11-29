@@ -37,10 +37,8 @@
 #include <QGraphicsPixmapItem>
 #include <QTime>
 #include <QDebug>
-
-// KDE include
-
-#include <kfiledialog.h>
+#include <QFileDialog>
+#include <QStandardPaths>
 
 // libkface includes
 
@@ -132,7 +130,7 @@ MainWindow::MainWindow(QWidget* const parent)
     d->ui->accuracySlider->setValue(80);
     d->ui->sensitivitySlider->setValue(80);
 
-    d->lastFileOpenPath = QDir::currentPath();
+    d->lastFileOpenPath = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first();
 }
 
 MainWindow::~MainWindow()
@@ -168,13 +166,9 @@ void MainWindow::clearScene()
 
 void MainWindow::slotOpenImage()
 {
-#pragma message("PORT QT5")
-/*
-    QString file = KFileDialog::getOpenFileName(
-            d->lastFileOpenPath,
-            QString::fromLatin1("Image Files (*.png *.jpg *.bmp *.pgm)"),
-            this,
-            QString::fromLatin1("Open Image"));
+    QString file = QFileDialog::getOpenFileName(this, i18n("Select Image to Open"),
+                                                d->lastFileOpenPath,
+                                                QString::fromLatin1("Image Files (*.png *.jpg *.bmp *.pgm)"));
 
     if (file.isEmpty())
         return;
@@ -201,7 +195,6 @@ void MainWindow::slotOpenImage()
 
     d->myScene->addItem(d->lastPhotoItem);
     d->ui->detectFacesBtn->setEnabled(true);
-*/
 }
 
 void MainWindow::slotDetectFaces()
@@ -252,19 +245,16 @@ void MainWindow::slotUpdateSensitivity()
 
 void MainWindow::slotOpenDatabase()
 {
-#pragma message("PORT QT5")
-/*
-    QString directory = KFileDialog::getExistingDirectory(
-            QDir::currentPath(),
+    QString directory = QFileDialog::getExistingDirectory(
             this,
-            "Select Database Directory");
+            i18n("Select Database Directory"),
+            QDir::currentPath());
 
     if (directory.isEmpty())
         return;
 
     d->ui->configLocation->setText(directory);
     d->database = RecognitionDatabase::addDatabase(directory);
-*/
 }
 
 void MainWindow::slotRecognise()
