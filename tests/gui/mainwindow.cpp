@@ -168,7 +168,7 @@ void MainWindow::clearScene()
 
 void MainWindow::slotOpenImage()
 {
-#pragma message: PORT QT5
+#pragma message("PORT QT5")
 /*
     QString file = KFileDialog::getOpenFileName(
             d->lastFileOpenPath,
@@ -252,7 +252,7 @@ void MainWindow::slotUpdateSensitivity()
 
 void MainWindow::slotOpenDatabase()
 {
-#pragma message: PORT QT5
+#pragma message("PORT QT5")
 /*
     QString directory = KFileDialog::getExistingDirectory(
             QDir::currentPath(),
