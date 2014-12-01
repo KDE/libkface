@@ -15,8 +15,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
 #                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
 )
 
-remove_definitions(-DQT_NO_STL)
-
 set(kface_LIB_SRCS facedetector.cpp
                    libkface_debug.cpp
                    identity.cpp
