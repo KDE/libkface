@@ -11,20 +11,22 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
+
 #                    ${CMAKE_CURRENT_SOURCE_DIR}/alignment-flandmark
 #                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
 )
 
-set(kface_LIB_SRCS facedetector.cpp
-                   libkface_debug.cpp
-                   identity.cpp
-                   dataproviders.cpp
-                   recognitiondatabase.cpp
-                   detection/opencvfacedetector.cpp
+set(kface_LIB_SRCS detection/opencvfacedetector.cpp
                    recognition-opencv-lbph/lbphfacemodel.cpp
                    recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                    recognition-opencv-lbph/facerec_borrowed.cpp
+                   facedetector.cpp
+                   libkface_debug.cpp
+                   identity.cpp
+                   dataproviders.cpp
                    alignment-congealing/funnelreal.cpp
+                   recognitiondatabase.cpp
+
 #                   alignment-flandmark/flandmarkaligner.cpp
 #                   preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
@@ -53,7 +55,7 @@ ecm_generate_headers(kface_CamelCase_HEADERS
                      REQUIRED_HEADERS kface_HEADERS
 )
 
-add_library(KF5KFace SHARED ${kface_LIB_SRCS} ${kface_database_LIB_SRCS})
+add_library(KF5KFace SHARED ${kface_LIB_SRCS})# ${kface_database_LIB_SRCS})
 add_library(KF5::KFace ALIAS KF5KFace)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libopencv.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libopencv.h)
@@ -93,10 +95,18 @@ target_link_libraries(KF5KFace
                       PRIVATE
                       ${OpenCV_LIBRARIES}
                       PUBLIC
-                      KF5::KDELibs4Support
                       Qt5::Gui
                       Qt5::Xml
                       Qt5::Sql
+                      
+#                       KF5::ConfigCore
+#                       KF5::TextWidgets
+#                       KF5::IconThemes
+#                       KF5::WidgetsAddons
+#                       KF5::Completion
+#                       KF5::KIOWidgets
+                      
+                      KF5::KDELibs4Support
 )
 
 install(TARGETS KF5KFace
