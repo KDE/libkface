@@ -51,13 +51,12 @@ set(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/main.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/button.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/marquee.cpp
                   ${CMAKE_CURRENT_SOURCE_DIR}/gui/fancyrect.cpp
-   )
+)
 
 ki18n_wrap_ui(kfacegui_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gui/mainwindow.ui)
 add_executable(kfacegui ${kfacegui_SRCS})
 
 target_link_libraries(kfacegui KF5KFace
-                               KF5::KIOCore
                                Qt5::Core
                                Qt5::Gui
                                ${OpenCV_LIBRARIES}
