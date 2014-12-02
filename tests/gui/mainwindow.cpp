@@ -177,7 +177,7 @@ void MainWindow::slotOpenImage()
 
     clearScene();
 
-    qDebug() << "Opened file " << file.toAscii().data();
+    qDebug() << "Opened file " << file;
 
     d->currentPhoto.load(file);
     d->lastPhotoItem = new QGraphicsPixmapItem(QPixmap::fromImage(d->currentPhoto));

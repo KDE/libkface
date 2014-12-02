@@ -25,7 +25,11 @@
  * ============================================================ */
 
 #include "button.h"
+
+// Qt includes
+
 #include <QGraphicsScene>
+
 namespace KFaceIface
 {
 

@@ -98,15 +98,9 @@ target_link_libraries(KF5KFace
                       Qt5::Gui
                       Qt5::Xml
                       Qt5::Sql
-                      
-#                       KF5::ConfigCore
-#                       KF5::TextWidgets
-#                       KF5::IconThemes
-#                       KF5::WidgetsAddons
-#                       KF5::Completion
-#                       KF5::KIOWidgets
-                      
-                      KF5::KDELibs4Support
+
+                      KF5::ConfigCore
+                      KF5::TextWidgets
 )
 
 install(TARGETS KF5KFace

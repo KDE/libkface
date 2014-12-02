@@ -37,10 +37,8 @@
 #include <QMutexLocker>
 #include <QSharedData>
 #include <QUuid>
-
-// KDE includes
-
-#include <kstandarddirs.h>
+#include <QDir>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -107,7 +105,8 @@ public:
         : mutex(QMutex::Recursive)
     {
         // Note: same line in databaseconfigelement.cpp. Keep in sync.
-        defaultPath = KStandardDirs::locateLocal("data", "libkface/database/", true);
+        defaultPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + QString("libkface/database/");
+        QDir().mkpath(defaultPath);
     }
 
     QExplicitlySharedDataPointer<RecognitionDatabase::Private> database(const QString& key);

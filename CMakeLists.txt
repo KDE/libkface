@@ -75,13 +75,9 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
 )
 
 find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
-#             Config
-#             TextWidgets
-#             IconThemes
-#             WidgetsAddons
-#             Completion
-#             KIO
-             KDELibs4Support
+             Config
+             TextWidgets
+             KIO
 )
 
 remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII) # TODO just for porting, remove later

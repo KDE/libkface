@@ -38,10 +38,6 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 
-// Local includes
-
-#include "libkface_export.h"
-
 namespace KFaceIface
 {
 

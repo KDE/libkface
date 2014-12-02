@@ -29,11 +29,11 @@
 #include <QDomElement>
 #include <QFile>
 #include <QIODevice>
+#include <QStandardPaths>
 
 // KDE includes
 
-#include <kstandarddirs.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -208,8 +208,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
 
 bool DatabaseConfigElementLoader::readConfig()
 {
-    QString filepath = KStandardDirs::locate("data", "libkface/database/dbconfig.xml");
-    //QString filepath = ":/database/dbconfig.xml";
+    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("libkface/database/dbconfig.xml"));
 
     QFile file(filepath);
 

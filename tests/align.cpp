@@ -35,15 +35,13 @@
 #include <QTime>
 #include <QDebug>
 #include <QGraphicsScene>
-// libkface includes
+
+// local includes
 
 #include "src/alignment-congealing/funnelreal.h"
 
-// Implementation not exported
-
-#include "src/alignment-congealing/funnelreal.cpp"
-
 using namespace KFaceIface;
+
 QStringList toPaths(char** const argv, int startIndex, int argc)
 {
     QStringList files;

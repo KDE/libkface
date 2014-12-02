@@ -38,12 +38,8 @@
 #include <QGraphicsScene>
 #include <QColor>
 #include <QDebug>
+#include <QIcon>
 #include <qmath.h>
-
-// KDE include
-
-#include <kstandarddirs.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -77,7 +73,6 @@ public:
         suggestionRejectButton(0),
         suggestionAcceptButton(0)
     {
-
     }
 
     bool               suggestionMode;
@@ -163,12 +158,12 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
 
     //---------------------
 
-    QPixmap rejectPix  = SmallIcon("dialog-close");
+    QPixmap rejectPix  = QIcon::fromTheme("dialog-close").pixmap(16, 16);
     d->rejectButton    = new Button( rejectPix, rejectPix);
     scene->addItem(d->rejectButton);
     d->rejectButton->show();
 
-    QPixmap acceptPix  = SmallIcon("dialog-ok");
+    QPixmap acceptPix  = QIcon::fromTheme("dialog-ok").pixmap(16, 16);
     d->acceptButton    = new Button( acceptPix, acceptPix);
     scene->addItem(d->acceptButton);
     //d->acceptButton->show();

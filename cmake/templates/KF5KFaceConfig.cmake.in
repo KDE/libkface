@@ -14,6 +14,6 @@
 @PACKAGE_INIT@
 
 find_dependency(Qt5Core Qt5Sql Qt5Gui Qt5Xml @REQUIRED_QT_VERSION@)
-find_dependency(KF5KDELibs4Support)
+find_dependency(Config TextWidgets KIO)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5KFaceTargets.cmake")
