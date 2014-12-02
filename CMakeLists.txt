@@ -80,8 +80,6 @@ find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
              KIO
 )
 
-remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII) # TODO just for porting, remove later
-
 # OpenCV detection
 include(MacroOpenCV)
 DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)

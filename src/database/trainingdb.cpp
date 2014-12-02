@@ -56,14 +56,14 @@ TrainingDB::~TrainingDB()
 
 void TrainingDB::setSetting(const QString& keyword, const QString& value)
 {
-    d->db->execSql( QString("REPLACE into Settings VALUES (?,?);"),
+    d->db->execSql( QString::fromLatin1("REPLACE into Settings VALUES (?,?);"),
                     keyword, value );
 }
 
 QString TrainingDB::setting(const QString& keyword) const
 {
     QList<QVariant> values;
-    d->db->execSql(QString("SELECT value FROM Settings "
+    d->db->execSql(QString::fromLatin1("SELECT value FROM Settings "
                            "WHERE keyword=?;"),
                    keyword, &values);
 
@@ -80,40 +80,41 @@ QString TrainingDB::setting(const QString& keyword) const
 int TrainingDB::addIdentity() const
 {
     QVariant id;
-    d->db->execSql("INSERT INTO Identities (type) VALUES (0)", 0, &id);
+    d->db->execSql(QString::fromLatin1("INSERT INTO Identities (type) VALUES (0)"), 0, &id);
     return id.toInt();
 }
 
 void TrainingDB::updateIdentity(const Identity& p)
 {
-    d->db->execSql("DELETE FROM IdentityAttributes WHERE id=?", p.id());
+    d->db->execSql(QString::fromLatin1("DELETE FROM IdentityAttributes WHERE id=?"), p.id());
     const QMap<QString, QString> map = p.attributesMap();
     QMap<QString, QString>::const_iterator it;
 
     for (it = map.constBegin(); it != map.constEnd(); ++it)
     {
-        d->db->execSql("INSERT INTO IdentityAttributes (id, attribute, value) VALUES (?, ?,?)", p.id(), it.key(), it.value());
+        d->db->execSql(QString::fromLatin1("INSERT INTO IdentityAttributes (id, attribute, value) VALUES (?, ?,?)"),
+                       p.id(), it.key(), it.value());
     }
 }
 
 void TrainingDB::deleteIdentity(int id)
 {
     // Triggers do the rest
-    d->db->execSql("DELETE FROM Identities WHERE id=?", id);
+    d->db->execSql(QString::fromLatin1("DELETE FROM Identities WHERE id=?"), id);
 }
 
 QList<Identity> TrainingDB::identities() const
 {
     QList<QVariant> ids;
     QList<Identity> results;
-    d->db->execSql("SELECT id FROM Identities", &ids);
+    d->db->execSql(QString::fromLatin1("SELECT id FROM Identities"), &ids);
 
     foreach (const QVariant& v, ids)
     {
         QList<QVariant> values;
         Identity p;
         p.setId(v.toInt());
-        d->db->execSql("SELECT attribute, value FROM IdentityAttributes WHERE id=?", p.id(), &values);
+        d->db->execSql(QString::fromLatin1("SELECT attribute, value FROM IdentityAttributes WHERE id=?"), p.id(), &values);
 
         for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
         {
@@ -134,7 +135,7 @@ QList<Identity> TrainingDB::identities() const
 QList<int> TrainingDB::identityIds() const
 {
     QList<QVariant> ids;
-    d->db->execSql("SELECT id FROM Identities", &ids);
+    d->db->execSql(QString::fromLatin1("SELECT id FROM Identities"), &ids);
 
     QList<int> results;
 
@@ -162,12 +163,12 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
     if (model.databaseId)
     {
         values << model.databaseId;
-        d->db->execSql("UPDATE OpenCVLBPHRecognizer SET version=?, radius=?, neighbors=?, grid_x=?, grid_y=? WHERE id=?", values);
+        d->db->execSql(QString::fromLatin1("UPDATE OpenCVLBPHRecognizer SET version=?, radius=?, neighbors=?, grid_x=?, grid_y=? WHERE id=?"), values);
     }
     else
     {
         QVariant insertedId;
-        d->db->execSql("INSERT INTO OpenCVLBPHRecognizer (version, radius, neighbors, grid_x, grid_y) VALUES (?,?,?,?,?)",
+        d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVLBPHRecognizer (version, radius, neighbors, grid_x, grid_y) VALUES (?,?,?,?,?)"),
                        values, 0, &insertedId);
         model.databaseId = insertedId.toInt();
     }
@@ -207,8 +208,8 @@ void TrainingDB::updateLBPHFaceModel(LBPHFaceModel& model)
                                     << data.cols
                                     << compressed;
 
-                    d->db->execSql("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, context, type, rows, cols, data) "
-                                   "VALUES (?,?,?,?,?,?,?)",
+                    d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, context, type, rows, cols, data) "
+                                   "VALUES (?,?,?,?,?,?,?)"),
                                    histogramValues, 0, &insertedId);
 
                     model.setWrittenToDatabase(i, insertedId.toInt());
@@ -224,7 +225,7 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
 {
     QVariantList values;
     //qCDebug(LIBKFACE_LOG) << "Loading LBPH model";
-    d->db->execSql("SELECT id, version, radius, neighbors, grid_x, grid_y FROM OpenCVLBPHRecognizer", &values);
+    d->db->execSql(QString::fromLatin1("SELECT id, version, radius, neighbors, grid_x, grid_y FROM OpenCVLBPHRecognizer"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -252,8 +253,8 @@ LBPHFaceModel TrainingDB::lbphFaceModel() const
         model.setGridY(it->toInt());
         ++it;
 
-        SqlQuery query = d->db->execQuery("SELECT id, identity, context, type, rows, cols, data "
-                                          "FROM OpenCVLBPHistograms WHERE recognizerid=?",
+        SqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data "
+                                          "FROM OpenCVLBPHistograms WHERE recognizerid=?"),
                                           model.databaseId);
         QList<OpenCVMatData> histograms;
         QList<LBPHistogramMetadata> histogramMetadata;
@@ -307,12 +308,12 @@ void TrainingDB::clearLBPHTraining(const QString& context)
 {
     if (context.isNull())
     {
-        d->db->execSql("DELETE FROM OpenCVLBPHistograms");
-        d->db->execSql("DELETE FROM OpenCVLBPHRecognizer");
+        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms"));
+        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHRecognizer"));
     }
     else
     {
-        d->db->execSql("DELETE FROM OpenCVLBPHistograms WHERE context=?", context);
+        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms WHERE context=?"), context);
     }
 }
 
@@ -322,11 +323,11 @@ void TrainingDB::clearLBPHTraining(const QList<int>& identities, const QString& 
     {
         if (context.isNull())
         {
-            d->db->execSql("DELETE FROM OpenCVLBPHistograms WHERE identity=?", id);
+            d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms WHERE identity=?"), id);
         }
         else
         {
-            d->db->execSql("DELETE FROM OpenCVLBPHistograms WHERE identity=? AND context=?", id, context);
+            d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms WHERE identity=? AND context=?"), id, context);
         }
     }
 }

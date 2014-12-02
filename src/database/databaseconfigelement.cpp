@@ -82,15 +82,15 @@ DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& databaseElement)
 {
     DatabaseConfigElement configElement;
-    configElement.databaseID = "Unidentified";
+    configElement.databaseID = QString::fromLatin1("Unidentified");
 
-    if (!databaseElement.hasAttribute("name"))
+    if (!databaseElement.hasAttribute(QString::fromLatin1("name")))
     {
         qCDebug(LIBKFACE_LOG) << "Missing statement attribute <name>.";
     }
 
-    configElement.databaseID = databaseElement.attribute("name");
-    QDomElement element      = databaseElement.namedItem("databaseName").toElement();
+    configElement.databaseID = databaseElement.attribute(QString::fromLatin1("name"));
+    QDomElement element      = databaseElement.namedItem(QString::fromLatin1("databaseName")).toElement();
 
     if (element.isNull())
     {
@@ -98,7 +98,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.databaseName = element.text();
-    element                    = databaseElement.namedItem("userName").toElement();
+    element                    = databaseElement.namedItem(QString::fromLatin1("userName")).toElement();
 
     if (element.isNull())
     {
@@ -106,7 +106,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.userName = element.text();
-    element                = databaseElement.namedItem("password").toElement();
+    element                = databaseElement.namedItem(QString::fromLatin1("password")).toElement();
 
     if (element.isNull())
     {
@@ -114,7 +114,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.password = element.text();
-    element                = databaseElement.namedItem("hostName").toElement();
+    element                = databaseElement.namedItem(QString::fromLatin1("hostName")).toElement();
 
     if (element.isNull())
     {
@@ -122,7 +122,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.hostName = element.text();
-    element                = databaseElement.namedItem("port").toElement();
+    element                = databaseElement.namedItem(QString::fromLatin1("port")).toElement();
 
     if (element.isNull())
     {
@@ -130,7 +130,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.port = element.text();
-    element            = databaseElement.namedItem("connectoptions").toElement();
+    element            = databaseElement.namedItem(QString::fromLatin1("connectoptions")).toElement();
 
     if (element.isNull())
     {
@@ -138,7 +138,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.connectOptions = element.text();
-    element                      = databaseElement.namedItem("dbservercmd").toElement();
+    element                      = databaseElement.namedItem(QString::fromLatin1("dbservercmd")).toElement();
 
     if (element.isNull())
     {
@@ -146,7 +146,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.dbServerCmd = element.text();
-    element                   = databaseElement.namedItem("dbinitcmd").toElement();
+    element                   = databaseElement.namedItem(QString::fromLatin1("dbinitcmd")).toElement();
 
     if (element.isNull())
     {
@@ -154,7 +154,7 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
     }
 
     configElement.dbInitCmd = element.text();
-    element                 = databaseElement.namedItem("dbactions").toElement();
+    element                 = databaseElement.namedItem(QString::fromLatin1("dbactions")).toElement();
 
     if (element.isNull())
     {
@@ -168,35 +168,35 @@ DatabaseConfigElement DatabaseConfigElementLoader::readDatabase(QDomElement& dat
 
 void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement)
 {
-    QDomElement dbActionElement = sqlStatementElements.firstChildElement("dbaction");
+    QDomElement dbActionElement = sqlStatementElements.firstChildElement(QString::fromLatin1("dbaction"));
 
-    for ( ; !dbActionElement.isNull();  dbActionElement=dbActionElement.nextSiblingElement("dbaction"))
+    for ( ; !dbActionElement.isNull();  dbActionElement=dbActionElement.nextSiblingElement(QString::fromLatin1("dbaction")))
     {
-        if (!dbActionElement.hasAttribute("name"))
+        if (!dbActionElement.hasAttribute(QString::fromLatin1("name")))
         {
             qCDebug(LIBKFACE_LOG) << "Missing statement attribute <name>.";
         }
 
         DatabaseAction action;
-        action.name = dbActionElement.attribute("name");
+        action.name = dbActionElement.attribute(QString::fromLatin1("name"));
         //qCDebug(LIBKFACE_LOG) << "Getting attribute " << dbActionElement.attribute("name");
 
-        if (dbActionElement.hasAttribute("mode"))
+        if (dbActionElement.hasAttribute(QString::fromLatin1("mode")))
         {
-            action.mode = dbActionElement.attribute("mode");
+            action.mode = dbActionElement.attribute(QString::fromLatin1("mode"));
         }
 
-        QDomElement databaseElement = dbActionElement.firstChildElement("statement");
+        QDomElement databaseElement = dbActionElement.firstChildElement(QString::fromLatin1("statement"));
 
-        for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("statement"))
+        for ( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement(QString::fromLatin1("statement")))
         {
-            if (!databaseElement.hasAttribute("mode"))
+            if (!databaseElement.hasAttribute(QString::fromLatin1("mode")))
             {
                 qCDebug(LIBKFACE_LOG) << "Missing statement attribute <mode>.";
             }
 
             DatabaseActionElement actionElement;
-            actionElement.mode      = databaseElement.attribute("mode");
+            actionElement.mode      = databaseElement.attribute(QString::fromLatin1("mode"));
             actionElement.statement = databaseElement.text();
 
             action.dbActionElements.append(actionElement);
@@ -208,7 +208,8 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
 
 bool DatabaseConfigElementLoader::readConfig()
 {
-    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("libkface/database/dbconfig.xml"));
+    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                              QString::fromLatin1("libkface/database/dbconfig.xml"));
 
     QFile file(filepath);
 
@@ -227,7 +228,7 @@ bool DatabaseConfigElementLoader::readConfig()
         return false;
     }
 
-    QDomDocument doc("DBConfig");
+    QDomDocument doc(QString::fromLatin1("DBConfig"));
 
     if (!doc.setContent(&file))
     {
@@ -239,7 +240,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     file.close();
 
-    QDomElement element = doc.namedItem("databaseconfig").toElement();
+    QDomElement element = doc.namedItem(QString::fromLatin1("databaseconfig")).toElement();
 
     if (element.isNull())
     {
@@ -248,7 +249,7 @@ bool DatabaseConfigElementLoader::readConfig()
         return false;
     }
 
-    QDomElement versionElement = element.namedItem("version").toElement();
+    QDomElement versionElement = element.namedItem(QString::fromLatin1("version")).toElement();
     int version = 0;
 
     qCDebug(LIBKFACE_LOG) << versionElement.isNull() << versionElement.text() << versionElement.text().toInt() << dbconfig_xml_version;
@@ -266,9 +267,9 @@ bool DatabaseConfigElementLoader::readConfig()
         return false;
     }
 
-    QDomElement databaseElement = element.firstChildElement("database");
+    QDomElement databaseElement = element.firstChildElement(QString::fromLatin1("database"));
 
-    for ( ; !databaseElement.isNull(); databaseElement=databaseElement.nextSiblingElement("database"))
+    for ( ; !databaseElement.isNull(); databaseElement=databaseElement.nextSiblingElement(QString::fromLatin1("database")))
     {
         DatabaseConfigElement l_DBCfgElement = readDatabase(databaseElement);
         databaseConfigs.insert(l_DBCfgElement.databaseID, l_DBCfgElement);

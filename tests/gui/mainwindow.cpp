@@ -234,13 +234,13 @@ void MainWindow::slotDetectFaces()
 void MainWindow::slotUpdateAccuracy()
 {
     int value = d->ui->accuracySlider->value();
-    d->detector->setParameter("accuracy", value/100.0);
+    d->detector->setParameter(QString::fromLatin1("accuracy"), value/100.0);
 }
 
 void MainWindow::slotUpdateSensitivity()
 {
     int value = d->ui->sensitivitySlider->value();
-    d->detector->setParameter("sensitivity", value);
+    d->detector->setParameter(QString::fromLatin1("sensitivity"), value);
 }
 
 void MainWindow::slotOpenDatabase()
@@ -274,10 +274,10 @@ void MainWindow::slotRecognise()
 
         if (!identity.isNull())
         {
-            item->suggest(identity.attribute("name"));
+            item->suggest(identity.attribute(QString::fromLatin1("name")));
 
             qDebug() << "Face #" << i+1 << " is closest to the person with ID " << identity.id()
-                     << " and name "<< identity.attribute("name");
+                     << " and name "<< identity.attribute(QString::fromLatin1("name"));
         }
         else
         {
@@ -298,7 +298,7 @@ void MainWindow::slotUpdateDatabase()
 
     foreach(FaceItem* const item, d->faceitems)
     {
-        if (item->text() != QString("?"))
+        if (item->text() != QString::fromLatin1("?"))
         {
             QTime time;
             time.start();
@@ -306,13 +306,13 @@ void MainWindow::slotUpdateDatabase()
             QString name = item->text();
             qDebug() << "Face #" << i+1 << ": training name '" << name << "'";
 
-            Identity identity = d->database.findIdentity("name", name);
+            Identity identity = d->database.findIdentity(QString::fromLatin1("name"), name);
 
             if (identity.isNull())
             {
                 QMap<QString, QString> attributes;
-                attributes["name"] = name;
-                identity           = d->database.addIdentity(attributes);
+                attributes[QString::fromLatin1("name")] = name;
+                identity                                = d->database.addIdentity(attributes);
                 qDebug() << "Adding new identity ID " << identity.id() << " to database for name " << name;
             }
             else
@@ -320,7 +320,7 @@ void MainWindow::slotUpdateDatabase()
                 qDebug() << "Found existing identity ID " << identity.id() << " from database for name " << name;
             }
 
-            d->database.train(identity, d->currentPhoto.copy(item->originalRect()), "test application");
+            d->database.train(identity, d->currentPhoto.copy(item->originalRect()), QString::fromLatin1("test application"));
 
             int elapsed = time.elapsed();
 

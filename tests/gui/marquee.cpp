@@ -103,7 +103,7 @@ Marquee::Marquee(FancyRect* const rect, QGraphicsItem* const parent)
     d->rect->setPos(0, 0);
     createHandles();
 
-    d->label   = new QGraphicsSimpleTextItem("", this);
+    d->label   = new QGraphicsSimpleTextItem(QString::fromLatin1(""), this);
     d->label->setBrush(QBrush(d->rectPen.color()));
     d->label->setPen(d->outlinePen);
     d->label->setZValue(2);

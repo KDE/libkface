@@ -62,12 +62,12 @@ public:
 
         for (int i=number*secondMultiplier ; i < number*secondMultiplier+secondMultiplier; i++)
         {
-            QString name      = QString("face%1").arg(i);
+            QString name      = QString::fromLatin1("face%1").arg(i);
             qDebug() << "Record Identity " << name << " to DB";
             QMap<QString, QString> attributes;
-            attributes["name"] = name;
-            identity           = db.addIdentity(attributes);
-            db.train(identity, image, "test application");
+            attributes[QString::fromLatin1("name")] = name;
+            identity                                = db.addIdentity(attributes);
+            db.train(identity, image, QString::fromLatin1("test application"));
         }
 
         qDebug() << "Trained group" << number;
@@ -76,8 +76,8 @@ public:
 
         for (int i=number*secondMultiplier ; i < number*secondMultiplier+secondMultiplier; i++)
         {
-            QString name = QString("face%1").arg(i);
-            identity     = db.findIdentity("name", name);
+            QString name = QString::fromLatin1("face%1").arg(i);
+            identity     = db.findIdentity(QString::fromLatin1("name"), name);
 
             if (!identity.isNull())
             {
@@ -107,8 +107,8 @@ int main(int argc, char** argv)
         Runnable* r= new Runnable(i, db);
         pool.start(r);
     }
-    pool.waitForDone();
 
+    pool.waitForDone();
 
     // Process recognition in database.
 
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
     {
         foreach(Identity id, list)
         {
-            qDebug() << "Identity " << id.attribute("name") << " recognized";
+            qDebug() << "Identity " << id.attribute(QString::fromLatin1("name")) << " recognized";
         }
     }
     else

@@ -72,7 +72,7 @@ QList<QImage> toImages(const QStringList& paths)
 
 int main(int argc, char** argv)
 {
-    if (argc < 2 || (argv[1] == QLatin1String("train") && argc < 3))
+    if (argc < 2 || (QString::fromLatin1(argv[1]) == QString::fromLatin1("train") && argc < 3))
     {
         qDebug() << "Bad Arguments!!!\nUsage: " << argv[0] << " identify <image1> <image2> ... | train name <image1> <image2> ... "
                                                               "| ORL <path to orl_faces>";
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 
     RecognitionDatabase db = RecognitionDatabase::addDatabase(QDir::currentPath());
 
-    if (argv[1] == QLatin1String("identify"))
+    if (QString::fromLatin1(argv[1]) == QString::fromLatin1("identify"))
     {
         QStringList paths    = toPaths(argv, 2, argc);
         QList<QImage> images = toImages(paths);
@@ -97,41 +97,41 @@ int main(int argc, char** argv)
 
         for (int i = 0 ; i < paths.size() ; i++)
         {
-            qDebug() << "Identified " << identities[i].attribute("name") << " in " << paths[i];
+            qDebug() << "Identified " << identities[i].attribute(QString::fromLatin1("name")) << " in " << paths[i];
         }
     }
-    else if (argv[1] == QLatin1String("train"))
+    else if (QString::fromLatin1(argv[1]) == QString::fromLatin1("train"))
     {
         QString name = QString::fromLocal8Bit(argv[2]);
         qDebug() << "Training " << name;
 
         QStringList paths    = toPaths(argv, 3, argc);
         QList<QImage> images = toImages(paths);
-        Identity identity    = db.findIdentity("name", name);
+        Identity identity    = db.findIdentity(QString::fromLatin1("name"), name);
 
         if (identity.isNull())
         {
             qDebug() << "Adding new identity to database for name " << name;
             QMap<QString, QString> attributes;
-            attributes["name"] = name;
-            identity           = db.addIdentity(attributes);
+            attributes[QString::fromLatin1("name")] = name;
+            identity                                = db.addIdentity(attributes);
         }
 
         QTime time;
         time.start();
 
-        db.train(identity, images, "test application");
+        db.train(identity, images, QString::fromLatin1("test application"));
 
         int elapsed = time.elapsed();
         qDebug() << "Training took " << elapsed << " for " << images.size() << ", " << ((float)elapsed/images.size()) << " per image";
     }
-    else if (argv[1] == QLatin1String("orl"))
+    else if (QString::fromLatin1(argv[1]) == QString::fromLatin1("orl"))
     {
         QString orlPath = QString::fromLocal8Bit(argv[2]);
 
         if (orlPath.isEmpty())
         {
-            orlPath = "orl_faces"; // relative to current dir
+            orlPath = QString::fromLatin1("orl_faces"); // relative to current dir
         }
 
         QDir orlDir(orlPath);
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
 
         const int OrlIdentities       = 40;
         const int OrlSamples          = 10;
-        const QString trainingContext = "test application";
+        const QString trainingContext = QString::fromLatin1("test application");
 
         QMap<int, Identity> idMap;
         QList<Identity> trainingToBeCleared;
@@ -152,8 +152,8 @@ int main(int argc, char** argv)
         for (int i = 1 ; i <= OrlIdentities ; i++)
         {
             QMap<QString, QString> attributes;
-            attributes["name"] = QString::number(i);
-            Identity identity  = db.findIdentity(attributes);
+            attributes[QString::fromLatin1("name")] = QString::number(i);
+            Identity identity                       = db.findIdentity(attributes);
 
             if (identity.isNull())
             {
@@ -176,7 +176,7 @@ int main(int argc, char** argv)
         {
             for (int j = 1 ; j <= OrlSamples ; j++)
             {
-                QString path = orlDir.path() + QString("/s%1/%2.pgm").arg(i).arg(j);
+                QString path = orlDir.path() + QString::fromLatin1("/s%1/%2.pgm").arg(i).arg(j);
 
                 if (j <= OrlSamples/2)
                 {
@@ -208,7 +208,7 @@ int main(int argc, char** argv)
 
         for (QMap<int, QStringList>::const_iterator it = trainingImages.constBegin() ; it != trainingImages.constEnd() ; ++it)
         {
-            Identity identity = db.findIdentity("name", QString::number(it.key()));
+            Identity identity = db.findIdentity(QString::fromLatin1("name"), QString::number(it.key()));
 
             if (identity.isNull())
             {

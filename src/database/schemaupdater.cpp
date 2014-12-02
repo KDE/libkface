@@ -89,12 +89,12 @@ bool SchemaUpdater::update()
     // even on failure, try to set current version - it may have incremented
     if (d->currentVersion)
     {
-        d->access->db()->setSetting("DBVersion", QString::number(d->currentVersion));
+        d->access->db()->setSetting(QString::fromLatin1("DBVersion"), QString::number(d->currentVersion));
     }
 
     if (d->currentRequiredVersion)
     {
-        d->access->db()->setSetting("DBVersionRequired", QString::number(d->currentRequiredVersion));
+        d->access->db()->setSetting(QString::fromLatin1("DBVersionRequired"), QString::number(d->currentRequiredVersion));
     }
 
     return success;
@@ -105,17 +105,17 @@ bool SchemaUpdater::startUpdates()
     // First step: do we have an empty database?
     QStringList tables = d->access->backend()->tables();
 
-    if (tables.contains("Settings", Qt::CaseInsensitive))
+    if (tables.contains(QString::fromLatin1("Settings"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version         = d->access->db()->setting("DBVersion");
-        QString versionRequired = d->access->db()->setting("DBVersionRequired");
+        QString version         = d->access->db()->setting(QString::fromLatin1("DBVersion"));
+        QString versionRequired = d->access->db()->setting(QString::fromLatin1("DBVersionRequired"));
         qCDebug(LIBKFACE_LOG) << "Have a database structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && d->access->parameters().isSQLite())
         {
-            version = d->access->db()->setting("DBVersion");
+            version = d->access->db()->setting(QString::fromLatin1("DBVersion"));
         }
 
         // We absolutely require the DBVersion setting
@@ -230,18 +230,18 @@ bool SchemaUpdater::createDatabase()
 
 bool SchemaUpdater::createTables()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDB")) &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateDBOpenCVLBPH"));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateDB"))) &&
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateDBOpenCVLBPH")));
 }
 
 bool SchemaUpdater::createIndices()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateIndices"));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateIndices")));
 }
 
 bool SchemaUpdater::createTriggers()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction("CreateTriggers"));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateTriggers")));
 }
 
 bool SchemaUpdater::updateV1ToV2()
