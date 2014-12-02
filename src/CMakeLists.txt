@@ -62,6 +62,36 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libopencv.h.cmake.in ${CMAKE_CURRENT_
 
 generate_export_header(KF5KFace BASE_NAME libkface EXPORT_MACRO_NAME LIBKFACE_EXPORT)
 
+target_include_directories(KF5KFace INTERFACE 
+                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KFace>"
+)
+
+target_link_libraries(KF5KFace
+                      PRIVATE
+                      ${OpenCV_LIBRARIES}
+                      PUBLIC
+                      Qt5::Gui
+                      Qt5::Widgets
+                      Qt5::Xml
+                      Qt5::Sql
+
+                      KF5::I18n
+)
+
+set_target_properties(KF5KFace    PROPERTIES
+                      VERSION     ${KFACE_VERSION_STRING}
+                      SOVERSION   ${KFACE_SOVERSION}
+                      EXPORT_NAME KFace
+)
+
+install(TARGETS KF5KFace
+        EXPORT  KF5KFaceTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+)
+
+
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
+        DESTINATION ${DATA_INSTALL_DIR}/libkface/database )
+
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
 if(NOT DIGIKAMSC_COMPILE_LIBKFACE)
 
@@ -86,32 +116,3 @@ if(NOT DIGIKAMSC_COMPILE_LIBKFACE)
     )
 
 endif()
-
-target_include_directories(KF5KFace INTERFACE 
-                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KFace>"
-)
-
-target_link_libraries(KF5KFace
-                      PRIVATE
-                      ${OpenCV_LIBRARIES}
-                      PUBLIC
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Xml
-                      Qt5::Sql
-
-                      KF5::I18n
-)
-
-install(TARGETS KF5KFace
-        EXPORT  KF5KFaceTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
-)
-
-set_target_properties(KF5KFace    PROPERTIES
-                      VERSION     ${KFACE_VERSION_STRING}
-                      SOVERSION   ${KFACE_SOVERSION}
-                      EXPORT_NAME KFace
-)
-
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
-        DESTINATION ${DATA_INSTALL_DIR}/libkface/database )
