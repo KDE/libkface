@@ -430,7 +430,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         }
 
         // Compute mean
-        QString s("Mean distances: ");
+        QString s = QString::fromLatin1("Mean distances: ");
         std::map<int, std::vector<int> >::const_iterator it;
 
         for (it = distancesMap.begin(); it != distancesMap.end(); ++it)
@@ -443,7 +443,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             }
 
             double mean = sum / it->second.size();
-            s          += QString("%1: %2 - ").arg(it->first).arg(mean);
+            s          += QString::fromLatin1("%1: %2 - ").arg(it->first).arg(mean);
 
             if((mean < minDist) && (mean < m_threshold))
             {
@@ -481,12 +481,12 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         }
 
         minDist = 0;
-        QString s("Nearest Neighbor score: ");
+        QString s = QString::fromLatin1("Nearest Neighbor score: ");
 
         for (std::map<int,int>::iterator it = scoreMap.begin(); it != scoreMap.end(); ++it)
         {
             double score = double(it->second) / countMap.at(it->first);
-            s           += QString("%1/%2 %3  ").arg(it->second).arg(countMap.at(it->first)).arg(score);
+            s           += QString::fromLatin1("%1/%2 %3  ").arg(it->second).arg(countMap.at(it->first)).arg(score);
 
             if (score > minDist)
             {

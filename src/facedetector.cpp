@@ -61,15 +61,15 @@ public:
         {
             QStringList cascadeDirs;
             // First try : typically work everywhere if packagers don't drop libkface shared data files.
-            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,  "libkface/haarcascades",  QStandardPaths::LocateDirectory);
+            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,  QString::fromLatin1("libkface/haarcascades"),  QStandardPaths::LocateDirectory);
 
             // Second try to find OpenCV shared files. Work only under Linux and OSX. OpenCV do not install XML files under Windows (checked with OpenCV 2.4.9)
             // Try under both CamelCase *and* lowercase directories, as both seems to be used.
-            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "../OpenCV/haarcascades", QStandardPaths::LocateDirectory);
-            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "../opencv/haarcascades", QStandardPaths::LocateDirectory);
+            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, QString::fromLatin1("../OpenCV/haarcascades"), QStandardPaths::LocateDirectory);
+            cascadeDirs << QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, QString::fromLatin1("../opencv/haarcascades"), QStandardPaths::LocateDirectory);
 
             // Last try to find OpenCV shared files, using cmake env variables.
-            cascadeDirs << QString("%1/haarcascades").arg(OPENCV_ROOT_PATH);
+            cascadeDirs << QString::fromLatin1("%1/haarcascades").arg(QString::fromLatin1(OPENCV_ROOT_PATH));
 
             qCDebug(LIBKFACE_LOG) << "Try to find OpenCV Haar Cascade files in these directories: " << cascadeDirs;
 
@@ -93,19 +93,19 @@ public:
         }
         for (QVariantMap::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it)
         {
-            if (it.key() == "accuracy")
+            if (it.key() == QString::fromLatin1("accuracy"))
             {
                 backend()->setAccuracy(it.value().toDouble());
             }
-            else if (it.key() == "speed")
+            else if (it.key() == QString::fromLatin1("speed"))
             {
                 backend()->setAccuracy(1.0 - it.value().toDouble());
             }
-            else if (it.key() == "specificity")
+            else if (it.key() == QString::fromLatin1("specificity"))
             {
                 backend()->setSpecificity(it.value().toDouble());
             }
-            else if (it.key() == "sensitivity")
+            else if (it.key() == QString::fromLatin1("sensitivity"))
             {
                 backend()->setSpecificity(1.0 - it.value().toDouble());
             }
@@ -145,7 +145,7 @@ FaceDetector::~FaceDetector()
 
 QString FaceDetector::backendIdentifier() const
 {
-    return QString("OpenCV Cascades");
+    return QString::fromLatin1("OpenCV Cascades");
 }
 
 QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& originalSize)

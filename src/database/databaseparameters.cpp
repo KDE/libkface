@@ -68,22 +68,22 @@ bool DatabaseParameters::isValid() const
 
 bool DatabaseParameters::isSQLite() const
 {
-    return databaseType == "QSQLITE";
+    return databaseType == QString::fromLatin1("QSQLITE");
 }
 
 bool DatabaseParameters::isMySQL() const
 {
-    return databaseType == "QMYSQL";
+    return databaseType == QString::fromLatin1("QMYSQL");
 }
 
 QString DatabaseParameters::SQLiteDatabaseType()
 {
-    return "QSQLITE";
+    return QString::fromLatin1("QSQLITE");
 }
 
 QString DatabaseParameters::MySQLDatabaseType()
 {
-    return "QMYSQL";
+    return QString::fromLatin1("QMYSQL");
 }
 
 QString DatabaseParameters::SQLiteDatabaseFile() const
@@ -142,7 +142,7 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
 {
     // only the database name is needed
-    return DatabaseParameters("QSQLITE", databaseFile);
+    return DatabaseParameters(QString::fromLatin1("QSQLITE"), databaseFile);
 }
 
 } // namespace KFaceIface

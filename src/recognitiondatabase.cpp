@@ -105,7 +105,8 @@ public:
         : mutex(QMutex::Recursive)
     {
         // Note: same line in databaseconfigelement.cpp. Keep in sync.
-        defaultPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + QString("libkface/database/");
+        defaultPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
+                      QString::fromLatin1("/") + QString::fromLatin1("libkface/database/");
         QDir().mkpath(defaultPath);
     }
 
@@ -243,7 +244,8 @@ RecognitionDatabase::Private::Private(const QString& configPath)
       opencvlbph(0),
       funnel(0)
 {
-    DatabaseParameters params = DatabaseParameters::parametersForSQLite(configPath + "/" + "recognition.db");
+    DatabaseParameters params = DatabaseParameters::parametersForSQLite(configPath + 
+                                QString::fromLatin1("/") + QString::fromLatin1("recognition.db"));
     DatabaseAccess::setParameters(db, params);
     dbAvailable               = DatabaseAccess::checkReadyForUse(db);
 
@@ -410,8 +412,8 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
     Identity match;
 
     // First and foremost, UUID
-    QString uuid = attributes.value("uuid");
-    match        = d->findByAttribute("uuid", uuid);
+    QString uuid = attributes.value(QString::fromLatin1("uuid"));
+    match        = d->findByAttribute(QString::fromLatin1("uuid"), uuid);
 
     if (!match.isNull())
     {
@@ -425,7 +427,7 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
     }
 
     // full name
-    match = d->findByAttributes("fullName", attributes);
+    match = d->findByAttributes(QString::fromLatin1("fullName"), attributes);
 
     if (!match.isNull())
     {
@@ -433,7 +435,7 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
     }
 
     // name
-    match = d->findByAttributes("name", attributes);
+    match = d->findByAttributes(QString::fromLatin1("name"), attributes);
 
     if (!match.isNull())
     {
@@ -444,7 +446,9 @@ Identity RecognitionDatabase::findIdentity(const QMap<QString, QString>& attribu
 
     for (it = attributes.begin(); it != attributes.end(); ++it)
     {
-        if (it.key() == "uuid" || it.key() == "fullName" || it.key() == "name")
+        if (it.key() == QString::fromLatin1("uuid")     ||
+            it.key() == QString::fromLatin1("fullName") ||
+            it.key() == QString::fromLatin1("name"))
         {
             continue;
         }
@@ -469,9 +473,9 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
 
     QMutexLocker lock(&d->mutex);
 
-    if (attributes.contains("uuid"))
+    if (attributes.contains(QString::fromLatin1("uuid")))
     {
-        Identity matchByUuid = findIdentity("uuid", attributes.value("uuid"));
+        Identity matchByUuid = findIdentity(QString::fromLatin1("uuid"), attributes.value(QString::fromLatin1("uuid")));
 
         if (!matchByUuid.isNull())
         {
@@ -490,7 +494,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
         int id = DatabaseAccess(d->db).db()->addIdentity();
         identity.setId(id);
         identity.setAttributesMap(attributes);
-        identity.setAttribute("uuid", QUuid::createUuid().toString());
+        identity.setAttribute(QString::fromLatin1("uuid"), QUuid::createUuid().toString());
         DatabaseAccess(d->db).db()->updateIdentity(identity);
     }
 
@@ -557,7 +561,7 @@ void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QStr
 
 QString RecognitionDatabase::backendIdentifier() const
 {
-    return QString("opencvlbph");
+    return QString::fromLatin1("opencvlbph");
 }
 
 void RecognitionDatabase::Private::applyParameters()
@@ -566,7 +570,7 @@ void RecognitionDatabase::Private::applyParameters()
     {
         for (QVariantMap::const_iterator it = parameters.constBegin(); it != parameters.constEnd(); ++it)
         {
-            if (it.key() == "threshold" || it.key() == "accuracy")
+            if (it.key() == QString::fromLatin1("threshold") || it.key() == QString::fromLatin1("accuracy"))
             {
                 recognizer()->setThreshold(it.value().toFloat());
             }
@@ -893,12 +897,12 @@ void RecognitionDatabase::deleteIdentity(const Identity& identityToBeDeleted)
 
 QString LibOpenCVVersion()
 {
-    return QString("%1").arg(CV_VERSION);
+    return QString::fromLatin1("%1").arg(QString::fromLatin1(CV_VERSION));
 }
 
 QString version()
 {
-    return QString(KFACE_VERSION_STRING);
+    return QString::fromLatin1(KFACE_VERSION_STRING);
 }
 
 } // namespace KFaceIface

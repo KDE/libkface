@@ -165,8 +165,8 @@ public:
 FunnelReal::FunnelReal()
     : d(new Private)
 {
-    QString trainingFile = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).last() + "/" +
-                           QString("libkface/alignment-congealing/face-funnel.data");
+    QString trainingFile = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).last() + QString::fromLatin1("/") +
+                           QString::fromLatin1("libkface/alignment-congealing/face-funnel.data");
 
     if (!QFileInfo(trainingFile).exists())
     {

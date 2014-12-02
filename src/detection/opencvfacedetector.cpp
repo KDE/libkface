@@ -80,7 +80,9 @@ static QString findFileInDirs(const QStringList& dirs, const QString& fileName)
 {
     foreach (const QString& dir, dirs)
     {
-        const QString file = dir + (dir.endsWith("/") ? "" : "/") + fileName;
+        const QString file = dir + (dir.endsWith(QString::fromLatin1("/")) ? QString::fromLatin1("") 
+                                                                           : QString::fromLatin1("/"))
+                                 + fileName;
 
         if (QFile::exists(file))
         {
@@ -296,17 +298,17 @@ OpenCVFaceDetector::OpenCVFaceDetector(const QStringList& cascadeDirs)
         return;
     }
 
-    d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt.xml");
-    d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_default.xml");
-    d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt2.xml");
-    d->cascades << Cascade(cascadeDirs, "haarcascade_frontalface_alt_tree.xml");
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_frontalface_alt.xml"));
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_frontalface_default.xml"));
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_frontalface_alt2.xml"));
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_frontalface_alt_tree.xml"));
 
-    d->cascades << Cascade(cascadeDirs, "haarcascade_profileface.xml");
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_profileface.xml"));
 
-    d->cascades << Cascade(cascadeDirs, "haarcascade_mcs_lefteye.xml");
-    d->cascades << Cascade(cascadeDirs, "haarcascade_mcs_righteye.xml");
-    d->cascades << Cascade(cascadeDirs, "haarcascade_mcs_nose.xml");
-    d->cascades << Cascade(cascadeDirs, "haarcascade_mcs_mouth.xml");
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_mcs_lefteye.xml"));
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_mcs_righteye.xml"));
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_mcs_nose.xml"));
+    d->cascades << Cascade(cascadeDirs, QString::fromLatin1("haarcascade_mcs_mouth.xml"));
 
     d->cascades[2].setPrimaryCascade();
 

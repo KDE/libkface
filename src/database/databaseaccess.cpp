@@ -191,7 +191,7 @@ void DatabaseAccess::setParameters(DatabaseAccessData* const d, const DatabasePa
     {
         delete d->db;
         delete d->backend;
-        d->backend = new DatabaseCoreBackend("database-", &d->lock);
+        d->backend = new DatabaseCoreBackend(QString::fromLatin1("database-"), &d->lock);
         d->db      = new TrainingDB(d->backend);
     }
 }
@@ -200,7 +200,7 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, Initializatio
 {
     QStringList drivers = QSqlDatabase::drivers();
 
-    if (!drivers.contains("QSQLITE"))
+    if (!drivers.contains(QString::fromLatin1("QSQLITE")))
     {
         qCWarning(LIBKFACE_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
