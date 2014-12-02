@@ -96,11 +96,11 @@ target_link_libraries(KF5KFace
                       ${OpenCV_LIBRARIES}
                       PUBLIC
                       Qt5::Gui
+                      Qt5::Widgets
                       Qt5::Xml
                       Qt5::Sql
 
-                      KF5::ConfigCore
-                      KF5::TextWidgets
+                      KF5::I18n
 )
 
 install(TARGETS KF5KFace

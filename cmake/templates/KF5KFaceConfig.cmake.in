@@ -13,7 +13,7 @@
 
 @PACKAGE_INIT@
 
-find_dependency(Qt5Core Qt5Sql Qt5Gui Qt5Xml @REQUIRED_QT_VERSION@)
-find_dependency(Config TextWidgets)
+find_dependency(Qt5Core Qt5Sql Qt5Gui Qt5Xml Qt5Widgets @REQUIRED_QT_VERSION@)
+find_dependency(I18n)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5KFaceTargets.cmake")

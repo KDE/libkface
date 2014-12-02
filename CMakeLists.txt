@@ -69,14 +69,14 @@ include(FeatureSummary)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
+             Widgets
              Sql
              Xml
              Gui
 )
 
 find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
-             Config
-             TextWidgets
+             I18n
 )
 
 # OpenCV detection

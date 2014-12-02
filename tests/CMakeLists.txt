@@ -25,6 +25,7 @@ target_link_libraries(recognize KF5KFace Qt5::Core Qt5::Gui ${OpenCV_LIBRARIES})
 # -----------------------------------------------------------------------------
 
 set(align_SRCS align.cpp
+               # not exported by libkface
                ../src/alignment-congealing/funnelreal.cpp
                ../src/libkface_debug.cpp
 )
