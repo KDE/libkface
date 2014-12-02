@@ -44,11 +44,11 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QDebug>
+#include <QStandardPaths>
 
-// KDE includes
+// Local includes
 
-#include <kstandarddirs.h>
+#include "libkface_debug.h"
 
 namespace KFaceIface
 {
@@ -59,7 +59,7 @@ public:
 
     Private()
         : isLoaded(false),
-          numParams(4), // similarity transforms - x translation, y translation, rotation, uniform scaling
+          numParams(4),          // similarity transforms - x translation, y translation, rotation, uniform scaling
           windowSize(4),
           maxProcessAtOnce(600), // set based on memory limitations,
           outerDimW(150),
@@ -68,7 +68,7 @@ public:
           innerDimH(100),
           siftHistDim(4),
           siftBucketsDim(8),
-          siftDescDim((4*windowSize*windowSize*siftBucketsDim)/(siftHistDim*siftHistDim)),
+          siftDescDim((4*windowSize*windowSize*siftBucketsDim) / (siftHistDim*siftHistDim)),
           numRandPxls(0),
           numFeatureClusters(0),
           edgeDescDim(0)
@@ -109,9 +109,11 @@ public:
     void computeOriginalFeatures(std::vector<std::vector<std::vector<float> > > &originalFeatures,
                                  const cv::Mat& image,
                                  const int width, const int height) const;
+
     /// Part 2: Returns a small vector containg transformation parameters
     std::vector<float> computeTransform(const std::vector<std::vector<std::vector<float> > > &originalFeatures,
                                  const int width, const int height) const;
+
     /// Part 3: Applies the transformation (v, form computeTransform) to the given image, returns the result.
     cv::Mat applyTransform      (const cv::Mat& image,
                                  const std::vector<float> &v,
@@ -163,11 +165,11 @@ public:
 FunnelReal::FunnelReal()
     : d(new Private)
 {
-    QString trainingFile = KStandardDirs::installPath("data") + QString("libkface/alignment-congealing/face-funnel.data");
+    QString trainingFile = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).last() + QString("libkface/alignment-congealing/face-funnel.data");
 
     if (!QFileInfo(trainingFile).exists())
     {
-        qCritical() << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
+        qCritical(LIBKFACE_LOG) << "Training data for Congealing/Funnel not found. Should be at" << trainingFile;
         return;
     }
 
@@ -228,19 +230,20 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
         centroids = std::vector<std::vector<float> >(numFeatureClusters, cRow);
         sigmaSq   = std::vector<float>(numFeatureClusters);
 
-        for(int i=0; i<numFeatureClusters; i++)
+        for(int i = 0; i < numFeatureClusters; i++)
         {
-            for(int j=0; j<edgeDescDim; j++)
+            for(int j = 0; j < edgeDescDim; j++)
             {
                 trainingInfo >> centroids[i][j];
             }
+
             trainingInfo >> sigmaSq[i];
         }
 
         trainingInfo >> numRandPxls;
         randPxls = std::vector<std::pair<int, int> >(numRandPxls);
 
-        for(int j=0; j<numRandPxls; j++)
+        for(int j = 0; j < numRandPxls; j++)
             trainingInfo >> randPxls[j].first >> randPxls[j].second;
 
         std::vector<float>                dfCol(numFeatureClusters, 0);
@@ -255,9 +258,9 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
             if(trainingInfo.eof())
                 break;
 
-            for(int j=0; j<numRandPxls; j++)
+            for(int j = 0; j < numRandPxls; j++)
             {
-                for(int i=0; i<numFeatureClusters; i++)
+                for(int i = 0; i < numFeatureClusters; i++)
                     trainingInfo >> logDistField[j][i];
             }
 
@@ -266,11 +269,11 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
     }
     catch (const std::ifstream::failure& e)
     {
-        qCritical() << "Error loading Congealing/Funnel training data:" << e.what();
+        qCritical(LIBKFACE_LOG) << "Error loading Congealing/Funnel training data:" << e.what();
     }
     catch(...)
     {
-        qCritical() << "Default exception";
+        qCritical(LIBKFACE_LOG) << "Default exception";
     }
 
     computeGaussian(Gaussian, windowSize);
@@ -280,11 +283,11 @@ void FunnelReal::Private::loadTrainingData(const QString& path)
 
 void FunnelReal::Private::computeGaussian(std::vector<std::vector<float> > &Gaussian, int windowSize) const
 {
-    for(int i=0; i<2*windowSize; i++)
+    for(int i = 0; i < 2*windowSize; i++)
     {
         std::vector<float> grow(2*windowSize);
 
-        for(int j=0; j<2*windowSize; j++)
+        for(int j = 0; j < 2*windowSize; j++)
         {
             float ii = i-(windowSize-0.5f), jj = j-(windowSize-0.5f);
             grow[j]  = exp(-(ii*ii+jj*jj)/(2*windowSize*windowSize));
@@ -298,7 +301,7 @@ static float dist(const std::vector<float> &a, const std::vector<float> &b)
 {
     float r=0;
 
-    for(int i=0; i<(signed)a.size(); i++)
+    for(int i = 0; i < (signed)a.size(); i++)
         r+=(a[i]-b[i])*(a[i]-b[i]);
 
     return r;
@@ -321,7 +324,7 @@ void FunnelReal::Private::computeOriginalFeatures(std::vector<std::vector<std::v
     std::vector<std::vector<float> > theta(image.rows, mtRow);
     float dx, dy;
 
-    for(int j=0; j<image.rows; j++)
+    for(int j = 0; j < image.rows; j++)
     {
         const float *greaterRow, *lesserRow, *row;
         row = image.ptr<float>(j);
@@ -342,7 +345,7 @@ void FunnelReal::Private::computeOriginalFeatures(std::vector<std::vector<std::v
             lesserRow  = image.ptr<float>(j-1);
         }
 
-        for(int k=0; k<image.cols; k++)
+        for(int k = 0; k < image.cols; k++)
         {
             dy = greaterRow[k] - lesserRow[k];
 
@@ -369,9 +372,9 @@ void FunnelReal::Private::computeOriginalFeatures(std::vector<std::vector<std::v
         }
     }
 
-    for(int j=0; j<height; j++)
+    for(int j = 0; j < height; j++)
     {
-        for(int k=0; k<width; k++)
+        for(int k = 0; k < width; k++)
         {
             getSIFTdescripter(SiftDesc, m, theta, j+windowSize, k+windowSize, windowSize,
                               siftHistDim, siftBucketsDim, Gaussian);
@@ -379,20 +382,20 @@ void FunnelReal::Private::computeOriginalFeatures(std::vector<std::vector<std::v
         }
     }
 
-    for(int j=0; j<height; j++)
+    for(int j = 0; j < height; j++)
     {
-        for(int k=0; k<width; k++)
+        for(int k = 0; k < width; k++)
         {
             std::vector<float> distances(numFeatureClusters);
             float sum = 0;
 
-            for(int ii=0; ii<numFeatureClusters; ii++)
+            for(int ii = 0; ii < numFeatureClusters; ii++)
             {
                 distances[ii] = exp(-dist(originalFeatures[j][k], centroids[ii])/(2*sigmaSq[ii]))/sqrt(sigmaSq[ii]);
                 sum += distances[ii];
             }
 
-            for(int ii=0; ii<numFeatureClusters; ii++)
+            for(int ii = 0; ii < numFeatureClusters; ii++)
             {
                 distances[ii] /= sum;
             }
