@@ -9,8 +9,9 @@
 # So we generalize installation of these files directly through libkface.
 
 file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.xml")
-install( FILES ${files}
-         DESTINATION ${DATA_INSTALL_DIR}/libkface/haarcascades )
+install(FILES ${files}
+        DESTINATION ${DATA_INSTALL_DIR}/libkface/haarcascades
+)
 
 # ---------------------------------------------------------------
 
@@ -20,7 +21,8 @@ add_custom_command(OUTPUT face-funnel.data
 add_custom_target(extract_funnel_data ALL DEPENDS face-funnel.data)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/face-funnel.data
-        DESTINATION ${DATA_INSTALL_DIR}/libkface/alignment-congealing)
+        DESTINATION ${DATA_INSTALL_DIR}/libkface/alignment-congealing
+)
 
 #add_custom_command(OUTPUT flandmark_model.dat
 #                   COMMAND ${CMAKE_COMMAND} -E tar xz ${CMAKE_CURRENT_SOURCE_DIR}/flandmark_model.dat.tgz)
