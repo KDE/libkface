@@ -63,7 +63,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libopencv.h.cmake.in ${CMAKE_CURRENT_
 generate_export_header(KF5KFace BASE_NAME libkface EXPORT_MACRO_NAME LIBKFACE_EXPORT)
 
 target_include_directories(KF5KFace INTERFACE 
-                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KFace:${KF5_INCLUDE_INSTALL_DIR}/KFace/kface>"
+                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KFace;${KF5_INCLUDE_INSTALL_DIR}/KFace/kface>"
 )
 
 target_link_libraries(KF5KFace
