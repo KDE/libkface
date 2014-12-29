@@ -19,4 +19,4 @@
 
 #include "libkface_debug.h"
 
-Q_LOGGING_CATEGORY(LIBKFACE_LOG, "log_libkface")
+Q_LOGGING_CATEGORY(LIBKFACE_LOG, "libkface")
