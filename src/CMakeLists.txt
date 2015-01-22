@@ -64,6 +64,7 @@ generate_export_header(KF5KFace BASE_NAME libkface EXPORT_MACRO_NAME LIBKFACE_EX
 
 target_include_directories(KF5KFace INTERFACE 
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KFace;${KF5_INCLUDE_INSTALL_DIR}/KFace/kface>"
+                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>"
 )
 
 target_link_libraries(KF5KFace

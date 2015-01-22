@@ -88,8 +88,8 @@ if(OpenCV_FOUND)
 
     ecm_setup_version(${LIBKFACE_LIB_VERSION}
                       VARIABLE_PREFIX      KFACE
-                      VERSION_HEADER       "${CMAKE_CURRENT_BINARY_DIR}/libkface_version.h"
-                      PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KFaceConfigVersion.cmake"
+                      VERSION_HEADER       "libkface_version.h"
+                      PACKAGE_VERSION_FILE "KF5KFaceConfigVersion.cmake"
                       SOVERSION            ${LIBKFACE_SO_VERSION}
     )
 
