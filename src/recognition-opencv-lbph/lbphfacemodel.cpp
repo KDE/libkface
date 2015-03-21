@@ -157,9 +157,12 @@ void LBPHFaceModel::setHistograms(const QList<OpenCVMatData>& histograms, const 
         newHistograms.push_back(histogram.toMat());
     }
 
+    m_histogramMetadata.clear();
+
     foreach (const LBPHistogramMetadata& metadata, histogramMetadata)
     {
         newLabels.push_back(metadata.identity);
+        m_histogramMetadata << metadata;
     }
 
     std::vector<cv::Mat> currentHistograms = ptr()->get<std::vector<cv::Mat> >("histograms");
