@@ -51,7 +51,7 @@ ecm_generate_headers(kface_CamelCase_HEADERS
                      Identity
                      DataProviders
 
-                     PREFIX           kface
+                     PREFIX           KFace
                      REQUIRED_HEADERS kface_HEADERS
 )
 
