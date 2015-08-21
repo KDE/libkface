@@ -90,7 +90,7 @@ public:
         // Draw images side-by-side for later display
         QSize size(left.cols, left.rows);
         size.scale(uiSize, uiSize, Qt::KeepAspectRatio);
-        cv::Size scaleSize(size.height(), size.width());
+        cv::Size scaleSize(size.width(), size.height());
 
         const int top = currentRow*uiSize;
         cv::Mat scaledLeft, scaledRight;
