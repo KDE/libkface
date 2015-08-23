@@ -426,7 +426,7 @@ std::vector<float> FunnelReal::Private::computeTransform(const std::vector<std::
 
         for(int k=0; k<numParams; k++)
         {
-            float dn = ((rand()%160)-80)/100.0f;
+            float dn = ((qrand()%160)-80)/100.0f;
             if(k>1)
             {
                 dn /= 100.0f;
