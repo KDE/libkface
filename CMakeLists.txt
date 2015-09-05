@@ -56,11 +56,12 @@ if(OpenCV_FOUND)
     # 3.3.0 => 2.0.0     (Added a "simple" training method using image data directly for a single image)
     # 3.4.0 => 2.0.0     (Added a "simple" training method using image data directly for an image list)
     # 3.5.0 => 3.0.0     (Added d private internal container to reduce binary uncompatibility with Identity class)
+    # 3.5.1 => 3.0.0     (Added OpenCV3 support)
 
     # Library API version
     set(KFACE_LIB_MAJOR_VERSION "3")
     set(KFACE_LIB_MINOR_VERSION "5")
-    set(KFACE_LIB_PATCH_VERSION "0")
+    set(KFACE_LIB_PATCH_VERSION "1")
 
     # Suffix to add at end of version string. Usual values are:
     # "-git"   : alpha code unstable from git. Do not use in production
