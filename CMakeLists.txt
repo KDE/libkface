@@ -10,6 +10,8 @@ project(libkface)
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: libkface")
 
+option(ENABLE_OPENCV3 "Build libkface with OpenCV3 instead OpenCV2 (default=OFF)" OFF)
+
 find_package(Qt4 4.6.0 REQUIRED)
 find_package(KDE4 REQUIRED)
 
@@ -30,7 +32,12 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${LIBKFACE_AREA_CODE_GENERAL})
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 include(MacroOpenCV)
-DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
+
+if (ENABLE_OPENCV3)
+    DETECT_OPENCV(3.0.0 core face highgui objdetect imgproc)
+else()
+    DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
+endif()
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 

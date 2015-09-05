@@ -21,6 +21,11 @@ libqt      >= 4.6.x                    http://www.qtsoftware.com
 libkde     >= 4.4.x                    http://www.kde.org
 libopencv  >= 2.4.9                    http://opencv.willowgarage.com/wiki    (with opencv 'haarcascades' data files)
 
+CMake compilation options to custom libkface:
+
+Use CMake "-DENABLE_OPENCV3=on"        flag to compile libkface source code using OpenCV3 instead OpenCV2 (disabled by default).
+                                       OpenCV3 support needs extra contrib modules package, especially 'face' and 'legacy' components.
+
 -- INSTALL ------------------------------------------------------------
 
 In order to compile, especially when QT3/Qt4 are installed at the same time,
