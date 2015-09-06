@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -8,6 +8,8 @@ project(libkface)
 
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
+
+option(ENABLE_OPENCV3 "Build libkface with OpenCV3 instead OpenCV2 (default=OFF)" OFF)
 
 set(CMAKE_MIN_VERSION   "2.8.12")
 set(ECM_MIN_VERSION     "1.1.0")
@@ -81,7 +83,27 @@ find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
 
 # OpenCV detection
 include(MacroOpenCV)
-DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
+
+if(ENABLE_OPENCV3)
+
+    DETECT_OPENCV(3.0.0 core face highgui objdetect imgproc)
+
+    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_LESS 3.0.0)
+        message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.0.0 have been found. Disabled ENABLE_OPENCV3")
+        set(OpenCV_FOUND FALSE)
+    endif()
+
+else()
+
+    DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
+
+    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_GREATER 2.4.99)
+        message(STATUS "ENABLE_OPENCV3 option is disabled and OpenCV >= 3.0.0 have been found. Enabled ENABLE_OPENCV3")
+        set(OpenCV_FOUND FALSE)
+    endif()
+
+endif()
+
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 if(OpenCV_FOUND)
