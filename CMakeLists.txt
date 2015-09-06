@@ -37,7 +37,7 @@ if(ENABLE_OPENCV3)
 
     DETECT_OPENCV(3.0.0 core face highgui objdetect imgproc)
 
-    if(${OpenCV_VERSION} VERSION_LESS 3.0.0)
+    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_LESS 3.0.0)
         message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.0.0 have been found. Disabled ENABLE_OPENCV3")
         set(OpenCV_FOUND FALSE)
     endif()
@@ -46,7 +46,7 @@ else()
 
     DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
 
-    if(${OpenCV_VERSION} VERSION_GREATER 2.4.11)
+    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_GREATER 2.4.11)
         message(STATUS "ENABLE_OPENCV3 option is disabled and OpenCV >= 3.0.0 have been found. Enabled ENABLE_OPENCV3")
         set(OpenCV_FOUND FALSE)
     endif()
