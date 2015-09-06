@@ -531,7 +531,7 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
     return ptr;
 }
 
-#if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,11)
+#if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,99)
     CV_INIT_ALGORITHM(LBPHFaceRecognizer, "FaceRecognizer.LBPH-KFaceIface",
                       obj.info()->addParam(obj, "radius",     obj.m_radius);
                       obj.info()->addParam(obj, "neighbors",  obj.m_neighbors);

@@ -136,7 +136,7 @@ public:
 
     cv::Size getOriginalWindowSize() const
     {
-#if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,11)
+#if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,99)
         // This is a HACK which may break any time. Work around the fact that getOriginalWindowSize()
         // always returns (0,0) and we need these values.
         if (oldCascade)

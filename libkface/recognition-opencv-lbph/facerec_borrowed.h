@@ -46,9 +46,9 @@ namespace KFaceIface
 {
 
 #if OPENCV_TEST_VERSION(3,0,0)
-class LBPHFaceRecognizer : public cv::face::FaceRecognizer
-#else
 class LBPHFaceRecognizer : public cv::FaceRecognizer
+#else
+class LBPHFaceRecognizer : public cv::face::FaceRecognizer
 #endif
 {
 public:
@@ -104,11 +104,11 @@ public:
     ~LBPHFaceRecognizer() {}
 
 #if OPENCV_TEST_VERSION(3,0,0)
-    using cv::face::FaceRecognizer::save;
-    using cv::face::FaceRecognizer::load;
-#else
     using cv::FaceRecognizer::save;
     using cv::FaceRecognizer::load;
+#else
+    using cv::face::FaceRecognizer::save;
+    using cv::face::FaceRecognizer::load;
 #endif
 
     static cv::Ptr<LBPHFaceRecognizer> create(int radius=1, int neighbors=8, int grid_x=8, int grid_y=8, double threshold = DBL_MAX, PredictionStatistics statistics = NearestNeighbor);
@@ -150,6 +150,16 @@ public:
      */
 #if OPENCV_TEST_VERSION(3,0,0)
 
+    int neighbors() const { return m_neighbors; }
+    int radius()    const { return m_radius;    }
+    int grid_x()    const { return m_grid_x;    }
+    int grid_y()    const { return m_grid_y;    }
+
+    // NOTE: Implementation done through CV_INIT_ALGORITHM macro from OpenCV.
+    cv::AlgorithmInfo* info() const;
+
+#else
+
     int getNeighbors() const                             { return m_neighbors;            }
     void setNeighbors(int _neighbors)                    { m_neighbors = _neighbors;      }
 
@@ -173,16 +183,6 @@ public:
 
     void setStatistic(int _statistic)                    { m_statisticsMode = _statistic; }
     int getStatistic() const                             { return m_statisticsMode;       }
-
-#else
-
-    int neighbors() const { return m_neighbors; }
-    int radius()    const { return m_radius;    }
-    int grid_x()    const { return m_grid_x;    }
-    int grid_y()    const { return m_grid_y;    }
-
-    // NOTE: Implementation done through CV_INIT_ALGORITHM macro from OpenCV.
-    cv::AlgorithmInfo* info() const;
 
 #endif
 
