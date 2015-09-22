@@ -540,7 +540,7 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
                       obj.info()->addParam(obj, "threshold",  obj.m_threshold);
                       obj.info()->addParam(obj, "histograms", obj.m_histograms);         // modification: Make Read/Write
                       obj.info()->addParam(obj, "labels",     obj.m_labels);             // modification: Make Read/Write
-                      obj.info()->addParam(obj, "statistic",  obj.m_statisticsMode));    // modification: Add parameter
+                      obj.info()->addParam(obj, "statistic",  obj.m_statisticsMode))     // modification: Add parameter
 #endif
 
 } // namespace KFaceIface
