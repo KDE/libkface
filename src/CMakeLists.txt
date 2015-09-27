@@ -89,32 +89,26 @@ install(TARGETS KF5KFace
         EXPORT  KF5KFaceTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
         DESTINATION ${DATA_INSTALL_DIR}/libkface/database
 )
 
-# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-if(NOT DIGIKAMSC_COMPILE_LIBKFACE)
+install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkface_export.h
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/kface
+        COMPONENT   Devel
+)
 
-    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkface_export.h
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/kface
-            COMPONENT   Devel
-    )
+install(FILES       ${kface_CamelCase_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/KFace
+        COMPONENT   Devel
+)
 
-    install(FILES       ${kface_CamelCase_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/KFace
-            COMPONENT   Devel
-    )
+install(FILES       ${kface_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/kface
+        COMPONENT   Devel
+)
 
-    install(FILES       ${kface_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KFace/kface
-            COMPONENT   Devel
-    )
-
-    install(FILES       "${CMAKE_BINARY_DIR}/libkface_version.h"
-            DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-            COMPONENT   Devel
-    )
-
-endif()
+install(FILES       "${CMAKE_BINARY_DIR}/libkface_version.h"
+        DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
+        COMPONENT   Devel
+)
