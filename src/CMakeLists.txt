@@ -108,7 +108,7 @@ install(FILES       ${kface_HEADERS}
         COMPONENT   Devel
 )
 
-install(FILES       "${CMAKE_BINARY_DIR}/libkface_version.h"
+install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkface_version.h"
         DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
         COMPONENT   Devel
 )
