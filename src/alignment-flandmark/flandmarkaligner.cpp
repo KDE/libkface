@@ -34,9 +34,9 @@
 
 #include "flandmarkaligner.h"
 
-// KDE includes
+// Qt includes
 
-#include <kstandarddirs.h>
+#include <QStandardPaths>
 
 // local includes
 
@@ -56,7 +56,11 @@ public:
     }
 
     void loadTrainingData(const QString& path);
-    bool isLoaded() const { return model; }
+
+    bool isLoaded() const
+    {
+        return model;
+    }
 
 public:
 
@@ -71,7 +75,8 @@ void FlandmarkAligner::Private::loadTrainingData(const QString& path)
 FlandmarkAligner::FlandmarkAligner()
     : d(new Private)
 {
-    QString modelData = KStandardDirs::installPath("data") + QString("libkface/alignment-flandmark/flandmark_model.dat");
+    QString modelData = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                               QLatin1String("libkface/alignment-flandmark/flandmark_model.dat"));
 
     if (!QFileInfo(modelData).exists())
     {
@@ -109,11 +114,11 @@ cv::Mat FlandmarkAligner::align(const cv::Mat& inputImage)
     qCDebug(LIBKFACE_LOG) << "Detecting" << d->model->data.options.M << "landmarks";
     QVector<double> landmarks(2*d->model->data.options.M);
     // bbox with detected face (format: top_left_col top_left_row bottom_right_col bottom_right_row)
-    int bbox[]        = {30,30,120,120};//{ 0, 0, image.cols, image.rows };
+    int bbox[]        = {30,30,120,120}; //{ 0, 0, image.cols, image.rows };
     IplImage iplImage = image;
     flandmark_detect(&iplImage, bbox, d->model, landmarks.data());
 
-    for (int i=0; i<d->model->data.options.M; i++)
+    for (int i = 0; i < d->model->data.options.M; i++)
     {
         qCDebug(LIBKFACE_LOG) << "Landmark" << i << landmarks.at(2*i) << ", " << landmarks.at(2*i+1);
     }
