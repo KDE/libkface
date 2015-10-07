@@ -28,10 +28,6 @@
 #include <QMutex>
 #include <QSqlDatabase>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "libkface_debug.h"
@@ -49,6 +45,7 @@ public:
     DatabaseAccessData()
         : backend(0),
           db(0),
+          lastError(QSqlError::NoError),
           initializing(false)
     {
     }
@@ -63,7 +60,7 @@ public:
     TrainingDB*          db;
     DatabaseParameters   parameters;
     DatabaseLocking      lock;
-    QString              lastError;
+    int                  lastError;
     bool                 initializing;
 };
 
@@ -202,9 +199,10 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, Initializatio
 
     if (!drivers.contains(QString::fromLatin1("QSQLITE")))
     {
-        qCWarning(LIBKFACE_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
-        d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
-                            "digiKam depends on the drivers provided by the SQL module of Qt.");
+        qCWarning(LIBKFACE_LOG) << "No SQLite3 driver available. "
+                                   "Libkface depends on the drivers provided by the SQL module of Qt. "
+                                   "List of QSqlDatabase drivers: " << drivers;
+        d->lastError = SQLite3DriverUnavialable;
         return false;
     }
 
@@ -214,7 +212,7 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, Initializatio
     if (!d->backend)
     {
         qCWarning(LIBKFACE_LOG) << "No database backend available in checkReadyForUse. "
-                      "Did you call setParameters before?";
+                                   "Did you call setParameters before?";
         return false;
     }
 
@@ -227,8 +225,7 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, Initializatio
     {
         if (!d->backend->open(d->parameters))
         {
-            access.setLastError(i18n("Error opening database backend.\n%1",
-                                     d->backend->lastError()));
+            access.setLastError((int)d->backend->lastError().type());
             return false;
         }
     }
@@ -251,12 +248,12 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, Initializatio
     return d->backend->isReady();
 }
 
-QString DatabaseAccess::lastError() const
+int DatabaseAccess::lastError() const
 {
     return d->lastError;
 }
 
-void DatabaseAccess::setLastError(const QString& error)
+void DatabaseAccess::setLastError(int error)
 {
     d->lastError = error;
 }

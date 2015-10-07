@@ -1641,10 +1641,10 @@ QSqlError DatabaseCoreBackend::lastSQLError()
     return d->databaseErrorForThread();
 }
 
-QString DatabaseCoreBackend::lastError()
+QSqlError DatabaseCoreBackend::lastError()
 {
     Q_D(DatabaseCoreBackend);
-    return d->databaseForThread().lastError().text();
+    return d->databaseForThread().lastError();
 }
 
 int DatabaseCoreBackend::maximumBoundValues() const

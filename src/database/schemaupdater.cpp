@@ -23,10 +23,6 @@
 
 #include "schemaupdater.h"
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "libkface_debug.h"
@@ -122,18 +118,16 @@ bool SchemaUpdater::startUpdates()
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            qCWarning(LIBKFACE_LOG) << "DBVersion not available! Giving up schema upgrading.";
+            qCWarning(LIBKFACE_LOG) << "The database is not valid: "
+                                       "the \"DBVersion\" setting does not exist. "
+                                       "The current database schema version cannot be verified. "
+                                       "Try to start with an empty database. ";
 
-            QString errorMsg = i18n("The database is not valid: "
-                                    "the \"DBVersion\" setting does not exist. "
-                                    "The current database schema version cannot be verified. "
-                                    "Try to start with an empty database. ");
-
-            d->access->setLastError(errorMsg);
+            d->access->setLastError(DatabaseVersionUnknow);
 
             if (d->observer)
             {
-                d->observer->error(errorMsg);
+                d->observer->error(DatabaseVersionUnknow);
                 d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
 
@@ -154,16 +148,16 @@ bool SchemaUpdater::startUpdates()
             }
             else
             {
-                QString errorMsg = i18n("The database has been used with a more recent version of libkface "
-                                        "and has been updated to a database schema which cannot be used with this version. "
-                                        "(This means this libkface version is too old, or the database format is to recent.) "
-                                        "Please use the more recent version of libkface that you used before.");
+                qCWarning(LIBKFACE_LOG) << "The database has been used with a more recent version of libkface "
+                                           "and has been updated to a database schema which cannot be used with this version. "
+                                           "(This means this libkface version is too old, or the database format is to recent.) "
+                                           "Please use the more recent version of libkface that you used before.";
 
-                d->access->setLastError(errorMsg);
+                d->access->setLastError(DatabaseVersionInvalid);
 
                 if (d->observer)
                 {
-                    d->observer->error(errorMsg);
+                    d->observer->error(DatabaseVersionInvalid);
                     d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
                 }
 
@@ -183,13 +177,13 @@ bool SchemaUpdater::startUpdates()
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
-            QString errorMsg = i18n("Failed to create tables in database.\n%1",
-                                    d->access->backend()->lastError());
-            d->access->setLastError(errorMsg);
+            qCDebug(LIBKFACE_LOG) << "Failed to create tables in database: " << d->access->backend()->lastError().text();
+                                                
+            d->access->setLastError(d->access->backend()->lastError().type());
 
             if (d->observer)
             {
-                d->observer->error(errorMsg);
+                d->observer->error(d->access->backend()->lastError().type());
                 d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
 

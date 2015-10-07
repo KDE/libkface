@@ -29,7 +29,6 @@
 #include "databaseparameters.h"
 #include "databaseerrorhandler.h"
 
-
 namespace KFaceIface
 {
 
@@ -37,6 +36,17 @@ class DatabaseCoreBackend;
 class InitializationObserver;
 class TrainingDB;
 class DatabaseAccessData;
+
+/** Database error codes in extension of QSqlError::Type
+ */
+enum DatabaseErrorCode
+{
+    DatabaseConfigFileInvalid    = 995,  /// Database XML config is invalid.
+    CannotOpenDatabaseConfigFile = 996,  /// Database XML config cannot be open.
+    DatabaseVersionInvalid       = 997,  /// Database version ID is incompatible with the current schema.
+    DatabaseVersionUnknow        = 998,  /// No Database version ID found. Cannot verify schema.
+    SQLite3DriverUnavialable     = 999   /// The Qt driver for SQLite3 databases is not available.
+};
 
 class DatabaseAccess
 {
@@ -52,11 +62,10 @@ public:
     DatabaseAccess(DatabaseAccessData* const);
     ~DatabaseAccess();
 
-    TrainingDB* db() const;
-
-    DatabaseCoreBackend* backend() const;
-    QString lastError() const;
-    DatabaseParameters parameters() const;
+    TrainingDB*          db()         const;
+    DatabaseCoreBackend* backend()    const;
+    int                  lastError()  const;
+    DatabaseParameters   parameters() const;
 
 
     static void initDatabaseErrorHandler(DatabaseAccessData* const d, DatabaseErrorHandler* const errorhandler);
@@ -64,9 +73,9 @@ public:
     static bool checkReadyForUse(DatabaseAccessData* const d, InitializationObserver* const observer = 0);
 
     /**
-      * Set the "last error" message. This method is not for public use.
+      * Set the "last error" code. This method is not for public use.
       */
-    void setLastError(const QString& error);
+    void setLastError(int error);
 
 private:
 

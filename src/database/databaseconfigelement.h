@@ -64,7 +64,7 @@ class DatabaseConfigElement
 public:
 
     static bool                   checkReadyForUse();
-    static QString                errorMessage();
+    static int                    error();
     static DatabaseConfigElement  element(const QString& databaseType);
 
 public:

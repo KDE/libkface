@@ -31,14 +31,10 @@
 #include <QIODevice>
 #include <QStandardPaths>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
+#include "databaseaccess.h"
 #include "libkface_debug.h"
-//#include "dbconfigversion.h"
 
 namespace KFaceIface
 {
@@ -63,7 +59,7 @@ public:
 public:
 
     bool                                 isValid;
-    QString                              errorMessage;
+    int                                  error;
     QMap<QString, DatabaseConfigElement> databaseConfigs;
 };
 
@@ -75,7 +71,7 @@ DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 
     if (!isValid)
     {
-        qCWarning(LIBKFACE_LOG) << errorMessage;
+        qCWarning(LIBKFACE_LOG) << "Error while reading configuration. Code: " << error;
     }
 }
 
@@ -215,16 +211,18 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (!file.exists())
     {
-        errorMessage = i18n("Could not open the dbconfig.xml file. "
-                            "This file is installed with libkface "
-                            "and is absolutely required to run recognition. "
-                            "Please check your installation.");
+        qCDebug(LIBKFACE_LOG) << "Could not open the dbconfig.xml file. "
+                                 "This file is installed with libkface "
+                                 "and is absolutely required to run recognition. "
+                                 "Please check your installation.";
+        error = CannotOpenDatabaseConfigFile;
         return false;
     }
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        errorMessage = i18n("Could not open dbconfig.xml file <filename>%1</filename>", filepath);
+        qCDebug(LIBKFACE_LOG) << "Could not open dbconfig.xml file: " << filepath;
+        error = CannotOpenDatabaseConfigFile;
         return false;
     }
 
@@ -233,8 +231,8 @@ bool DatabaseConfigElementLoader::readConfig()
     if (!doc.setContent(&file))
     {
         file.close();
-        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
-                            "is invalid and cannot be read.", filepath);
+        qCDebug(LIBKFACE_LOG) << "The XML in the dbconfig.xml file is invalid: " << filepath;
+        error = DatabaseConfigFileInvalid;
         return false;
     }
 
@@ -244,8 +242,8 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (element.isNull())
     {
-        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
-                            "is missing the required element <icode>%2</icode>", filepath, element.tagName());
+        qCDebug(LIBKFACE_LOG) << "Missing the required element " << element.tagName() << " in XML config file " << filepath;
+        error = DatabaseConfigFileInvalid;
         return false;
     }
 
@@ -261,9 +259,10 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (version < dbconfig_xml_version)
     {
-        errorMessage = i18n("An old version of the dbconfig.xml file <filename>%1</filename> "
-                            "is found. Please ensure that the right version of libkface "
-                            "is installed.", filepath);
+        qCDebug(LIBKFACE_LOG) << "An old version of the dbconfig.xml file " << filepath <<
+                                 " is found. Please ensure that the right version of libkface "
+                                 "is installed.";
+        error = DatabaseConfigFileInvalid;
         return false;
     }
 
@@ -291,9 +290,9 @@ bool DatabaseConfigElement::checkReadyForUse()
     return loader()->isValid;
 }
 
-QString DatabaseConfigElement::errorMessage()
+int DatabaseConfigElement::error()
 {
-    return loader()->errorMessage;
+    return loader()->error;
 }
 
 } // namespace KFaceIface

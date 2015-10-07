@@ -39,6 +39,7 @@
 #include "databaseerrorhandler.h"
 #include "databaseparameters.h"
 #include "sqlquery.h"
+#include "databaseaccess.h"
 
 namespace KFaceIface
 {
@@ -426,17 +427,14 @@ public:
     QStringList tables();
 
     /**
-     * Returns a description of the last error that occurred on this database.
-     * Use DatabaseAccess::lastError for errors presented to the user.
-     * This error will be included in that message.
-     * It may be empty.
+     * Returns a the last error that occurred on this database.
+     * Use DatabaseAccess::lastError for errors presented to the client application.
      */
-    QString lastError();
+    QSqlError lastError();
 
     /**
      * Returns the last error that occurred on this database.
-     * Use DatabaseAccess::lastError for errors presented to the user.
-     * It may be empty.
+     * Use DatabaseAccess::lastError for errors presented to the client application.
      */
     QSqlError lastSQLError();
 

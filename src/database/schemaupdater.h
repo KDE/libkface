@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SchemaUpdater_H
-#define SchemaUpdater_H
+#ifndef SCHEMA_UPDATER_H
+#define SCHEMA_UPDATER_H
 
 namespace KFaceIface
 {
@@ -60,4 +60,4 @@ private:
 
 } // namespace KFaceIface
 
-#endif // SchemaUpdater_H
+#endif // SCHEMA_UPDATER_H
