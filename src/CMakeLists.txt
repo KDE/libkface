@@ -70,13 +70,13 @@ target_include_directories(KF5KFace INTERFACE
 target_link_libraries(KF5KFace
                       PRIVATE
                       ${OpenCV_LIBRARIES}
+                      KF5::I18n
+
                       PUBLIC
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::Xml
                       Qt5::Sql
-
-                      KF5::I18n
 )
 
 set_target_properties(KF5KFace    PROPERTIES

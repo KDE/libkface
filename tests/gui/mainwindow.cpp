@@ -166,7 +166,7 @@ void MainWindow::clearScene()
 
 void MainWindow::slotOpenImage()
 {
-    QString file = QFileDialog::getOpenFileName(this, i18n("Select Image to Open"),
+    QString file = QFileDialog::getOpenFileName(this, QLatin1String("Select Image to Open"),
                                                 d->lastFileOpenPath,
                                                 QString::fromLatin1("Image Files (*.png *.jpg *.bmp *.pgm)"));
 
@@ -247,7 +247,7 @@ void MainWindow::slotOpenDatabase()
 {
     QString directory = QFileDialog::getExistingDirectory(
             this,
-            i18n("Select Database Directory"),
+            QLatin1String("Select Database Directory"),
             QDir::currentPath());
 
     if (directory.isEmpty())
