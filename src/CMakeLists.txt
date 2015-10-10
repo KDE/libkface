@@ -73,9 +73,9 @@ target_link_libraries(KF5KFace
 
                       PUBLIC
                       Qt5::Gui
-                      Qt5::Widgets
                       Qt5::Xml
                       Qt5::Sql
+                      Qt5::Widgets
 )
 
 set_target_properties(KF5KFace    PROPERTIES
