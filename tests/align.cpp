@@ -36,7 +36,7 @@
 #include <QDebug>
 #include <QGraphicsScene>
 
-// local includes
+// Local includes
 
 #include "src/alignment-congealing/funnelreal.h"
 

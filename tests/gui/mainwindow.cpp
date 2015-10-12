@@ -40,7 +40,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 
-// libkface includes
+// Local includes
 
 #include "recognitiondatabase.h"
 #include "facedetector.h"

@@ -35,7 +35,7 @@
 #include <QTime>
 #include <QDebug>
 
-// libkface includes
+// Local includes
 
 #include "src/preprocessing-tantriggs/tantriggspreprocessor.h"
 

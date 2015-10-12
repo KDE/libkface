@@ -32,7 +32,7 @@
 #include <QRunnable>
 #include <QDebug>
 
-// libkface includes
+// Local includes
 
 #include "src/recognitiondatabase.h"
 
@@ -40,12 +40,13 @@ using namespace KFaceIface;
 
 // --------------------------------------------------------------------------------------------------
 
-const int firstMultiplier = 20;
+const int firstMultiplier  = 20;
 const int secondMultiplier = 20;
 
 class Runnable : public QRunnable
 {
 public:
+
     Runnable(int number, RecognitionDatabase db)
         : number(number), db(db)
     {

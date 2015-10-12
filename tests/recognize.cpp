@@ -36,7 +36,7 @@
 #include <QTime>
 #include <QDebug>
 
-// libkface includes
+// Local includes
 
 #include "src/recognitiondatabase.h"
 

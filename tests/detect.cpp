@@ -33,7 +33,7 @@
 #include <QWidget>
 #include <QDebug>
 
-// libkface includes
+// Local includes
 
 #include "src/facedetector.h"
 
