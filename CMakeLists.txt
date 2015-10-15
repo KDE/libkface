@@ -112,8 +112,6 @@ if(OpenCV_FOUND)
 
     ############## Targets #########################
 
-    add_definitions(-DTRANSLATION_DOMAIN=\"libkface\")
-
     add_subdirectory(data)
     add_subdirectory(src)
 
