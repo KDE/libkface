@@ -88,7 +88,7 @@ install(TARGETS KF5KFace
         EXPORT  KF5KFaceTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfig.xml
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/database/dbfaceconfig.xml
         DESTINATION ${DATA_INSTALL_DIR}/libkface/database
 )
 

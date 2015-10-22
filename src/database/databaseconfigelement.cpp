@@ -205,13 +205,13 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
 bool DatabaseConfigElementLoader::readConfig()
 {
     QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              QString::fromLatin1("libkface/database/dbconfig.xml"));
+                                              QString::fromLatin1("libkface/database/dbfaceconfig.xml"));
 
     QFile file(filepath);
 
     if (!file.exists())
     {
-        qCDebug(LIBKFACE_LOG) << "Could not open the dbconfig.xml file. "
+        qCDebug(LIBKFACE_LOG) << "Could not open the dbfaceconfig.xml file. "
                                  "This file is installed with libkface "
                                  "and is absolutely required to run recognition. "
                                  "Please check your installation.";
@@ -221,7 +221,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qCDebug(LIBKFACE_LOG) << "Could not open dbconfig.xml file: " << filepath;
+        qCDebug(LIBKFACE_LOG) << "Could not open dbfaceconfig.xml file: " << filepath;
         error = CannotOpenDatabaseConfigFile;
         return false;
     }
@@ -231,7 +231,7 @@ bool DatabaseConfigElementLoader::readConfig()
     if (!doc.setContent(&file))
     {
         file.close();
-        qCDebug(LIBKFACE_LOG) << "The XML in the dbconfig.xml file is invalid: " << filepath;
+        qCDebug(LIBKFACE_LOG) << "The XML in the dbfaceconfig.xml file is invalid: " << filepath;
         error = DatabaseConfigFileInvalid;
         return false;
     }
@@ -259,7 +259,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (version < dbconfig_xml_version)
     {
-        qCDebug(LIBKFACE_LOG) << "An old version of the dbconfig.xml file " << filepath <<
+        qCDebug(LIBKFACE_LOG) << "An old version of the dbfaceconfig.xml file " << filepath <<
                                  " is found. Please ensure that the right version of libkface "
                                  "is installed.";
         error = DatabaseConfigFileInvalid;
