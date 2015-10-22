@@ -8,6 +8,7 @@ kde_enable_exceptions()
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/database
+                    ${CMAKE_CURRENT_SOURCE_DIR}/database/core
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
@@ -31,18 +32,17 @@ set(kface_LIB_SRCS detection/opencvfacedetector.cpp
 #                   preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
-set(kface_database_LIB_SRCS database/databasecorebackend.cpp
-                            database/databaseconfigelement.cpp
-                            database/sqlquery.cpp
+set(kface_database_LIB_SRCS database/core/databasecorebackend.cpp
+                            database/core/databaseconfigelement.cpp
+                            database/core/sqlquery.cpp
+                            database/core/dbactiontype.cpp
 
                             database/databasefaceaccess.cpp
                             database/databasefaceparameters.cpp
                             database/databasefacecontainers.cpp
                             database/databasefaceschemaupdater.cpp
                             database/databasefaceoperationgroup.cpp
-
                             database/trainingdb.cpp
-                            database/dbactiontype.cpp
 )
 
 ecm_generate_headers(kface_CamelCase_HEADERS
