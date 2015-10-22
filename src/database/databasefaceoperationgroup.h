@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-10-12
- * Description : Convenience object for grouping database operations
+ * Description : Convenience object for grouping face database operations
  *
  * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEOPERATIONGROUP_H
-#define DATABASEOPERATIONGROUP_H
+#ifndef DATABASE_FACE_OPERATION_GROUP_H
+#define DATABASE_FACE_OPERATION_GROUP_H
 
 namespace KFaceIface
 {
@@ -32,26 +32,26 @@ class DatabaseFaceAccessData;
 
 /**
  * When you intend to execute a number of write operations to the database,
- * group them while holding a DatabaseOperationGroup.
+ * group them while holding a DatabaseFaceOperationGroup.
  * For some database systems (SQLite), keeping a transaction across write operations
  * occurring in short time results in enormous speedup (800x).
  * For system that do not need this optimization, this class is a no-op.
  */
-class DatabaseOperationGroup
+class DatabaseFaceOperationGroup
 {
 public:
 
     /**
      * Retrieve a DatabaseFaceAccess object each time when constructing and destructing.
      */
-    DatabaseOperationGroup(DatabaseFaceAccessData* const db);
+    DatabaseFaceOperationGroup(DatabaseFaceAccessData* const db);
 
     /**
      * Use an existing DatabaseFaceAccess object, which must live as long as this object exists.
      */
-    DatabaseOperationGroup(DatabaseFaceAccess* const access);
+    DatabaseFaceOperationGroup(DatabaseFaceAccess* const access);
 
-    ~DatabaseOperationGroup();
+    ~DatabaseFaceOperationGroup();
 
     /**
      * This will - if a transaction is held - commit the transaction and acquire a new one.
@@ -80,4 +80,4 @@ private:
 
 } // namespace KFaceIface
 
-#endif // DATABASETRANSACTION_H
+#endif // DATABASE_FACE_OPERATION_GROUP_H

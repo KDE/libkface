@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databaseoperationgroup.h"
+#include "databasefaceoperationgroup.h"
 
 // Qt includes
 
@@ -35,7 +35,7 @@
 namespace KFaceIface
 {
 
-class DatabaseOperationGroup::Private
+class DatabaseFaceOperationGroup::Private
 {
 public:
 
@@ -51,9 +51,9 @@ public:
 
     DatabaseFaceAccess*     access;
     DatabaseFaceAccessData* db;
-    bool                acquired;
-    QTime               timeAcquired;
-    int                 maxTime;
+    bool                    acquired;
+    QTime                   timeAcquired;
+    int                     maxTime;
 
 public:
 
@@ -94,7 +94,7 @@ public:
     }
 };
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseFaceAccessData* const db)
+DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(DatabaseFaceAccessData* const db)
     : d(new Private)
 {
     d->db = db;
@@ -105,7 +105,7 @@ DatabaseOperationGroup::DatabaseOperationGroup(DatabaseFaceAccessData* const db)
     }
 }
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseFaceAccess* const access)
+DatabaseFaceOperationGroup::DatabaseFaceOperationGroup(DatabaseFaceAccess* const access)
     : d(new Private)
 {
     d->access = access;
@@ -116,13 +116,13 @@ DatabaseOperationGroup::DatabaseOperationGroup(DatabaseFaceAccess* const access)
     }
 }
 
-DatabaseOperationGroup::~DatabaseOperationGroup()
+DatabaseFaceOperationGroup::~DatabaseFaceOperationGroup()
 {
     d->release();
     delete d;
 }
 
-void DatabaseOperationGroup::lift()
+void DatabaseFaceOperationGroup::lift()
 {
     if (d->acquired)
     {
@@ -137,17 +137,17 @@ void DatabaseOperationGroup::lift()
     }
 }
 
-void DatabaseOperationGroup::setMaximumTime(int msecs)
+void DatabaseFaceOperationGroup::setMaximumTime(int msecs)
 {
     d->maxTime = msecs;
 }
 
-void DatabaseOperationGroup::resetTime()
+void DatabaseFaceOperationGroup::resetTime()
 {
     d->timeAcquired.start();
 }
 
-void DatabaseOperationGroup::allowLift()
+void DatabaseFaceOperationGroup::allowLift()
 {
     if (d->maxTime && d->timeAcquired.elapsed() > d->maxTime)
     {

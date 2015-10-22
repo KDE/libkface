@@ -46,7 +46,7 @@
 #include "libkface_version.h"
 #include "recognitiondatabase.h"
 #include "databasefaceaccess.h"
-#include "databaseoperationgroup.h"
+#include "databasefaceoperationgroup.h"
 #include "databasefaceparameters.h"
 #include "dataproviders.h"
 #include "trainingdb.h"
@@ -133,14 +133,14 @@ class RecognitionDatabase::Private : public QSharedData
 {
 public:
 
-    bool                 dbAvailable;
+    bool                    dbAvailable;
 
-    const QString        configPath;
-    QMutex               mutex;
-    DatabaseFaceAccessData*  db;
+    const QString           configPath;
+    QMutex                  mutex;
+    DatabaseFaceAccessData* db;
 
-    QVariantMap          parameters;
-    QHash<int, Identity> identityCache;
+    QVariantMap             parameters;
+    QHash<int, Identity>    identityCache;
 
 public:
 
@@ -249,7 +249,7 @@ RecognitionDatabase::Private::Private(const QString& configPath)
     DatabaseFaceParameters params = DatabaseFaceParameters::parametersForSQLite(configPath + 
                                 QString::fromLatin1("/") + QString::fromLatin1("recognition.db"));
     DatabaseFaceAccess::setParameters(db, params);
-    dbAvailable               = DatabaseFaceAccess::checkReadyForUse(db);
+    dbAvailable                   = DatabaseFaceAccess::checkReadyForUse(db);
 
     if (dbAvailable)
     {
@@ -492,7 +492,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
 
     Identity identity;
     {
-        DatabaseOperationGroup group(d->db);
+        DatabaseFaceOperationGroup group(d->db);
         int id = DatabaseFaceAccess(d->db).db()->addIdentity();
         identity.setId(id);
         identity.setAttributesMap(attributes);
