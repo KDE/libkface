@@ -34,13 +34,13 @@ set(kface_LIB_SRCS detection/opencvfacedetector.cpp
 set(kface_database_LIB_SRCS database/databaseaccess.cpp
                             database/databasecorebackend.cpp
                             database/databaseparameters.cpp
-                            database/dbactiontype.cpp
-                            database/schemaupdater.cpp
                             database/databaseconfigelement.cpp
                             database/databaseoperationgroup.cpp
+                            database/databasefacecontainers.cpp
                             database/trainingdb.cpp
+                            database/dbactiontype.cpp
+                            database/schemaupdater.cpp
                             database/sqlquery.cpp
-                            database/dbcontainers.cpp
 )
 
 ecm_generate_headers(kface_CamelCase_HEADERS

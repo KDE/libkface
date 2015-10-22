@@ -19,7 +19,7 @@
  *
  * ============================================================ */
 
-#include "dbcontainers.h"
+#include "databasefacecontainers.h"
 #include "libkface_debug.h"
 
 namespace KFaceIface

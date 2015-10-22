@@ -40,7 +40,7 @@
 
 // local includes
 
-#include "dbcontainers.h"
+#include "databasefacecontainers.h"
 #include "facerec_borrowed.h"
 
 namespace KFaceIface
