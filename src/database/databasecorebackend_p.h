@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "databaseparameters.h"
+#include "databasefaceparameters.h"
 
 namespace KFaceIface
 {
@@ -108,7 +108,7 @@ public:
 
     QString                                   backendName;
 
-    DatabaseParameters                        parameters;
+    DatabaseFaceParameters                        parameters;
 
     DatabaseCoreBackend::Status               status;
 

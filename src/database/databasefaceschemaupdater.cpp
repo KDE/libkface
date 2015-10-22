@@ -172,7 +172,7 @@ bool DatabaseFaceSchemaUpdater::startUpdates()
     else
     {
         //qCDebug(LIBKFACE_LOG) << "No database file available";
-        DatabaseParameters parameters = d->access->parameters();
+        DatabaseFaceParameters parameters = d->access->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())

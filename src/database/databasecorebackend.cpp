@@ -744,12 +744,12 @@ void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler* const ha
     d->errorHandler = handler;
 }
 
-bool DatabaseCoreBackend::isCompatible(const DatabaseParameters& parameters)
+bool DatabaseCoreBackend::isCompatible(const DatabaseFaceParameters& parameters)
 {
     return QSqlDatabase::drivers().contains(parameters.databaseType);
 }
 
-bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
+bool DatabaseCoreBackend::open(const DatabaseFaceParameters& parameters)
 {
     Q_D(DatabaseCoreBackend);
     d->parameters = parameters;

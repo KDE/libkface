@@ -47,7 +47,7 @@
 #include "recognitiondatabase.h"
 #include "databaseaccess.h"
 #include "databaseoperationgroup.h"
-#include "databaseparameters.h"
+#include "databasefaceparameters.h"
 #include "dataproviders.h"
 #include "trainingdb.h"
 
@@ -244,7 +244,7 @@ RecognitionDatabase::Private::Private(const QString& configPath)
       opencvlbph(0),
       funnel(0)
 {
-    DatabaseParameters params = DatabaseParameters::parametersForSQLite(configPath + 
+    DatabaseFaceParameters params = DatabaseFaceParameters::parametersForSQLite(configPath + 
                                 QString::fromLatin1("/") + QString::fromLatin1("recognition.db"));
     DatabaseAccess::setParameters(db, params);
     dbAvailable               = DatabaseAccess::checkReadyForUse(db);

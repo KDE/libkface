@@ -58,7 +58,7 @@ public:
 
     DatabaseCoreBackend* backend;
     TrainingDB*          db;
-    DatabaseParameters   parameters;
+    DatabaseFaceParameters   parameters;
     DatabaseLocking      lock;
     int                  lastError;
     bool                 initializing;
@@ -146,14 +146,14 @@ DatabaseCoreBackend* DatabaseAccess::backend() const
     return d->backend;
 }
 
-DatabaseParameters DatabaseAccess::parameters() const
+DatabaseFaceParameters DatabaseAccess::parameters() const
 {
     if (d)
     {
         return d->parameters;
     }
 
-    return DatabaseParameters();
+    return DatabaseFaceParameters();
 }
 
 void DatabaseAccess::initDatabaseErrorHandler(DatabaseAccessData* const d, DatabaseErrorHandler* const errorhandler)
@@ -162,7 +162,7 @@ void DatabaseAccess::initDatabaseErrorHandler(DatabaseAccessData* const d, Datab
     d->backend->setDatabaseErrorHandler(errorhandler);
 }
 
-void DatabaseAccess::setParameters(DatabaseAccessData* const d, const DatabaseParameters& parameters)
+void DatabaseAccess::setParameters(DatabaseAccessData* const d, const DatabaseFaceParameters& parameters)
 {
     DatabaseAccessMutexLocker lock(d);
 

@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "databaseparameters.h"
+#include "databasefaceparameters.h"
 #include "databaseerrorhandler.h"
 
 namespace KFaceIface
@@ -65,11 +65,11 @@ public:
     TrainingDB*          db()         const;
     DatabaseCoreBackend* backend()    const;
     int                  lastError()  const;
-    DatabaseParameters   parameters() const;
+    DatabaseFaceParameters   parameters() const;
 
 
     static void initDatabaseErrorHandler(DatabaseAccessData* const d, DatabaseErrorHandler* const errorhandler);
-    static void setParameters(DatabaseAccessData* const d, const DatabaseParameters& parameters);
+    static void setParameters(DatabaseAccessData* const d, const DatabaseFaceParameters& parameters);
     static bool checkReadyForUse(DatabaseAccessData* const d, DatabaseFaceInitObserver* const observer = 0);
 
     /**

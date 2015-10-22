@@ -33,11 +33,13 @@ set(kface_LIB_SRCS detection/opencvfacedetector.cpp
 
 set(kface_database_LIB_SRCS database/databaseaccess.cpp
                             database/databasecorebackend.cpp
-                            database/databaseparameters.cpp
                             database/databaseconfigelement.cpp
                             database/databaseoperationgroup.cpp
+
+                            database/databasefaceparameters.cpp
                             database/databasefacecontainers.cpp
                             database/databasefaceschemaupdater.cpp
+
                             database/trainingdb.cpp
                             database/dbactiontype.cpp
                             database/sqlquery.cpp

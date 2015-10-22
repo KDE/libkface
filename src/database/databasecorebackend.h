@@ -37,7 +37,7 @@
 
 #include "databaseconfigelement.h"
 #include "databaseerrorhandler.h"
-#include "databaseparameters.h"
+#include "databasefaceparameters.h"
 #include "sqlquery.h"
 #include "databaseaccess.h"
 
@@ -128,13 +128,13 @@ public:
     /**
      * Checks if the parameters can be used for this database backend.
      */
-    bool isCompatible(const DatabaseParameters& parameters);
+    bool isCompatible(const DatabaseFaceParameters& parameters);
 
     /**
      * Open the database connection.
      * @returns true on success
      */
-    bool open(const DatabaseParameters& parameters);
+    bool open(const DatabaseFaceParameters& parameters);
 
     /**
      * Initialize the database schema to the current version,

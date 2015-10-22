@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-03-18
- * Description : Storage container for database connection parameters.
+ * Description : Storage container for face database connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Holger Foerster <hamsi2k at freenet dot de>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databaseparameters.h"
+#include "databasefaceparameters.h"
 
 namespace KFaceIface
 {
@@ -36,27 +36,27 @@ static const char* configDatabaseName  = "Database Name";
 */
 }
 
-DatabaseParameters::DatabaseParameters()
+DatabaseFaceParameters::DatabaseFaceParameters()
 {
 }
 
-DatabaseParameters::DatabaseParameters(const QString& type, const QString& databaseName)
+DatabaseFaceParameters::DatabaseFaceParameters(const QString& type, const QString& databaseName)
     : databaseType(type), databaseName(databaseName)
 {
 }
 
-bool DatabaseParameters::operator==(const DatabaseParameters& other) const
+bool DatabaseFaceParameters::operator==(const DatabaseFaceParameters& other) const
 {
     return (databaseType == other.databaseType &&
             databaseName == other.databaseName);
 }
 
-bool DatabaseParameters::operator!=(const DatabaseParameters& other) const
+bool DatabaseFaceParameters::operator!=(const DatabaseFaceParameters& other) const
 {
     return !operator==(other);
 }
 
-bool DatabaseParameters::isValid() const
+bool DatabaseFaceParameters::isValid() const
 {
     if (isSQLite())
     {
@@ -66,27 +66,27 @@ bool DatabaseParameters::isValid() const
     return false;
 }
 
-bool DatabaseParameters::isSQLite() const
+bool DatabaseFaceParameters::isSQLite() const
 {
     return databaseType == QString::fromLatin1("QSQLITE");
 }
 
-bool DatabaseParameters::isMySQL() const
+bool DatabaseFaceParameters::isMySQL() const
 {
     return databaseType == QString::fromLatin1("QMYSQL");
 }
 
-QString DatabaseParameters::SQLiteDatabaseType()
+QString DatabaseFaceParameters::SQLiteDatabaseType()
 {
     return QString::fromLatin1("QSQLITE");
 }
 
-QString DatabaseParameters::MySQLDatabaseType()
+QString DatabaseFaceParameters::MySQLDatabaseType()
 {
     return QString::fromLatin1("QMYSQL");
 }
 
-QString DatabaseParameters::SQLiteDatabaseFile() const
+QString DatabaseFaceParameters::SQLiteDatabaseFile() const
 {
     if (isSQLite())
     {
@@ -97,14 +97,14 @@ QString DatabaseParameters::SQLiteDatabaseFile() const
 }
 
 /*
-DatabaseParameters DatabaseParameters::parametersFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
+DatabaseFaceParameters DatabaseFaceParameters::parametersFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
 {
-    DatabaseParameters parameters;
+    DatabaseFaceParameters parameters;
     parameters.readFromConfig(config, configGroup);
     return parameters;
 }
 
-void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
+void DatabaseFaceParameters::readFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
 {
     KConfigGroup group;
 
@@ -121,7 +121,7 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     databaseName             = group.readEntry(configDatabaseName, QString());
 }
 
-void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString& configGroup) const
+void DatabaseFaceParameters::writeToConfig(KSharedConfig::Ptr config, const QString& configGroup) const
 {
     KConfigGroup group;
 
@@ -139,10 +139,10 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
 
 */
 
-DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
+DatabaseFaceParameters DatabaseFaceParameters::parametersForSQLite(const QString& databaseFile)
 {
     // only the database name is needed
-    return DatabaseParameters(QString::fromLatin1("QSQLITE"), databaseFile);
+    return DatabaseFaceParameters(QString::fromLatin1("QSQLITE"), databaseFile);
 }
 
 } // namespace KFaceIface
