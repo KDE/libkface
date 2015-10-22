@@ -27,8 +27,8 @@
  *
  * ============================================================ */
 
-#ifndef KFACE_OPENCV_LBPH_FACERECOGNIZER_H
-#define KFACE_OPENCV_LBPH_FACERECOGNIZER_H
+#ifndef OPENCV_LBPH_FACE_RECOGNIZER_H
+#define OPENCV_LBPH_FACE_RECOGNIZER_H
 
 // OpenCV library
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace KFaceIface
 
-#endif // KFACE_FACERECOGNIZER_H
+#endif // OPENCV_LBPH_FACE_RECOGNIZER_H
