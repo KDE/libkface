@@ -414,7 +414,7 @@ public:
     void rollbackTransaction();
     /**
      * Returns if the database is in a different thread in a transaction.
-     * Note that a transaction does not require holding DatabaseAccess.
+     * Note that a transaction does not require holding database access.
      * Note that this does not give information about other processes
      * locking the database.
      */
@@ -427,13 +427,13 @@ public:
 
     /**
      * Returns a the last error that occurred on this database.
-     * Use DatabaseAccess::lastError for errors presented to the client application.
+     * Use database access lastError() for errors presented to the client application.
      */
     QSqlError lastError();
 
     /**
      * Returns the last error that occurred on this database.
-     * Use DatabaseAccess::lastError for errors presented to the client application.
+     * Use database access lastError() for errors presented to the client application.
      */
     QSqlError lastSQLError();
 

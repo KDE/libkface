@@ -557,7 +557,7 @@ bool DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::wait(unsigned long tim
 
 /** This suspends the current thread if the query status as
  *  set by setFlag() is Wait and until the thread is woken with wakeAll().
- *  The DatabaseAccess mutex will be unlocked while waiting.
+ *  The database access mutex will be unlocked while waiting.
  */
 void DatabaseCoreBackendPrivate::ErrorLocker::wait()
 {

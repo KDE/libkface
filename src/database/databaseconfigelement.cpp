@@ -280,7 +280,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
 DatabaseConfigElement DatabaseConfigElement::element(const QString& databaseType)
 {
-    // Unprotected read-only access? Usually accessed under DatabaseAccess protection anyway
+    // Unprotected read-only access? Usually accessed under database access protection anyway
     return loader()->databaseConfigs.value(databaseType);
 }
 
