@@ -27,14 +27,14 @@
 namespace KFaceIface
 {
 
-class DatabaseAccess;
+class DatabaseFaceAccess;
 class DatabaseFaceInitObserver;
 
 class DatabaseFaceSchemaUpdater
 {
 public:
 
-    DatabaseFaceSchemaUpdater(DatabaseAccess* const access);
+    DatabaseFaceSchemaUpdater(DatabaseFaceAccess* const access);
     ~DatabaseFaceSchemaUpdater();
 
     bool update();

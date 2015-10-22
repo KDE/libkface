@@ -27,8 +27,8 @@
 namespace KFaceIface
 {
 
-class DatabaseAccess;
-class DatabaseAccessData;
+class DatabaseFaceAccess;
+class DatabaseFaceAccessData;
 
 /**
  * When you intend to execute a number of write operations to the database,
@@ -42,14 +42,14 @@ class DatabaseOperationGroup
 public:
 
     /**
-     * Retrieve a DatabaseAccess object each time when constructing and destructing.
+     * Retrieve a DatabaseFaceAccess object each time when constructing and destructing.
      */
-    DatabaseOperationGroup(DatabaseAccessData* const db);
+    DatabaseOperationGroup(DatabaseFaceAccessData* const db);
 
     /**
-     * Use an existing DatabaseAccess object, which must live as long as this object exists.
+     * Use an existing DatabaseFaceAccess object, which must live as long as this object exists.
      */
-    DatabaseOperationGroup(DatabaseAccess* const access);
+    DatabaseOperationGroup(DatabaseFaceAccess* const access);
 
     ~DatabaseOperationGroup();
 

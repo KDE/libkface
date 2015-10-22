@@ -27,7 +27,7 @@
 
 #include "libkface_debug.h"
 #include "databasecorebackend.h"
-#include "databaseaccess.h"
+#include "databasefaceaccess.h"
 #include "databasefaceinitobserver.h"
 #include "trainingdb.h"
 
@@ -52,12 +52,12 @@ public:
     int                       currentVersion;
     int                       currentRequiredVersion;
 
-    DatabaseAccess*           access;
+    DatabaseFaceAccess*           access;
 
     DatabaseFaceInitObserver* observer;
 };
 
-DatabaseFaceSchemaUpdater::DatabaseFaceSchemaUpdater(DatabaseAccess* const access)
+DatabaseFaceSchemaUpdater::DatabaseFaceSchemaUpdater(DatabaseFaceAccess* const access)
     : d(new Private)
 {
     d->access = access;

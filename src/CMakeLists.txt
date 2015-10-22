@@ -31,18 +31,18 @@ set(kface_LIB_SRCS detection/opencvfacedetector.cpp
 #                   preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
-set(kface_database_LIB_SRCS database/databaseaccess.cpp
-                            database/databasecorebackend.cpp
+set(kface_database_LIB_SRCS database/databasecorebackend.cpp
                             database/databaseconfigelement.cpp
                             database/databaseoperationgroup.cpp
+                            database/sqlquery.cpp
 
+                            database/databasefaceaccess.cpp
                             database/databasefaceparameters.cpp
                             database/databasefacecontainers.cpp
                             database/databasefaceschemaupdater.cpp
 
                             database/trainingdb.cpp
                             database/dbactiontype.cpp
-                            database/sqlquery.cpp
 )
 
 ecm_generate_headers(kface_CamelCase_HEADERS

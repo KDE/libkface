@@ -32,7 +32,7 @@
 // local includes
 
 #include "libkface_debug.h"
-#include "databaseaccess.h"
+#include "databasefaceaccess.h"
 #include "libopencv.h"
 #include "lbphfacemodel.h"
 #include "trainingdb.h"
@@ -44,7 +44,7 @@ class OpenCVLBPHFaceRecognizer::Private
 {
 public:
 
-    Private(DatabaseAccessData* const db)
+    Private(DatabaseFaceAccessData* const db)
         : db(db),
           threshold(100),
           loaded(false)
@@ -57,7 +57,7 @@ public:
     {
         if (!loaded)
         {
-            m_lbph = DatabaseAccess(db).db()->lbphFaceModel();
+            m_lbph = DatabaseFaceAccess(db).db()->lbphFaceModel();
             loaded = true;
         }
 
@@ -66,7 +66,7 @@ public:
 
 public:
 
-    DatabaseAccessData* db;
+    DatabaseFaceAccessData* db;
     float               threshold;
 
 private:
@@ -75,7 +75,7 @@ private:
     bool                loaded;
 };
 
-OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer(DatabaseAccessData* const db)
+OpenCVLBPHFaceRecognizer::OpenCVLBPHFaceRecognizer(DatabaseFaceAccessData* const db)
     : d(new Private(db))
 {
     setThreshold(0.5);
@@ -163,7 +163,7 @@ void OpenCVLBPHFaceRecognizer::train(const std::vector<cv::Mat>& images, const s
 
     d->lbph().update(images, labels, context);
     // add to database
-    DatabaseAccess(d->db).db()->updateLBPHFaceModel(d->lbph());
+    DatabaseFaceAccess(d->db).db()->updateLBPHFaceModel(d->lbph());
 }
 
 } // namespace KFaceIface

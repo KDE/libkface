@@ -45,7 +45,7 @@
 namespace KFaceIface
 {
 
-class DatabaseAccessData;
+class DatabaseFaceAccessData;
 
 class OpenCVLBPHFaceRecognizer
 {
@@ -55,7 +55,7 @@ public:
     /**
      *  @brief FaceRecognizer:Master class to control entire recognition using LBPH algorithm
      */
-    OpenCVLBPHFaceRecognizer(DatabaseAccessData* const);
+    OpenCVLBPHFaceRecognizer(DatabaseFaceAccessData* const);
     ~OpenCVLBPHFaceRecognizer();
 
     void setThreshold(float threshold) const;

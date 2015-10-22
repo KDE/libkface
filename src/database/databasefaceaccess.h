@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-29
- * Description : Thumbnail database access wrapper.
+ * Description : Face database access wrapper.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEACCESS_H
-#define DATABASEACCESS_H
+#ifndef DATABASE_FACE_ACCESS_H
+#define DATABASE_FACE_ACCESS_H
 
 // Local includes
 
@@ -35,21 +35,21 @@ namespace KFaceIface
 class DatabaseCoreBackend;
 class DatabaseFaceInitObserver;
 class TrainingDB;
-class DatabaseAccessData;
+class DatabaseFaceAccessData;
 
-class DatabaseAccess
+class DatabaseFaceAccess
 {
 public:
 
-    static DatabaseAccessData* create();
-    static void destroy(DatabaseAccessData* const);
+    static DatabaseFaceAccessData* create();
+    static void destroy(DatabaseFaceAccessData* const);
 
-    /** This class is written in analogy to DatabaseAccess
+    /** This class is written in analogy to DatabaseFaceAccess
      *  (some features stripped off).
      *  For documentation, see databaseaccess.h */
 
-    DatabaseAccess(DatabaseAccessData* const);
-    ~DatabaseAccess();
+    DatabaseFaceAccess(DatabaseFaceAccessData* const);
+    ~DatabaseFaceAccess();
 
     TrainingDB*          db()         const;
     DatabaseCoreBackend* backend()    const;
@@ -57,9 +57,9 @@ public:
     DatabaseFaceParameters   parameters() const;
 
 
-    static void initDatabaseErrorHandler(DatabaseAccessData* const d, DatabaseErrorHandler* const errorhandler);
-    static void setParameters(DatabaseAccessData* const d, const DatabaseFaceParameters& parameters);
-    static bool checkReadyForUse(DatabaseAccessData* const d, DatabaseFaceInitObserver* const observer = 0);
+    static void initDatabaseErrorHandler(DatabaseFaceAccessData* const d, DatabaseErrorHandler* const errorhandler);
+    static void setParameters(DatabaseFaceAccessData* const d, const DatabaseFaceParameters& parameters);
+    static bool checkReadyForUse(DatabaseFaceAccessData* const d, DatabaseFaceInitObserver* const observer = 0);
 
     /**
       * Set the "last error" code. This method is not for public use.
@@ -68,37 +68,37 @@ public:
 
 private:
 
-    DatabaseAccess(bool, DatabaseAccessData* const);
+    DatabaseFaceAccess(bool, DatabaseFaceAccessData* const);
 
 private:
 
-    friend class DatabaseAccessUnlock;
-    DatabaseAccessData* const d;
+    friend class DatabaseFaceAccessUnlock;
+    DatabaseFaceAccessData* const d;
 };
 
 // ------------------------------------------------------------------------------------------
 
-class DatabaseAccessUnlock
+class DatabaseFaceAccessUnlock
 {
 public:
 
     /** Acquire an object of this class if you want to assure
-     *  that the DatabaseAccess is _not_ held during the lifetime of the object.
+     *  that the DatabaseFaceAccess is _not_ held during the lifetime of the object.
      *  At creation, the lock is obtained shortly, then all locks are released.
      *  At destruction, all locks are acquired again.
      *  If you need to access any locked structures during lifetime, acquire a new
-     *  DatabaseAccess.
+     *  DatabaseFaceAccess.
      */
-    DatabaseAccessUnlock(DatabaseAccessData* const);
-    DatabaseAccessUnlock(DatabaseAccess* const access);
-    ~DatabaseAccessUnlock();
+    DatabaseFaceAccessUnlock(DatabaseFaceAccessData* const);
+    DatabaseFaceAccessUnlock(DatabaseFaceAccess* const access);
+    ~DatabaseFaceAccessUnlock();
 
 private:
 
-    DatabaseAccessData* d;
-    int                 count;
+    DatabaseFaceAccessData* d;
+    int                     count;
 };
 
 } // namespace KFaceIface
 
-#endif // DATABASEACCESS_H
+#endif // DATABASE_FACE_ACCESS_H

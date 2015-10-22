@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "databaseaccess.h"
+#include "databasefaceaccess.h"
 #include "databasecorebackend.h"
 
 namespace KFaceIface
@@ -49,8 +49,8 @@ public:
 
 public:
 
-    DatabaseAccess*     access;
-    DatabaseAccessData* db;
+    DatabaseFaceAccess*     access;
+    DatabaseFaceAccessData* db;
     bool                acquired;
     QTime               timeAcquired;
     int                 maxTime;
@@ -59,7 +59,7 @@ public:
 
     bool needsTransaction() const
     {
-        return DatabaseAccess(db).parameters().isSQLite();
+        return DatabaseFaceAccess(db).parameters().isSQLite();
     }
 
     void acquire()
@@ -70,7 +70,7 @@ public:
         }
         else
         {
-            DatabaseAccess access(db);
+            DatabaseFaceAccess access(db);
             acquired = access.backend()->beginTransaction();
         }
 
@@ -87,14 +87,14 @@ public:
             }
             else
             {
-                DatabaseAccess access(db);
+                DatabaseFaceAccess access(db);
                 access.backend()->commitTransaction();
             }
         }
     }
 };
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccessData* const db)
+DatabaseOperationGroup::DatabaseOperationGroup(DatabaseFaceAccessData* const db)
     : d(new Private)
 {
     d->db = db;
@@ -105,7 +105,7 @@ DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccessData* const db)
     }
 }
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* const access)
+DatabaseOperationGroup::DatabaseOperationGroup(DatabaseFaceAccess* const access)
     : d(new Private)
 {
     d->access = access;
@@ -130,7 +130,7 @@ void DatabaseOperationGroup::lift()
 
         if (d->access)
         {
-            DatabaseAccessUnlock unlock(d->access);
+            DatabaseFaceAccessUnlock unlock(d->access);
         }
 
         d->acquire();
