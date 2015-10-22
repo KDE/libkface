@@ -37,17 +37,6 @@ class DatabaseFaceInitObserver;
 class TrainingDB;
 class DatabaseAccessData;
 
-/** Database error codes in extension of QSqlError::Type
- */
-enum DatabaseErrorCode
-{
-    DatabaseConfigFileInvalid    = 995,  /// Database XML config is invalid.
-    CannotOpenDatabaseConfigFile = 996,  /// Database XML config cannot be open.
-    DatabaseVersionInvalid       = 997,  /// Database version ID is incompatible with the current schema.
-    DatabaseVersionUnknow        = 998,  /// No Database version ID found. Cannot verify schema.
-    SQLite3DriverUnavialable     = 999   /// The Qt driver for SQLite3 databases is not available.
-};
-
 class DatabaseAccess
 {
 public:

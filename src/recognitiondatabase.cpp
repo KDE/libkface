@@ -61,7 +61,8 @@ class SimpleTrainingDataProvider : public TrainingDataProvider
 public:
 
     SimpleTrainingDataProvider(const Identity& identity, const QList<QImage>& newImages)
-        : identity(identity), toTrain(newImages)
+        : identity(identity),
+          toTrain(newImages)
     {
     }
 
@@ -72,6 +73,7 @@ public:
             toTrain.reset();
             return &toTrain;
         }
+
         return &empty;
     }
 

@@ -36,7 +36,6 @@
 // local includes
 
 #include "libkface_debug.h"
-#include "databaseaccess.h"
 
 namespace KFaceIface
 {

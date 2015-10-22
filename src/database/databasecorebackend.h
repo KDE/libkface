@@ -39,7 +39,6 @@
 #include "databaseerrorhandler.h"
 #include "databasefaceparameters.h"
 #include "sqlquery.h"
-#include "databaseaccess.h"
 
 namespace KFaceIface
 {
