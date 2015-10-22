@@ -91,24 +91,6 @@
               <!-- Indices -->
               <dbaction name="CreateIndices" mode="transaction">
                   <statement mode="plain">CREATE INDEX attribute_index  ON IdentityAttributes (id);</statement>
-                  <!--<statement mode="plain">CREATE TRIGGER delete_image DELETE ON Images
-                      BEGIN
-                      DELETE FROM ImageTags          WHERE imageid=OLD.id;
-                      DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
-                      DELETE From ImageInformation   WHERE imageid=OLD.id;
-                      DELETE From ImageMetadata      WHERE imageid=OLD.id;
-                      DELETE From VideoMetadata      WHERE imageid=OLD.id;
-                      DELETE From ImagePositions     WHERE imageid=OLD.id;
-                      DELETE From ImageComments      WHERE imageid=OLD.id;
-                      DELETE From ImageCopyright     WHERE imageid=OLD.id;
-                      DELETE From ImageProperties    WHERE imageid=OLD.id;
-                      DELETE From ImageHistory       WHERE imageid=OLD.id;
-                      DELETE FROM ImageRelations     WHERE subject=OLD.id OR object=OLD.id;
-                      DELETE FROM ImageTagProperties WHERE imageid=OLD.id;
-                      UPDATE Albums SET icon=null    WHERE icon=OLD.id;
-                      UPDATE Tags SET icon=null      WHERE icon=OLD.id;
-                      END;
-                  </statement>-->
               </dbaction>
 
               <!-- Triggers -->
