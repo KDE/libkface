@@ -33,7 +33,7 @@ namespace KFaceIface
 {
 
 class DatabaseCoreBackend;
-class InitializationObserver;
+class DatabaseFaceInitObserver;
 class TrainingDB;
 class DatabaseAccessData;
 
@@ -70,7 +70,7 @@ public:
 
     static void initDatabaseErrorHandler(DatabaseAccessData* const d, DatabaseErrorHandler* const errorhandler);
     static void setParameters(DatabaseAccessData* const d, const DatabaseParameters& parameters);
-    static bool checkReadyForUse(DatabaseAccessData* const d, InitializationObserver* const observer = 0);
+    static bool checkReadyForUse(DatabaseAccessData* const d, DatabaseFaceInitObserver* const observer = 0);
 
     /**
       * Set the "last error" code. This method is not for public use.

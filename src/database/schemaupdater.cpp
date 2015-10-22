@@ -28,7 +28,7 @@
 #include "libkface_debug.h"
 #include "databasecorebackend.h"
 #include "databaseaccess.h"
-#include "databaseinitializationobserver.h"
+#include "databasefaceinitobserver.h"
 #include "trainingdb.h"
 
 namespace KFaceIface
@@ -47,14 +47,14 @@ public:
     {
     }
 
-    bool                    setError;
+    bool                      setError;
 
-    int                     currentVersion;
-    int                     currentRequiredVersion;
+    int                       currentVersion;
+    int                       currentRequiredVersion;
 
-    DatabaseAccess*         access;
+    DatabaseAccess*           access;
 
-    InitializationObserver* observer;
+    DatabaseFaceInitObserver* observer;
 };
 
 SchemaUpdater::SchemaUpdater(DatabaseAccess* const access)
@@ -73,7 +73,7 @@ int SchemaUpdater::schemaVersion()
     return 2;
 }
 
-void SchemaUpdater::setObserver(InitializationObserver* const observer)
+void SchemaUpdater::setObserver(DatabaseFaceInitObserver* const observer)
 {
     d->observer = observer;
 }
@@ -128,7 +128,7 @@ bool SchemaUpdater::startUpdates()
             if (d->observer)
             {
                 d->observer->error(DatabaseVersionUnknow);
-                d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                d->observer->finishedSchemaUpdate(DatabaseFaceInitObserver::UpdateErrorMustAbort);
             }
 
             return false;
@@ -158,7 +158,7 @@ bool SchemaUpdater::startUpdates()
                 if (d->observer)
                 {
                     d->observer->error(DatabaseVersionInvalid);
-                    d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                    d->observer->finishedSchemaUpdate(DatabaseFaceInitObserver::UpdateErrorMustAbort);
                 }
 
                 return false;
@@ -184,7 +184,7 @@ bool SchemaUpdater::startUpdates()
             if (d->observer)
             {
                 d->observer->error(d->access->backend()->lastError().type());
-                d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                d->observer->finishedSchemaUpdate(DatabaseFaceInitObserver::UpdateErrorMustAbort);
             }
 
             return false;

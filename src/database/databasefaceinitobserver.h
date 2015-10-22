@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-02-02
- * Description : Database initialization observer
+ * Description : Face database initialization observer
  *
  * Copyright (C) 2012 by Marcel Wiesweg <marcel dot wiesweg at uk-essen dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEINITIALIZATIONOBSERVER_H
-#define DATABASEINITIALIZATIONOBSERVER_H
+#ifndef DATABASE_FACE_INIT_IOBSERVER_H
+#define DATABASE_FACE_INIT_IOBSERVER_H
 
 // Qt includes
 
@@ -31,7 +31,7 @@
 namespace KFaceIface
 {
 
-class InitializationObserver
+class DatabaseFaceInitObserver
 {
 public:
 
@@ -44,7 +44,7 @@ public:
 
 public:
 
-    virtual ~InitializationObserver() {};
+    virtual ~DatabaseFaceInitObserver() {};
 
     virtual bool continueQuery() = 0;
 
@@ -57,4 +57,4 @@ public:
 
 } // namespace KFaceIface
 
-#endif // DATABASEINITIALIZATIONOBSERVER_H
+#endif // DATABASE_FACE_INIT_IOBSERVER_H

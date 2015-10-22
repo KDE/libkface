@@ -28,7 +28,7 @@ namespace KFaceIface
 {
 
 class DatabaseAccess;
-class InitializationObserver;
+class DatabaseFaceInitObserver;
 
 class SchemaUpdater
 {
@@ -38,7 +38,7 @@ public:
     ~SchemaUpdater();
 
     bool update();
-    void setObserver(InitializationObserver* const observer);
+    void setObserver(DatabaseFaceInitObserver* const observer);
 
     static int schemaVersion();
 

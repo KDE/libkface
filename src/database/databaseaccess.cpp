@@ -193,7 +193,7 @@ void DatabaseAccess::setParameters(DatabaseAccessData* const d, const DatabasePa
     }
 }
 
-bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, InitializationObserver* const observer)
+bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, DatabaseFaceInitObserver* const observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
