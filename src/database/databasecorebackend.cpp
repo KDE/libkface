@@ -40,7 +40,7 @@
 
 #include "libkface_debug.h"
 #include "dbactiontype.h"
-#include "schemaupdater.h"
+#include "databasefaceschemaupdater.h"
 
 namespace KFaceIface
 {
@@ -785,7 +785,7 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
     return true;
 }
 
-bool DatabaseCoreBackend::initSchema(SchemaUpdater* const updater)
+bool DatabaseCoreBackend::initSchema(DatabaseFaceSchemaUpdater* const updater)
 {
     Q_D(DatabaseCoreBackend);
 

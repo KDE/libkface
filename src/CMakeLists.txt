@@ -37,9 +37,9 @@ set(kface_database_LIB_SRCS database/databaseaccess.cpp
                             database/databaseconfigelement.cpp
                             database/databaseoperationgroup.cpp
                             database/databasefacecontainers.cpp
+                            database/databasefaceschemaupdater.cpp
                             database/trainingdb.cpp
                             database/dbactiontype.cpp
-                            database/schemaupdater.cpp
                             database/sqlquery.cpp
 )
 

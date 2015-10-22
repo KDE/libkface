@@ -46,7 +46,7 @@ namespace KFaceIface
 
 class DatabaseCoreBackendPrivate;
 class DatabaseErrorHandler;
-class SchemaUpdater;
+class DatabaseFaceSchemaUpdater;
 
 class DatabaseLocking
 {
@@ -141,7 +141,7 @@ public:
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(SchemaUpdater* const updater);
+    bool initSchema(DatabaseFaceSchemaUpdater* const updater);
 
     /**
      * Close the database connection.

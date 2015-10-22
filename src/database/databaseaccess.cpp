@@ -33,7 +33,7 @@
 #include "libkface_debug.h"
 #include "databasecorebackend.h"
 #include "trainingdb.h"
-#include "schemaupdater.h"
+#include "databasefaceschemaupdater.h"
 
 namespace KFaceIface
 {
@@ -234,7 +234,7 @@ bool DatabaseAccess::checkReadyForUse(DatabaseAccessData* const d, DatabaseFaceI
     d->initializing = true;
 
     // update schema
-    SchemaUpdater updater(&access);
+    DatabaseFaceSchemaUpdater updater(&access);
     updater.setObserver(observer);
 
     if (!d->backend->initSchema(&updater))

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-16
- * Description : Schema update
+ * Description : Face database schema update
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "schemaupdater.h"
+#include "databasefaceschemaupdater.h"
 
 // Local includes
 
@@ -34,7 +34,7 @@
 namespace KFaceIface
 {
 
-class SchemaUpdater::Private
+class DatabaseFaceSchemaUpdater::Private
 {
 public:
 
@@ -57,28 +57,28 @@ public:
     DatabaseFaceInitObserver* observer;
 };
 
-SchemaUpdater::SchemaUpdater(DatabaseAccess* const access)
+DatabaseFaceSchemaUpdater::DatabaseFaceSchemaUpdater(DatabaseAccess* const access)
     : d(new Private)
 {
     d->access = access;
 }
 
-SchemaUpdater::~SchemaUpdater()
+DatabaseFaceSchemaUpdater::~DatabaseFaceSchemaUpdater()
 {
     delete d;
 }
 
-int SchemaUpdater::schemaVersion()
+int DatabaseFaceSchemaUpdater::schemaVersion()
 {
     return 2;
 }
 
-void SchemaUpdater::setObserver(DatabaseFaceInitObserver* const observer)
+void DatabaseFaceSchemaUpdater::setObserver(DatabaseFaceInitObserver* const observer)
 {
     d->observer = observer;
 }
 
-bool SchemaUpdater::update()
+bool DatabaseFaceSchemaUpdater::update()
 {
     bool success = startUpdates();
 
@@ -96,7 +96,7 @@ bool SchemaUpdater::update()
     return success;
 }
 
-bool SchemaUpdater::startUpdates()
+bool DatabaseFaceSchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
     QStringList tables = d->access->backend()->tables();
@@ -140,7 +140,7 @@ bool SchemaUpdater::startUpdates()
 
         if (d->currentVersion > schemaVersion())
         {
-            // trying to open a database with a more advanced than this SchemaUpdater supports
+            // trying to open a database with a more advanced than this DatabaseFaceSchemaUpdater supports
             if (!versionRequired.isEmpty() && versionRequired.toInt() <= schemaVersion())
             {
                 // version required may be less than current version
@@ -194,7 +194,7 @@ bool SchemaUpdater::startUpdates()
     }
 }
 
-bool SchemaUpdater::makeUpdates()
+bool DatabaseFaceSchemaUpdater::makeUpdates()
 {
     if (d->currentVersion < schemaVersion())
     {
@@ -208,7 +208,7 @@ bool SchemaUpdater::makeUpdates()
 }
 
 
-bool SchemaUpdater::createDatabase()
+bool DatabaseFaceSchemaUpdater::createDatabase()
 {
     if ( createTables() && createIndices() && createTriggers())
     {
@@ -222,23 +222,23 @@ bool SchemaUpdater::createDatabase()
     }
 }
 
-bool SchemaUpdater::createTables()
+bool DatabaseFaceSchemaUpdater::createTables()
 {
     return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateDB"))) &&
            d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateDBOpenCVLBPH")));
 }
 
-bool SchemaUpdater::createIndices()
+bool DatabaseFaceSchemaUpdater::createIndices()
 {
     return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateIndices")));
 }
 
-bool SchemaUpdater::createTriggers()
+bool DatabaseFaceSchemaUpdater::createTriggers()
 {
     return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateTriggers")));
 }
 
-bool SchemaUpdater::updateV1ToV2()
+bool DatabaseFaceSchemaUpdater::updateV1ToV2()
 {
 /*
     if (!d->access->backend()->execDBAction(d->access->backend()->getDBAction("UpdateDBSchemaFromV1ToV2")))

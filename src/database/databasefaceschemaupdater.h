@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-05-29
- * Description : Thumbnail DB schema update
+ * Description : Face database schema update
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SCHEMA_UPDATER_H
-#define SCHEMA_UPDATER_H
+#ifndef DATABASE_FACE_SCHEMA_UPDATER_H
+#define DATABASE_FACE_SCHEMA_UPDATER_H
 
 namespace KFaceIface
 {
@@ -30,12 +30,12 @@ namespace KFaceIface
 class DatabaseAccess;
 class DatabaseFaceInitObserver;
 
-class SchemaUpdater
+class DatabaseFaceSchemaUpdater
 {
 public:
 
-    SchemaUpdater(DatabaseAccess* const access);
-    ~SchemaUpdater();
+    DatabaseFaceSchemaUpdater(DatabaseAccess* const access);
+    ~DatabaseFaceSchemaUpdater();
 
     bool update();
     void setObserver(DatabaseFaceInitObserver* const observer);
@@ -60,4 +60,4 @@ private:
 
 } // namespace KFaceIface
 
-#endif // SCHEMA_UPDATER_H
+#endif // DATABASE_FACE_SCHEMA_UPDATER_H
