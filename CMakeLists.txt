@@ -13,7 +13,7 @@ option(ENABLE_OPENCV3 "Build libkface with OpenCV3 instead OpenCV2 (default=OFF)
 
 set(CMAKE_MIN_VERSION   "2.8.12")
 set(ECM_MIN_VERSION     "1.1.0")
-set(REQUIRED_QT_VERSION "5.2.0")
+set(QT_MIN_VERSION      "5.2.0")
 set(OPENCV_MIN_VERSION  "2.4.9")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
@@ -68,7 +68,7 @@ include(FeatureSummary)
 
 ############## Find Packages ###################
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
              Widgets
              Sql
@@ -81,20 +81,26 @@ include(MacroOpenCV)
 
 if(ENABLE_OPENCV3)
 
-    DETECT_OPENCV(3.0.0 core face highgui objdetect imgproc)
+    set(OPENCV_MIN_VERSION "3.0.0")
+    DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect imgproc)
 
-    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_LESS 3.0.0)
-        message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.0.0 have been found. Disabled ENABLE_OPENCV3")
-        set(OpenCV_FOUND FALSE)
+    if(${OpenCV_FOUND})
+        if(${OpenCV_VERSION} VERSION_LESS 3.0.0)
+            message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.0.0 have been found. Disabled ENABLE_OPENCV3")
+            set(OpenCV_FOUND FALSE)
+        endif()
     endif()
 
 else()
 
-    DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
+    set(OPENCV_MIN_VERSION "2.4.9")
+    DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
 
-    if(${OpenCV_FOUND} AND ${OpenCV_VERSION} VERSION_GREATER 2.4.99)
-        message(STATUS "ENABLE_OPENCV3 option is disabled and OpenCV >= 3.0.0 have been found. Enabled ENABLE_OPENCV3")
-        set(OpenCV_FOUND FALSE)
+    if(${OpenCV_FOUND})
+        if(${OpenCV_VERSION} VERSION_GREATER 2.4.99)
+            message(STATUS "ENABLE_OPENCV3 option is disabled and OpenCV >= 3.0.0 have been found. Enabled ENABLE_OPENCV3")
+            set(OpenCV_FOUND FALSE)
+        endif()
     endif()
 
 endif()
