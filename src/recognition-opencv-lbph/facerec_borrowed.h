@@ -125,6 +125,8 @@ public:
      */
     void update(cv::InputArrayOfArrays src, cv::InputArray labels);
 
+
+#if OPENCV_TEST_VERSION(3,1,0)
     /**
      * Predicts the label of a query image in src.
      */
@@ -134,6 +136,13 @@ public:
      * Predicts the label and confidence for a given sample.
      */
     void predict(cv::InputArray _src, int &label, double &dist) const;
+#else
+    using cv::face::FaceRecognizer::predict;
+    /*
+     * Predict
+     */
+    void predict(cv::InputArray src, cv::Ptr<cv::face::PredictCollector> collector, const int state = 0) const override;
+#endif
 
     /**
      * See FaceRecognizer::load().
