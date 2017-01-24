@@ -30,7 +30,7 @@
 #define OPENCV_ROOT_PATH "${OpenCV_DIR}"
 
 // Pragma directives to reduce warnings from OpenCV header files.
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #   pragma GCC diagnostic ignored "-Woverloaded-virtual"
@@ -69,7 +69,7 @@
 #include <opencv/cvaux.h>
 
 // Restore warnings
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #   pragma GCC diagnostic pop
 #endif
 
