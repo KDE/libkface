@@ -1,8 +1,8 @@
 /** ===========================================================
  * @file
  *
- * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * This file is a part of KDE project
+ *
  *
  * @date    2012-01-03
  * @brief   <a href="http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms">Face Recognition based on Local Binary Patterns Histograms</a>

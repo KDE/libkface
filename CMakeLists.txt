@@ -23,8 +23,8 @@ cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
 # Library version history:
 # API      ABI
-# 0.1.0 => 0.1.0     (During digiKam GoSC2010)
-# 2.0.0 => 1.0.0     (Included into digiKam 2.0.0 Software Collection)
+# 0.1.0 => 0.1.0     (During GoSC2010)
+# 2.0.0 => 1.0.0     (Included into 2.0.0 Software Collection)
 # 3.0.0 => 2.0.0     (Including LBPH algorithm for face recognition)
 # 3.1.0 => 2.0.0     (Big private code review. No BC broken).
 # 3.2.0 => 2.0.0     (Added the deleteIdentity function to the RecognitionDatabase class)

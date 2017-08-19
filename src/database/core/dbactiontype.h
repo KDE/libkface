@@ -1,7 +1,6 @@
 /* ============================================================
  *
- * This file is a part of digiKam project
- * http://www.digikam.org
+ * This file is a part of KDE project
  *
  * Date        : 2010-04-20
  * Description : DBActionType which wrappes other data types

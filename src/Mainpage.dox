@@ -8,8 +8,6 @@ Have a look at KFaceIface::FaceDetector to get started with face detection.
 
 Have a look at KFaceIface::RecognitionDatabase to get started with face recognition.
 
-This Library has been writen and is maintained by the <a href="http://www.digikam.org">digiKam team</a>.
-
 <h1>Technical Background</h1>
 
 Detection only processes image data. Recognition requires persistent storage
@@ -34,7 +32,7 @@ process.
 persistence, as well as identity management is includede. But no backend either.
 
 The <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/show/libkface/database">database</a>
-subdirectory contains a stripped-down version of the digiKam database management code, just enough
+subdirectory contains a stripped-down version of the database management code, just enough
 to comfortably keep a database with recognition data. To process database operations, the backend
 usees Qt's QSL driver.
 
@@ -106,10 +104,5 @@ code.
 
 <a href="https://projects.kde.org/projects/extragear/libs/libkface/repository/revisions/master/entry/tests/gui/">KFaceGui tool</a>:
 A simple GUI application able to run detection and recognition without using CLI tools.
-
-<h1>Client Applications</h1>
-
-Libkface is currently used by digiKam to do face management. Look at <a href="https://projects.kde.org/projects/extragear/graphics/digikam/repository/revisions/master/show/utilities/facemanagement">these implementations</a>
-for details.
 
 */

@@ -1,6 +1,6 @@
 /* ============================================================
  *
- * This file is a part of digikam/libkface
+ * This file is a part of KDE project
  *
  * Date        : 02.02.2012
  *

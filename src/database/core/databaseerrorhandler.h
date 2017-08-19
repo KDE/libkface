@@ -1,7 +1,6 @@
 /* ============================================================
  *
- * This file is a part of digiKam project
- * http://www.digikam.org
+ * This file is a part of KDE project
  *
  * Date        : 2010-04-02
  * Description : Database error handler interface
