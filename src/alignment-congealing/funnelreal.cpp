@@ -110,7 +110,7 @@ public:
                                  const cv::Mat& image,
                                  const int width, const int height) const;
 
-    /// Part 2: Returns a small vector containg transformation parameters
+    /// Part 2: Returns a small vector containing transformation parameters
     std::vector<float> computeTransform(const std::vector<std::vector<std::vector<float> > > &originalFeatures,
                                  const int width, const int height) const;
 
@@ -612,7 +612,7 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
 
     if(sum < .0000001f)
     {
-        //float dn = 1.0f / (signed)descripter.size(); // is unused, dont know
+        //float dn = 1.0f / (signed)descripter.size(); // is unused, don't know
         for(int i=0; i<(signed)descripter.size(); i++)
             descripter[i] = 0;
 

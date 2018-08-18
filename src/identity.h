@@ -49,7 +49,7 @@ public:
     /**
      * Wraps a libkface recognition Identity.
      * An identity refers to a natural person.
-     * There is an internal id which is used the the libkface storage,
+     * There is an internal id which is used for the libkface storage,
      * and a number of attributes which map the identity to the outside.
      * Prespecified attributes:
      * "fullName"   The full name as on the ID card, e.g. "Peter Brown"
